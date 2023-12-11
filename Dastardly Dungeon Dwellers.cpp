@@ -16,8 +16,8 @@ using std::setfill;
 using std::rand;
 
 // Map Constants - feel free to change - have to both be odd numbers or positioning will be weird
-const int MAP_ROWS = 7;
-const int MAP_COLUMNS = 7;
+const int MAP_ROWS = 9;
+const int MAP_COLUMNS = 9;
 
 // File Streaming .txt file generator and map generator
 void generateCharacterStats(std::ofstream &defaultCharacterStats);
@@ -36,25 +36,24 @@ void mainMenu();
 void classSelection(string &className);
 
 // roomController group, these functions are top-level and handle a majority of the game
-void roomController(string &className, int &potionCount, int &goldCount, int &keyCount, int &roomCount, bool &gameOver, bool &gameVictory, char mapArray[MAP_ROWS][MAP_COLUMNS], bool roomExplored[MAP_ROWS][MAP_COLUMNS], string roomContents[MAP_ROWS][MAP_COLUMNS], char *&playerPosition, bool *&exploredPosition, string *&contentsPosition, std::ifstream &characterStats);
-bool roomEnemy(string &className, int &potionCount, int &goldCount, int &keyCount, int enemyProgression, std::ifstream &characterStats);
-bool roomLoot(string &className, int &potionCount, int &goldCount, int &keyCount, int enemyProgression, bool &isEnemyRoom, std::ifstream &characterStats);
-void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string &className);
+void roomController(string &className, int &potionCount, int &armorCount, int &goldCount, int &keyCount, int &roomCount, bool &gameOver, bool &gameVictory, char mapArray[MAP_ROWS][MAP_COLUMNS], bool roomExplored[MAP_ROWS][MAP_COLUMNS], string roomContents[MAP_ROWS][MAP_COLUMNS], char *&playerPosition, bool *&exploredPosition, string *&contentsPosition, std::ifstream &characterStats);
+bool roomEnemy(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, std::ifstream &characterStats);
+bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, bool &isEnemyRoom, std::ifstream &characterStats);
+void roomMerchant(int &potionCount, int &armorCount, int &goldCount, int &keyCount, const string &className);
 void roomMerchantPurchase(int ITEM_INDEX, const string merchantItemName[], const int merchantItemQuantity[], const int merchantItemCost[], int &purchaseAmount, int &goldCount);
 void roomExit(int &keyCount, bool &gameVictory);
 
 // battleController group, these functions handle all battle related functions. Called within roomController group
-int battleController(const string &className, int &rewardTier, int &potionCount, int enemyProgression, std::ifstream &characterStats);
+int battleController(const string &className, int &rewardTier, int &potionCount, int armorCount, int enemyProgression, std::ifstream &characterStats);
 int battleMenu(string &meleeName, string &magicName, string &rangedName, int playerHealth, int enemyHealth);
 void battleHealthArt(int playerHealth, int enemyHealth);
 void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, string &enemyName, int enemyProgression, bool &boss);
-int playerDamage(int battleMenuSelection, string &meleeName, string &magicName, string &rangedName, const string &className, const string &enemyName, bool boss, std::ifstream &characterStats);
-void enemyResistance(int &damageValue, const string &abilityName, const string &enemyName, bool boss, int battleMenuSelection);
-int enemyDamage(const int enemyTier, const string &enemyName, bool boss);
-int skillProgression(int &skillCounter, int overrideType);
+float playerDamage(int battleMenuSelection, string &meleeName, string &magicName, string &rangedName, const string &className, const string &enemyName, bool boss, std::ifstream &characterStats);
+float enemyResistance(const string &abilityName, const string &enemyName, bool boss, int battleMenuSelection);
+float enemyDamage(int enemyTier, const string &enemyName, bool boss, int armorCount);
 void skillNames(string &skillName, const string &skillType, string &upgradeMessage, const string &className, int tier = 1);
 int weaponUpgrade (int checkWeaponUpgrade, int = -1);
-int heal(int &potionCount, int = 0);
+int heal(int &potionCount);
 
 // Validation Functions
 bool validateDecision(int userChoice);
@@ -84,20 +83,20 @@ void gameOverArt(int roomCount);
 const int BASE_MELEE_DAMAGE = 2;
 const int BASE_MAGIC_DAMAGE = 2;
 const int BASE_RANGED_DAMAGE = 3;
+const float BASE_CRIT_CHANCE = 0.10;
 const int BASE_ENEMY_DAMAGE = 2;
 const int BASE_ENEMY_HEALTH = 5;
 const int BOSS_HEALTH = 100;
 const int BOSS_DAMAGE_LOW = 8;
 const int BOSS_DAMAGE_HIGH = 16;
 const int SKILL_UPGRADE = 7;
-const float BASE_CRIT_CHANCE = 0.10;
 
 // Debug toggle - displays useful debug information in the console and gives resources / increased damage
 bool debug = false; // Enter -37 at the main menu to enter debug mode
 
 int main()
 {
-  std::srand(std::time(0));
+  std::srand(std::time(0)); // NOLINT(*-use-nullptr)
 
   // I use a rand() here because the first value generated by rand() after srand() seems to be consistently increasing if the rand() bounds are large enough
   rand(); // rand range formula: min + (rand() % ((max + 1) - min))
@@ -157,7 +156,7 @@ void startGame(std::ifstream &characterStats)
   classSelection(className);
 
   // These variables will be constantly tracked / updated while the game is played
-  int potionCount = 3, goldCount = 0, keyCount = 0, roomCount = 0;
+  int potionCount = 3, armorCount = 0, goldCount = 0, keyCount = 0, roomCount = 0;
   bool gameOver = false, gameVictory = false;
 
   // DEBUG Option - Extra potions, gold, keys
@@ -188,7 +187,7 @@ void startGame(std::ifstream &characterStats)
   // Runs the game until the player loses all of their health or wins the game
   do
   {
-    roomController(className, potionCount, goldCount, keyCount, roomCount, gameOver, gameVictory, mapArray, roomExplored, roomContents, playerPosition, exploredPosition, contentsPosition, characterStats);
+    roomController(className, potionCount, armorCount, goldCount, keyCount, roomCount, gameOver, gameVictory, mapArray, roomExplored, roomContents, playerPosition, exploredPosition, contentsPosition, characterStats);
   } while (!gameOver && !gameVictory);
 
   if (gameVictory)
@@ -418,7 +417,7 @@ void generateMap(char mapArray[MAP_ROWS][MAP_COLUMNS], bool roomExplored[MAP_ROW
   int remainingRoomsAvailable = (MAP_ROWS * MAP_COLUMNS) - 2 - merchantsAllowed; // The literal 2 is for 1 exit and 1 spawn location
 
   // Spawn Loot Room
-  int lootRoomsAllowed = remainingRoomsAvailable * 0.15; // 15% of remaining rooms can be loot rooms
+  int lootRoomsAllowed = remainingRoomsAvailable * 0.15f; // 15% of remaining rooms can be loot rooms
   string lootRoomName = "Loot";
   char lootRoomSymbol = 'L';
   generateMapRoomSpawner(ROW_MIDPOINT, COLUMN_MIDPOINT, remainingRoomsDistance, remainingRoomsSimilarDistance, lootRoomsAllowed, lootRoomName, lootRoomSymbol, mapArray, roomContents);
@@ -534,7 +533,7 @@ void generateMapRoomSpawner(const int ROW_MIDPOINT, const int COLUMN_MIDPOINT, c
 
 // Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
 // Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
-void roomController(string &className, int &potionCount, int &goldCount, int &keyCount, int &roomCount, bool &gameOver, bool &gameVictory, char mapArray[MAP_ROWS][MAP_COLUMNS], bool roomExplored[MAP_ROWS][MAP_COLUMNS], string roomContents[MAP_ROWS][MAP_COLUMNS], char *&playerPosition, bool *&exploredPosition, string *&contentsPosition, std::ifstream &characterStats)
+void roomController(string &className, int &potionCount, int &armorCount, int &goldCount, int &keyCount, int &roomCount, bool &gameOver, bool &gameVictory, char mapArray[MAP_ROWS][MAP_COLUMNS], bool roomExplored[MAP_ROWS][MAP_COLUMNS], string roomContents[MAP_ROWS][MAP_COLUMNS], char *&playerPosition, bool *&exploredPosition, string *&contentsPosition, std::ifstream &characterStats)
 {
   static int enemyProgression;
   // map() allows the player to move between rooms. It returns false if the room has not been explored yet
@@ -543,7 +542,7 @@ void roomController(string &className, int &potionCount, int &goldCount, int &ke
     if (*contentsPosition == "Enemy")
     {
       roomEnemyMonologue();
-      if (!roomEnemy(className, potionCount, goldCount, keyCount, roomCount, characterStats))
+      if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
       {
         gameOver = true;
         return;
@@ -556,7 +555,7 @@ void roomController(string &className, int &potionCount, int &goldCount, int &ke
       bool isEnemyRoom = false;
       roomLootMonologue();
       treasureArt();
-      if(!roomLoot(className, potionCount, goldCount, keyCount, roomCount, isEnemyRoom, characterStats))
+      if(!roomLoot(className, potionCount, armorCount, goldCount, keyCount, roomCount, isEnemyRoom, characterStats))
       {
         gameOver = true;
         return;
@@ -571,7 +570,7 @@ void roomController(string &className, int &potionCount, int &goldCount, int &ke
     {
       roomMerchantMonologue();
       merchantArt();
-      roomMerchant(potionCount, goldCount, keyCount, className);
+      roomMerchant(potionCount, armorCount, goldCount, keyCount, className);
       ++roomCount;
     }
     else if (*contentsPosition == "Exit")
@@ -593,7 +592,7 @@ void roomController(string &className, int &potionCount, int &goldCount, int &ke
       if (1 + (rand() % 100) <= 50)
       {
         roomEnemyMonologue(dialogueSwitch);
-        if (!roomEnemy(className, potionCount, goldCount, keyCount, roomCount, characterStats))
+        if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
         {
           gameOver = true;
           return;
@@ -607,7 +606,7 @@ void roomController(string &className, int &potionCount, int &goldCount, int &ke
       if (1 + (rand() % 100) <= 50)
       {
         roomLootMonologue(dialogueSwitch);
-        if (!roomEnemy(className, potionCount, goldCount, keyCount, roomCount, characterStats))
+        if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
         {
           gameOver = true;
           return;
@@ -620,7 +619,7 @@ void roomController(string &className, int &potionCount, int &goldCount, int &ke
       monologueInABox("A friendly traveling merchant resides here");
       roomMerchantMonologue(dialogueSwitch);
       merchantArt();
-      roomMerchant(potionCount, goldCount, keyCount, className);
+      roomMerchant(potionCount, armorCount, goldCount, keyCount, className);
     }
     else if (*contentsPosition == "Exit")
     {
@@ -827,11 +826,11 @@ void mapMovement(int &rowPosition, int &columnPosition)
 
 // Pre-condition: called by roomController(), passed enemyProgression, inventory variables and className / characterStats
 // Post-condition: Returns true if the player survives the room, updates inventory variables based on result
-bool roomEnemy(string &className, int &potionCount, int &goldCount, int &keyCount, int enemyProgression, std::ifstream &characterStats)
+bool roomEnemy(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, std::ifstream &characterStats)
 {
   // Run the battleController function. It returns 1 if the player wins the battle, -1 if the player successfully runs away, and 0 if they lose.
   int rewardTier = 1;
-  int battleResult = battleController(className, rewardTier, potionCount, enemyProgression, characterStats);
+  int battleResult = battleController(className, rewardTier, potionCount, armorCount, enemyProgression, characterStats);
 
   // Control variable that enables the pause screen after winning the battle
   bool battleSuccess = false;
@@ -922,7 +921,7 @@ bool roomEnemy(string &className, int &potionCount, int &goldCount, int &keyCoun
       // 90% chance to earn a potion(s)
       if (lootRoll <= 90)
       {
-        int potionAdded = 1 + (rand() % 3);
+        int potionAdded = 1 + (rand() % 2);
         potionCount += potionAdded;
         if (potionAdded == 1)
         {
@@ -950,8 +949,8 @@ bool roomEnemy(string &className, int &potionCount, int &goldCount, int &keyCoun
 
     else if (rewardTier == 5)
     {
-      // 100% chance to earn 2-4 potions
-      int potionAdded = 2 + (rand() % 3);
+      // 100% chance to earn a potion(s)
+      int potionAdded = 1 + (rand() % 2);
       potionCount += potionAdded;
       cout << "Potion x" << potionAdded << " added\n";
 
@@ -1011,7 +1010,7 @@ bool roomEnemy(string &className, int &potionCount, int &goldCount, int &keyCoun
 
 // Pre-condition: called by roomController(), passed enemyProgression, isEnemyRoom, inventory variables and className / characterStats
 // Post-condition: Returns true if the player survives the room, updates inventory variables based on result, isEnemyRoom is updated to true if an enemy is spawned
-bool roomLoot(string &className, int &potionCount, int &goldCount, int &keyCount, int enemyProgression, bool &isEnemyRoom, std::ifstream &characterStats)
+bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, bool &isEnemyRoom, std::ifstream &characterStats)
 {
   // This room could be a trap, ask the player if they want to attempt to loot the chest
   bool lootSuccess = false;
@@ -1086,7 +1085,7 @@ bool roomLoot(string &className, int &potionCount, int &goldCount, int &keyCount
            << "You quickly slam the lid closed as you hear the door in front of you crack open!\n\n";
 
       // Run roomEnemy, Returns true if the player wins the battle
-      if (roomEnemy(className, potionCount, goldCount, keyCount, enemyProgression, characterStats))
+      if (roomEnemy(className, potionCount, armorCount, goldCount, keyCount, enemyProgression, characterStats))
       {
         lootSuccess = true;
         isEnemyRoom = true;
@@ -1113,10 +1112,10 @@ bool roomLoot(string &className, int &potionCount, int &goldCount, int &keyCount
 
 // Pre-condition: called by roomController(), passed inventory variables and className
 // Post-condition: Runs merchant shop loop until the player leaves, updates inventory variables
-void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string &className)
+void roomMerchant(int &potionCount, int &armorCount, int &goldCount, int &keyCount, const string &className)
 {
   // Initialize Merchant Shop arrays
-  const int NUM_ITEMS = 6 + 1; // Adding one here so the visual menu matches index location, we're not using index 0. (Wasteful, but it really helped me visualize the shop output) - Refactor
+  const int NUM_ITEMS = 7 + 1; // Adding one here so the visual menu matches index location, we're not using index 0. (Wasteful, but it really helped me visualize the shop output) - Refactor
   int merchantItemQuantity[NUM_ITEMS] = {0};
   int merchantItemCost[NUM_ITEMS] = {0};
   string merchantItemName[NUM_ITEMS];
@@ -1136,7 +1135,7 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
   const int MELEE_WEAPON = 0, MAGIC_WEAPON = 1, RANGED_WEAPON = 2;
   const int KEY_CHANCE = 75;
   const int UPGRADE_CHANCE = 60;
-  const int UPGRADE_COST = 25;
+  const int UPGRADE_COST = 50;
   int meleeChance = 1 + rand() % 100;
   int magicChance = 1 + rand() % 100;
   int rangedChance = 1 + rand() % 100;
@@ -1146,10 +1145,16 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
   const int POTION_INDEX = 1;
   merchantItemName[POTION_INDEX] = "Potion";
   merchantItemQuantity[POTION_INDEX] = 2 + (rand() % 4);
-  merchantItemCost[POTION_INDEX] = 10;
+  merchantItemCost[POTION_INDEX] = 15;
 
-  // Slot 2 - Melee Upgrade
-  const int MELEE_UPGRADE_INDEX = 2;
+  // Slot 2 - The Merchant has a random number of armor platings between 1-3
+  const int ARMOR_UPGRADE_INDEX = 2;
+  merchantItemName[ARMOR_UPGRADE_INDEX] = "Armor Plating";
+  merchantItemQuantity[ARMOR_UPGRADE_INDEX] = 1 + (rand() % 3);
+  merchantItemCost[ARMOR_UPGRADE_INDEX] = 30;
+
+  // Slot 3 - Melee Upgrade
+  const int MELEE_UPGRADE_INDEX = 3;
   if (className == "Warrior")
   {
     merchantItemName[MELEE_UPGRADE_INDEX] = "Sword Sharpening";
@@ -1169,8 +1174,8 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
   merchantItemQuantity[MELEE_UPGRADE_INDEX] = 0;
   merchantItemCost[MELEE_UPGRADE_INDEX] = UPGRADE_COST;
 
-  // Slot 3 - Staff Upgrade
-  const int MAGIC_UPGRADE_INDEX = 3;
+  // Slot 4 - Staff Upgrade
+  const int MAGIC_UPGRADE_INDEX = 4;
   if (className == "Warrior")
   {
     merchantItemName[MAGIC_UPGRADE_INDEX] = "Shield Polish";
@@ -1190,8 +1195,8 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
   merchantItemQuantity[MAGIC_UPGRADE_INDEX] = 0;
   merchantItemCost[MAGIC_UPGRADE_INDEX] = UPGRADE_COST;
 
-  // Slot 4 - Arrow Upgrade
-  const int RANGED_UPGRADE_INDEX = 4;
+  // Slot 5 - Arrow Upgrade
+  const int RANGED_UPGRADE_INDEX = 5;
   if (className == "Warrior")
   {
     merchantItemName[RANGED_UPGRADE_INDEX] = "Titanium Throwing Sleeve";
@@ -1211,13 +1216,13 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
   merchantItemQuantity[RANGED_UPGRADE_INDEX] = 0;
   merchantItemCost[RANGED_UPGRADE_INDEX] = UPGRADE_COST;
 
-  // Slot 5 - Golden Key
+  // Slot 6 - Golden Key
   const int GOLDEN_KEY_INDEX = NUM_ITEMS - 2;
   merchantItemName[GOLDEN_KEY_INDEX] = "Golden Key";
   merchantItemQuantity[GOLDEN_KEY_INDEX] = 0;
-  merchantItemCost[GOLDEN_KEY_INDEX] = 50;
+  merchantItemCost[GOLDEN_KEY_INDEX] = 100;
 
-  // Slot 6 - Exit Index
+  // Slot 7 - Exit Index
   const int EXIT_INDEX = NUM_ITEMS - 1;
   merchantItemName[EXIT_INDEX] = "Exit";
   merchantItemQuantity[EXIT_INDEX] = 1;
@@ -1266,7 +1271,7 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
     cout << "|" << setfill(' ') << setw(2) << " " << goldDisplay << setw(57 - goldDisplay.length()) << potionDisplay << setw(2) << " " << "|\n";
     cout << "|" << setfill(' ') << setw(63) << "|\n";
 
-    // Int to hold amount of items/lines to be displayed
+    // Counter to hold amount of items/lines to be displayed
     int shopItemCount = 0;
 
     // Display middle rows - randomized shop items
@@ -1282,13 +1287,13 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
           if (merchantItemQuantity[i] > 1)
           {
             cout << "|" << setw(10) << " " << ++shopItemCount << ". " << merchantItemName[i] << "(s) x" << merchantItemQuantity[i]
-                 << setw(24 - merchantItemName[i].length()) << " " << "Cost: " << merchantItemCost[i] << setw(12) << "|\n";
+                 << setw(24 - merchantItemName[i].length()) << " " << "Cost: " << merchantItemCost[i] << setw(14 - std::to_string(merchantItemCost[i]).size()) << "|\n";
           }
           // Don't print the quantity if there's only one
           else if (merchantItemQuantity[i] == 1)
           {
             cout << "|" << setw(10) << " " << ++shopItemCount << ". " << merchantItemName[i]
-                 << setw(30 - merchantItemName[i].length()) << " " << "Cost: " << merchantItemCost[i] << setw(12) << "|\n";
+                 << setw(30 - merchantItemName[i].length()) << " " << "Cost: " << merchantItemCost[i] << setw(14 - std::to_string(merchantItemCost[i]).size()) << "|\n";
           }
           // Places item name values in shopItemOrder array
           shopItemOrder[shopItemCount] = merchantItemName[i];
@@ -1348,6 +1353,19 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
           merchantItemQuantity[POTION_INDEX] -= purchaseAmount;
           goldCount -= merchantItemCost[POTION_INDEX] * purchaseAmount;
           potionCount += purchaseAmount;
+        }
+        break;
+      }
+
+      // Player chose to buy armor upgrades
+      case ARMOR_UPGRADE_INDEX:
+      {
+        roomMerchantPurchase(ARMOR_UPGRADE_INDEX, merchantItemName, merchantItemQuantity, merchantItemCost, purchaseAmount,goldCount);
+        if (purchaseAmount > 0)
+        {
+          merchantItemQuantity[ARMOR_UPGRADE_INDEX] -= purchaseAmount;
+          goldCount -= merchantItemCost[ARMOR_UPGRADE_INDEX] * purchaseAmount;
+          armorCount += purchaseAmount;
         }
         break;
       }
@@ -1450,6 +1468,7 @@ void roomMerchant(int &potionCount, int &goldCount, int &keyCount, const string 
         {
           // Validate selection
           char selection = ' ';
+          loopFlag = true;
           do
           {
             cout << "\tWould you like to buy the golden key for " << merchantItemCost[GOLDEN_KEY_INDEX] << " gold?\n";
@@ -1643,10 +1662,15 @@ void roomExit(int &keyCount, bool &gameVictory)
 
 // Pre-condition: called by roomEnemy(), passed inventory variables, enemyProgression, rewardTier and className / characterStats
 // Post-condition: returns 1 if the player won the battle, -1 if the player ran away, 0 if they lost, updates inventory variables, playerHealth, and updates rewardTier based on battleEnemySpawner()
-int battleController(const string &className, int &rewardTier, int &potionCount, int enemyProgression, std::ifstream &characterStats)
+int battleController(const string &className, int &rewardTier, int &potionCount, int armorCount, int enemyProgression, std::ifstream &characterStats)
 {
   // Player health variable
   static int playerHealth = 20;
+
+  if (debug)
+  {
+    playerHealth = 100;
+  }
 
   // Fills skill names with default names based on class selection
   static string meleeName = " ", magicName = " ", rangedName = " ";
@@ -1682,7 +1706,7 @@ int battleController(const string &className, int &rewardTier, int &potionCount,
       if (enemyHealth > 0)
       {
         // Enemy damage is based on the (enemy tier * base enemy damage) + a random number between 1 and 3
-        playerHealth -= enemyDamage(enemyTier, enemyName, boss);
+        playerHealth -= enemyDamage(enemyTier, enemyName, boss, armorCount);
       }
     }
 
@@ -1693,7 +1717,7 @@ int battleController(const string &className, int &rewardTier, int &potionCount,
       playerHealth += heal(potionCount);
 
       // Enemy damage is based on the (enemy tier * base enemy damage) + a random number between 1 and 3
-      playerHealth -= enemyDamage(enemyTier, enemyName, boss);
+      playerHealth -= enemyDamage(enemyTier, enemyName, boss, armorCount);
     }
 
     // Player chose to run
@@ -1712,7 +1736,7 @@ int battleController(const string &className, int &rewardTier, int &potionCount,
       {
         cout << "\tYou failed to escape!\n\n";
         // Enemy damage is based on the (enemy tier * base enemy damage) + a random number between 1 and 3
-        playerHealth -= enemyDamage(enemyTier, enemyName, boss);
+        playerHealth -= enemyDamage(enemyTier, enemyName, boss, armorCount);
       }
     }
   }
@@ -1732,9 +1756,7 @@ int battleController(const string &className, int &rewardTier, int &potionCount,
     // Returning a 0 means the player lost the battle
     return 0;
   }
-
-  return 0; // TODO why is this necessary (build fails without) if there are only 2 possible outcomes?
-} // A randomized enemy is spawned, the function runs until the player wins or loses the battle
+}
 
 // Pre-condition: called by battleController(), passed enemy variables
 // Post-condition: updates all enemy variables based on enemyProgression
@@ -2050,7 +2072,7 @@ int battleMenu(string &meleeName, string &magicName, string &rangedName, int pla
   } while (loopFlag);
   cout << "\n";
   return battleMenuSelection;
-} // Player is prompted with the battle menu, and their selection is returned
+}
 
 // Pre-condition: called by battleMenu(), passed health variables
 // Post-condition: displays health art
@@ -2083,11 +2105,11 @@ void battleHealthArt(int playerHealth, int enemyHealth)
          << "'" << setfill('-') << setw(5 + playerHealthDisplay.length()) << "'" << setfill(' ') << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "'" << setfill('-') << setw(6 + enemyHealthDisplay.length()) << "'\n"
          << setfill(' ');
   }
-} // Displays health values
+}
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
-int playerDamage(int battleMenuSelection, string &meleeName, string &magicName, string &rangedName, const string &className, const string &enemyName, bool boss, std::ifstream &characterStats)
+float playerDamage(int battleMenuSelection, string &meleeName, string &magicName, string &rangedName, const string &className, const string &enemyName, bool boss, std::ifstream &characterStats)
 {
   // Pull values from characterStats
   static int meleeSkill, magicSkill, rangedSkill;
@@ -2117,104 +2139,99 @@ int playerDamage(int battleMenuSelection, string &meleeName, string &magicName, 
     }
   }
 
-  // Constants for function calls
-  const int MELEE_WEAPON = 0, MAGIC_WEAPON = 1, RANGED_WEAPON = 2;
-
   // Counters that are used to move through the tiers of skill milestones
   static int meleeCounter, magicCounter, rangedCounter;
 
-  // Damage variables
-  int damageValue = 0;
-  int meleeTier = 1, magicTier = 1, rangedTier = 1;
+  // Variables to track current skill values
+  int *skillCounter = nullptr;
+  string skillName = " ";
+  int skillUpgradeIndex = 0;
 
-  // Adds a small offset to the damage for a touch of variability
-  int randomMeleeDamageOffset = (-1 + (rand() % 3)) * meleeTier;
-  int randomMagicDamageOffset = (-1 + (rand() % 3)) * magicTier;
-  int randomRangedDamageOffset = (-1 + (rand() % 3)) * rangedTier;
-
-  // Calculate whether the player landed a critical hit
-  bool crit = false;
+  // Damage Variables
   float critChance = BASE_CRIT_CHANCE * critSkill;
-  if (1 + (rand() % 100) <= critChance * 100)
-  {
-    crit = true;
-  }
+  float damageValue = 0;
 
   switch (battleMenuSelection)
   {
-    // Player chose melee skill
+    // Melee
     case 1:
     {
-      // Assigns a value 1-3 to meleeTier as meleeProgression ascends through the tiers
-      meleeTier = skillProgression(meleeCounter, MELEE_WEAPON);
-
-      // Calculate damageValue
-      damageValue = (BASE_MELEE_DAMAGE * meleeSkill) * meleeTier * weaponUpgrade(MELEE_WEAPON);
-      enemyResistance(damageValue, meleeName, enemyName, boss, battleMenuSelection);
-      damageValue += randomMeleeDamageOffset;
-      if (crit)
-      {
-        damageValue *= 2;
-        cout << "\tYou landed a critical hit!\n";
-      }
-      cout << "\t" << meleeName << " dealt " << damageValue << " damage\n\n";
+      skillCounter = &meleeCounter;
+      skillName = meleeName;
+      skillUpgradeIndex = 0;
+      damageValue = BASE_MELEE_DAMAGE * meleeSkill;
       break;
     }
-
-    // Player chose magic skill
+    // Magic
     case 2:
     {
-      // Assigns a value 1-3 to magicTier as magicProgression ascends through the tiers
-      magicTier = skillProgression(magicCounter, MAGIC_WEAPON);
-
-      // Calculate damageValue
-      damageValue = (BASE_MAGIC_DAMAGE * magicSkill) * magicTier * weaponUpgrade(MAGIC_WEAPON);
-      enemyResistance(damageValue, magicName, enemyName, boss, battleMenuSelection);
-      damageValue += randomMagicDamageOffset;
-      if (crit)
-      {
-        damageValue *= 2;
-        cout << "\tYou landed a critical hit!\n";
-      }
-      cout << "\t" << magicName << " dealt " << damageValue << " damage\n\n";
+      skillCounter = &magicCounter;
+      skillName = magicName;
+      skillUpgradeIndex = 1;
+      damageValue = BASE_MAGIC_DAMAGE * magicSkill;
       break;
     }
-
-    // Player chose ranged skill
+    // Ranged
     case 3:
     {
-      // Ranged attacks have a 10% chance of missing
-      if (1 + (rand() % 100) <= 10)
-      {
-        cout << "\tYour projectile missed the enemy!\n\n";
-        return 0;
-      }
-
-      // Assigns a value 1-3 to rangedTier as rangedProgression ascends through the tiers
-      rangedTier = skillProgression(rangedCounter, RANGED_WEAPON);
-
-      // Calculate damageValue
-      damageValue = (BASE_RANGED_DAMAGE * rangedSkill) * rangedTier * weaponUpgrade(RANGED_WEAPON);
-      enemyResistance(damageValue, rangedName, enemyName, boss, battleMenuSelection);
-      damageValue += randomRangedDamageOffset;
-      if (crit)
-      {
-        damageValue *= 2;
-        cout << "\tYou landed a critical hit!\n";
-      }
-      cout << "\t" << rangedName << " dealt " << damageValue << " damage\n\n";
+      skillCounter = &rangedCounter;
+      skillName = rangedName;
+      skillUpgradeIndex = 2;
+      damageValue = BASE_RANGED_DAMAGE * rangedSkill;
       break;
     }
   }
 
-  // Print skill upgrade notification, this has to be done here rather than skillProgressions(), so the message comes up after the skill is used
-  if (meleeCounter == SKILL_UPGRADE || meleeCounter == SKILL_UPGRADE * 2 || magicCounter == SKILL_UPGRADE || magicCounter == SKILL_UPGRADE * 2 || rangedCounter == SKILL_UPGRADE || rangedCounter == SKILL_UPGRADE * 2)
+  // Check skill tier for damage calculations
+  int skillTier = 0;
+  // Level 1
+  if (*skillCounter < SKILL_UPGRADE)
+  {
+    skillTier = 1;
+    ++(*skillCounter);
+  }
+  // Level 2
+  else if (*skillCounter >= SKILL_UPGRADE && *skillCounter < SKILL_UPGRADE * 2)
+  {
+    skillTier = 2;
+    ++(*skillCounter);
+  }
+  // Level 3
+  else if (*skillCounter >= SKILL_UPGRADE * 2)
+  {
+    skillTier = 3;
+    ++(*skillCounter);
+  }
+
+  // Calculate damageValue
+  damageValue *= skillTier * weaponUpgrade(skillUpgradeIndex) * enemyResistance(skillName, enemyName, boss, battleMenuSelection);
+
+  // Add a small offset to the damage for a touch of variability
+  damageValue += (-1 + (rand() % 3)) * skillTier;
+
+  // Calculate crit
+  if (1 + (rand() % 100) <= critChance * 100)
+  {
+    damageValue *= 2;
+    cout << "\tYou landed a critical hit!\n";
+  }
+
+  // DEBUG OPTION - Max damage
+  if (debug)
+  {
+    damageValue = 100;
+  }
+
+  cout << "\t" << skillName << " dealt " << damageValue << " damage\n\n";
+
+  // Print skill upgrade notification
+  if (*skillCounter == SKILL_UPGRADE || *skillCounter == SKILL_UPGRADE * 2)
   {
     // Upgrade messages for displayMeInABox function
     string congratulationsMessage = "Congratulations!";
     string upgradeMessage = " ";
 
-    // Bool to make sure messages only prints once
+    // Bools to make sure messages only prints once
     static bool melee2Once = false, melee3Once = false;
     static bool magic2Once = false, magic3Once = false;
     static bool ranged2Once = false, ranged3Once = false;
@@ -2277,18 +2294,12 @@ int playerDamage(int battleMenuSelection, string &meleeName, string &magicName, 
     }
   }
 
-  // DEBUG OPTION - Max damage
-  if (debug)
-  {
-    damageValue = 100;
-  }
-
   return damageValue;
-} // Passes a value from the battleMenu function between 1 and 3, to select a skill tree
+}
 
 // Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
 // Post-condition: updates damageValue based on enemy stats
-void enemyResistance(int &damageValue, const string &abilityName, const string &enemyName, bool boss, int battleMenuSelection)
+float enemyResistance(const string &abilityName, const string &enemyName, bool boss, int battleMenuSelection)
 {
   float resistanceValue = 1.00;
 
@@ -2415,78 +2426,44 @@ void enemyResistance(int &damageValue, const string &abilityName, const string &
     resistanceValue = 3.0;
   }
 
-  damageValue = ceil(static_cast<float>(damageValue) * resistanceValue);
+  return resistanceValue;
 }
 
 // Pre-condition: called by battleController(), passed enemy variables
 // Post-condition: returns a damage amount based on enemy attributes
-int enemyDamage(const int enemyTier, const string &enemyName, bool boss)
+float enemyDamage(int enemyTier, const string &enemyName, bool boss, int armorCount)
 {
-  int damage = 0;
+  float damage = 0;
   if (!boss)
   {
     damage = (BASE_ENEMY_DAMAGE * enemyTier) + (1 + (rand() % 3));
     if (enemyTier > 3)
     {
-      damage *= 0.75f;
+      damage *= 0.85f;
     }
   }
   else
   {
     damage = BOSS_DAMAGE_LOW + (rand() % (BOSS_DAMAGE_HIGH + 1 - BOSS_DAMAGE_LOW));
   }
+
+  damage -= armorCount;
+
+  // One-shot protection
+  if (damage > 19)
+  {
+    damage = 19;
+  }
+
+  // Stops players from healing when stacking a bunch of armor
+  if (damage < 0)
+  {
+    damage = 0;
+  }
+
   cout << "\t" << enemyName << " dealt " << damage << " damage\n\n";
   return damage;
 }
-
-// Pre-condition: called by playerDamage(), passed skillCounter and overrideType, overrideType tells skillProgression which skill type to upgrade
-// Post-condition: returns a skillProgression value based on skillCounter and overrideType
-int skillProgression(int &skillCounter, int overrideType)
-{
-  // Select current upgrade tree
-  string skillType = " ";
-  switch (overrideType)
-  {
-    case 0:
-    {
-      skillType = "Melee";
-      break;
-    }
-    case 1:
-    {
-      skillType = "Magic";
-      break;
-    }
-    case 2:
-    {
-      skillType = "Ranged";
-      break;
-    }
-  }
-
-  // Level 1
-  if (skillCounter < SKILL_UPGRADE)
-  {
-    ++skillCounter;
-    return 1;
-  }
-
-  // Level 2
-  else if (skillCounter >= SKILL_UPGRADE && skillCounter < SKILL_UPGRADE * 2)
-  {
-    ++skillCounter;
-    return 2;
-  }
-
-  // Level 3
-  else if (skillCounter >= SKILL_UPGRADE * 2)
-  {
-    ++skillCounter;
-    return 3;
-  }
-
-  return 0; // // TODO why is this necessary (build fails without) if there are only 3 possible outcomes?
-} // Keeps a counter for number of individual skill moves used, and upgrades the move at certain thresholds
 
 // Pre-condition: called by playerDamage(), passed skill variables, upgradeMessage, and tier override
 // Post-condition: updates skillName and upgradeMessage based on tier and skillType
@@ -2822,39 +2799,27 @@ int weaponUpgrade(int checkWeaponUpgrade, int upgradeThis)
 }
 
 // Pre-condition: called by battleController(), passed potionCount
-// Post-condition: returns an amount to heal the player and updates potionCount. I don't think the second argument / else branch is being used anymore, but I'm too scared to remove it
-int heal(int &potionCount, int potion)
+// Post-condition: returns an amount to heal the player and updates potionCount
+int heal(int &potionCount)
 {
-  // If the heal function was passed a 0 in the potion slot (default), the healing portion of the function runs
-  if (potion == 0)
+  // If you have a potion, heal
+  if (potionCount > 0)
   {
-    // If you have a potion, heal
-    if (potionCount > 0)
-    {
-      // Picks a random number between 10 and 20 to return a heal amount
-      int healValue = 10 + (rand() % 11);
-      cout << "\tYou used a potion and healed for " << healValue << " health\n"
-           << "\tYou now have " << --potionCount << " potions.\n\n";
-      // Returns the amount the player will be healed
-      return healValue;
-    }
-
-    // If the player doesn't have any potions
-    else
-    {
-      cout << "\tYou don't have any potions!\n";
-      return 0;
-    }
+    // Picks a random number between 10 and 20 to return a heal amount
+    int healValue = 10 + (rand() % 11);
+    cout << "\tYou used a potion and healed for " << healValue << " health\n"
+         << "\tYou now have " << --potionCount << " potions.\n\n";
+    // Returns the amount the player will be healed
+    return healValue;
   }
 
-  // Heal function was called with any value other than 0 in the potion slot, the potionCount value is incremented
+  // If the player doesn't have any potions
   else
   {
-    potionCount += potion;
-    cout << "You now have: " << potionCount << " potions\n\n";
+    cout << "\tYou don't have any potions!\n";
     return 0;
   }
-}  // Call this function with a 0 to return a heal value and decrement potionCount or call with anything else to increment potionCount by the amount called
+}
 
 // Pre-condition: called to validate a Y or N decision
 // Post-condition: returns whether the choice was valid or not
