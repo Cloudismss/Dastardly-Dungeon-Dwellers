@@ -1618,7 +1618,7 @@ void roomMerchantPurchase(int ITEM_INDEX, const string merchantItemName[], const
   else
   {
     purchaseAmount = 0;
-    cout << "\tYou don't have enough gold!\n";
+    cout << "\tYou don't have enough gold!\n\n";
     return;
   }
 }
@@ -2222,7 +2222,7 @@ float playerDamage(int battleMenuSelection, string &meleeName, string &magicName
     damageValue = 100;
   }
 
-  cout << "\t" << skillName << " dealt " << damageValue << " damage\n\n";
+  cout << "\t" << skillName << " dealt " << static_cast<int>(damageValue) << " damage\n\n";
 
   // Print skill upgrade notification
   if (*skillCounter == SKILL_UPGRADE || *skillCounter == SKILL_UPGRADE * 2)
@@ -2461,7 +2461,7 @@ float enemyDamage(int enemyTier, const string &enemyName, bool boss, int armorCo
     damage = 0;
   }
 
-  cout << "\t" << enemyName << " dealt " << damage << " damage\n\n";
+  cout << "\t" << enemyName << " dealt " << static_cast<int>(damage) << " damage\n\n";
   return damage;
 }
 
