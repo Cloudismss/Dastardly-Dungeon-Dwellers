@@ -3,8 +3,32 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 
 ![Main Menu](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/main%20menu.png)
 
+## Game Information
+
+![Game Info](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/info.png)
+
+## Battle Information
+
+![Battle Info](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/battle%20info.png)
+
 ## Feautures
 
+### Class Selection
 
+![Class Selection](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/archer.png)
+
+### Randomly Generated Map and Movement Display
 
 ![Map](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/map.png)
+
+### Randomized Fantasy Battles
+
+![Troll Battle](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/troll.png)
+
+### Loot Chests!
+
+![Loot Chests](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/chest.png)
+
+### Friendly Traveling Merchant
+
+![Merchant](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/chest.png)
