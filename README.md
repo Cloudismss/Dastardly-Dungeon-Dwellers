@@ -3,4 +3,4 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 
 ## Feautures
 
-!MainMenu(https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/main menu.png?raw=true)
+!MainMenu(https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/main-menu.png?raw=true)
