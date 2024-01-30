@@ -31,4 +31,13 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 
 ### Friendly Traveling Merchant
 
-![Merchant](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/chest.png)
+![Merchant](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/merchant.png)
+
+### Art Credits
+Thank you to the ASCII art contributors at https://www.asciiart.eu/ and https://ascii.co.uk
+The following art was used in this project:
+TomekK - Treasure Chest - https://ascii.co.uk/art/treasure
+Shanaka Dias - Merchant (Gimli) - https://www.asciiart.eu/books/lord-of-the-rings
+Lee (FL) - Exit Door (Vanishing Point) - https://www.asciiart.eu/art-and-design/mazes
+dc - Game Over Page - https://www.asciiart.eu/art-and-design/borders
+Unknown - Victory Page - https://www.asciiart.eu/art-and-design/borders
