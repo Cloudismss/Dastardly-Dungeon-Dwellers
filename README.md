@@ -33,8 +33,8 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 
 ![Merchant](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/merchant.png)
 
-### Art Credits
-Thank you to the ASCII art contributors at https://www.asciiart.eu/ and https://ascii.co.uk
+## Art Credits
+Huge thank you to the ASCII art contributors at https://www.asciiart.eu/ and https://ascii.co.uk
 
 The following art was used in this project:
 
