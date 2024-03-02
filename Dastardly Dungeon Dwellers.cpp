@@ -576,6 +576,7 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
     else if (*contentsPosition == "Exit")
     {
       roomExitMonologue();
+      doorArt();
       roomExit(keyCount, gameVictory);
       ++roomCount;
     }
@@ -625,6 +626,7 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
     {
       monologueInABox("A strange sensation controls my actions");
       roomExitMonologue(dialogueSwitch);
+      doorArt();
       roomExit(keyCount, gameVictory);
     }
     else if (*contentsPosition == "Start")
@@ -1648,7 +1650,6 @@ void roomExit(int &keyCount, bool &gameVictory)
     {
       cout << "\n";
       gameVictory = true;
-      doorArt();
       return;
     }
   }
@@ -3211,7 +3212,7 @@ void roomExitMonologue(int dialogueSwitch)
     {
       default: // I haven't gotten around to writing more monologue yet
       {
-        cout << "You notice a strange door, unlike any you've seen before. You're not sure why, but you feel it calling to you\n\n";
+        cout << "You notice a strange door, unlike any you've seen before. You're not sure why, but you feel it calling to you...\n\n";
         break;
       }
     }
