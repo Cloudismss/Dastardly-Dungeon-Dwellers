@@ -11,7 +11,7 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 
 ![Battle Info](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/battle%20info.png)
 
-## Feautures
+## Features
 
 ### Class Selection
 
