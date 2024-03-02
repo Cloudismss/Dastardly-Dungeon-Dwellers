@@ -3543,12 +3543,6 @@ void doorArt()
           "88     .'   | .'   |/|  /                     \\ |`!   |`.|    `.  |  88\n"
           "88  _.'     !'|   .' | /                       \\|  `  |  `.    |`.|  88\n"
           "88888888888888888888888888888888888888888888888888888888888888888888888\n\n";
-
-  // Pause the game until the user is ready
-  cout << "Press enter to leave the dungeon: ";
-  string enterKey = " ";
-  getline(cin, enterKey);
-  cout << "\n";
 }
 
 // Pre-condition: called to display victory art
