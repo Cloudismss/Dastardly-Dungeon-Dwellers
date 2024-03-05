@@ -1,6 +1,7 @@
 #include "Enemy.h"
 
 // this is what the call will look like in DDD.cpp
+/*
 void inSomeFunction()
 {
   Progression p;
@@ -27,3 +28,4 @@ void Enemy::attackEnemy(float adjustment)
     health = 0;
   }
 }
+*/

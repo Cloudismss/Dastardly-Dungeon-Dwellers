@@ -1,7 +1,7 @@
 #include "Dastardly Dungeon Dwellers.h"
 #include "Art.h"
-#include "Enemy.h"
-#include "Progression.h"
+// #include "Enemy.h"
+// #include "Progression.h"
 
 // Map Constants - feel free to change - have to both be odd numbers or positioning will be weird
 const int MAP_ROWS = 9;
