@@ -11,33 +11,38 @@ protected:
   int tier;
   float health;
   float damage;
-  float resistance;
+  float meleeVulnerability;
+  float magicVulnerability;
+  float rangedVulnerability;
+  int attackLow;
+  int attackHigh;
 
 public:
   // Mutators
-  void setEnemyAttributes();
-  void attackEnemy(float damage);
+  virtual void setEnemyAttributes();
+  void attackEnemy(float attackDamage, const string &attackType);
 
   // Accessors
-  string getName() const;
-  int getTier() const;
-  float getHealth() const;
-  float attackPlayer() const;
-  float getResistance() const;
+  string getName() const { return name; }
+  int getTier() const { return tier; }
+  float getHealth() const { return health; }
+  float attackPlayer() const { return attackLow + (rand() % ((attackHigh + 1) - attackLow)); }
+  virtual void announceEnemy();
+
+  // Debug
+  void debugPrint();
 };
 
 class Troll: public Enemy
 {
-
+  void setEnemyAttributes() override;
+  void announceEnemy() override;
 };
 
 class Boss: public Enemy
 {
-
+  void setEnemyAttributes() override;
+  void announceEnemy() override;
 };
-
-void classTester();
-void inSomeFunction();
-void generateEnemy(Progression &, Enemy &);
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
