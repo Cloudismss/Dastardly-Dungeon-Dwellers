@@ -29,6 +29,8 @@ public:
   float attackPlayer() const { return attackLow + (rand() % ((attackHigh + 1) - attackLow)); }
   virtual void announceEnemy();
 
+  virtual string getEnemyType() = 0;
+
   // Debug
   void debugPrint();
 };
