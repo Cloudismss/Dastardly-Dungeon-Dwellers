@@ -1,8 +1,12 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
 #define DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
 
-#include "Dastardly Dungeon Dwellers.h"
-#include "Progression.h"
+#include <string>
+
+#include "Boss.h"
+#include "Troll.h"
+
+using std::string;
 
 class Enemy
 {

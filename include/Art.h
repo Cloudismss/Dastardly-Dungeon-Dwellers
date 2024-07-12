@@ -1,7 +1,9 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_ART_H
 #define DASTARDLY_DUNGEON_DWELLERS_ART_H
 
-#include "Dastardly Dungeon Dwellers.h"
+#include <string>
+
+using std::string;
 
 void displayMeInABox(const string &message);
 void displayMeInABox(const string &message1, const string &message2);
