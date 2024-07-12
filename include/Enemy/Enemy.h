@@ -8,6 +8,7 @@ class Enemy
 {
 protected:
   string name;
+  string type;
   int tier;
   float health;
   float damage;
@@ -24,27 +25,17 @@ public:
 
   // Accessors
   string getName() const { return name; }
+  string getType() const { return type; }
   int getTier() const { return tier; }
   float getHealth() const { return health; }
   float attackPlayer() const { return attackLow + (rand() % ((attackHigh + 1) - attackLow)); }
-  virtual void announceEnemy();
+  void announceEnemy();
 
+  // ! Test
   virtual string getEnemyType() = 0;
 
   // Debug
   void debugPrint();
-};
-
-class Troll: public Enemy
-{
-  void setEnemyAttributes() override;
-  void announceEnemy() override;
-};
-
-class Boss: public Enemy
-{
-  void setEnemyAttributes() override;
-  void announceEnemy() override;
 };
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
