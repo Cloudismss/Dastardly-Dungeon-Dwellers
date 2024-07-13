@@ -31,7 +31,7 @@ void Enemy::attackEnemy(float attackDamage, const string &attackType)
 
 void Enemy::announceEnemy()
 {
-  std::cerr << "ERROR: This text should be overwritten!\n";
+  std::cout << "Placeholder Text!!\n";
 }
 
 void Enemy::debugPrint()

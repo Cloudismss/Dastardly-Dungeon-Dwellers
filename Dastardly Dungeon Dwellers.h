@@ -3,20 +3,15 @@
 
 #include <fstream>
 #include <iostream>
-#include <iomanip>
 #include <string>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
-#include <limits>
 
-using std::cout;
+#include "Main Menu.h"
+#include "Map Generator.h"
+#include "Room Controller.h"
+
 using std::cin;
+using std::cout;
 using std::string;
-using std::setw;
-using std::setfill;
-using std::rand;
-
 
 // Prototypes
 

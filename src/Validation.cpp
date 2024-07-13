@@ -1,7 +1,5 @@
 #include "Validation.h"
 
-#include "Globals.h"
-
 // Pre-condition: called to validate a Y or N decision
 // Post-condition: returns whether the choice was valid or not
 bool validateDecision(int userChoice)

@@ -1,5 +1,6 @@
 #include "Globals.h"
 
+#include "Map.h"
 #include "Room Enemy.h"
 #include "Room Exit.h"
 #include "Room Loot.h"

@@ -1,11 +1,14 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
 #define DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
 
+#include <iostream>
 #include <string>
 
 #include "Boss.h"
 #include "Troll.h"
 
+using std::cerr;
+using std::cout;
 using std::string;
 
 class Enemy
@@ -36,7 +39,7 @@ public:
   void announceEnemy();
 
   // ! Test
-  virtual string getEnemyType() = 0;
+  //virtual string getEnemyType() = 0;
 
   // Debug
   void debugPrint();

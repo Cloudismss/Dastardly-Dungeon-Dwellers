@@ -1,4 +1,7 @@
+#include <iostream>
 #include <string>
+
+#include "Battle Controller.h"
 
 using std::string;
 

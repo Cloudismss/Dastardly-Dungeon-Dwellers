@@ -3,10 +3,10 @@ const int MAP_ROWS = 9;
 const int MAP_COLUMNS = 9;
 
 // Globals
+const float BASE_CRIT_CHANCE = 0.10;
 const int BASE_MELEE_DAMAGE = 2;
 const int BASE_MAGIC_DAMAGE = 2;
 const int BASE_RANGED_DAMAGE = 3;
-const float BASE_CRIT_CHANCE = 0.10;
 const int BASE_ENEMY_DAMAGE = 2;
 const int BASE_ENEMY_HEALTH = 5;
 const int BOSS_HEALTH = 100;

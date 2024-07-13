@@ -1,5 +1,15 @@
+#include <iomanip>
+#include <iostream>
 #include <string>
 
+#include "Globals.h"
+
+#include "Validation.h"
+
+using std::cin;
+using std::cout;
+using std::setfill;
+using std::setw;
 using std::string;
 
 // Map Functions

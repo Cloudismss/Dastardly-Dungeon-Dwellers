@@ -1,0 +1,1 @@
+int weaponUpgrade(int checkWeaponUpgrade, int upgradeThis = -1);

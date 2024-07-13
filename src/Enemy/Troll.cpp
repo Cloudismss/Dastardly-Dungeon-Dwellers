@@ -1,3 +1,5 @@
+#include "Troll.h"
+
 // Troll Class Definitions
 
 void Troll::setEnemyAttributes()
@@ -12,9 +14,4 @@ void Troll::setEnemyAttributes()
   rangedVulnerability = 2.0;
   attackLow = 5;
   attackHigh = 10;
-}
-
-void Troll::announceEnemy()
-{
-  cout << "PLACEHOLDER: Zoinks! TROLL\n";
 }

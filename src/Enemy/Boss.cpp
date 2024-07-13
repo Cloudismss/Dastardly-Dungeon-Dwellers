@@ -1,3 +1,5 @@
+#include "Boss.h"
+
 // Boss Class Definitions
 
 void Boss::setEnemyAttributes()
@@ -12,9 +14,4 @@ void Boss::setEnemyAttributes()
   rangedVulnerability = 2.0;
   attackLow = 10;
   attackHigh = 20;
-}
-
-void Boss::announceEnemy()
-{
-  cout << "PLACEHOLDER: Zoinks! BOSS\n";
 }
