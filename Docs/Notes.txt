@@ -1,0 +1,15 @@
+Expand health bars and round up float damage values
+Redo boss handling
+Spawn boss in a room with icon
+Redo enemy damage formula with better one-shot protection - use a static bool that is set to false when health would reach 0 in a battle, and set health to 1, then set health back to true when the battle is won
+add visual health bars to accomodate switch to floats
+
+create classes
+  map
+  player
+  enemy
+  progression
+
+move main menu art to art.h
+move room merchant art to art.h
+move battle health art to art.h
