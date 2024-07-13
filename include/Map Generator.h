@@ -1,7 +1,5 @@
 #include <string>
 
-#include "Map.h"
-
 using std::string;
 
 void generateMap(char mapArray[MAP_ROWS][MAP_COLUMNS], bool roomExplored[MAP_ROWS][MAP_COLUMNS], string roomContents[MAP_ROWS][MAP_COLUMNS], char *&playerPosition, bool *&exploredPosition, string *&contentsPosition, const int ROW_MIDPOINT, const int COLUMN_MIDPOINT);

@@ -1,4 +1,5 @@
-#include "Enemy.h"
+#include "Globals.h"
+#include "Art.h"
 
 // battleController group, these functions handle all battle related functions. Called within roomController group
 int battleController(const string &className, int &rewardTier, int &potionCount, int armorCount, int enemyProgression, std::ifstream &characterStats);

@@ -1,5 +1,38 @@
 #include "Art.h"
 
+// Pre-condition: called by battleMenu(), passed health variables
+// Post-condition: displays health art
+void battleHealthArt(int playerHealth, int enemyHealth)
+{
+  // Don't print health if either the player or the enemy has 0 health
+  if (playerHealth <= 0 || enemyHealth <= 0)
+  {
+    return;
+  }
+
+  // Print health
+  else
+  {
+    string playerHealthDisplay = "Player health: ";
+    playerHealthDisplay += std::to_string(playerHealth);
+    string enemyHealthDisplay = "Enemy health: ";
+    enemyHealthDisplay += std::to_string(enemyHealth);
+
+    // Check amount of playerHealth digits to determine offset for blank spacing between player and enemy health boxes
+    int offset = 1;
+    int playerHealthDigits = (std::to_string(playerHealth)).length();
+    for (int i = 1; i < playerHealthDigits; ++i)
+    {
+      --offset;
+    }
+
+    cout << "." << setfill('-') << setw(5 + playerHealthDisplay.length()) << "." << setfill(' ') << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "." << setfill('-') << setw(6 + enemyHealthDisplay.length()) << ".\n"
+         << "|" << setfill(' ') << setw(2) << " " << playerHealthDisplay << setw(2) << " " << "|" << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "|" << setw(2) << " " << enemyHealthDisplay << setw(4) << "|\n"
+         << "'" << setfill('-') << setw(5 + playerHealthDisplay.length()) << "'" << setfill(' ') << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "'" << setfill('-') << setw(6 + enemyHealthDisplay.length()) << "'\n"
+         << setfill(' ');
+  }
+}
+
 // Pre-condition: called to display text in a box
 // Post-condition: displays text in a box based on string length
 void displayMeInABox(const string &message)
