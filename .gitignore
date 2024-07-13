@@ -33,4 +33,5 @@
 
 # Custom
 .vscode
+.build
 Docs
