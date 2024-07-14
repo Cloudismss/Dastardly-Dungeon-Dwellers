@@ -1,3 +1,6 @@
+#ifndef DASTARDLY_DUNGEON_DWELLERS_ROOM_LOOT_H
+#define DASTARDLY_DUNGEON_DWELLERS_ROOM_LOOT_H
+
 #include <iostream>
 #include <string>
 
@@ -10,3 +13,5 @@ using std::cout;
 using std::string;
 
 bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, bool &isEnemyRoom, std::ifstream &characterStats);
+
+#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_LOOT_H

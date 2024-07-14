@@ -1,3 +1,6 @@
+#ifndef DASTARDLY_DUNGEON_DWELLERS_PLAYER_DAMAGE_H
+#define DASTARDLY_DUNGEON_DWELLERS_PLAYER_DAMAGE_H
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -13,3 +16,5 @@ using std::cin;
 using std::string;
 
 float playerDamage(int battleMenuSelection, string &meleeName, string &magicName, string &rangedName, const string &className, const string &enemyName, bool boss, std::ifstream &characterStats);
+
+#endif //DASTARDLY_DUNGEON_DWELLERS_PLAYER_DAMAGE_H

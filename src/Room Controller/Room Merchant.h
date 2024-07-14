@@ -1,3 +1,6 @@
+#ifndef DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H
+#define DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H
+
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -13,3 +16,5 @@ using std::string;
 
 void roomMerchant(int &potionCount, int &armorCount, int &goldCount, int &keyCount, const string &className);
 void roomMerchantPurchase(int ITEM_INDEX, const string merchantItemName[], const int merchantItemQuantity[], const int merchantItemCost[], int &purchaseAmount, int &goldCount);
+
+#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H

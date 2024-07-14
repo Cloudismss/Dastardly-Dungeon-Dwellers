@@ -1,3 +1,6 @@
+#ifndef DASTARDLY_DUNGEON_DWELLERS_VALIDATION_H
+#define DASTARDLY_DUNGEON_DWELLERS_VALIDATION_H
+
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -14,3 +17,5 @@ using std::string;
 bool validateDecision(int userChoice);
 bool validateInput(int userChoice, int rangeLow, int rangeHigh);
 bool validateDirection(int rowPosition, int columnPosition, char &userChoice);
+
+#endif //DASTARDLY_DUNGEON_DWELLERS_VALIDATION_H
