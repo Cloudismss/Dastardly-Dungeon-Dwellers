@@ -43,7 +43,8 @@ void mainMenu()
     }
     else if (selection == -37) // Secret entry to activate debug mode
     {
-      debug = true;
+      // TODO: find new implementation
+      //debug = true;
       std::cerr << "Debug mode enabled\n\n";
     }
   } while (loopFlag);

@@ -27,7 +27,7 @@ protected:
 
 public:
   // Mutators
-  virtual void setEnemyAttributes();
+  virtual void setEnemyAttributes() = 0;
   void attackEnemy(float attackDamage, const string &attackType);
 
   // Accessors

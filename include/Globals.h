@@ -17,7 +17,8 @@ const int BOSS_DAMAGE_LOW = 8;
 const int BOSS_DAMAGE_HIGH = 16;
 const int SKILL_UPGRADE = 7;
 
+// TODO: Find new implementation
 // Debug toggle - displays useful debug information in the console and gives resources / increased damage
-bool debug = false; // Enter -37 at the main menu to enter debug mode
+const bool debug = false; // Enter -37 at the main menu to enter debug mode
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H
