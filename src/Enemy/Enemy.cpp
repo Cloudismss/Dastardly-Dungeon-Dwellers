@@ -1,10 +1,25 @@
 #include "Enemy.h"
 
 // Enemy Class Definitions
+Enemy::Enemy()
+{
+  name = generateEnemy();
+}
+
+Enemy::~Enemy()
+{
+
+}
 
 void Enemy::setEnemyAttributes()
 {
   std::cerr << "Error: This text should be overwritten\n";
+}
+
+string Enemy::generateEnemy()
+{
+  std::vector<string> baddies = {"Goblin", "Orc", "Skeleton", "Troll", "Cyclops", "Minotaur"};
+  return baddies[1 + (rand() % baddies.size())];
 }
 
 void Enemy::attackEnemy(float attackDamage, const string &attackType)
@@ -29,9 +44,10 @@ void Enemy::attackEnemy(float attackDamage, const string &attackType)
   }
 }
 
+// TODO varied dialogue implementation
 void Enemy::announceEnemy()
 {
-  std::cout << "Placeholder Text!!\n";
+  std::cout << "Yikes! A tier " << tier << " " << name << " has appeared {PLACEHOLDER}\n";
 }
 
 void Enemy::debugPrint()

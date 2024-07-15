@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "Boss.h"
 #include "Troll.h"
@@ -13,9 +14,11 @@ using std::string;
 
 class Enemy
 {
+  Enemy();
+  ~Enemy();
+
 protected:
   string name;
-  string type;
   int tier;
   float health;
   float damage;
@@ -25,6 +28,8 @@ protected:
   int attackLow;
   int attackHigh;
 
+  string generateEnemy();
+
 public:
   // Mutators
   virtual void setEnemyAttributes() = 0;
@@ -32,14 +37,10 @@ public:
 
   // Accessors
   string getName() const { return name; }
-  string getType() const { return type; }
   int getTier() const { return tier; }
   float getHealth() const { return health; }
   float attackPlayer() const { return attackLow + (rand() % ((attackHigh + 1) - attackLow)); }
   void announceEnemy();
-
-  // ! Test
-  //virtual string getEnemyType() = 0;
 
   // Debug
   void debugPrint();
