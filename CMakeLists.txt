@@ -6,9 +6,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
 
+# executable
 add_executable(${PROJECT_NAME} "Dastardly Dungeon Dwellers.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Dastardly Dungeon Dwellers")
-target_link_libraries(${PROJECT_NAME} src)
-target_link_libraries(${PROJECT_NAME} include)
-add_subdirectory(src)
+
+# dirs
 add_subdirectory(include)
+add_subdirectory(src)
+target_link_libraries(${PROJECT_NAME} include)
+target_link_libraries(${PROJECT_NAME} src)
+
+# fmt library
+add_subdirectory(deps/fmt)
+target_link_libraries(${PROJECT_NAME} fmt::fmt)

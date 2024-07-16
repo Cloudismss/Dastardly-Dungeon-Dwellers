@@ -24,10 +24,13 @@ set(Sources
         "Room Controller/Room Merchant.cpp"
 )
 
-add_library(src ${Sources})
+set(Dirs
+        "../include"
+        "../include/Battle Controller"
+        "../include/Enemy"
+        "../include/Player"
+        "../include/Room Controller"
+)
 
-target_include_directories(src PUBLIC "../include")
-target_include_directories(src PUBLIC "../include/Battle Controller")
-target_include_directories(src PUBLIC "../include/Enemy")
-target_include_directories(src PUBLIC "../include/Player")
-target_include_directories(src PUBLIC "../include/Room Controller")
+add_library(src ${Sources})
+target_include_directories(src PUBLIC ${Dirs})
