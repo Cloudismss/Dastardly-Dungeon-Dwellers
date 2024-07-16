@@ -17,5 +17,5 @@ target_link_libraries(${PROJECT_NAME} include)
 target_link_libraries(${PROJECT_NAME} src)
 
 # fmt library
-add_subdirectory(deps/fmt)
+add_subdirectory(lib/fmt)
 target_link_libraries(${PROJECT_NAME} fmt::fmt)
