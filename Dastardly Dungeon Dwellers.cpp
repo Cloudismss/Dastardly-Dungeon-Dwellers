@@ -9,6 +9,10 @@
 #include "fmt/base.h"
 #include "fmt/color.h"
 
+#include "boost/random/mersenne_twister.hpp"
+#include "boost/random/uniform_int_distribution.hpp"
+#include "boost/random/discrete_distribution.hpp"
+
 // END TESTING PROTOTYPES | FUNCTIONS | INCLUDES
 
 int main()
@@ -19,7 +23,20 @@ int main()
   // ?
   // *
 
+  // Print red text
   fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Test\n");
+
+  // Random number 1-100
+  boost::random::mt19937 gen(std::time(nullptr));
+  boost::random::uniform_int_distribution<> dist1(1, 100);
+  cout << dist1(gen) << "\n";
+
+  // Weighted probability 1-6
+  double probabilities[] = {0.5, 0.1, 0.1, 0.1, 0.1, 0.1};
+  boost::random::discrete_distribution<> dist2(probabilities);
+  cout << dist2(gen) + 1 << "\n";
+
+  cout << "\n\n\n\n";
 
   // END TESTING CODE
   

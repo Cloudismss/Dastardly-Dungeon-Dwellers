@@ -19,3 +19,7 @@ target_link_libraries(${PROJECT_NAME} src)
 # fmt library
 add_subdirectory(lib/fmt)
 target_link_libraries(${PROJECT_NAME} fmt::fmt)
+
+# boost library
+add_subdirectory(lib/boost EXCLUDE_FROM_ALL)
+target_link_libraries(${PROJECT_NAME} Boost::random)
