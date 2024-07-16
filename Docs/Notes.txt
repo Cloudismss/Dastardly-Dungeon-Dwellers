@@ -13,3 +13,5 @@ create classes
 move main menu art to art.h
 move room merchant art to art.h
 move battle health art to art.h
+
+git submodule update --init --recursive
