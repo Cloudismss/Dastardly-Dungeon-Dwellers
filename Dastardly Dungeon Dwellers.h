@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Main Menu.h"
-#include "Map Generator.h"
+#include "Map.h"
 #include "Room Controller.h"
 
 using std::cin;
@@ -15,7 +15,7 @@ using std::string;
 
 // Prototypes
 
-// File Streaming .txt file generator and map generator
+// File Streaming .txt file generator
 void generateCharacterStats(std::ofstream &defaultCharacterStats);
 
 // Game Controller

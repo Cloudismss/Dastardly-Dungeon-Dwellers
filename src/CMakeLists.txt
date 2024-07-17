@@ -2,7 +2,6 @@ set(Sources
         # Sources
         "Art.cpp"
         "Main Menu.cpp"
-        "Map Generator.cpp"
         "Map.cpp"
         "Progression.cpp"
         "Validation.cpp"

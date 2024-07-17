@@ -5,7 +5,6 @@ set(Includes
         # Headers
         "Art.h"
         "Main Menu.h"
-        "Map Generator.h"
         "Map.h"
         "Progression.h"
         "Validation.h"

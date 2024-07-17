@@ -1,10 +1,6 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H
 #define DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H
 
-// Map Constants - feel free to change - have to both be odd numbers or positioning will be weird
-const int MAP_ROWS = 9;
-const int MAP_COLUMNS = 9;
-
 // Globals
 const float BASE_CRIT_CHANCE = 0.10;
 const int BASE_MELEE_DAMAGE = 2;
