@@ -6,6 +6,9 @@ Map::Map()
   rowPosition = MAP_ROWS / 2;
   columnPosition = MAP_COLUMNS / 2;
   previousPlayerPosition = mapArray[MAP_ROWS / 2][MAP_COLUMNS / 2];
+
+  // Generate map
+  generateMap();
 }
 
 Map::~Map() { }
@@ -56,12 +59,11 @@ void Map::mapPrint()
   cout << "\n";
 }
 
-
 // Pre-condition: called by roomController(), passed mapArray[], roomExplored[], roomContents[], array pointers
 // Post-condition: Returns true if the room has already been explored. Allows the player to move around the map. Updates mapArray[] with current and previous player position. Updates roomExplored[] with true once a new room is entered
 bool Map::move()
 {
-  // Prints the mao
+  // Prints the map
   mapPrint();
 
   // Adjusts either rowPosition or columnPosition by 1 or -1 based on direction choice by the user
@@ -101,7 +103,8 @@ bool Map::move()
 
   // Prints the map
   mapPrint();
-  cout << "\n";
+
+  // Print map divider
   cout << setfill('-') << setw(64) << " " << setfill(' ') << "\n\n";
 
   // If the room was already visited, return true, if not, return false
@@ -159,7 +162,6 @@ void Map::mapMovement()
   }
 }
 
-
 // !
 
 // Pre-condition: receives mapArray[], roomExplored[], roomContents[], *playerPosition, *exploredPosition, *contentsPosition, and constants from startGame()
@@ -177,7 +179,7 @@ void Map::generateMap()
     }
   }
 
-  // Place the player icon in the starter room and sets the starter room to explored with "start" contents
+  // Place the player icon in the starter room and sets the starter room to "explored" with "start" contents
   *mapArray[ROW_MIDPOINT][COLUMN_MIDPOINT] = '*';
   *roomExplored[ROW_MIDPOINT][COLUMN_MIDPOINT] = true;
   *roomContents[ROW_MIDPOINT][COLUMN_MIDPOINT] = "Start";
@@ -209,23 +211,23 @@ void Map::generateMap()
   } while (!exitPlaced);
 
   // Spawn Merchants
-  int merchantDistance = 2; // Merchants must spawn 2 tiles away from the center
-  int merchantSimilarDistance = 1; // Merchants rooms must spawn 1 tile away from each other
-  int merchantsAllowed = MAP_ROWS / 2 + 1; // Number of merchants to spawn is based on map size
-  string merchantName = "Merchant";
-  char merchantSymbol = '$';
-  generateRooms(merchantName, merchantSymbol);
+  const int MERCHANT_ROOMS_DISTANCE = 2; // Merchants must spawn 2 tiles away from the center
+  const int MERCHANT_ROOMS_SIMILAR_DISTANCE = 1; // Merchants rooms must spawn 1 tile away from each other
+  const int MERCHANT_ROOMS_ALLOWED = MAP_ROWS / 2 + 1; // Number of merchants to spawn is based on map size
+  const string MERCHANT_ROOMS_NAME = "Merchant";
+  const char MERCHANT_SYMBOL = '$';
+  generateRooms(MERCHANT_ROOMS_NAME, MERCHANT_SYMBOL, MERCHANT_ROOMS_DISTANCE, MERCHANT_ROOMS_SIMILAR_DISTANCE, MERCHANT_ROOMS_ALLOWED);
 
-  // Spawn Remaining Non-Enemy Rooms
-  int remainingRoomsDistance = 2; // Non-enemy rooms must spawn 2 tiles away from the center, this is so the first room is guaranteed to contain an enemy
-  int remainingRoomsSimilarDistance = 1; // Non-enemy rooms must spawn 1 tiles away from each other
-  int remainingRoomsAvailable = (MAP_ROWS * MAP_COLUMNS) - 2 - merchantsAllowed; // The literal 2 is for 1 exit and 1 spawn location
+  // Calculate Remaining Non-Enemy Rooms
+  int REMAINING_ROOMS_DISTANCE = 2; // Non-enemy rooms must spawn 2 tiles away from the center, this is so the first room is guaranteed to contain an enemy
+  int REMAINING_ROOMS_SIMILAR_DISTANCE = 1; // Non-enemy rooms must spawn 1 tiles away from each other
+  int REMAINING_ROOMS_ALLOWED = (MAP_ROWS * MAP_COLUMNS) - 2 - MERCHANT_ROOMS_ALLOWED; // The literal 2 is for 1 exit and 1 spawn location
 
   // Spawn Loot Room
-  int lootRoomsAllowed = remainingRoomsAvailable * 0.15f; // 15% of remaining rooms can be loot rooms
-  string lootRoomName = "Loot";
-  char lootRoomSymbol = 'L';
-  generateRooms(lootRoomName, lootRoomSymbol);
+  const int LOOT_ROOMS_ALLOWED = REMAINING_ROOMS_ALLOWED * 0.15f; // 15% of remaining rooms can be loot rooms
+  const string LOOT_ROOMS_NAME = "Loot";
+  const char LOOT_ROOMS_SYMBOL = 'L';
+  generateRooms(LOOT_ROOMS_NAME, LOOT_ROOMS_SYMBOL, REMAINING_ROOMS_DISTANCE, REMAINING_ROOMS_SIMILAR_DISTANCE, LOOT_ROOMS_ALLOWED);
 
   // Spawn Enemy Rooms
   for (int i = 0; i < MAP_ROWS; ++i)
@@ -246,7 +248,7 @@ void Map::generateMap()
 
 // Pre-condition: receives mapArray[], roomContents[], and constants from generateMap()
 // Post-condition: roomContents[] is filled with a random selection of rooms. If debug is on - mapArray[] is filled with room contents indicators
-void Map::generateRooms(const string &roomName, char roomSymbol)
+void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int SIMILAR_DISTANCE, const int ROOMS_ALLOWED)
 {
   bool validSpawns[MAP_COLUMNS][MAP_COLUMNS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function
   for (int i = 0; i < MAP_ROWS; ++i)
@@ -264,7 +266,7 @@ void Map::generateRooms(const string &roomName, char roomSymbol)
   // Using these variable to make sure the function has a way out if it can't find a spawn after x attempts
   int spawnAttempts = 0;
   int allowedAttempts = 10;
-  if (roomName == "Merchant")
+  if (ROOM_NAME == "Merchant")
   {
     allowedAttempts = 100; // I want to ensure the proper amount of merchants are always spawned
   }
@@ -280,14 +282,14 @@ void Map::generateRooms(const string &roomName, char roomSymbol)
     if (validSpawns[randomRow][randomColumn] && *roomContents[randomRow][randomColumn] == " ")
     {
       // Place room
-      *roomContents[randomRow][randomColumn] = roomName;
+      *roomContents[randomRow][randomColumn] = ROOM_NAME;
       validSpawns[randomRow][randomColumn] = false;
       ++roomsPlaced;
 
       // DEBUG Option - Print loot room icons on map
       if (debug)
       {
-        *mapArray[randomRow][randomColumn] = roomSymbol;
+        *mapArray[randomRow][randomColumn] = ROOM_SYMBOL;
       }
 
       // Mark spaces SIMILAR_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
