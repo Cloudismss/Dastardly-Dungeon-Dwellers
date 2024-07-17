@@ -162,8 +162,6 @@ void Map::mapMovement()
   }
 }
 
-// !
-
 // Pre-condition: receives mapArray[], roomExplored[], roomContents[], *playerPosition, *exploredPosition, *contentsPosition, and constants from startGame()
 // Post-condition: initializes mapArray[] with blanks and roomExplored[] with false, roomContents[] is filled with a random selection of rooms. The spawn room is marked with an '*' in mapArray[] and 'true' in roomExplored[]. If debug is on - mapArray[] is filled with room contents indicators
 void Map::generateMap()

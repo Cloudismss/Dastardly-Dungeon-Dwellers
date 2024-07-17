@@ -2,134 +2,156 @@
 
 // Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
 // Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
-void roomController(string &className, int &potionCount, int &armorCount, int &goldCount, int &keyCount, int &roomCount, bool &gameOver, bool &gameVictory, char mapArray[MAP_ROWS][MAP_COLUMNS], bool roomExplored[MAP_ROWS][MAP_COLUMNS], string roomContents[MAP_ROWS][MAP_COLUMNS], char *&playerPosition, bool *&exploredPosition, string *&contentsPosition, std::ifstream &characterStats)
+void roomController(string &className, int &potionCount, int &armorCount, int &goldCount, int &keyCount, int &roomCount, bool &gameOver, bool &gameVictory, Map *map, std::ifstream &characterStats)
 {
+  // Difficulty tracking counter
   static int enemyProgression;
-  // map() allows the player to move between rooms. It returns false if the room has not been explored yet
-  if (!(map(mapArray, roomExplored, roomContents, playerPosition, exploredPosition, contentsPosition)))
-  {
-    if (*contentsPosition == "Enemy")
-    {
-      roomEnemyMonologue();
-      if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
-      {
-        gameOver = true;
-        return;
-      }
-      ++roomCount;
-      ++enemyProgression;
-    }
-    else if (*contentsPosition == "Loot")
-    {
-      bool isEnemyRoom = false;
-      roomLootMonologue();
-      treasureArt();
-      if(!roomLoot(className, potionCount, armorCount, goldCount, keyCount, roomCount, isEnemyRoom, characterStats))
-      {
-        gameOver = true;
-        return;
-      }
-      ++roomCount;
-      if (isEnemyRoom)
-      {
-        ++enemyProgression;
-      }
-    }
-    else if (*contentsPosition == "Merchant")
-    {
-      roomMerchantMonologue();
-      merchantArt();
-      roomMerchant(potionCount, armorCount, goldCount, keyCount, className);
-      ++roomCount;
-    }
-    else if (*contentsPosition == "Exit")
-    {
-      roomExitMonologue();
-      doorArt();
-      roomExit(keyCount, gameVictory);
-      ++roomCount;
-    }
-  }
 
-  // This branch runs if the room has already been explored
-  else
+  // map->move() allows the player to move between rooms. It returns false if the room has not been explored yet
+  const bool ROOM_EXPLORED = map->move();
+  const string ROOM_NAME = map->getRoomContents();
+
+  // Dialogue controller - determines which text should display when it comes to room explored vs not explored
+  int dialogueSwitch = 0;
+
+  if (ROOM_NAME == "Enemy")
   {
-    // Set dialogue switch to -1, so it runs room cleared dialogue
-    int dialogueSwitch = -1;
-    if (*contentsPosition == "Enemy")
+    if (ROOM_EXPLORED)
     {
+      // Set dialogue switch to -1, so it runs room cleared dialogue
+      dialogueSwitch = -1;
       monologueInABox("A powerful foe once inhabited this room");
+      
+      // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
-      {
-        roomEnemyMonologue(dialogueSwitch);
-        if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
-        {
-          gameOver = true;
-          return;
-        }
-        ++enemyProgression;
-      }
+        return;
     }
-    else if (*contentsPosition == "Loot")
+
+    roomEnemyMonologue(dialogueSwitch);
+
+    // Initiate enemy room
+    if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
     {
+      gameOver = true;
+      return;
+    }
+    ++enemyProgression;
+
+    // Increment room count if this room was not explored previously
+    if (!ROOM_EXPLORED)
+      ++roomCount;
+  }
+  else if (ROOM_NAME == "Loot")
+  {
+    if (ROOM_EXPLORED)
+    {
+      // Set dialogue switch to -1, so it runs room cleared dialogue
+      dialogueSwitch = -1;
       monologueInABox("A chest used to sit before me in this room");
+      
+      // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
-      {
-        roomLootMonologue(dialogueSwitch);
-        if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
-        {
-          gameOver = true;
-          return;
-        }
-        ++enemyProgression;
-      }
+        return;
     }
-    else if (*contentsPosition == "Merchant")
+
+    // This variable is set to true if a trap chest is discovered
+    bool isEnemyRoom = false;
+
+    roomLootMonologue(dialogueSwitch);
+    treasureArt();
+    
+    // Initiate loot room
+    if(!roomLoot(className, potionCount, armorCount, goldCount, keyCount, roomCount, isEnemyRoom, characterStats))
     {
+      gameOver = true;
+      return;
+    }
+
+    // Increment enemy progression if a trap chest battle was cleared
+    if (isEnemyRoom)
+      ++enemyProgression;
+
+    // Increment room count if this room was not explored previously
+    if (!ROOM_EXPLORED)
+      ++roomCount;
+  }
+  else if (ROOM_NAME == "Merchant")
+  {
+    if (ROOM_EXPLORED)
+    {
+      // Set dialogue switch to -1, so it runs room cleared dialogue
+      dialogueSwitch = -1;
       monologueInABox("A friendly traveling merchant resides here");
-      roomMerchantMonologue(dialogueSwitch);
-      merchantArt();
-      roomMerchant(potionCount, armorCount, goldCount, keyCount, className);
+      
+      // There is a 50% chance the room will respawn
+      if (1 + (rand() % 100) <= 50)
+        return;
     }
-    else if (*contentsPosition == "Exit")
+
+    roomMerchantMonologue(dialogueSwitch);
+    merchantArt();
+
+    // Initiate merchant room
+    roomMerchant(potionCount, armorCount, goldCount, keyCount, className);
+
+    // Increment room count if this room was not explored previously
+    if (!ROOM_EXPLORED)
+      ++roomCount;
+  }
+  else if (ROOM_NAME == "Exit")
+  {
+    if (ROOM_EXPLORED)
     {
+      // Set dialogue switch to -1, so it runs room cleared dialogue
+      dialogueSwitch = -1;
       monologueInABox("A strange sensation controls my actions");
-      roomExitMonologue(dialogueSwitch);
-      doorArt();
-      roomExit(keyCount, gameVictory);
+      
+      // There is a 50% chance the room will respawn
+      if (1 + (rand() % 100) <= 50)
+        return;
     }
-    else if (*contentsPosition == "Start")
-    {
-      monologueInABox("This room seems familiar... have I gone in a circle???");
-    }
+
+    roomExitMonologue(dialogueSwitch);
+    doorArt();
+
+    // Initiate exit room
+    roomExit(keyCount, gameVictory);
+    
+    // Increment room count if this room was not explored previously
+    if (!ROOM_EXPLORED)
+      ++roomCount;
+  }
+  else if (ROOM_NAME == "Start")
+  {
+    monologueInABox("This room seems familiar... have I gone in a circle???");
   }
 
   // Display text indicating the enemy spawner has become more challenging
-  static bool sayOnce1 = false, sayOnce2 = true, sayOnce3 = true;
+  static bool checkpoint1 = false, checkpoint2 = true, checkpoint3 = true;
   if (enemyProgression == 5)
   {
-    if (!sayOnce1)
+    if (!checkpoint1)
     {
       monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
-      sayOnce1 = true;
-      sayOnce2 = false;
+      checkpoint1 = true;
+      checkpoint2 = false;
     }
   }
   if (enemyProgression == 10)
   {
-    if (!sayOnce2)
+    if (!checkpoint2)
     {
       monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
-      sayOnce2 = true;
-      sayOnce3 = false;
+      checkpoint2 = true;
+      checkpoint3 = false;
     }
   }
   if (enemyProgression == 15)
   {
-    if (!sayOnce3)
+    if (!checkpoint3)
     {
       monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
-      sayOnce3 = true;
+      checkpoint3 = true;
     }
   }
 }

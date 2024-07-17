@@ -19,6 +19,7 @@ const int MAP_COLUMNS = 9;
 
 class Map
 {
+public:
   Map();
   ~Map();
 
@@ -39,10 +40,7 @@ private:
 
 public:
   bool move();
-  string getRoomContents();
+  string getRoomContents() { return *roomContents[rowPosition][columnPosition]; }
 };
-
-
-
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_MAP_H

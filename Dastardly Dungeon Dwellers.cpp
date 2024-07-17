@@ -111,28 +111,16 @@ void startGame(std::ifstream &characterStats)
     keyCount = 10;
   }
 
-  // These 3 parallel arrays store the player's movements, room cleared status, and room contents
-  char mapArray[MAP_ROWS][MAP_COLUMNS];
-  bool roomExplored[MAP_ROWS][MAP_COLUMNS];
-  string roomContents[MAP_ROWS][MAP_COLUMNS];
-
-  // Constants to hold midpoints
-  const int ROW_MIDPOINT = MAP_ROWS / 2;
-  const int COLUMN_MIDPOINT = MAP_COLUMNS / 2;
-
-  // These 3 pointers are initialized to the middle of the array
-  char *playerPosition = &mapArray[ROW_MIDPOINT][COLUMN_MIDPOINT];
-  bool *exploredPosition = &roomExplored[ROW_MIDPOINT][COLUMN_MIDPOINT];
-  string *contentsPosition = &roomContents[ROW_MIDPOINT][COLUMN_MIDPOINT];
-
   // Generates the map with rooms to traverse
-  generateMap(mapArray, roomExplored, roomContents, playerPosition, exploredPosition, contentsPosition, ROW_MIDPOINT, COLUMN_MIDPOINT);
+  Map *map = new Map;
 
   // Runs the game until the player loses all of their health or wins the game
   do
   {
-    roomController(className, potionCount, armorCount, goldCount, keyCount, roomCount, gameOver, gameVictory, mapArray, roomExplored, roomContents, playerPosition, exploredPosition, contentsPosition, characterStats);
+    roomController(className, potionCount, armorCount, goldCount, keyCount, roomCount, gameOver, gameVictory, map, characterStats);
   } while (!gameOver && !gameVictory);
+
+  delete map;
 
   if (gameVictory)
   {
