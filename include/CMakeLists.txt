@@ -6,7 +6,6 @@ set(Includes
         "Art.h"
         "Main Menu.h"
         "Map.h"
-        "Progression.h"
         "Validation.h"
         "Battle Controller/Battle Controller.h"
         "Battle Controller/Enemy Damage.h"
