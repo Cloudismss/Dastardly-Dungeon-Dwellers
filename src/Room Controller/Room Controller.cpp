@@ -2,11 +2,8 @@
 
 // Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
 // Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
-void roomController(string &className, int &potionCount, int &armorCount, int &goldCount, int &keyCount, int &roomCount, bool &gameOver, bool &gameVictory, Map *map, std::ifstream &characterStats)
+void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
 {
-  // Difficulty tracking counter
-  static int enemyProgression;
-
   // map->move() allows the player to move between rooms. It returns false if the room has not been explored yet
   const bool ROOM_EXPLORED = map->move();
   const string ROOM_NAME = map->getRoomContents();
@@ -30,16 +27,16 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
     roomEnemyMonologue(dialogueSwitch);
 
     // Initiate enemy room
-    if (!roomEnemy(className, potionCount, armorCount, goldCount, keyCount, roomCount, characterStats))
+    if (!roomEnemy(player))
     {
       gameOver = true;
       return;
     }
-    ++enemyProgression;
+    player->progress();
 
     // Increment room count if this room was not explored previously
     if (!ROOM_EXPLORED)
-      ++roomCount;
+      player->roomCleared();
   }
   else if (ROOM_NAME == "Loot")
   {
@@ -61,7 +58,7 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
     treasureArt();
     
     // Initiate loot room
-    if(!roomLoot(className, potionCount, armorCount, goldCount, keyCount, roomCount, isEnemyRoom, characterStats))
+    if(!roomLoot(player, isEnemyRoom))
     {
       gameOver = true;
       return;
@@ -69,11 +66,11 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
 
     // Increment enemy progression if a trap chest battle was cleared
     if (isEnemyRoom)
-      ++enemyProgression;
+      player->progress();
 
     // Increment room count if this room was not explored previously
     if (!ROOM_EXPLORED)
-      ++roomCount;
+      player->roomCleared();
   }
   else if (ROOM_NAME == "Merchant")
   {
@@ -92,11 +89,11 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
     merchantArt();
 
     // Initiate merchant room
-    roomMerchant(potionCount, armorCount, goldCount, keyCount, className);
+    roomMerchant(player);
 
     // Increment room count if this room was not explored previously
     if (!ROOM_EXPLORED)
-      ++roomCount;
+      player->roomCleared();
   }
   else if (ROOM_NAME == "Exit")
   {
@@ -105,21 +102,17 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
       // Set dialogue switch to -1, so it runs room cleared dialogue
       dialogueSwitch = -1;
       monologueInABox("A strange sensation controls my actions");
-      
-      // There is a 50% chance the room will respawn
-      if (1 + (rand() % 100) <= 50)
-        return;
     }
 
     roomExitMonologue(dialogueSwitch);
     doorArt();
 
     // Initiate exit room
-    roomExit(keyCount, gameVictory);
+    roomExit(player, gameVictory);
     
     // Increment room count if this room was not explored previously
     if (!ROOM_EXPLORED)
-      ++roomCount;
+      player->roomCleared();
   }
   else if (ROOM_NAME == "Start")
   {
@@ -128,7 +121,7 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
 
   // Display text indicating the enemy spawner has become more challenging
   static bool checkpoint1 = false, checkpoint2 = true, checkpoint3 = true;
-  if (enemyProgression == 5)
+  if (player->getProgression() == 5)
   {
     if (!checkpoint1)
     {
@@ -137,7 +130,7 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
       checkpoint2 = false;
     }
   }
-  if (enemyProgression == 10)
+  if (player->getProgression() == 10)
   {
     if (!checkpoint2)
     {
@@ -146,7 +139,7 @@ void roomController(string &className, int &potionCount, int &armorCount, int &g
       checkpoint3 = false;
     }
   }
-  if (enemyProgression == 15)
+  if (player->getProgression() == 15)
   {
     if (!checkpoint3)
     {

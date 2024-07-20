@@ -36,7 +36,7 @@ bool validateInput(int userChoice, int rangeLow, int rangeHigh)
 
 // Pre-condition: called to validate a direction input, passed userChoice
 // Post-condition: returns whether the choice was valid or not, updates userChoice value to uppercase
-bool validateDirection(int rowPosition, int columnPosition, char &userChoice)
+bool validateDirection(int rowPosition, int columnPosition, char &userChoice, const int MAP_ROWS, const int MAP_COLUMNS)
 {
   bool validFlag = true;
   if ((cin.fail()) || (!(userChoice == 'N' || userChoice == 'n' || userChoice == 'E' || userChoice == 'e' || userChoice == 'S' || userChoice == 's' || userChoice == 'W' || userChoice == 'w')))

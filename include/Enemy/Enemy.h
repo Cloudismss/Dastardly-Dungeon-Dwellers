@@ -19,12 +19,14 @@ class Enemy
 
 protected:
   string name;
+  bool boss = false;
   int tier;
-  float health;
-  float damage;
-  float meleeVulnerability;
-  float magicVulnerability;
-  float rangedVulnerability;
+  int rewardTier;
+  double health;
+  double damage;
+  double meleeVulnerability;
+  double magicVulnerability;
+  double rangedVulnerability;
   int attackLow;
   int attackHigh;
 
@@ -33,13 +35,16 @@ protected:
 public:
   // Mutators
   virtual void setEnemyAttributes() = 0;
-  void attackEnemy(float attackDamage, const string &attackType);
+  void receive(double healthAdjust, const string &attackType);
+  // TODO: Factor in player armor
+  double attack(int playerArmor) const { return attackLow + (rand() % ((attackHigh + 1) - attackLow)); }
 
   // Accessors
   string getName() const { return name; }
   int getTier() const { return tier; }
-  float getHealth() const { return health; }
-  float attackPlayer() const { return attackLow + (rand() % ((attackHigh + 1) - attackLow)); }
+  double getHealth() const { return health; }
+  double getResistance(const string &battleMenuSelection);
+  int getRewardTier() const { return rewardTier; }
   void announceEnemy();
 
   // Debug

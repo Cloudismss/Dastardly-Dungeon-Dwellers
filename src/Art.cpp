@@ -1,5 +1,57 @@
 #include "Art.h"
 
+// Pre-condition: called by battleController(), passed skill and health variables
+// Post-condition: returns user selection from displayed battleMenu
+string battleMenu(Player *player, Enemy *enemy)
+{
+  // Menu Variables
+  int boxWidth = 63;
+  int borderSpacing = ((boxWidth - 23) / 2);
+  string choiceName[] = {player->skills->getSkillName("Melee"), player->skills->getSkillName("Nagic"), player->skills->getSkillName("Ranged")};
+
+  short int battleMenuSelection = 0;
+  bool loopFlag = true;
+  do
+  {
+    battleHealthArt(player->getHealth(), enemy->getHealth());
+    cout << "." << setfill('-') << setw(boxWidth) << ".\n"
+         << "|" << setfill(' ') << setw(boxWidth) << "|\n"
+         << "|" << setw(12) << " " << "1. " << choiceName[0] << setw(borderSpacing - choiceName[0].length()) << " " << "4. Heal" << setw(18) << " " << " |\n"
+         << "|" << setw(12) << " " << "2. " << choiceName[1] << setw( borderSpacing - choiceName[1].length()) << " " << "5. Run Away" << setw(14) << " " << " |\n"
+         << "|" << setw(12) << " " << "3. " << choiceName[2] << setw(borderSpacing - choiceName[2].length()) << " " << "6. Help" << setw(18) << " " << " |\n"
+         << "|" << setfill(' ') << setw(boxWidth) << "|\n"
+         << "'" << setfill('-') << setw(boxWidth) << "'\n"
+         << setfill(' ') << "\n"
+         << "\tMake a selection: ";
+    battleMenuSelection = 0;
+    cin >> battleMenuSelection;
+    if (validateInput(battleMenuSelection, 1, 6))
+    {
+      if (battleMenuSelection != 6)
+      {
+        loopFlag = false;
+      }
+      else
+      {
+        cout << "\n";
+        tutorialBattle();
+      }
+    }
+  } while (loopFlag);
+  cout << "\n";
+
+  if (battleMenuSelection == 1)
+    return "Melee";
+  else if (battleMenuSelection == 2)
+    return "Magic";
+  else if (battleMenuSelection == 3)
+    return "Ranged";
+  else if (battleMenuSelection == 4)
+    return "Heal";
+  else if (battleMenuSelection == 5)
+    return "Run";
+}
+
 // Pre-condition: called by battleMenu(), passed health variables
 // Post-condition: displays health art
 void battleHealthArt(int playerHealth, int enemyHealth)
@@ -657,8 +709,9 @@ void doorArt()
 
 // Pre-condition: called to display victory art
 // Post-condition: displays art with roomCount displayed
-void victoryArt(int roomCount)
+void victoryArt(Player *player)
 {
+  int roomCount = player->getRoomCount();
   cout << "     _______________________________________________________\n"
           "    /\\                                                      \\\n"
           "(O)===)><><><><><><><><><><><><><><><><><><><><><><><><><><><)==(O)\n"
@@ -688,8 +741,9 @@ void victoryArt(int roomCount)
 
 // Pre-condition: called to display game over art
 // Post-condition: displays art with roomCount displayed
-void gameOverArt(int roomCount)
+void gameOverArt(Player *player)
 {
+  int roomCount = player->getRoomCount();
   cout << "   ______________________________\n"
           " / \\                             \\.\n"
           "|   |                            |.\n"

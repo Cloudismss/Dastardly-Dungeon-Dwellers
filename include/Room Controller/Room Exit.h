@@ -3,11 +3,12 @@
 
 #include <iostream>
 
+#include "Player.h"
 #include "Validation.h"
 
 using std::cin;
 using std::cout;
 
-void roomExit(int &keyCount, bool &gameVictory);
+void roomExit(Player *player, bool &gameVictory);
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H

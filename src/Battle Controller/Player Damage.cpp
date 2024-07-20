@@ -4,33 +4,7 @@
 // Post-condition: returns a damage amount based on all passed variables
 float playerDamage(int battleMenuSelection, string &meleeName, string &magicName, string &rangedName, const string &className, const string &enemyName, bool boss, std::ifstream &characterStats)
 {
-  // Pull values from characterStats
-  static int meleeSkill, magicSkill, rangedSkill;
-  static float critSkill = 1.0;
-  static bool statsRead = false;
-  if (!statsRead)
-  {
-    string classNameChecker = " ";
-    // Ignore the first two lines (info header and blank line)
-    std::getline(characterStats, classNameChecker);
-    std::getline(characterStats, classNameChecker);
-    while (characterStats.good() && !statsRead)
-    {
-      // Read the class name
-      std::getline(characterStats, classNameChecker, ',');
-      // Check the class name
-      if (classNameChecker == className)
-      {
-        characterStats >> meleeSkill >> rangedSkill >> magicSkill >> critSkill;
-        statsRead = true;
-      }
-      // Check the next line if className doesn't match
-      else
-      {
-        std::getline(characterStats, classNameChecker);
-      }
-    }
-  }
+  // ! TODO: Moved character stats read implementation
 
   // Counters that are used to move through the tiers of skill milestones
   static int meleeCounter, magicCounter, rangedCounter;

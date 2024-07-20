@@ -5,9 +5,10 @@
 #include <string>
 
 #include "Battle Controller.h"
+#include "Loot.h"
 
 using std::string;
 
-bool roomEnemy(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, std::ifstream &characterStats);
+bool roomEnemy(Player *player);
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_ENEMY_H

@@ -2,7 +2,7 @@
 
 // Pre-condition: called by roomController(), passed enemyProgression, isEnemyRoom, inventory variables and className / characterStats
 // Post-condition: Returns true if the player survives the room, updates inventory variables based on result, isEnemyRoom is updated to true if an enemy is spawned
-bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, bool &isEnemyRoom, std::ifstream &characterStats)
+bool roomLoot(Player *player, bool &isEnemyRoom)
 {
   // This room could be a trap, ask the player if they want to attempt to loot the chest
   bool lootSuccess = false;
@@ -31,7 +31,7 @@ bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCoun
 
       // Player is guaranteed a random amount of gold between 15-30
       int goldAdded = 15 + (rand() % 16);
-      goldCount += goldAdded;
+      player->addGold(goldAdded);
       cout << "Gold x" << goldAdded << " added\n";
 
       int lootRoll = 1 + (rand() % 100);
@@ -41,7 +41,7 @@ bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCoun
       {
         // Player is given a random amount of potions between 2-3
         int potionAdded = 2 + (rand() % 2);
-        potionCount += potionAdded;
+        player->addPotion(potionAdded);
         if (potionAdded > 1)
         {
           cout << "Potion x" << potionAdded << " added\n";
@@ -56,7 +56,7 @@ bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCoun
       // 30% chance the player is given the golden key
       if (lootRoll <= 30)
       {
-        ++keyCount;
+        player->addKey();
         displayMeInABox("GOLDEN KEY Acquired!");
       }
 
@@ -77,7 +77,7 @@ bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCoun
            << "You quickly slam the lid closed as you hear the door in front of you crack open!\n\n";
 
       // Run roomEnemy, Returns true if the player wins the battle
-      if (roomEnemy(className, potionCount, armorCount, goldCount, keyCount, enemyProgression, characterStats))
+      if (roomEnemy(player))
       {
         lootSuccess = true;
         isEnemyRoom = true;

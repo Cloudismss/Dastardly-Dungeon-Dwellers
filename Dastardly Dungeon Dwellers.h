@@ -5,20 +5,17 @@
 #include <iostream>
 #include <string>
 
+#include "Art.h"
 #include "Main Menu.h"
 #include "Map.h"
+#include "Player.h"
 #include "Room Controller.h"
 
 using std::cin;
 using std::cout;
 using std::string;
 
-// Prototypes
-
-// File Streaming .txt file generator
-void generateCharacterStats(std::ofstream &defaultCharacterStats);
-
 // Game Controller
-void startGame(std::ifstream &characterStats);
+void startGame();
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_DASTARDLY_DUNGEON_DWELLERS_H

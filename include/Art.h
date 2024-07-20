@@ -5,12 +5,17 @@
 #include <iostream>
 #include <string>
 
+#include <Enemy.h>
+#include <Player.h>
+#include <Validation.h>
+
 using std::cout;
 using std::cin;
 using std::setfill;
 using std::setw;
 using std::string;
 
+string battleMenu(Player *player, Enemy *enemy);
 void battleHealthArt(int playerHealth, int enemyHealth);
 void displayMeInABox(const string &message);
 void displayMeInABox(const string &message1, const string &message2);
@@ -26,8 +31,8 @@ void bardArt();
 void treasureArt();
 void merchantArt();
 void doorArt();
-void victoryArt(int roomCount);
-void gameOverArt(int roomCount);
+void victoryArt(Player *player);
+void gameOverArt(Player *player);
 void tutorialGame();
 void tutorialBattle();
 

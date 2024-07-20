@@ -22,7 +22,7 @@ string Enemy::generateEnemy()
   return baddies[1 + (rand() % baddies.size())];
 }
 
-void Enemy::attackEnemy(float attackDamage, const string &attackType)
+void Enemy::receive(double healthAdjust, const string &attackType)
 {
   float resistance = 0;
   if (attackType == "melee")
@@ -37,7 +37,7 @@ void Enemy::attackEnemy(float attackDamage, const string &attackType)
   {
     resistance = rangedVulnerability;
   }
-  health -= attackDamage * resistance;
+  health -= healthAdjust * resistance;
   if (health < 0)
   {
     health = 0;

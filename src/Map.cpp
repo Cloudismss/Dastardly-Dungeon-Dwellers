@@ -23,9 +23,7 @@ void Map::mapPrint()
   for (int i = 0; i < MAP_ROWS; ++i)
   {
     for (int j = 0; j < MAP_COLUMNS; ++j)
-    {
       cout << "[" << mapArray[i][j] << "]" ;
-    }
     cout << "\n";
   }
 
@@ -39,18 +37,14 @@ void Map::mapPrint()
     for (int i = 0; i < MAP_ROWS; ++i)
     {
       for (int j = 0; j < MAP_COLUMNS; ++j)
-      {
         cout << "[" << roomExplored[i][j] << "]" ;
-      }
       cout << "\n";
     }
     cout << "\n";
     for (int i = 0; i < MAP_ROWS; ++i)
     {
       for (int j = 0; j < MAP_COLUMNS; ++j)
-      {
         cout << "[" << roomContents[i][j] << "]" ;
-      }
       cout << "\n";
     }
     cout << "\n" << setfill('-') << setw(64) << " " << setfill(' ');
@@ -72,28 +66,18 @@ bool Map::move()
   // Check if we've been in this room before
   bool roomCleared = false;
   if (*roomExplored[rowPosition][columnPosition])
-  {
     roomCleared = true;
-  }
   else
-  {
     // Set the current index to true, since we'll be clearing this room next
     *roomExplored[rowPosition][columnPosition] = true;
-  }
 
   // Place new value in previousPlayerPosition
   if (!(*roomContents[rowPosition][columnPosition] == "Merchant" || *roomContents[rowPosition][columnPosition] == "Exit"))
-  {
     *previousPlayerPosition = 'o'; // Place a 'o' value in previousPlayerPosition pointer's element to indicate a previously cleared room
-  }
   else if (*roomContents[rowPosition][columnPosition] == "Merchant")
-  {
     *previousPlayerPosition = '$'; // Place a '$' value in previousPlayerPosition pointer's element to indicate a discovered merchant shop
-  }
   else if (*roomContents[rowPosition][columnPosition] == "Exit")
-  {
     *previousPlayerPosition = '#'; // Place a '#' value in previousPlayerPosition pointer's element to indicate the exit
-  }
 
   // Place new value in player's current position
   *mapArray[rowPosition][columnPosition] = '*';
@@ -109,13 +93,9 @@ bool Map::move()
 
   // If the room was already visited, return true, if not, return false
   if (roomCleared)
-  {
     return true;
-  }
   else
-  {
     return false;
-  }
 }
 
 // Pre-condition: called by map(), passed rowPosition and columnPosition
@@ -130,7 +110,7 @@ void Map::mapMovement()
     cout << "Which direction would you like to go? (N|E|S|W): ";
     cin >> directionChoice;
     cout << "\n";
-    if (validateDirection(rowPosition, columnPosition, directionChoice))
+    if (validateDirection(rowPosition, columnPosition, directionChoice, MAP_ROWS, MAP_COLUMNS))
     {
       loopFlag = false;
     }
@@ -190,9 +170,7 @@ void Map::generateMap()
     for (int j = 0; j < MAP_COLUMNS; ++j)
     {
       if ((i <= ROW_MIDPOINT - MIN_EXIT_DISTANCE || i >= ROW_MIDPOINT + MIN_EXIT_DISTANCE) || (j <= COLUMN_MIDPOINT - MIN_EXIT_DISTANCE || j >= COLUMN_MIDPOINT + MIN_EXIT_DISTANCE))
-      {
         validExitSpawns[i][j] = true;
-      }
     }
   }
   bool exitPlaced = false;
@@ -236,9 +214,7 @@ void Map::generateMap()
       {
         *roomContents[i][j] = "Enemy";
         if (debug)
-        {
           *mapArray[i][j] = 'E';
-        }
       }
     }
   }
@@ -255,9 +231,7 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
     {
       // Mark the room as valid if the room is empty and a valid distance away from spawn
       if (*roomContents[i][j] == " " && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COLUMN_MIDPOINT - ROOM_DISTANCE || j >= COLUMN_MIDPOINT + ROOM_DISTANCE))
-      {
         validSpawns[i][j] = true;
-      }
     }
   }
 
@@ -265,9 +239,7 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
   int spawnAttempts = 0;
   int allowedAttempts = 10;
   if (ROOM_NAME == "Merchant")
-  {
     allowedAttempts = 100; // I want to ensure the proper amount of merchants are always spawned
-  }
 
   int roomsPlaced = 0;
   do
@@ -286,9 +258,7 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
 
       // DEBUG Option - Print loot room icons on map
       if (debug)
-      {
         *mapArray[randomRow][randomColumn] = ROOM_SYMBOL;
-      }
 
       // Mark spaces SIMILAR_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
       // TODO num merchants not always correct
@@ -296,42 +266,28 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
       {
         validSpawns[randomRow + SIMILAR_DISTANCE][randomColumn] = false;
         if (randomColumn + SIMILAR_DISTANCE < MAP_COLUMNS)
-        {
           validSpawns[randomRow + SIMILAR_DISTANCE][randomColumn + SIMILAR_DISTANCE] = false;
-        }
         if (randomColumn - SIMILAR_DISTANCE >= 0)
-        {
           validSpawns[randomRow + SIMILAR_DISTANCE][randomColumn - SIMILAR_DISTANCE] = false;
-        }
       }
 
       if (randomRow - SIMILAR_DISTANCE >= 0)
       {
         validSpawns[randomRow - SIMILAR_DISTANCE][randomColumn] = false;
         if (randomColumn - SIMILAR_DISTANCE >= 0)
-        {
           validSpawns[randomRow - SIMILAR_DISTANCE][randomColumn - SIMILAR_DISTANCE] = false;
-        }
         if (randomColumn + SIMILAR_DISTANCE < MAP_COLUMNS)
-        {
           validSpawns[randomRow - SIMILAR_DISTANCE][randomColumn + SIMILAR_DISTANCE] = false;
-        }
       }
 
       if (randomColumn + SIMILAR_DISTANCE < MAP_COLUMNS)
-      {
         validSpawns[randomRow][randomColumn + SIMILAR_DISTANCE] = false;
-      }
       if (randomColumn - SIMILAR_DISTANCE >= 0)
-      {
         validSpawns[randomRow][randomColumn - SIMILAR_DISTANCE] = false;
-      }
     }
 
     // Fallback exit if the spawning luck is poor
     else
-    {
       ++spawnAttempts;
-    }
   } while (roomsPlaced < ROOMS_ALLOWED && spawnAttempts < allowedAttempts);
 }

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "Upgrade.h"
+#include "Player.h"
 #include "Validation.h"
 
 using std::cin;
@@ -14,7 +14,7 @@ using std::setfill;
 using std::setw;
 using std::string;
 
-void roomMerchant(int &potionCount, int &armorCount, int &goldCount, int &keyCount, const string &className);
-void roomMerchantPurchase(int ITEM_INDEX, const string merchantItemName[], const int merchantItemQuantity[], const int merchantItemCost[], int &purchaseAmount, int &goldCount);
+void roomMerchant(Player *player);
+void roomMerchantPurchase(Player *player, int ITEM_INDEX, const string merchantItemName[], const int merchantItemQuantity[], const int merchantItemCost[], int &purchaseAmount);
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H

@@ -12,6 +12,6 @@ using std::cin;
 using std::cout;
 using std::string;
 
-bool roomLoot(string &className, int &potionCount, int armorCount, int &goldCount, int &keyCount, int enemyProgression, bool &isEnemyRoom, std::ifstream &characterStats);
+bool roomLoot(Player *player, bool &isEnemyRoom);
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_LOOT_H
