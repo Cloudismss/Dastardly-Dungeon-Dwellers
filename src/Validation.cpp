@@ -50,9 +50,7 @@ bool validateDirection(int rowPosition, int columnPosition, char &userChoice, co
   {
     // Convert the char to uppercase for use in switch statements
     if (userChoice == 'n' || userChoice == 'e' || userChoice == 's' || userChoice == 'w')
-    {
       userChoice -= 32;
-    }
 
     // Bounds checking
     string boundsFail = "A mysterious force prevents you from progressing in that direction...\n\n";

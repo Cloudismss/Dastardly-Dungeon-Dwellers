@@ -32,9 +32,7 @@ void mainMenu()
     if (validateInput(selection, 1, 2))
     {
       if (selection == 1)
-      {
         loopFlag = false;
-      }
       else if (selection == 2)
       {
         tutorialGame();

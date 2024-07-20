@@ -12,16 +12,12 @@ int battleController(Player *player, Enemy *enemy)
 
     // Player chose a damaging move
     if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ramged")
-    {
       // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
       enemy->receive(player->attack(player, enemy, battleMenuSelection), battleMenuSelection);
-    }
     // Player chose to heal
     else if (battleMenuSelection == "Heal")
-    {
       // A random heal amount is added to playerHealth
       player->heal();
-    }
     // Player chose to run
     else if (battleMenuSelection == "Run")
     {
@@ -29,14 +25,12 @@ int battleController(Player *player, Enemy *enemy)
       if (player->getClass() == "Bard" || 1 + (rand() % 100) <= 50)
       {
         cout << "\tYou escaped successfully!\n\n";
-        // Returning a -1 means successful escape
+        // Returning a -1 indicates a successful escape
         return -1;
       }
       // Player failed to run
       else
-      {
         cout << "\tYou failed to escape!\n\n";
-      }
     }
 
     // The enemy is permitted to attack only if their health is > 0, this prevents the enemy from attacking after their health reaches 0

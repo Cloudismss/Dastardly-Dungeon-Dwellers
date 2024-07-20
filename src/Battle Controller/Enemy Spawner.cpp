@@ -14,13 +14,9 @@ void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, strin
   if (enemyProgression < 5)
   {
     if (randomTier <= 80)
-    {
       enemyTier = 1;
-    }
     else
-    {
       enemyTier = 2;
-    }
   }
 
   // The next 5 rooms can spawn enemies Tier 1-3
@@ -29,17 +25,11 @@ void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, strin
     // Calculates a random tier for the enemy - 60% chance of Tier 1, 30% chance of Tier 2, 10% chance of Tier 3
     tier1 = 60, tier2 = tier1 + 30;
     if (randomTier <= tier1)
-    {
       enemyTier = 1;
-    }
     else if (randomTier <= tier2)
-    {
       enemyTier = 2;
-    }
     else
-    {
       enemyTier = 3;
-    }
   }
 
   // The next 5 rooms can spawn enemies Tier 1-4
@@ -48,21 +38,13 @@ void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, strin
     // Calculates a random tier for the enemy - 35% chance of Tier 1, 30% chance of Tier 2, 25% chance of Tier 3, 10% chance of Tier 4
     tier1 = 35, tier2 = tier1 + 30, tier3 = tier2 + 25;
     if (randomTier <= tier1)
-    {
       enemyTier = 1;
-    }
     else if (randomTier <= tier2)
-    {
       enemyTier = 2;
-    }
     else if (randomTier <= tier3)
-    {
       enemyTier = 3;
-    }
     else
-    {
       enemyTier = 4;
-    }
   }
 
   // The final rooms can spawn enemies Tier 2-5
@@ -71,25 +53,15 @@ void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, strin
     // Calculates a random tier for the enemy - 35% chance of Tier 2, 25% chance of Tier 3, 20% chance of Tier 4, 15% chance of Tier 5, 5% chance of BOSS
     tier2 = 35, tier3 = tier2 + 25, tier4 = tier3 + 20, tier5 = tier4 + 15;
     if (randomTier <= tier2)
-    {
       enemyTier = 2;
-    }
     else if (randomTier <= tier3)
-    {
       enemyTier = 3;
-    }
     else if (randomTier <= tier4)
-    {
       enemyTier = 4;
-    }
     else if (randomTier <= tier5)
-    {
       enemyTier = 5;
-    }
     else
-    {
       boss = true;
-    }
   }
 
   // Establish non-boss enemy values
@@ -105,27 +77,19 @@ void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, strin
     {
       // 90% chance of enemies 1 - 2
       if (randomValue <= 90)
-      {
         randomEnemyName = 1 + (rand() % 2);
-      }
       // 10% chance of enemy 3
       else
-      {
         randomEnemyName = 3;
-      }
     }
     if (enemyProgression < 10)
     {
       // 70% chance of enemies 1 - 2
       if (randomValue <= 70)
-      {
         randomEnemyName = 1 + (rand() % 2);
-      }
       // 30% chance of enemy 3
       else
-      {
         randomEnemyName = 3;
-      }
     }
     else if (enemyProgression < 15)
     {
@@ -138,30 +102,22 @@ void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, strin
         {
           randomValueAgain = rand() % 4;
           if (randomValueAgain != 1)
-          {
             goodValue = true;
-          }
         } while (!goodValue);
         randomEnemyName = 1 + (rand() % 2) + randomValueAgain;
       }
       // 30% chance of enemy 3
       else
-      {
         randomEnemyName = 3;
-      }
     }
     else
     {
       // 40% chance of enemies 1 - 4
       if (randomValue <= 40)
-      {
         randomEnemyName = 1 + (rand() % 4);
-      }
       // 60% chance of enemies 4 - 6
       else
-      {
         randomEnemyName = 4 + (rand() % 3);
-      }
     }
 
     switch (randomEnemyName)
@@ -272,4 +228,4 @@ void battleEnemySpawner(int &enemyTier, int &rewardTier, int &enemyHealth, strin
     cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n"
          << enemyName << " has cornered you!\n\n";
   }
-}
+}x

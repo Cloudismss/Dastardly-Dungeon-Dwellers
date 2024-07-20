@@ -50,5 +50,4 @@ public:
   void useSkill(const string &battleMenuSelection, const string &className);
 };
 
-
 #endif //DASTARDLY_DUNGEON_DWELLERS_SKILLS_H

@@ -15,9 +15,7 @@ void roomExit(Player *player, bool &gameVictory)
            << "Y or N:";
       cin >> selection;
       if (validateDecision(selection))
-      {
         loopFlag = false;
-      }
     } while (loopFlag);
 
     // Player chose to leave the dungeon, victory!
@@ -31,7 +29,5 @@ void roomExit(Player *player, bool &gameVictory)
 
   // Player doesn't have a golden key
   else
-  {
     cout << "You don't have a golden key!\n\n";
-  }
 }

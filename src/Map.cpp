@@ -228,11 +228,9 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
   for (int i = 0; i < MAP_ROWS; ++i)
   {
     for (int j = 0; j < MAP_COLUMNS; ++j)
-    {
       // Mark the room as valid if the room is empty and a valid distance away from spawn
       if (*roomContents[i][j] == " " && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COLUMN_MIDPOINT - ROOM_DISTANCE || j >= COLUMN_MIDPOINT + ROOM_DISTANCE))
         validSpawns[i][j] = true;
-    }
   }
 
   // Using these variable to make sure the function has a way out if it can't find a spawn after x attempts

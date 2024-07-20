@@ -28,9 +28,7 @@ string battleMenu(Player *player, Enemy *enemy)
     if (validateInput(battleMenuSelection, 1, 6))
     {
       if (battleMenuSelection != 6)
-      {
         loopFlag = false;
-      }
       else
       {
         cout << "\n";
@@ -58,9 +56,7 @@ void battleHealthArt(int playerHealth, int enemyHealth)
 {
   // Don't print health if either the player or the enemy has 0 health
   if (playerHealth <= 0 || enemyHealth <= 0)
-  {
     return;
-  }
 
   // Print health
   else
@@ -92,9 +88,7 @@ void displayMeInABox(const string &message)
   // Offsets are used to clean up integer division spacing
   int offset = 0;
   if (message.length() % 2 == 0)
-  {
     offset = 1;
-  }
 
   // Adjusts box width based on message size
   int boxWidth = 0;
@@ -129,13 +123,9 @@ void displayMeInABox(const string &message1, const string &message2)
   int offset1 = 0;
   int offset2 = 0;
   if (message1.length() % 2 == 0)
-  {
     offset1 = 1;
-  }
   if (message2.length() % 2 == 0)
-  {
     offset2 = 1;
-  }
 
   // Adjusts box width based on message size
   int boxWidth = 0;

@@ -14,9 +14,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
          << "Y or N:";
     cin >> chestSelection;
     if (validateDecision(chestSelection))
-    {
       loopFlag = false;
-    }
   } while (loopFlag);
 
   // Player wants to open the chest
@@ -43,13 +41,9 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
         int potionAdded = 2 + (rand() % 2);
         player->addPotion(potionAdded);
         if (potionAdded > 1)
-        {
           cout << "Potion x" << potionAdded << " added\n";
-        }
         else
-        {
           cout << "Potion added\n";
-        }
       }
       cout << "\n";
 

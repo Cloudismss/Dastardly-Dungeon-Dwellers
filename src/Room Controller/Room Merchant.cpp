@@ -10,16 +10,12 @@ void roomMerchant(Player *player)
   int merchantItemCost[NUM_ITEMS] = {0};
   string merchantItemName[NUM_ITEMS];
   for (int i = 0; i < NUM_ITEMS; ++i)
-  {
     merchantItemName[i] = " ";
-  }
 
   // shopItemIndex array variable is used only to aid in translating user input indexes to 1-6 in numberTranslated loop. We need this since the shop is randomized
   int shopItemIndex[NUM_ITEMS] = {0};
   for (int i = 1; i < NUM_ITEMS; ++i)
-  {
     shopItemIndex[i] = i;
-  }
 
   // Upgrade variables
   const int MELEE_WEAPON = 0, MAGIC_WEAPON = 1, RANGED_WEAPON = 2;
@@ -307,9 +303,7 @@ void roomMerchant(Player *player)
             cin >> selection;
             cout << "\n";
             if (validateDecision(selection))
-            {
               loopFlag = false;
-            }
           } while (loopFlag);
 
           // Player chose to purchase the golden key
@@ -329,9 +323,7 @@ void roomMerchant(Player *player)
 
         // Player doesn't have enough gold
         else
-        {
           cout << "\tYou don't have enough gold!\n\n";
-        }
         break;
       }
 
@@ -375,18 +367,14 @@ void roomMerchantPurchase(Player *player, int ITEM_INDEX, const string merchantI
 
         // If they choose 0, exit purchase menu
         if (purchaseAmount == 0)
-        {
           return;
-        }
       }
     } while (loopFlag);
   }
 
   // Selected item has 1 remaining qty
   else if (merchantItemQuantity[ITEM_INDEX] == 1)
-  {
     purchaseAmount = 1;
-  }
 
   // Selected item has 0 remaining qty
   else if (merchantItemQuantity[ITEM_INDEX] == 0)
@@ -406,15 +394,11 @@ void roomMerchantPurchase(Player *player, int ITEM_INDEX, const string merchantI
     {
       // Purchase confirmation with qty printed
       if (merchantItemQuantity[ITEM_INDEX] > 1)
-      {
         cout << "\tConfirm purchase of " << purchaseAmount << "x " << merchantItemName[ITEM_INDEX] << " for x" << purchaseAmount * merchantItemCost[ITEM_INDEX] << " gold?\n";
-      }
 
       // Purchase confirmation without qty printed
       else if (merchantItemQuantity[ITEM_INDEX] == 1)
-      {
         cout << "\tConfirm purchase of " << merchantItemName[ITEM_INDEX] << " for x" << purchaseAmount * merchantItemCost[ITEM_INDEX] << " gold?\n";
-      }
 
       cout << "\tY or N: ";
       cin >> merchantConfirm;
@@ -429,20 +413,14 @@ void roomMerchantPurchase(Player *player, int ITEM_INDEX, const string merchantI
     if (merchantConfirm == 'Y' || merchantConfirm == 'y')
     {
       if (merchantItemQuantity[ITEM_INDEX] > 1)
-      {
         cout << "\t" << merchantItemName[ITEM_INDEX] << " x" << purchaseAmount << " acquired!\n\n";
-      }
       else
-      {
         cout << "\t" << merchantItemName[ITEM_INDEX] << " acquired!\n\n";
-      }
     }
 
     // Player chose not to purchase the item
     else
-    {
       purchaseAmount = 0;
-    }
   }
 
   // Player couldn't afford the purchase
