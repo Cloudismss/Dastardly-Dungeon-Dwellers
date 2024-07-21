@@ -1,5 +1,12 @@
 #include "Room Controller.h"
 
+#include "Globals.h"
+
+#include "Room Enemy.h"
+#include "Room Exit.h"
+#include "Room Loot.h"
+#include "Room Merchant.h"
+
 // Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
 // Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
 void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
@@ -33,10 +40,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
       return;
     }
     player->progress();
-
-    // Increment room count if this room was not explored previously
-    if (!ROOM_EXPLORED)
-      player->roomCleared();
   }
   else if (ROOM_NAME == "Loot")
   {
@@ -67,10 +70,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
     // Increment enemy progression if a trap chest battle was cleared
     if (isEnemyRoom)
       player->progress();
-
-    // Increment room count if this room was not explored previously
-    if (!ROOM_EXPLORED)
-      player->roomCleared();
   }
   else if (ROOM_NAME == "Merchant")
   {
@@ -90,10 +89,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
 
     // Initiate merchant room
     roomMerchant(player);
-
-    // Increment room count if this room was not explored previously
-    if (!ROOM_EXPLORED)
-      player->roomCleared();
   }
   else if (ROOM_NAME == "Exit")
   {
@@ -109,42 +104,21 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
 
     // Initiate exit room
     roomExit(player, gameVictory);
-    
-    // Increment room count if this room was not explored previously
-    if (!ROOM_EXPLORED)
-      player->roomCleared();
   }
   else if (ROOM_NAME == "Start")
-  {
     monologueInABox("This room seems familiar... have I gone in a circle???");
-  }
 
-  // Display text indicating the enemy spawner has become more challenging
-  static bool checkpoint1 = false, checkpoint2 = true, checkpoint3 = true;
-  if (player->getProgression() == 5)
+  // Increment room count if this room was not explored previously
+  if (!ROOM_EXPLORED)
   {
-    if (!checkpoint1)
-    {
-      monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
-      checkpoint1 = true;
-      checkpoint2 = false;
-    }
-  }
-  if (player->getProgression() == 10)
-  {
-    if (!checkpoint2)
-    {
-      monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
-      checkpoint2 = true;
-      checkpoint3 = false;
-    }
-  }
-  if (player->getProgression() == 15)
-  {
-    if (!checkpoint3)
-    {
-      monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
-      checkpoint3 = true;
-    }
+    // Display text indicating the enemy spawner has become more challenging
+    short unsigned int progression = player->getProgression();
+    if (progression + 1 == CHECKPOINT_1 ||
+        progression + 1 == CHECKPOINT_2 ||
+        progression + 1 == CHECKPOINT_3)
+        monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
+
+    // Increment room counter
+    player->roomCleared();
   }
 }

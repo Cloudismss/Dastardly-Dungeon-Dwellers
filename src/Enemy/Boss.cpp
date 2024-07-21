@@ -1,3 +1,4 @@
+/*
 #include "Boss.h"
 
 // Boss Class Definitions
@@ -15,3 +16,4 @@ void Boss::setEnemyAttributes()
   attackLow = 10;
   attackHigh = 20;
 }
+*/

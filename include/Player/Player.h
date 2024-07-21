@@ -1,15 +1,7 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
 #define DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
 
-#include <iostream>
-#include <string>
-
 #include <Enemy.h>
-#include <Globals.h>
-#include <Skills.h>
-
-using std::cout;
-using std::string;
 
 class Player
 {

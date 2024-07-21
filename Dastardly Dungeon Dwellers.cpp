@@ -1,5 +1,18 @@
 #include "Dastardly Dungeon Dwellers.h"
 
+#include <iostream>
+#include <string>
+
+#include "Art.h"
+#include "Main Menu.h"
+#include "Map.h"
+#include "Player.h"
+#include "Room Controller.h"
+
+using std::cin;
+using std::cout;
+using std::string;
+
 // BEGIN TESTING PROTOTYPES | FUNCTIONS | INCLUDES
 // !
 // TODO
@@ -77,9 +90,7 @@ void startGame()
   mainMenu();
 
   // Class selection menu
-  string className = " ";
-  classSelection(className);
-  player->setClass(className);
+  player->setClass(classSelection());
 
   // Generates the map with rooms to traverse
   Map *map = new Map;

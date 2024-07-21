@@ -1,5 +1,15 @@
 #include "Room Merchant.h"
 
+#include <iomanip>
+#include <iostream>
+
+#include "Validation.h"
+
+using std::cin;
+using std::cout;
+using std::setfill;
+using std::setw;
+
 // Pre-condition: called by roomController(), passed inventory variables and className
 // Post-condition: Runs merchant shop loop until the player leaves, updates inventory variables
 void roomMerchant(Player *player)

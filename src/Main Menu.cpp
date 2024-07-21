@@ -1,5 +1,13 @@
 #include "Main Menu.h"
 
+#include <iostream>
+
+#include "Art.h"
+#include "Validation.h"
+
+using std::cin;
+using std::cout;
+
 // Pre-condition: called by startGame()
 // Post-condition: displays a menu with options to start the game or read the tutorial
 void mainMenu()
@@ -50,8 +58,9 @@ void mainMenu()
 
 // Pre-condition: passed className
 // Post-condition: displays class selection menu and stores result in className
-void classSelection(string &className)
+string classSelection()
 {
+  string className = " ";
   bool loopFlag = true;
   do
   {
@@ -95,7 +104,7 @@ void classSelection(string &className)
           break;
         }
 
-          // Player chose Mage
+        // Player chose Mage
         case 2:
         {
           mageArt();
@@ -118,7 +127,7 @@ void classSelection(string &className)
           break;
         }
 
-          // Player chose Archer
+        // Player chose Archer
         case 3:
         {
           archerArt();
@@ -141,7 +150,7 @@ void classSelection(string &className)
           break;
         }
 
-          // Player chose an invalid number
+        // Player chose an invalid number
         default:
         {
           className = "Bard";
@@ -154,4 +163,6 @@ void classSelection(string &className)
       }
     }
   } while (loopFlag);
+  
+  return className;
 }

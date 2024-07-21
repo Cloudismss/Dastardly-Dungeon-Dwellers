@@ -1,5 +1,12 @@
 #include "Room Exit.h"
 
+#include <iostream>
+
+#include "Validation.h"
+
+using std::cin;
+using std::cout;
+
 // Pre-condition: called by roomController(), passed keyCount and gameVictory
 // Post-condition: updates gameVictory to true if the player chooses to leave the dungeon - game ends
 void roomExit(Player *player, bool &gameVictory)

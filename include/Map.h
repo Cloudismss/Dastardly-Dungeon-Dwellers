@@ -1,16 +1,8 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_MAP_H
 #define DASTARDLY_DUNGEON_DWELLERS_MAP_H
 
-#include <iomanip>
-#include <iostream>
 #include <string>
 
-#include "Validation.h"
-
-using std::cin;
-using std::cout;
-using std::setfill;
-using std::setw;
 using std::string;
 
 // Map Constants - feel free to change - have to both be odd numbers or positioning will be weird

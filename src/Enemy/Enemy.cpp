@@ -1,27 +1,42 @@
 #include "Enemy.h"
 
-// Enemy Class Definitions
-Enemy::Enemy()
+#include <iostream>
+#include <vector>
+
+#include "Globals.h"
+
+using std::cerr;
+using std::cout;
+
+// Enemy Class Constructor
+Enemy::Enemy(Player *player)
 {
-  name = generateEnemy();
+  // Generate tier for enemy
+  setEnemyTier(player);
+
+  // Generate enemy type
+  setEnemyName(player);
+  setEnemyVulnerabilities();
+
+  // Calculates health of the enemy based off of base enemy health and enemy tier
+  health = BASE_ENEMY_HEALTH * tier;
+  
+  announceEnemy();
+
+  // ! TODO: Debug
+  debugPrint();
 }
 
-void Enemy::setEnemyAttributes()
+void Enemy::setEnemyTier(Player *player)
 {
-  std::cerr << "Error: This text should be overwritten\n";
-}
-
-// ! TEMP
-void Enemy::tempEnemySpawner(Player *player)
-{
-// Randomizer variable for tier
+  // Randomizer variable for tier
   int randomTier = 1 + (rand() % 100);
 
   // Variables for Tier chance
   int tier1 = 0, tier2 = 0, tier3 = 0, tier4 = 0, tier5 = 0;
 
   // The first 5 rooms can spawn enemies Tier 1-2
-  if (player->getProgression() < 5)
+  if (player->getProgression() < CHECKPOINT_1)
   {
     if (randomTier <= 80)
       tier = 1;
@@ -30,7 +45,7 @@ void Enemy::tempEnemySpawner(Player *player)
   }
 
   // The next 5 rooms can spawn enemies Tier 1-3
-  else if (player->getProgression() < 10)
+  else if (player->getProgression() < CHECKPOINT_2)
   {
     // Calculates a random tier for the enemy - 60% chance of Tier 1, 30% chance of Tier 2, 10% chance of Tier 3
     tier1 = 60, tier2 = tier1 + 30;
@@ -43,7 +58,7 @@ void Enemy::tempEnemySpawner(Player *player)
   }
 
   // The next 5 rooms can spawn enemies Tier 1-4
-  else if (player->getProgression() < 15)
+  else if (player->getProgression() < CHECKPOINT_3)
   {
     // Calculates a random tier for the enemy - 35% chance of Tier 1, 30% chance of Tier 2, 25% chance of Tier 3, 10% chance of Tier 4
     tier1 = 35, tier2 = tier1 + 30, tier3 = tier2 + 25;
@@ -74,192 +89,123 @@ void Enemy::tempEnemySpawner(Player *player)
       boss = true;
   }
 
-  // Establish non-boss enemy values
-  if (!boss)
+  rewardTier = tier;
+
+  if (boss)
   {
-    // Calculates health of the enemy based off of base enemy health and enemy tier
-    health = BASE_ENEMY_HEALTH * tier;
-
-    // Assigns a random name to the enemy
-    int randomName = 0;
-    int randomValue = 1 + (rand() % 100);
-    if (player->getProgression() < 5)
-    {
-      // 90% chance of enemies 1 - 2
-      if (randomValue <= 90)
-        randomName = 1 + (rand() % 2);
-      // 10% chance of enemy 3
-      else
-        randomName = 3;
-    }
-    if (player->getProgression() < 10)
-    {
-      // 70% chance of enemies 1 - 2
-      if (randomValue <= 70)
-        randomName = 1 + (rand() % 2);
-      // 30% chance of enemy 3
-      else
-        randomName = 3;
-    }
-    else if (player->getProgression() < 15)
-    {
-      // 70% chance of enemies 1, 2, 4, or 5
-      if (randomValue < 70)
-      {
-        bool goodValue = false;
-        int randomValueAgain = 0;
-        do
-        {
-          randomValueAgain = rand() % 4;
-          if (randomValueAgain != 1)
-            goodValue = true;
-        } while (!goodValue);
-        randomName = 1 + (rand() % 2) + randomValueAgain;
-      }
-      // 30% chance of enemy 3
-      else
-        randomName = 3;
-    }
-    else
-    {
-      // 40% chance of enemies 1 - 4
-      if (randomValue <= 40)
-        randomName = 1 + (rand() % 4);
-      // 60% chance of enemies 4 - 6
-      else
-        randomName = 4 + (rand() % 3);
-    }
-
-    switch (randomName)
-    {
-      case 1:
-      {
-        name = "Goblin"; // Weak to Melee, Neutral to Ranged, Neutral to Melee
-        break;
-      }
-      case 2:
-      {
-        name = "Orc"; // Weak to Magic, Neutral to Ranged, Neutral to Melee
-        break;
-      }
-      case 3:
-      {
-        name = "Troll"; // Weak to Ranged and Melee, Neutral to Magic
-        health *= 2;
-        break;
-      }
-      case 4:
-      {
-        name = "Skeleton"; // Weak to Melee, Neutral to Magic, Resistant to Ranged
-        break;
-      }
-      case 5:
-      {
-        name = "Cyclops"; // Neutral to Melee, Neutral to Magic, Neutral to Ranged
-        break;
-      }
-      case 6:
-      {
-        name = "Minotaur"; // Weak to Ranged and Magic, Resistant to Melee
-        health *= 2;
-        break;
-      }
-    }
-
-    // Print enemy attributes
-    cout << "A tier " << tier << " " << name << " is guarding this room!\n\n";
-    rewardTier = tier; // Reward tier is used to control loot drops
+    rewardTier = 10;
   }
-
-  // Establish enemy values as boss values
-  else
-  {
-    // Boss health
-    health = BOSS_HEALTH;
-    rewardTier = 10; // This value is only used to control loot drops
-    int randomBossName = 1 + (rand() % 10);
-
-    // Assigns a random boss name
-    switch (randomBossName)
-    {
-      case 1:
-      {
-        name = "Voidshaper Nihilus";
-        break;
-      }
-      case 2:
-      {
-        name = "Snarltooth the Feral";
-        break;
-      }
-      case 3:
-      {
-        name = "Dreadlord Vorkar";
-        break;
-      }
-      case 4:
-      {
-        name = "Soulstealer Malgrimor";
-        break;
-      }
-      case 5:
-      {
-        name = "King Rattleclaw";
-        break;
-      }
-      case 6:
-      {
-        name = "Ignatius the Infernal";
-        break;
-      }
-      case 7:
-      {
-        name = "Dreadmaw the Bonecrusher";
-        break;
-      }
-      case 8:
-      {
-        name = "Rotclaw the Pustulant";
-        break;
-      }
-      case 9:
-      {
-        name = "Sludgeheart the Grotesque";
-        break;
-      }
-      case 10:
-      {
-        name = "Drak'thar the Trollking";
-        break;
-      }
-    }
-
-    // Some cool boss spawning text
-    cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n"
-         << name << " has cornered you!\n\n";
-  }  
 }
 
-string Enemy::generateEnemy()
+void Enemy::setEnemyName(Player *player)
 {
   // TODO: Weighted implementation with vector
+  std::vector<string> baddies = { };
   std::vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton", "Troll"};
   std::vector<string> stage2Baddies = {"Cyclops"};
   std::vector<string> stage3Baddies = {"Minotaur"};
-  return stage1Baddies[1 + (rand() % stage1Baddies.size())];
+  std::vector<string> bosses =
+  {
+    "Voidshaper Nihilus",
+    "Snarltooth the Feral",
+    "Dreadlord Vorkar",
+    "Soulstealer Malgrimor",
+    "King Rattleclaw",
+    "Ignatius the Infernal",
+    "Dreadmaw the Bonecrusher",
+    "Rotclaw the Pustulant",
+    "Sludgeheart the Grotesque",
+    "Drak'thar the Trollking"
+  };
+
+  if (!boss)
+  {
+    // ! TODO: Figure out how to copy entire vector
+    if (player->getProgression() == CHECKPOINT_1)
+    {
+      baddies.push_back(stage1Baddies[0]);
+      name = baddies[rand() % baddies.size()];
+    }
+    else if (player->getProgression() == CHECKPOINT_2)
+    {
+      baddies.push_back(stage2Baddies[0]);
+      name = baddies[rand() % baddies.size()];
+    }
+    else if (player->getProgression() == CHECKPOINT_3)
+    {
+      baddies.push_back(stage3Baddies[0]);
+      name = baddies[rand() % baddies.size()];
+    }
+  }
+  else
+  {
+    name = bosses[rand() % bosses.size()];
+  }
 }
 
-void Enemy::receive(double healthAdjust, const string &attackType)
+void Enemy::setEnemyVulnerabilities()
 {
-  // TODO: Needs class based implementation of resistance
-  double resistance = 0;
-  if (attackType == "Melee")
-    resistance = meleeVulnerability;
-  else if (attackType == "Magic")
-    resistance = magicVulnerability;
-  else if (attackType == "Ranged")
-    resistance = rangedVulnerability;
-  health -= healthAdjust * resistance;
+  if (name == "Goblin")
+  {
+    meleeVulnerability = 2.0;
+    magicVulnerability = 1.0;
+    rangedVulnerability = 1.0;
+  }
+  else if (name == "Orc")
+  {
+    meleeVulnerability = 1.0;
+    magicVulnerability = 2.0;
+    rangedVulnerability = 1.0;
+  }
+  else if (name == "Skeleton")
+  {
+    meleeVulnerability = 2.0;
+    magicVulnerability = 1.0;
+    rangedVulnerability = 0.5;
+  }
+  else if (name == "Troll")
+  {
+    meleeVulnerability = 2.0;
+    magicVulnerability = 1.0;
+    rangedVulnerability = 2.0;
+  }
+  else if (name == "Cyclops")
+  {
+    meleeVulnerability = 1.0;
+    magicVulnerability = 1.0;
+    rangedVulnerability = 1.0;
+  }
+  else if (name == "Minotaur")
+  {
+    meleeVulnerability = 2.0;
+    magicVulnerability = 1.0;
+    rangedVulnerability = 0.5;
+  }
+}
+
+// TODO varied dialogue implementation
+void Enemy::announceEnemy()
+{
+  // Print enemy attributes
+  if (!boss)
+    cout << "A tier " << tier << " " << name << " is guarding this room!\n\n";
+  else
+    cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
+}
+
+void Enemy::debugPrint()
+{
+  cout << "Name: " << name << "\n"
+       << "Tier: " << tier << "\n"
+       << "Health: " << health << "\n"
+       << "Weakness to melee: " << meleeVulnerability << "\n"
+       << "Weakness to magic: " << magicVulnerability << "\n"
+       << "Weakness to ranged: " << rangedVulnerability << "\n";
+}
+
+void Enemy::receive(Player *player, const string &battleMenuSelection, double playerAttack)
+{
+  health -= playerAttack * getResistance(player, battleMenuSelection);
   if (health < 0)
     health = 0;
 }
@@ -296,110 +242,19 @@ double Enemy::attack(int playerArmor)
 // Post-condition: updates damageValue based on enemy stats
 double Enemy::getResistance(Player *player, const string &battleMenuSelection)
 {
-  double resistanceValue = 1.00;
+  double *resistance = nullptr;
 
-  if (!boss)
-  {
-    if (name == "Goblin")
-    {
-      // Goblin is weak to Melee, but neutral to the rest
-      if (battleMenuSelection == "Melee")
-      {
-        resistanceValue = 2.0;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
-      }
-      else
-        resistanceValue = 1.0;
-    }
-    else if (name == "Orc")
-    {
-      // Orc is weak to Magic, Neutral to the rest
-      if (battleMenuSelection == "Magic")
-      {
-        resistanceValue = 2.0;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
-      }
-      else
-        resistanceValue = 1.0;
-    }
-    else if (name == "Troll")
-    {
-      // Troll is weak to Ranged and Melee, Neutral to Magic
-      if (battleMenuSelection == "Melee")
-      {
-        resistanceValue = 2.0;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
-      }
-      if (battleMenuSelection == "Ranged")
-      {
-        resistanceValue = 2.0;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
-      }
-      else
-        resistanceValue = 1.0;
-    }
-    else if (name == "Skeleton")
-    {
-      // Skeleton is weak to Melee, Neutral to Magic, and Resistant to Ranged
-      if (battleMenuSelection == "Melee")
-      {
-        resistanceValue = 2.0;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
-      }
-      if (battleMenuSelection == "Magic")
-        resistanceValue = 1.0;
-      if (battleMenuSelection == "Ranged")
-      {
-        resistanceValue = 0.5;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is disappointingly ineffective against " << name << "\n\n";
-      }
-    }
-    else if (name == "Cyclops")
-    {
-      resistanceValue = 1.0;
-    }
-    else if (name == "Minotaur")
-    {
-      if (battleMenuSelection == "Melee")
-      {
-        // Minotaur is weak to Ranged and Magic, Resistant to Melee
-        resistanceValue = 0.5;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is disappointingly ineffective against " << name << "\n\n";
-      }
-      else if (battleMenuSelection == "Magic")
-      {
-        resistanceValue = 2.0;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
-      }
-      else if (battleMenuSelection == "Ranged")
-      {
-        resistanceValue = 2.0;
-        cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
-      }
-    }
-  }
+  if (battleMenuSelection == "Melee")
+    resistance = &meleeVulnerability;
+  else if (battleMenuSelection == "Magic")
+    resistance = &magicVulnerability;
+  else if (battleMenuSelection == "Ranged")
+    resistance = &rangedVulnerability;
 
-  // Players deal triple damage vs. bosses
-  else
-    resistanceValue = 3.0;
+  if (*resistance < 1.0)
+    cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is disappointingly ineffective against " << name << "!\n\n";
+  else if (*resistance > 1.0)
+    cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
 
-  return resistanceValue;
-}
-
-// TODO varied dialogue implementation
-void Enemy::announceEnemy()
-{
-  std::cout << "Yikes! A tier " << tier << " " << name << " has appeared {PLACEHOLDER}\n";
-}
-
-void Enemy::debugPrint()
-{
-  cout << "Name: " << name << "\n"
-       << "Tier: " << tier << "\n"
-       << "Health: " << health << "\n"
-       << "Damage: " << damage << "\n"
-       << "Weakness to melee: " << meleeVulnerability << "\n"
-       << "Weakness to magic: " << magicVulnerability << "\n"
-       << "Weakness to ranged: " << rangedVulnerability << "\n"
-       << "Attack range: " << attackLow << "-" << attackHigh << "\n";
+  return *resistance;
 }

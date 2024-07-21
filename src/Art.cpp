@@ -1,5 +1,15 @@
 #include "Art.h"
 
+#include <iomanip>
+#include <iostream>
+
+#include <Validation.h>
+
+using std::cout;
+using std::cin;
+using std::setfill;
+using std::setw;
+
 // Pre-condition: called by battleController(), passed skill and health variables
 // Post-condition: returns user selection from displayed battleMenu
 string battleMenu(Player *player, Enemy *enemy)

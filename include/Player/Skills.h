@@ -1,12 +1,7 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_SKILLS_H
 #define DASTARDLY_DUNGEON_DWELLERS_SKILLS_H
 
-#include <iostream>
-#include <fstream>
 #include <string>
-
-#include "Art.h"
-#include "Globals.h"
 
 using std::string;
 

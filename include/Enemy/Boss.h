@@ -1,3 +1,4 @@
+/*
 #ifndef DASTARDLY_DUNGEON_DWELLERS_BOSS_H
 #define DASTARDLY_DUNGEON_DWELLERS_BOSS_H
 
@@ -27,6 +28,13 @@ private:
     "Sludgeheart the Grotesque",
     "Drak'thar the Trollking"
   };
+      // Boss health
+    health = BOSS_HEALTH;
+    rewardTier = 10; // This value is only used to control loot drops
+    // Some cool boss spawning text
+    cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n"
+         << name << " has cornered you!\n\n";
 };
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_BOSS_H
+*/

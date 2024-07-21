@@ -1,5 +1,15 @@
 #include "Player.h"
 
+#include <iostream>
+#include <string>
+
+#include <Globals.h>
+
+#include <Skills.h>
+
+using std::cout;
+using std::string;
+
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
 double Player::attack(Player *player, Enemy *enemy, const string &battleMenuSelection)

@@ -1,5 +1,15 @@
 #include "Validation.h"
 
+#include <iomanip>
+#include <iostream>
+#include <limits>
+#include <string>
+
+using std::cin;
+using std::cout;
+using std::setw;
+using std::string;
+
 // Pre-condition: called to validate a Y or N decision
 // Post-condition: returns whether the choice was valid or not
 bool validateDecision(int userChoice)

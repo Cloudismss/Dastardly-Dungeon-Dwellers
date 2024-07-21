@@ -1,5 +1,16 @@
 #include "Room Loot.h"
 
+#include <iostream>
+#include <string>
+
+#include "Art.h"
+#include "Room Enemy.h"
+#include "Validation.h"
+
+using std::cin;
+using std::cout;
+using std::string;
+
 // Pre-condition: called by roomController(), passed enemyProgression, isEnemyRoom, inventory variables and className / characterStats
 // Post-condition: Returns true if the player survives the room, updates inventory variables based on result, isEnemyRoom is updated to true if an enemy is spawned
 bool roomLoot(Player *player, bool &isEnemyRoom)

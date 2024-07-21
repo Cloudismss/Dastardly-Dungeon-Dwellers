@@ -1,5 +1,15 @@
 #include "Map.h"
 
+#include <iomanip>
+#include <iostream>
+
+#include "Validation.h"
+
+using std::cin;
+using std::cout;
+using std::setfill;
+using std::setw;
+
 Map::Map()
 {
   // Position Tracking Variables
@@ -111,9 +121,7 @@ void Map::mapMovement()
     cin >> directionChoice;
     cout << "\n";
     if (validateDirection(rowPosition, columnPosition, directionChoice, MAP_ROWS, MAP_COLUMNS))
-    {
       loopFlag = false;
-    }
   } while (loopFlag);
 
   // Adjust row and column values based on user choice

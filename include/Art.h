@@ -1,18 +1,11 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_ART_H
 #define DASTARDLY_DUNGEON_DWELLERS_ART_H
 
-#include <iomanip>
-#include <iostream>
 #include <string>
 
 #include <Enemy.h>
 #include <Player.h>
-#include <Validation.h>
 
-using std::cout;
-using std::cin;
-using std::setfill;
-using std::setw;
 using std::string;
 
 string battleMenu(Player *player, Enemy *enemy);

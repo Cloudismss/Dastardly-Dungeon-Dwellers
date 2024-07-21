@@ -1,3 +1,4 @@
+/*
 #include "Troll.h"
 
 // Troll Class Definitions
@@ -15,3 +16,4 @@ void Troll::setEnemyAttributes()
   attackLow = 5;
   attackHigh = 10;
 }
+*/

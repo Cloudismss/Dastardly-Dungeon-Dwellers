@@ -1,3 +1,4 @@
+/*
 #ifndef DASTARDLY_DUNGEON_DWELLERS_TROLL_H
 #define DASTARDLY_DUNGEON_DWELLERS_TROLL_H
 
@@ -9,3 +10,4 @@ class Troll: public Enemy
 };
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_TROLL_H
+*/

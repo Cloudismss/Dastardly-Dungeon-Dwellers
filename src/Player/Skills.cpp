@@ -1,5 +1,12 @@
 #include "Skills.h"
 
+#include <iostream>
+#include <fstream>
+
+#include "Globals.h"
+
+#include "Art.h"
+
 string Skills::getSkillName(const string &battleMenuSelection)
 {
   if (battleMenuSelection == "Melee")

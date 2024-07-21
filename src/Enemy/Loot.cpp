@@ -1,5 +1,7 @@
 #include "Loot.h"
 
+#include "Art.h"
+
 void loot(Player *player, Enemy *enemy)
 {
   cout << "You check the enemy for valuables:\n";

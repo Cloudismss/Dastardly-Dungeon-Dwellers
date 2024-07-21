@@ -1,5 +1,13 @@
 #include "Battle Controller.h"
 
+#include <string>
+
+#include "Art.h"
+#include "Skills.h"
+#include "Validation.h"
+
+using std::string;
+
 // Pre-condition: called by roomEnemy(), passed inventory variables, enemyProgression, rewardTier and className / characterStats
 // Post-condition: returns 1 if the player won the battle, -1 if the player ran away, 0 if they lost, updates inventory variables, playerHealth, and updates rewardTier based on battleEnemySpawner()
 int battleController(Player *player, Enemy *enemy)
@@ -13,7 +21,7 @@ int battleController(Player *player, Enemy *enemy)
     // Player chose a damaging move
     if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ramged")
       // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
-      enemy->receive(player->attack(player, enemy, battleMenuSelection), battleMenuSelection);
+      enemy->receive(player, battleMenuSelection, player->attack(player, enemy, battleMenuSelection));
     // Player chose to heal
     else if (battleMenuSelection == "Heal")
       // A random heal amount is added to playerHealth
