@@ -4,7 +4,7 @@ set(Sources
         "Main Menu.cpp"
         "Map.cpp"
         "Validation.cpp"
-        "Battle Controller/Battle Controller.cpp"
+        "Battle Controller.cpp"
         #"Enemy/Boss.cpp"
         "Enemy/Enemy.cpp"
         "Enemy/Loot.cpp"
@@ -20,7 +20,6 @@ set(Sources
 
 set(Dirs
         "../include"
-        "../include/Battle Controller"
         "../include/Enemy"
         "../include/Player"
         "../include/Room Controller"

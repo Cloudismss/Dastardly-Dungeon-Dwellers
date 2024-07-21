@@ -7,7 +7,7 @@ set(Includes
         "Main Menu.h"
         "Map.h"
         "Validation.h"
-        "Battle Controller/Battle Controller.h"
+        "Battle Controller.h"
         #"Enemy/Boss.h"
         "Enemy/Enemy.h"
         "Enemy/Loot.h"

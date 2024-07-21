@@ -6,7 +6,8 @@
 #include <vector>
 
 #include "Boss.h"
-#include "Troll.h"
+#include "Globals.h"
+#include "Player.h"
 
 using std::cerr;
 using std::cout;
@@ -15,7 +16,7 @@ using std::string;
 class Enemy
 {
   Enemy();
-  ~Enemy();
+  ~Enemy() { };
 
 protected:
   string name;
@@ -36,16 +37,18 @@ public:
   // Mutators
   virtual void setEnemyAttributes() = 0;
   void receive(double healthAdjust, const string &attackType);
-  // TODO: Factor in player armor
-  double attack(int playerArmor) const { return attackLow + (rand() % ((attackHigh + 1) - attackLow)); }
+  double attack(int playerArmor);
 
   // Accessors
   string getName() const { return name; }
   int getTier() const { return tier; }
   double getHealth() const { return health; }
-  double getResistance(const string &battleMenuSelection);
+  double getResistance(Player *player, const string &battleMenuSelection);
   int getRewardTier() const { return rewardTier; }
   void announceEnemy();
+
+  // ! Temp
+  void tempEnemySpawner(Player *player);
 
   // Debug
   void debugPrint();

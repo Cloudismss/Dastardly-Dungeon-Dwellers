@@ -11,7 +11,6 @@
 
 using std::string;
 
-// battleController group, these functions handle all battle related functions. Called within roomController group
 int battleController(Player *player, Enemy *enemy);
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_BATTLE_CONTROLLER_H
