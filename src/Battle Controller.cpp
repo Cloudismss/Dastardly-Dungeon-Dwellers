@@ -1,11 +1,13 @@
 #include "Battle Controller.h"
 
+#include <iostream>
 #include <string>
 
 #include "Art.h"
 #include "Skills.h"
 #include "Validation.h"
 
+using std::cout;
 using std::string;
 
 // Pre-condition: called by roomEnemy(), passed inventory variables, enemyProgression, rewardTier and className / characterStats

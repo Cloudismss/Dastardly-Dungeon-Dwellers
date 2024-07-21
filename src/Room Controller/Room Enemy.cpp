@@ -6,6 +6,8 @@
 #include "Battle Controller.h"
 #include "Loot.h"
 
+using std::cin;
+using std::cout;
 using std::string;
 
 // Pre-condition: called by roomController(), passed enemyProgression, inventory variables and className / characterStats
@@ -13,7 +15,7 @@ using std::string;
 bool roomEnemy(Player *player)
 {
   // Generate enemy
-  Enemy* enemy;
+  Enemy *enemy(player);
 
   // Run the battleController function. It returns 1 if the player wins the battle, -1 if the player successfully runs away, and 0 if they lose.
   int battleResult = battleController(player, enemy);

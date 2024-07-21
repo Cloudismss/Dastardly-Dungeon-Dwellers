@@ -205,7 +205,7 @@ void Enemy::debugPrint()
 
 void Enemy::receive(Player *player, const string &battleMenuSelection, double playerAttack)
 {
-  health -= playerAttack * getResistance(player, battleMenuSelection);
+  health -= playerAttack;
   if (health < 0)
     health = 0;
 }
@@ -240,7 +240,7 @@ double Enemy::attack(int playerArmor)
 
 // Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
 // Post-condition: updates damageValue based on enemy stats
-double Enemy::getResistance(Player *player, const string &battleMenuSelection)
+double Enemy::getResistance(const string &battleMenuSelection)
 {
   double *resistance = nullptr;
 

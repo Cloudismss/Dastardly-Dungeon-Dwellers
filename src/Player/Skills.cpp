@@ -89,12 +89,12 @@ void Skills::readSkills(const string &className)
   string classNameChecker = " ";
   
   // Ignore the first two lines (info header and blank line)
-  std::getline(characterStats, classNameChecker);
-  std::getline(characterStats, classNameChecker);
+  getline(characterStats, classNameChecker);
+  getline(characterStats, classNameChecker);
   while (characterStats.good())
   {
     // Read the class name
-    std::getline(characterStats, classNameChecker, ',');
+    getline(characterStats, classNameChecker, ',');
     // Check the class name
     if (classNameChecker == className)
     {
@@ -103,7 +103,7 @@ void Skills::readSkills(const string &className)
     // Check the next line if className doesn't match
     else
     {
-      std::getline(characterStats, classNameChecker);
+      getline(characterStats, classNameChecker);
     }
   }
 

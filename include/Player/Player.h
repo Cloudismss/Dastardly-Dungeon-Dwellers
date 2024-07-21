@@ -1,7 +1,13 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
 #define DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
 
-#include <Enemy.h>
+#include <string>
+
+#include "Globals.h"
+
+#include "Enemy.h"
+
+using std::string;
 
 class Player
 {

@@ -22,9 +22,9 @@ protected:
   double magicVulnerability;
   double rangedVulnerability;
 
-  // ! TODO: unused
-  // int attackLow;
-  // int attackHigh;
+  // ! TODO: balance
+  int attackLow = 10;
+  int attackHigh = 20;
   
   // Helper Functions
   void setEnemyTier(Player *player);
@@ -40,7 +40,7 @@ public:
   // Accessors
   string getName() const { return name; }
   double getHealth() const { return health; }
-  double getResistance(Player *player, const string &battleMenuSelection);
+  double getResistance(const string &battleMenuSelection);
   int getTier() const { return tier; }
   int getRewardTier() const { return rewardTier; }
 
