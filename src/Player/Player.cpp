@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "Skills.h"
-
 using std::cout;
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats

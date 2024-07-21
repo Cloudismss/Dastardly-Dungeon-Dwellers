@@ -6,6 +6,7 @@
 #include "Globals.h"
 
 #include "Enemy.h"
+#include "Skills.h"
 
 using std::string;
 
