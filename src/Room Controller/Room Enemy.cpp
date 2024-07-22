@@ -15,7 +15,7 @@ using std::string;
 bool roomEnemy(Player *player)
 {
   // Generate enemy
-  Enemy *enemy(player);
+  Enemy *enemy = new Enemy(player->getProgression());
 
   // Run the battleController function. It returns 1 if the player wins the battle, -1 if the player successfully runs away, and 0 if they lose.
   int battleResult = battleController(player, enemy);
@@ -27,6 +27,8 @@ bool roomEnemy(Player *player)
   // Player won the battle
   if (battleResult == 1)
     loot(player, enemy);
+
+  delete enemy;
 
   // Pause the game until the user is ready
   cout << "Press enter to continue to the next room: ";

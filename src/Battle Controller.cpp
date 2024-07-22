@@ -23,7 +23,7 @@ int battleController(Player *player, Enemy *enemy)
     // Player chose a damaging move
     if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ramged")
       // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
-      enemy->receive(player, battleMenuSelection, player->attack(player, enemy, battleMenuSelection));
+      enemy->receive(battleMenuSelection, player->skills->getSkillName(battleMenuSelection), player->attack(player, battleMenuSelection));
     // Player chose to heal
     else if (battleMenuSelection == "Heal")
       // A random heal amount is added to playerHealth

@@ -3,13 +3,12 @@
 
 #include <string>
 
-#include "Player.h"
-
 using std::string;
 
 class Enemy
 {
-  Enemy(Player *player);
+public:
+  Enemy(int playerProgression);
   ~Enemy() { };
 
 protected:
@@ -27,20 +26,20 @@ protected:
   int attackHigh = 20;
   
   // Helper Functions
-  void setEnemyTier(Player *player);
-  void setEnemyName(Player *player);
+  void setEnemyTier(int playerProgression);
+  void setEnemyName(int playerProgression);
   void setEnemyVulnerabilities();
   void announceEnemy();
 
 public:
   // Mutators
-  void receive(Player *player, const string &battleMenuSelection, double playerAttack);
+  void receive(const string &battleMenuSelection, const string &skillName, double playerAttack);
   double attack(int playerArmor);
 
   // Accessors
   string getName() const { return name; }
   double getHealth() const { return health; }
-  double getResistance(const string &battleMenuSelection);
+  double getVulnerability(const string &battleMenuSelection, const string &skillName);
   int getTier() const { return tier; }
   int getRewardTier() const { return rewardTier; }
 

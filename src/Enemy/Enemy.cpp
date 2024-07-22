@@ -9,13 +9,13 @@ using std::cerr;
 using std::cout;
 
 // Enemy Class Constructor
-Enemy::Enemy(Player *player)
+Enemy::Enemy(int playerProgression)
 {
   // Generate tier for enemy
-  setEnemyTier(player);
+  setEnemyTier(playerProgression);
 
   // Generate enemy type
-  setEnemyName(player);
+  setEnemyName(playerProgression);
   setEnemyVulnerabilities();
 
   // Calculates health of the enemy based off of base enemy health and enemy tier
@@ -27,7 +27,7 @@ Enemy::Enemy(Player *player)
   debugPrint();
 }
 
-void Enemy::setEnemyTier(Player *player)
+void Enemy::setEnemyTier(int playerProgression)
 {
   // Randomizer variable for tier
   int randomTier = 1 + (rand() % 100);
@@ -36,7 +36,7 @@ void Enemy::setEnemyTier(Player *player)
   int tier1 = 0, tier2 = 0, tier3 = 0, tier4 = 0, tier5 = 0;
 
   // The first 5 rooms can spawn enemies Tier 1-2
-  if (player->getProgression() < CHECKPOINT_1)
+  if (playerProgression < CHECKPOINT_1)
   {
     if (randomTier <= 80)
       tier = 1;
@@ -45,7 +45,7 @@ void Enemy::setEnemyTier(Player *player)
   }
 
   // The next 5 rooms can spawn enemies Tier 1-3
-  else if (player->getProgression() < CHECKPOINT_2)
+  else if (playerProgression < CHECKPOINT_2)
   {
     // Calculates a random tier for the enemy - 60% chance of Tier 1, 30% chance of Tier 2, 10% chance of Tier 3
     tier1 = 60, tier2 = tier1 + 30;
@@ -58,7 +58,7 @@ void Enemy::setEnemyTier(Player *player)
   }
 
   // The next 5 rooms can spawn enemies Tier 1-4
-  else if (player->getProgression() < CHECKPOINT_3)
+  else if (playerProgression < CHECKPOINT_3)
   {
     // Calculates a random tier for the enemy - 35% chance of Tier 1, 30% chance of Tier 2, 25% chance of Tier 3, 10% chance of Tier 4
     tier1 = 35, tier2 = tier1 + 30, tier3 = tier2 + 25;
@@ -97,7 +97,7 @@ void Enemy::setEnemyTier(Player *player)
   }
 }
 
-void Enemy::setEnemyName(Player *player)
+void Enemy::setEnemyName(int playerProgression)
 {
   // TODO: Weighted implementation with vector
   std::vector<string> baddies = { };
@@ -121,17 +121,17 @@ void Enemy::setEnemyName(Player *player)
   if (!boss)
   {
     // ! TODO: Figure out how to copy entire vector
-    if (player->getProgression() == CHECKPOINT_1)
+    if (playerProgression == CHECKPOINT_1)
     {
       baddies.push_back(stage1Baddies[0]);
       name = baddies[rand() % baddies.size()];
     }
-    else if (player->getProgression() == CHECKPOINT_2)
+    else if (playerProgression == CHECKPOINT_2)
     {
       baddies.push_back(stage2Baddies[0]);
       name = baddies[rand() % baddies.size()];
     }
-    else if (player->getProgression() == CHECKPOINT_3)
+    else if (playerProgression == CHECKPOINT_3)
     {
       baddies.push_back(stage3Baddies[0]);
       name = baddies[rand() % baddies.size()];
@@ -203,9 +203,9 @@ void Enemy::debugPrint()
        << "Weakness to ranged: " << rangedVulnerability << "\n";
 }
 
-void Enemy::receive(Player *player, const string &battleMenuSelection, double playerAttack)
+void Enemy::receive(const string &battleMenuSelection, const string &skillName, double playerAttack)
 {
-  health -= playerAttack;
+  health -= playerAttack * getVulnerability(battleMenuSelection, skillName);
   if (health < 0)
     health = 0;
 }
@@ -240,21 +240,21 @@ double Enemy::attack(int playerArmor)
 
 // Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
 // Post-condition: updates damageValue based on enemy stats
-double Enemy::getResistance(const string &battleMenuSelection)
+double Enemy::getVulnerability(const string &battleMenuSelection, const string &skillName)
 {
-  double *resistance = nullptr;
+  double *vulnerability = nullptr;
 
   if (battleMenuSelection == "Melee")
-    resistance = &meleeVulnerability;
+    vulnerability = &meleeVulnerability;
   else if (battleMenuSelection == "Magic")
-    resistance = &magicVulnerability;
+    vulnerability = &magicVulnerability;
   else if (battleMenuSelection == "Ranged")
-    resistance = &rangedVulnerability;
+    vulnerability = &rangedVulnerability;
 
-  if (*resistance < 1.0)
-    cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is disappointingly ineffective against " << name << "!\n\n";
-  else if (*resistance > 1.0)
-    cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " is incredibly effective against " << name << "!\n\n";
+  if (*vulnerability < 1.0)
+    cout << "\t" << skillName << " is disappointingly ineffective against " << name << "!\n\n";
+  else if (*vulnerability > 1.0)
+    cout << "\t" << skillName << " is incredibly effective against " << name << "!\n\n";
 
-  return *resistance;
+  return *vulnerability;
 }

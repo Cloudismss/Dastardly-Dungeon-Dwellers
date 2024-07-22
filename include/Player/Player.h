@@ -5,7 +5,6 @@
 
 #include "Globals.h"
 
-#include "Enemy.h"
 #include "Skills.h"
 
 using std::string;
@@ -56,7 +55,7 @@ public:
   Skills *skills = new Skills(className);
   
   // Mutators
-  double attack(Player *player, Enemy *enemy, const string &battleMenuSelection);
+  double attack(Player *player, const string &battleMenuSelection);
   void receive(double healthAdjust) { health -= healthAdjust; }
   void heal();
   void setClass(const string &CLASS_NAME) { className = CLASS_NAME; }

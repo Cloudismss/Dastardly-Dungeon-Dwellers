@@ -6,7 +6,7 @@ using std::cout;
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
-double Player::attack(Player *player, Enemy *enemy, const string &battleMenuSelection)
+double Player::attack(Player *player, const string &battleMenuSelection)
 {
   // Attack Variables
   double attackValue = 0;
@@ -23,7 +23,7 @@ double Player::attack(Player *player, Enemy *enemy, const string &battleMenuSele
   short unsigned int skillTier = player->skills->getSkillTier(battleMenuSelection);
 
   // Calculate attackValue
-  attackValue *= skillTier * player->getWeaponLevel(battleMenuSelection) * enemy->getResistance(battleMenuSelection);
+  attackValue *= skillTier * player->getWeaponLevel(battleMenuSelection);
 
   // Add a small offset to the damage for a touch of variability
   attackValue += skillTier * (-1 + (rand() % 3));
