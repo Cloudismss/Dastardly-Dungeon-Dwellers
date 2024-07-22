@@ -21,9 +21,9 @@ private:
   char *mapArray[MAP_ROWS][MAP_COLUMNS];
   bool *roomExplored[MAP_ROWS][MAP_COLUMNS];
   string *roomContents[MAP_ROWS][MAP_COLUMNS];
-  static int rowPosition;
-  static int columnPosition;
-  static char *previousPlayerPosition;
+  int rowPosition;
+  int columnPosition;
+  char *previousPlayerPosition;
 
   void generateMap();
   void generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int SIMILAR_DISTANCE, const int ROOMS_ALLOWED);
