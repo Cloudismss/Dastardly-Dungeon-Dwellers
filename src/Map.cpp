@@ -12,6 +12,17 @@ using std::setw;
 
 Map::Map()
 {
+  // Initialize all the arrays
+  for (int i = 0; i < MAP_ROWS; ++i)
+  {
+      for (int j = 0; j < MAP_COLUMNS; ++j)
+      {
+          *mapArray[i][j] = ' ';
+          *roomExplored[i][j] = false;
+          *roomContents[i][j] = " ";
+      }
+  }
+
   // Position Tracking Variables
   rowPosition = MAP_ROWS / 2;
   columnPosition = MAP_COLUMNS / 2;
@@ -154,17 +165,6 @@ void Map::mapMovement()
 // Post-condition: initializes mapArray[] with blanks and roomExplored[] with false, roomContents[] is filled with a random selection of rooms. The spawn room is marked with an '*' in mapArray[] and 'true' in roomExplored[]. If debug is on - mapArray[] is filled with room contents indicators
 void Map::generateMap()
 {
-  // Initialize all the arrays
-  for (int i = 0; i < MAP_ROWS; ++i)
-  {
-    for (int j = 0; j < MAP_COLUMNS; ++j)
-    {
-      *mapArray[i][j] = ' ';
-      *roomExplored[i][j] = false;
-      *roomContents[i][j] = " ";
-    }
-  }
-
   // Place the player icon in the starter room and sets the starter room to "explored" with "start" contents
   *mapArray[ROW_MIDPOINT][COLUMN_MIDPOINT] = '*';
   *roomExplored[ROW_MIDPOINT][COLUMN_MIDPOINT] = true;
