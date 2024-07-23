@@ -82,15 +82,12 @@ int main()
 // Post-condition: runs until the game is over
 void startGame()
 {
-  // These variables will be constantly tracked / updated while the game is played
-  Player *player = new Player();
-  bool gameOver = false, gameVictory = false;
-  
   // Menu Art
   mainMenu();
 
-  // Class selection menu
-  player->setClass(classSelection());
+  // These variables will be constantly tracked / updated while the game is played
+  Player *player = new Player();
+  bool gameOver = false, gameVictory = false;
 
   // Generates the map with rooms to traverse
   Map *map = new Map;
