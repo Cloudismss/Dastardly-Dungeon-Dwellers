@@ -16,6 +16,10 @@ public:
     meleeCounter = 0;
     magicCounter = 0;
     rangedCounter = 0;
+    meleeSkill = 0;
+    magicSkill = 0;
+    rangedSkill = 0;
+    critSkill = 1.0;
     initSkillNames(className);
     readSkills(className);
   }
