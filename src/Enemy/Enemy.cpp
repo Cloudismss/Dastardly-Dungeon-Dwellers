@@ -121,20 +121,24 @@ void Enemy::setEnemyName(int playerProgression)
   if (!boss)
   {
     // ! TODO: Figure out how to copy entire vector
-    if (playerProgression == CHECKPOINT_1)
+    if (playerProgression <= CHECKPOINT_1)
     {
-      baddies.push_back(stage1Baddies[0]);
-      name = baddies[rand() % baddies.size()];
+      //baddies.push_back(stage1Baddies[0]);
+      name = stage1Baddies[rand() % stage1Baddies.size()];
     }
-    else if (playerProgression == CHECKPOINT_2)
+    else if (playerProgression > CHECKPOINT_1 && playerProgression <= CHECKPOINT_2)
     {
-      baddies.push_back(stage2Baddies[0]);
-      name = baddies[rand() % baddies.size()];
+      //baddies.push_back(stage2Baddies[0]);
+      name = stage2Baddies[rand() % stage2Baddies.size()];
     }
-    else if (playerProgression == CHECKPOINT_3)
+    else if (playerProgression > CHECKPOINT_2 && playerProgression <= CHECKPOINT_3)
     {
-      baddies.push_back(stage3Baddies[0]);
-      name = baddies[rand() % baddies.size()];
+      //baddies.push_back(stage3Baddies[0]);
+      name = stage3Baddies[rand() % stage3Baddies.size()];
+    }
+    else if (playerProgression > CHECKPOINT_3)
+    {
+      name = "Minotaur";
     }
   }
   else
