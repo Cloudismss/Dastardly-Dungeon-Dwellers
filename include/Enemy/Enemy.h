@@ -22,8 +22,8 @@ protected:
   double rangedVulnerability;
 
   // ! TODO: balance
-  int attackLow = 10;
-  int attackHigh = 20;
+  int attackLow = 2;
+  int attackHigh = 5;
   
   // Helper Functions
   void setEnemyTier(int playerProgression);
