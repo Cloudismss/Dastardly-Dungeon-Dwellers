@@ -21,11 +21,17 @@ public:
     potions = 3;
     armor = 0;
     keys = 0;
-    meleeWeapon = 0;
-    magicWeapon = 0;
-    rangedWeapon = 0;
+    meleeWeapon = 1;
+    magicWeapon = 1;
+    rangedWeapon = 1;
     rooms = 0;
     progression = 0;
+
+    // Class selection menu
+    classSelection();
+
+    // Initialize skills
+    skills = new Skills(className);
 
     // DEBUG Option - Extra potions, gold, keys
     if (debug)
@@ -50,9 +56,12 @@ private:
   // Progression Variables
   short unsigned int rooms, progression;
 
+  // Class selector
+  void classSelection();
+
 public:
   // Initialize skills
-  Skills *skills = new Skills(className);
+  Skills *skills;
   
   // Mutators
   double attack(Player *player, const string &battleMenuSelection);

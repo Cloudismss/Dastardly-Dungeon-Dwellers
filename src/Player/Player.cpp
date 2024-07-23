@@ -2,7 +2,119 @@
 
 #include <iostream>
 
+#include "Art.h"
+#include "Validation.h"
+
+using std::cin;
 using std::cout;
+
+// Pre-condition: passed className
+// Post-condition: displays class selection menu and stores result in className
+void Player::classSelection()
+{
+  bool loopFlag = true;
+  do
+  {
+    short int classChoice = 0;
+    cout << ".-------------------------------------------------------------.\n"
+         << "|                                                             |\n"
+         << "|           Please choose a class using numbers 1-3:          |\n"
+         << "|                                                             |\n"
+         << "|            1. Warrior             Skill: Melee              |\n"
+         << "|            2. Mage                Skill: Magic              |\n"
+         << "|            3. Archer              Skill: Ranged             |\n"
+         << "|                                                             |\n"
+         << "'-------------------------------------------------------------'\n";
+    cin >> classChoice;
+    if (validateInput(classChoice, 1, 999))
+    {
+      char confirmSelection = ' ';
+      bool confirmLoop = true;
+      switch (classChoice)
+      {
+        // Player chose Warrior
+        case 1:
+        {
+          warriorArt();
+          do
+          {
+            cout << "You have selected 'Warrior', continue?\n"
+                 << "Y or N: ";
+            cin >> confirmSelection;
+            if (validateDecision(confirmSelection))
+            {
+              if (confirmSelection == 'Y' || confirmSelection == 'y')
+              {
+                className = "Warrior";
+                cout << "\nYou've chosen the path of the Warrior\n\n";
+                loopFlag = false;
+              }
+              confirmLoop = false;
+            }
+          } while (confirmLoop);
+          break;
+        }
+
+          // Player chose Mage
+        case 2:
+        {
+          mageArt();
+          do
+          {
+            cout << "You have selected 'Mage', continue?\n"
+                 << "Y or N: ";
+            cin >> confirmSelection;
+            if (validateDecision(confirmSelection))
+            {
+              if (confirmSelection == 'Y' || confirmSelection == 'y')
+              {
+                className = "Mage";
+                cout << "\nYou've chosen the path of the Mage\n\n";
+                loopFlag = false;
+              }
+              confirmLoop = false;
+            }
+          } while (confirmLoop);
+          break;
+        }
+
+          // Player chose Archer
+        case 3:
+        {
+          archerArt();
+          do
+          {
+            cout << "You have selected 'Archer', continue?\n"
+                 << "Y or N: ";
+            cin >> confirmSelection;
+            if (validateDecision(confirmSelection))
+            {
+              if (confirmSelection == 'Y' || confirmSelection == 'y')
+              {
+                className = "Archer";
+                cout << "\nYou've chosen the path of the Archer\n\n";
+                loopFlag = false;
+              }
+              confirmLoop = false;
+            }
+          } while (confirmLoop);
+          break;
+        }
+
+          // Player chose an invalid number
+        default:
+        {
+          className = "Bard";
+          bardArt();
+          cout << "That's wasn't an option >:(\n"
+               << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
+          loopFlag = false;
+          break;
+        }
+      }
+    }
+  } while (loopFlag);
+}
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
