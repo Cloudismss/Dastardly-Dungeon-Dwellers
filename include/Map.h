@@ -13,14 +13,14 @@ class Map
 {
 public:
   Map();
-  ~Map();
+  ~Map() { }
 
 private:
   const int ROW_MIDPOINT = MAP_ROWS / 2;
   const int COLUMN_MIDPOINT = MAP_COLUMNS / 2;
-  char *mapArray[MAP_ROWS][MAP_COLUMNS];
-  bool *roomExplored[MAP_ROWS][MAP_COLUMNS];
-  string *roomContents[MAP_ROWS][MAP_COLUMNS];
+  char mapArray[MAP_ROWS][MAP_COLUMNS];
+  bool roomExplored[MAP_ROWS][MAP_COLUMNS];
+  string roomContents[MAP_ROWS][MAP_COLUMNS];
   int rowPosition;
   int columnPosition;
   char *previousPlayerPosition;
@@ -32,7 +32,7 @@ private:
 
 public:
   bool move();
-  string getRoomContents() { return *roomContents[rowPosition][columnPosition]; }
+  string getRoomContents() { return roomContents[rowPosition][columnPosition]; }
 };
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_MAP_H

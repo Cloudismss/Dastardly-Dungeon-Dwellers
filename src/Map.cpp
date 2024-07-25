@@ -17,22 +17,19 @@ Map::Map()
   {
       for (int j = 0; j < MAP_COLUMNS; ++j)
       {
-          *mapArray[i][j] = ' ';
-          *roomExplored[i][j] = false;
-          *roomContents[i][j] = " ";
+          mapArray[i][j] = ' ';
+          roomExplored[i][j] = false;
+          roomContents[i][j] = " ";
       }
   }
 
   // Position Tracking Variables
   rowPosition = MAP_ROWS / 2;
   columnPosition = MAP_COLUMNS / 2;
-  previousPlayerPosition = mapArray[MAP_ROWS / 2][MAP_COLUMNS / 2];
 
   // Generate map
   generateMap();
 }
-
-Map::~Map() { }
 
 void Map::mapPrint()
 {
@@ -78,33 +75,33 @@ void Map::mapPrint()
 // Post-condition: Returns true if the room has already been explored. Allows the player to move around the map. Updates mapArray[] with current and previous player position. Updates roomExplored[] with true once a new room is entered
 bool Map::move()
 {
-  // Prints the map
+   // Prints the map
   mapPrint();
+
+  // Set previousPlayerPosition to player position, to record the last movement
+  previousPlayerPosition = &mapArray[rowPosition][columnPosition];
+
+  // Place new value in previousPlayerPosition
+  if (!(roomContents[rowPosition][columnPosition] == "Merchant" || roomContents[rowPosition][columnPosition] == "Exit"))
+    *previousPlayerPosition = 'o'; // Place a 'o' value in previousPlayerPosition pointer's element to indicate a previously cleared room
+  else if (roomContents[rowPosition][columnPosition] == "Merchant")
+    *previousPlayerPosition = '$'; // Place a '$' value in previousPlayerPosition pointer's element to indicate a discovered merchant shop
+  else if (roomContents[rowPosition][columnPosition] == "Exit")
+    *previousPlayerPosition = '#'; // Place a '#' value in previousPlayerPosition pointer's element to indicate the exit
 
   // Adjusts either rowPosition or columnPosition by 1 or -1 based on direction choice by the user
   mapMovement();
 
   // Check if we've been in this room before
   bool roomCleared = false;
-  if (*roomExplored[rowPosition][columnPosition])
+  if (roomExplored[rowPosition][columnPosition])
     roomCleared = true;
   else
     // Set the current index to true, since we'll be clearing this room next
-    *roomExplored[rowPosition][columnPosition] = true;
-
-  // Place new value in previousPlayerPosition
-  if (!(*roomContents[rowPosition][columnPosition] == "Merchant" || *roomContents[rowPosition][columnPosition] == "Exit"))
-    *previousPlayerPosition = 'o'; // Place a 'o' value in previousPlayerPosition pointer's element to indicate a previously cleared room
-  else if (*roomContents[rowPosition][columnPosition] == "Merchant")
-    *previousPlayerPosition = '$'; // Place a '$' value in previousPlayerPosition pointer's element to indicate a discovered merchant shop
-  else if (*roomContents[rowPosition][columnPosition] == "Exit")
-    *previousPlayerPosition = '#'; // Place a '#' value in previousPlayerPosition pointer's element to indicate the exit
+    roomExplored[rowPosition][columnPosition] = true;
 
   // Place new value in player's current position
-  *mapArray[rowPosition][columnPosition] = '*';
-
-  // Set previousPlayerPosition to player position, to record the last movement
-  previousPlayerPosition = mapArray[rowPosition][columnPosition];
+  mapArray[rowPosition][columnPosition] = '*';
 
   // Prints the map
   mapPrint();
@@ -166,9 +163,9 @@ void Map::mapMovement()
 void Map::generateMap()
 {
   // Place the player icon in the starter room and sets the starter room to "explored" with "start" contents
-  *mapArray[ROW_MIDPOINT][COLUMN_MIDPOINT] = '*';
-  *roomExplored[ROW_MIDPOINT][COLUMN_MIDPOINT] = true;
-  *roomContents[ROW_MIDPOINT][COLUMN_MIDPOINT] = "Start";
+  mapArray[ROW_MIDPOINT][COLUMN_MIDPOINT] = '*';
+  roomExplored[ROW_MIDPOINT][COLUMN_MIDPOINT] = true;
+  roomContents[ROW_MIDPOINT][COLUMN_MIDPOINT] = "Start";
 
   // Spawn an exit on the map
   const int MIN_EXIT_DISTANCE = 3; // The exit must spawn 3 tiles away from the center
@@ -188,8 +185,8 @@ void Map::generateMap()
     int randomColumn = rand() % MAP_COLUMNS;
     if (validExitSpawns[randomRow][randomColumn])
     {
-      *mapArray[randomRow][randomColumn] = '#';
-      *roomContents[randomRow][randomColumn] = "Exit";
+      mapArray[randomRow][randomColumn] = '#';
+      roomContents[randomRow][randomColumn] = "Exit";
       exitPlaced = true;
     }
   } while (!exitPlaced);
@@ -218,11 +215,11 @@ void Map::generateMap()
   {
     for (int j = 0; j < MAP_COLUMNS; ++j)
     {
-      if (*roomContents[i][j] == " ")
+      if (roomContents[i][j] == " ")
       {
-        *roomContents[i][j] = "Enemy";
+        roomContents[i][j] = "Enemy";
         if (debug)
-          *mapArray[i][j] = 'E';
+          mapArray[i][j] = 'E';
       }
     }
   }
@@ -237,7 +234,7 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
   {
     for (int j = 0; j < MAP_COLUMNS; ++j)
       // Mark the room as valid if the room is empty and a valid distance away from spawn
-      if (*roomContents[i][j] == " " && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COLUMN_MIDPOINT - ROOM_DISTANCE || j >= COLUMN_MIDPOINT + ROOM_DISTANCE))
+      if (roomContents[i][j] == " " && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COLUMN_MIDPOINT - ROOM_DISTANCE || j >= COLUMN_MIDPOINT + ROOM_DISTANCE))
         validSpawns[i][j] = true;
   }
 
@@ -255,16 +252,16 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
     int randomColumn = rand() % MAP_COLUMNS;
 
     // Check to make sure the room is valid and empty before spawning the room
-    if (validSpawns[randomRow][randomColumn] && *roomContents[randomRow][randomColumn] == " ")
+    if (validSpawns[randomRow][randomColumn] && roomContents[randomRow][randomColumn] == " ")
     {
       // Place room
-      *roomContents[randomRow][randomColumn] = ROOM_NAME;
+      roomContents[randomRow][randomColumn] = ROOM_NAME;
       validSpawns[randomRow][randomColumn] = false;
       ++roomsPlaced;
 
       // DEBUG Option - Print loot room icons on map
       if (debug)
-        *mapArray[randomRow][randomColumn] = ROOM_SYMBOL;
+        mapArray[randomRow][randomColumn] = ROOM_SYMBOL;
 
       // Mark spaces SIMILAR_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
       // TODO num merchants not always correct
