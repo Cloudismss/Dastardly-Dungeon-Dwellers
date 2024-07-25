@@ -8,5 +8,12 @@ move main menu art to art.h
 move room merchant art to art.h
 move battle health art to art.h
 refactor map rooms to be classes
+attack low and high need to be adjusted as progression moves up, remove tier check in calc
+more direct and tiny skill adjustments
+doing elemental stuff
+move globals - use externs if necessary
+progression and spawber off by 1
+map previous ibdicator broky
+deleting map crashes
 
 git submodule update --init --recursive
