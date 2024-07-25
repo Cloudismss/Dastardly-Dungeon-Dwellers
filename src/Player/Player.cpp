@@ -8,6 +8,36 @@
 using std::cin;
 using std::cout;
 
+Player::Player()
+{
+  health = 20.0;
+  className = " ";
+  gold = 0;
+  potions = 3;
+  armor = 0;
+  keys = 0;
+  meleeWeapon = 1;
+  magicWeapon = 1;
+  rangedWeapon = 1;
+  rooms = 0;
+  progression = 0;
+
+  // Class selection menu
+  classSelection();
+
+  // Initialize skills
+  skills = new Skills(className);
+
+  // DEBUG Option - Extra potions, gold, keys
+  if (debug)
+  {
+    health = 100.0;
+    potions = 100;
+    gold = 1000;
+    keys = 10;
+  }
+}
+
 // Pre-condition: passed className
 // Post-condition: displays class selection menu and stores result in className
 void Player::classSelection()
@@ -118,7 +148,7 @@ void Player::classSelection()
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
-double Player::attack(Player *player, const string &battleMenuSelection)
+double Player::attack(Player *player, const double &enemyVulnerability, const string &battleMenuSelection)
 {
   // Attack Variables
   double attackValue = 0;
@@ -146,6 +176,9 @@ double Player::attack(Player *player, const string &battleMenuSelection)
     attackValue *= 2;
     cout << "\tYou landed a critical hit!\n";
   }
+
+  // Calculate vulnerability
+  attackValue *= enemyVulnerability;
 
   // DEBUG OPTION - Max damage
   if (debug)

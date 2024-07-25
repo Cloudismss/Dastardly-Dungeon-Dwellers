@@ -19,6 +19,9 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   // Dialogue controller - determines which text should display when it comes to room explored vs not explored
   int dialogueSwitch = 0;
 
+  // This variable is set to true if an enemy is encountered
+  bool isEnemyRoom = false;
+
   if (ROOM_NAME == "Enemy")
   {
     if (ROOM_EXPLORED)
@@ -31,6 +34,8 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
       if (1 + (rand() % 100) <= 50)
         return;
     }
+    else
+      isEnemyRoom = true;
 
     roomEnemyMonologue(dialogueSwitch);
 
@@ -40,7 +45,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
       gameOver = true;
       return;
     }
-    player->progress();
   }
   else if (ROOM_NAME == "Loot")
   {
@@ -55,9 +59,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
         return;
     }
 
-    // This variable is set to true if a trap chest is discovered
-    bool isEnemyRoom = false;
-
     roomLootMonologue(dialogueSwitch);
     treasureArt();
     
@@ -67,10 +68,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
       gameOver = true;
       return;
     }
-
-    // Increment enemy progression if a trap chest battle was cleared
-    if (isEnemyRoom)
-      player->progress();
   }
   else if (ROOM_NAME == "Merchant")
   {
@@ -79,10 +76,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
       // Set dialogue switch to -1, so it runs room cleared dialogue
       dialogueSwitch = -1;
       monologueInABox("A friendly traveling merchant resides here");
-      
-      // There is a 50% chance the room will respawn
-      if (1 + (rand() % 100) <= 50)
-        return;
     }
 
     roomMerchantMonologue(dialogueSwitch);
@@ -112,12 +105,17 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   // Increment room count if this room was not explored previously
   if (!ROOM_EXPLORED)
   {
-    // Display text indicating the enemy spawner has become more challenging
-    short unsigned int progression = player->getProgression();
-    if (progression + 1 == CHECKPOINT_1 ||
-        progression + 1 == CHECKPOINT_2 ||
-        progression + 1 == CHECKPOINT_3)
-        monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
+    // Increment enemy progression if an enemy was defeated
+    if (isEnemyRoom)
+    {
+      // Display text indicating the enemy spawner has become more challenging
+      short unsigned int progression = player->getProgression();
+      if (progression + 1 == CHECKPOINT_1 ||
+          progression + 1 == CHECKPOINT_2 ||
+          progression + 1 == CHECKPOINT_3)
+          monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
+      player->progress();
+    }
 
     // Increment room counter
     player->roomCleared();

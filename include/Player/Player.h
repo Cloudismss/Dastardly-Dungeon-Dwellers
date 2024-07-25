@@ -13,35 +13,7 @@ class Player
 {
 public:
   // Constructor
-  Player()
-  {
-    health = 20.0;
-    className = " ";
-    gold = 0;
-    potions = 3;
-    armor = 0;
-    keys = 0;
-    meleeWeapon = 1;
-    magicWeapon = 1;
-    rangedWeapon = 1;
-    rooms = 0;
-    progression = 0;
-
-    // Class selection menu
-    classSelection();
-
-    // Initialize skills
-    skills = new Skills(className);
-
-    // DEBUG Option - Extra potions, gold, keys
-    if (debug)
-    {
-      health = 100.0;
-      potions = 100;
-      gold = 1000;
-      keys = 10;
-    }
-  }
+  Player();
   ~Player() { delete skills; }
 
 private:
@@ -64,7 +36,7 @@ public:
   Skills *skills;
   
   // Mutators
-  double attack(Player *player, const string &battleMenuSelection);
+  double attack(Player *player, const double &enemyVulnerability, const string &battleMenuSelection);
   void receive(double healthAdjust) { health -= healthAdjust; }
   void heal();
   void setClass(const string &CLASS_NAME) { className = CLASS_NAME; }

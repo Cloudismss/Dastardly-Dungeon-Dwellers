@@ -86,7 +86,10 @@ void Enemy::setEnemyTier(int playerProgression)
     else if (randomTier <= tier5)
       tier = 5;
     else
+    {
       boss = true;
+      tier = 10;
+    }
   }
 
   rewardTier = tier;
@@ -100,7 +103,7 @@ void Enemy::setEnemyTier(int playerProgression)
 void Enemy::setEnemyName(int playerProgression)
 {
   // TODO: Weighted implementation with vector
-  std::vector<string> baddies = { };
+  static std::vector<string> baddies = { };
   std::vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton", "Troll"};
   std::vector<string> stage2Baddies = {"Cyclops"};
   std::vector<string> stage3Baddies = {"Minotaur"};
@@ -120,31 +123,16 @@ void Enemy::setEnemyName(int playerProgression)
 
   if (!boss)
   {
-    // ! TODO: Figure out how to copy entire vector
-    if (playerProgression <= CHECKPOINT_1)
-    {
-      //baddies.push_back(stage1Baddies[0]);
-      name = stage1Baddies[rand() % stage1Baddies.size()];
-    }
-    else if (playerProgression > CHECKPOINT_1 && playerProgression <= CHECKPOINT_2)
-    {
-      //baddies.push_back(stage2Baddies[0]);
-      name = stage2Baddies[rand() % stage2Baddies.size()];
-    }
-    else if (playerProgression > CHECKPOINT_2 && playerProgression <= CHECKPOINT_3)
-    {
-      //baddies.push_back(stage3Baddies[0]);
-      name = stage3Baddies[rand() % stage3Baddies.size()];
-    }
-    else if (playerProgression > CHECKPOINT_3)
-    {
-      name = "Minotaur";
-    }
+    if (playerProgression == 0)
+      baddies.insert(baddies.end(), stage1Baddies.begin(), stage1Baddies.end());
+    else if (playerProgression == CHECKPOINT_1)
+      baddies.insert(baddies.end(), stage2Baddies.begin(), stage2Baddies.end());
+    else if (playerProgression == CHECKPOINT_2)
+      baddies.insert(baddies.end(), stage3Baddies.begin(), stage3Baddies.end());
+    name = baddies[rand() % baddies.size()];
   }
   else
-  {
     name = bosses[rand() % bosses.size()];
-  }
 }
 
 void Enemy::setEnemyVulnerabilities()
@@ -207,9 +195,9 @@ void Enemy::debugPrint()
        << "Weakness to ranged: " << rangedVulnerability << "\n";
 }
 
-void Enemy::receive(const string &battleMenuSelection, const string &skillName, double playerAttack)
+void Enemy::receive(double playerAttack)
 {
-  health -= playerAttack * getVulnerability(battleMenuSelection, skillName);
+  health -= playerAttack;
   if (health < 0)
     health = 0;
 }
@@ -256,9 +244,9 @@ double Enemy::getVulnerability(const string &battleMenuSelection, const string &
     vulnerability = &rangedVulnerability;
 
   if (*vulnerability < 1.0)
-    cout << "\t" << skillName << " is disappointingly ineffective against " << name << "!\n\n";
+    cout << "\t" << skillName << " is not very effective against " << name << "!\n\n";
   else if (*vulnerability > 1.0)
-    cout << "\t" << skillName << " is incredibly effective against " << name << "!\n\n";
+    cout << "\t" << skillName << " is super effective against " << name << "!\n\n";
 
   return *vulnerability;
 }

@@ -291,7 +291,7 @@ void roomMerchant(Player *player)
             cout << "\tThe air in this dungeon is very dry, you'll certainly need this\n";
           cout <<  "\tYour ranged damage has been upgraded!\n\n";
           merchantItemQuantity[RANGED_UPGRADE_INDEX] -= purchaseAmount;
-          player->addGold(merchantItemCost[RANGED_UPGRADE_INDEX] * purchaseAmount);
+          player->removeGold(merchantItemCost[RANGED_UPGRADE_INDEX] * purchaseAmount);
           player->upgradeWeapon("Ranged");
         }
         break;

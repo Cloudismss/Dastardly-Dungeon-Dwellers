@@ -21,9 +21,9 @@ int battleController(Player *player, Enemy *enemy)
     const string battleMenuSelection = battleMenu(player, enemy);
 
     // Player chose a damaging move
-    if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ramged")
+    if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ranged")
       // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
-      enemy->receive(battleMenuSelection, player->skills->getSkillName(battleMenuSelection), player->attack(player, battleMenuSelection));
+      enemy->receive(player->attack(player, enemy->getVulnerability(battleMenuSelection, player->skills->getSkillName(battleMenuSelection)), battleMenuSelection));
     // Player chose to heal
     else if (battleMenuSelection == "Heal")
       // A random heal amount is added to playerHealth

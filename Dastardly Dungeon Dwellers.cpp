@@ -86,7 +86,7 @@ void startGame()
   mainMenu();
 
   // These variables will be constantly tracked / updated while the game is played
-  Player *player = new Player();
+  Player *player = new Player;
   bool gameOver = false, gameVictory = false;
 
   // Generates the map with rooms to traverse
@@ -97,7 +97,6 @@ void startGame()
     roomController(player, map, gameOver, gameVictory);
   while (!gameOver && !gameVictory);
 
-  delete map;
 
   if (gameVictory)
     victoryArt(player);
@@ -105,4 +104,5 @@ void startGame()
     gameOverArt(player);
 
   delete player;
+  delete map;
 }

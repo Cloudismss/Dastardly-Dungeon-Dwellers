@@ -17,9 +17,9 @@ protected:
   int tier;
   int rewardTier;
   double health;
-  double meleeVulnerability;
-  double magicVulnerability;
-  double rangedVulnerability;
+  double meleeVulnerability = 1.0;
+  double magicVulnerability = 1.0;
+  double rangedVulnerability = 1.0;
 
   // ! TODO: balance
   int attackLow = 2;
@@ -33,7 +33,7 @@ protected:
 
 public:
   // Mutators
-  void receive(const string &battleMenuSelection, const string &skillName, double playerAttack);
+  void receive(double playerAttack);
   double attack(int playerArmor);
 
   // Accessors
