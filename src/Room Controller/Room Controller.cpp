@@ -1,7 +1,5 @@
 #include "Room Controller.h"
 
-#include "Globals.h"
-
 #include "Art.h"
 #include "Room Enemy.h"
 #include "Room Exit.h"

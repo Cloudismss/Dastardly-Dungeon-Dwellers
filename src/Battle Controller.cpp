@@ -4,8 +4,6 @@
 #include <string>
 
 #include "Art.h"
-#include "Skills.h"
-#include "Validation.h"
 
 using std::cout;
 using std::string;
