@@ -192,6 +192,12 @@ double Player::attack(Player *player, const double &enemyVulnerability, const st
   return attackValue;
 }
 
+void Player::addKey()
+{
+  ++keys;
+  displayMeInABox("GOLDEN KEY Acquired!");
+}
+
 void Player::upgradeWeapon(const string &weaponType)
 {
   if (weaponType == "Melee")

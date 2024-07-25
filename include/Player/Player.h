@@ -44,7 +44,7 @@ public:
   void addGold(int goldAdjust) { gold += goldAdjust; }
   void addPotion(int potionAdjust) { potions += potionAdjust; }
   void addArmor(int armorAdjust) { armor += armorAdjust; }
-  void addKey() { ++keys; }
+  void addKey();
 
   void upgradeWeapon(const string &weaponType);
 

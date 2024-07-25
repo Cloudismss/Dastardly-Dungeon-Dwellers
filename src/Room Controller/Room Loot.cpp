@@ -56,14 +56,12 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
         else
           cout << "Potion added\n";
       }
+
       cout << "\n";
 
       // 30% chance the player is given the golden key
       if (lootRoll <= 30)
-      {
         player->addKey();
-        displayMeInABox("GOLDEN KEY Acquired!");
-      }
 
       // Player successfully cleared the room
       lootSuccess = true;

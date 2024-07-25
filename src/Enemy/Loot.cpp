@@ -37,6 +37,8 @@ void loot(Player *player, Enemy *enemy)
       if (lootRoll > 85)
         cout << "You found nothing of value\n";
 
+      cout << "\n";
+
       break;
     }
     case 2:
@@ -62,6 +64,8 @@ void loot(Player *player, Enemy *enemy)
       if (lootRoll > 90)
         cout << "You found nothing of value\n";
 
+      cout << "\n";
+
       break;
     }
     case 3:
@@ -80,7 +84,9 @@ void loot(Player *player, Enemy *enemy)
       // 100% chance to earn a random amount of gold between 10-20
       int goldAdded = 10 + (rand() % 11);
       player->addGold(goldAdded);
-      cout << "Gold x" << goldAdded << " added\n";    
+      cout << "Gold x" << goldAdded << " added\n";
+
+      cout << "\n";    
 
       break;
     }
@@ -102,13 +108,11 @@ void loot(Player *player, Enemy *enemy)
       player->addGold(goldAdded);
       cout << "Gold x" << goldAdded << " added\n";
 
+      cout << "\n";
+
       // 5% chance to earn the golden key
       if (lootRoll <= 5)
-      {
         player->addKey();
-        cout << "\n";
-        displayMeInABox("GOLDEN KEY Acquired!");
-      }
 
       break;
     }
@@ -124,13 +128,11 @@ void loot(Player *player, Enemy *enemy)
       player->addGold(goldAdded);
       cout << "Gold x" << goldAdded << " added\n";
 
+      cout << "\n";
+
       // 15% chance to earn the golden key
       if (lootRoll <= 15)
-      {
         player->addKey();
-        cout << "\n";
-        displayMeInABox("GOLDEN KEY Acquired!");
-      }
 
       break;
     }
@@ -146,13 +148,12 @@ void loot(Player *player, Enemy *enemy)
       player->addGold(goldAdded);
       cout << "Gold x" << goldAdded << " added\n";
 
+      cout << "\n";
+
       // 100% chance to earn the golden key
       player->addKey();
-      cout << "\n";
-      displayMeInABox("GOLDEN KEY Acquired!");
 
       break;
     }
   }
-  cout << "\n";
 }

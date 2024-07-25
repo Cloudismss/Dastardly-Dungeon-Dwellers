@@ -322,12 +322,6 @@ void roomMerchant(Player *player)
             merchantItemQuantity[GOLDEN_KEY_INDEX] -= 1;
             player->removeGold(merchantItemCost[GOLDEN_KEY_INDEX]);
             player->addKey();
-            cout << "\t." << setfill('-') << setw(46) << ".\n"
-                 << "\t|" << setfill(' ') << setw(46) << "|\n"
-                 << "\t|" << setw(12) << " " << "GOLDEN KEY acquired!" << setw(11) << " " << " |\n"
-                 << "\t|" << setfill(' ') << setw(46) << "|\n"
-                 << "\t'" << setfill('-') << setw(46) << "'\n"
-                 << "\n";
           }
         }
 

@@ -22,9 +22,6 @@ Enemy::Enemy(int playerProgression)
   health = BASE_ENEMY_HEALTH * tier;
   
   announceEnemy();
-
-  // ! TODO: Debug
-  debugPrint();
 }
 
 void Enemy::setEnemyTier(int playerProgression)
@@ -183,16 +180,6 @@ void Enemy::announceEnemy()
     cout << "A tier " << tier << " " << name << " is guarding this room!\n\n";
   else
     cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
-}
-
-void Enemy::debugPrint()
-{
-  cout << "Name: " << name << "\n"
-       << "Tier: " << tier << "\n"
-       << "Health: " << health << "\n"
-       << "Weakness to melee: " << meleeVulnerability << "\n"
-       << "Weakness to magic: " << magicVulnerability << "\n"
-       << "Weakness to ranged: " << rangedVulnerability << "\n";
 }
 
 void Enemy::receive(double playerAttack)
