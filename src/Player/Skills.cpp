@@ -57,9 +57,9 @@ void Skills::useSkill(const string &battleMenuSelection, const string &className
     string congratulationsMessage = "Congratulations!";
     string upgradeMessage = " ";
 
-    if (*skillCounter == SKILL_UPGRADE)
+    if (*skillCounter + 1 == SKILL_UPGRADE)
       setSkillName(battleMenuSelection, upgradeMessage, className, 2);
-    else if (*skillCounter == SKILL_UPGRADE * 2)
+    else if (*skillCounter + 1 == SKILL_UPGRADE * 2)
       setSkillName(battleMenuSelection, upgradeMessage, className, 3);
       
     // Print skill upgrade notification
@@ -97,14 +97,10 @@ void Skills::readSkills(const string &className)
     getline(characterStats, classNameChecker, ',');
     // Check the class name
     if (classNameChecker == className)
-    {
       characterStats >> meleeSkill >> rangedSkill >> magicSkill >> critSkill;
-    }
     // Check the next line if className doesn't match
     else
-    {
       getline(characterStats, classNameChecker);
-    }
   }
 
   characterStats.close();
