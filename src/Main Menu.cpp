@@ -8,7 +8,7 @@
 using std::cin;
 using std::cout;
 
-// Pre-condition: called by startGame()
+// Pre-condition: called by startGame() to print the menu screen
 // Post-condition: displays a menu with options to start the game or read the tutorial
 void mainMenu()
 {

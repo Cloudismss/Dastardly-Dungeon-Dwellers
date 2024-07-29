@@ -44,7 +44,7 @@ bool validateInput(int userChoice, int rangeLow, int rangeHigh)
   return validFlag;
 }
 
-// Pre-condition: called to validate a direction input, passed userChoice
+// Pre-condition: called to validate a direction input, passed userChoice by reference
 // Post-condition: returns whether the choice was valid or not, updates userChoice value to uppercase
 bool validateDirection(int rowPosition, int columnPosition, char &userChoice, const int MAP_ROWS, const int MAP_COLUMNS)
 {

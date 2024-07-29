@@ -10,7 +10,7 @@ using std::cin;
 using std::setfill;
 using std::setw;
 
-// Pre-condition: called by battleController(), passed skill and health variables
+// Pre-condition: called by battleController(), passed player and enemy objects
 // Post-condition: returns user selection from displayed battleMenu
 string battleMenu(Player *player, Enemy *enemy)
 {
@@ -91,7 +91,7 @@ void battleHealthArt(int playerHealth, int enemyHealth)
   }
 }
 
-// Pre-condition: called to display text in a box
+// Pre-condition: called to display text in a box. Ensure a newline is used prior to the call to this function, it can't be included here because of vaired implementaton
 // Post-condition: displays text in a box based on string length
 void displayMeInABox(const string &message)
 {
@@ -125,8 +125,8 @@ void displayMeInABox(const string &message)
        << "\n";
 }
 
-// Pre-condition: overload - called to display text in a box
-// Post-condition: displays text in a box based on string length
+// Pre-condition: called to display 2 lines of text in a box. Ensure a newline is used prior to the call to this function, it can't be included here because of vaired implementaton
+// Post-condition: displays 2 lines of text in a box based on string length
 void displayMeInABox(const string &message1, const string &message2)
 {
   // Offsets are used to clean up integer division spacing

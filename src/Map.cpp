@@ -10,6 +10,8 @@ using std::cout;
 using std::setfill;
 using std::setw;
 
+// Prec=ondition: called to construct a map object
+// Post=condition: constructs a map object and initializes default values with a randomly generated map
 Map::Map()
 {
   // Initialize all the arrays
@@ -31,6 +33,8 @@ Map::Map()
   generateMap();
 }
 
+// Prec=ondition: called to print the map
+// Post=condition: prints the map, extra debug information is available
 void Map::mapPrint()
 {
   // Prints the map
@@ -71,8 +75,8 @@ void Map::mapPrint()
   cout << "\n";
 }
 
-// Pre-condition: called by roomController(), passed mapArray[], roomExplored[], roomContents[], array pointers
-// Post-condition: Returns true if the room has already been explored. Allows the player to move around the map. Updates mapArray[] with current and previous player position. Updates roomExplored[] with true once a new room is entered
+// Pre-condition: called by roomController() to move along the map
+// Post-condition: returns true if the room has already been explored. Updates mapArray[] with current and previous player position. Updates roomExplored[] with true once a new room is entered
 bool Map::move()
 {
    // Prints the map
@@ -116,8 +120,8 @@ bool Map::move()
     return false;
 }
 
-// Pre-condition: called by map(), passed rowPosition and columnPosition
-// Post-condition: updates both variables based on user selection
+// Pre-condition: called by Map::move()
+// Post-condition: updates row and column variables based on user selection
 void Map::mapMovement()
 {
   bool loopFlag = true;
@@ -158,8 +162,8 @@ void Map::mapMovement()
   }
 }
 
-// Pre-condition: receives mapArray[], roomExplored[], roomContents[], *playerPosition, *exploredPosition, *contentsPosition, and constants from startGame()
-// Post-condition: initializes mapArray[] with blanks and roomExplored[] with false, roomContents[] is filled with a random selection of rooms. The spawn room is marked with an '*' in mapArray[] and 'true' in roomExplored[]. If debug is on - mapArray[] is filled with room contents indicators
+// Pre-condition: called in the map constructor to generate a random map
+// Post-condition: Performs calculations to decide where and how many of each room to spawn when calling generateRooms(). The spawn room is marked with an '*' in mapArray[] and 'true' in roomExplored[]. If debug is on - mapArray[] is additionally filled with room contents indicators
 void Map::generateMap()
 {
   // Place the player icon in the starter room and sets the starter room to "explored" with "start" contents
@@ -225,8 +229,8 @@ void Map::generateMap()
   }
 }
 
-// Pre-condition: receives mapArray[], roomContents[], and constants from generateMap()
-// Post-condition: roomContents[] is filled with a random selection of rooms. If debug is on - mapArray[] is filled with room contents indicators
+// Pre-condition: called by generateMap() to randomly generate a selected room(s) for roomContets[]
+// Post-condition: roomContents[] is filled with a random selection of the passed in room. If debug is on - mapArray[] is additionally filled with room contents indicators
 void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int SIMILAR_DISTANCE, const int ROOMS_ALLOWED)
 {
   bool validSpawns[MAP_COLUMNS][MAP_COLUMNS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function

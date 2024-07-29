@@ -8,8 +8,8 @@
 using std::cout;
 using std::string;
 
-// Pre-condition: called by roomEnemy(), passed inventory variables, enemyProgression, rewardTier and className / characterStats
-// Post-condition: returns 1 if the player won the battle, -1 if the player ran away, 0 if they lost, updates inventory variables, playerHealth, and updates rewardTier based on battleEnemySpawner()
+// Pre-condition: called by roomEnemy(), passed player and enemy objects
+// Post-condition: returns 1 if the player won the battle, -1 if the player ran away, 0 if they lost, updates player variables
 int battleController(Player *player, Enemy *enemy)
 {
   // Battle loop - loops until either the enemy or the player hits 0 health
