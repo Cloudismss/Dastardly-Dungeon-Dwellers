@@ -18,6 +18,7 @@ using std::string;
 // TODO
 // ?
 // *
+/*
 
 #include "fmt/base.h"
 #include "fmt/color.h"
@@ -26,6 +27,7 @@ using std::string;
 #include "boost/random/uniform_int_distribution.hpp"
 #include "boost/random/discrete_distribution.hpp"
 
+*/
 // !
 // TODO
 // ?
@@ -39,6 +41,7 @@ int main()
   // TODO
   // ?
   // *
+  /*
 
   // Print red text
   fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Test\n");
@@ -55,6 +58,7 @@ int main()
 
   cout << "\n\n\n\n";
 
+  */
   // !
   // TODO
   // ?
