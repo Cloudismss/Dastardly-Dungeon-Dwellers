@@ -1,0 +1,8 @@
+#ifndef DASTARDLY_DUNGEON_DWELLERS_ROOM_ENEMY_H
+#define DASTARDLY_DUNGEON_DWELLERS_ROOM_ENEMY_H
+
+#include "Player.h"
+
+bool roomEnemy(Player *player);
+
+#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_ENEMY_H
