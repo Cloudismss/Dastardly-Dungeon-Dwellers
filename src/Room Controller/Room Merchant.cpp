@@ -40,92 +40,109 @@ void roomMerchant(Player *player)
   // Slot 3 - Melee Upgrade
   string meleeUpgradeName = " ";
   string meleeUpgradeMessage = " ";
-  if (className == "Warrior")
+  int meleeSuccess = meleeChance <= UPGRADE_CHANCE;
+  if (meleeSuccess)
   {
-    meleeUpgradeName = "Sword Sharpening";
-    meleeUpgradeMessage = "\tYou feel an immense power emanating from your blade\n";
+    if (className == "Warrior")
+    {
+      meleeUpgradeName = "Sword Sharpening";
+      meleeUpgradeMessage = "\tYou feel an immense power emanating from your blade\n";
+    }
+    else if (className == "Mage")
+    {
+      meleeUpgradeName = "Staff Density";
+      meleeUpgradeMessage = "\tThe weight of a distant star infuses within your staff\n";
+    }
+    else if (className == "Archer")
+    {
+      meleeUpgradeName = "Honed Blades";
+      meleeUpgradeMessage = "\tYour blades shimmer a soft blue gleam, there may be enemies nearby\n";
+    }
+    else if (className == "Bard")
+    {
+      meleeUpgradeName = "Lute Polish";
+      meleeUpgradeMessage = "\tYour lute gently tugs on your shoulder, politely yearning for your affection\n";
+    }
+    meleeUpgradeMessage += "\tYour melee damage has been upgraded!\n\n";
+    MerchantItem melee = {meleeUpgradeName, meleeSuccess, UPGRADE_COST};
+    shop.push_back(melee);
   }
-  else if (className == "Mage")
-  {
-    meleeUpgradeName = "Staff Density";
-    meleeUpgradeMessage = "\tThe weight of a distant star infuses within your staff\n";
-  }
-  else if (className == "Archer")
-  {
-    meleeUpgradeName = "Honed Blades";
-    meleeUpgradeMessage = "\tYour blades shimmer a soft blue gleam, there may be enemies nearby\n";
-  }
-  else if (className == "Bard")
-  {
-    meleeUpgradeName = "Lute Polish";
-    meleeUpgradeMessage = "\tYour lute gently tugs on your shoulder, politely yearning for your affection\n";
-  }
-  meleeUpgradeMessage += "\tYour melee damage has been upgraded!\n\n";
-  MerchantItem melee = {meleeUpgradeName, meleeChance <= UPGRADE_CHANCE, UPGRADE_COST};
-  shop.push_back(melee);
 
   // Slot 4 - Staff Upgrade
   string magicUpgradeName = " ";
   string magicUpgradeMessage = " ";
-  if (className == "Warrior")
+  int magicSuccess = magicChance <= UPGRADE_CHANCE;
+  if (magicSuccess)
   {
-    magicUpgradeName = "Shield Polish";
-    magicUpgradeMessage = "\tYour shield shakes with vicious ferocity, it is ready to bash your foes\n";
+    if (className == "Warrior")
+    {
+      magicUpgradeName = "Shield Polish";
+      magicUpgradeMessage = "\tYour shield shakes with vicious ferocity, it is ready to bash your foes\n";
+    }
+    else if (className == "Mage")
+    {
+      magicUpgradeName = "Runald's Ice Band";
+      magicUpgradeMessage = "\tA soft implosion pops within your staff, you feel empowered by the spirits of the dungeon\n";
+    }
+    else if (className == "Archer")
+    {
+      magicUpgradeName = "Toxic Canister";
+      magicUpgradeMessage = "\tYour toxins breathe a voracious pestilence, suffocating your enemies\n";
+    }
+    else if (className == "Bard")
+    {
+      magicUpgradeName = "Throat Lubricant";
+      magicUpgradeMessage = "\tYour throat feels nice and refreshed\n";
+    }
+    magicUpgradeMessage += "\tYour magic damage has been upgraded!\n\n";
+    MerchantItem magic = {magicUpgradeName, magicSuccess, UPGRADE_COST};
+    shop.push_back(magic);
   }
-  else if (className == "Mage")
-  {
-    magicUpgradeName = "Runald's Ice Band";
-    magicUpgradeMessage = "\tA soft implosion pops within your staff, you feel empowered by the spirits of the dungeon\n";
-  }
-  else if (className == "Archer")
-  {
-    magicUpgradeName = "Toxic Canister";
-    magicUpgradeMessage = "\tYour toxins breathe a voracious pestilence, suffocating your enemies\n";
-  }
-  else if (className == "Bard")
-  {
-    magicUpgradeName = "Throat Lubricant";
-    magicUpgradeMessage = "\tYour throat feels nice and refreshed\n";
-  }
-  magicUpgradeMessage += "\tYour magic damage has been upgraded!\n\n";
-  MerchantItem magic = {magicUpgradeName, magicChance <= UPGRADE_CHANCE, UPGRADE_COST};
-  shop.push_back(magic);
 
   // Slot 5 - Arrow Upgrade
   string rangedUpgradeName = " ";
   string rangedUpgradeMessage = " ";
-  if (className == "Warrior")
+  int rangedSuccess = rangedChance <= UPGRADE_CHANCE;
+  if (rangedSuccess)
   {
-    rangedUpgradeName = "Titanium Throwing Sleeve";
-    rangedUpgradeMessage = "\tYour spear calls for your grasp, ready to soar with reckless ferocity\n";
+    if (className == "Warrior")
+    {
+      rangedUpgradeName = "Titanium Throwing Sleeve";
+      rangedUpgradeMessage = "\tYour spear calls for your grasp, ready to soar with reckless ferocity\n";
+    }
+    else if (className == "Mage")
+    {
+      rangedUpgradeName = "Static Cleanse";
+      rangedUpgradeMessage = "\tA mystical cloud descends upon you, relieving you of your static charge\n";
+    }
+    else if (className == "Archer")
+    {
+      rangedUpgradeName = "Arcane Arrow Treatment";
+      rangedUpgradeMessage = "\tYour quiver shakes ferociously, you knock your bow with fearless determination\n";
+    }
+    else if (className == "Bard")
+    {
+    rangedUpgradeName = "Chapstick";
+    rangedUpgradeMessage = "\tThe air in this dungeon is very dry, you'll certainly need this\n";
+    }
+    rangedUpgradeMessage += "\tYour ranged damage has been upgraded!\n\n";
+    MerchantItem ranged = {rangedUpgradeName, rangedSuccess, UPGRADE_COST};
+    shop.push_back(ranged);
   }
-  else if (className == "Mage")
-  {
-    rangedUpgradeName = "Static Cleanse";
-    rangedUpgradeMessage = "\tA mystical cloud descends upon you, relieving you of your static charge\n";
-  }
-  else if (className == "Archer")
-  {
-    rangedUpgradeName = "Arcane Arrow Treatment";
-    rangedUpgradeMessage = "\tYour quiver shakes ferociously, you knock your bow with fearless determination\n";
-  }
-  else if (className == "Bard")
-  {
-   rangedUpgradeName = "Chapstick";
-   rangedUpgradeMessage = "\tThe air in this dungeon is very dry, you'll certainly need this\n";
-  }
-  rangedUpgradeMessage += "\tYour ranged damage has been upgraded!\n\n";
-  MerchantItem ranged = {rangedUpgradeName, rangedChance <= UPGRADE_CHANCE, UPGRADE_COST};
-  shop.push_back(ranged);
 
   // Slot 6 - Golden Key
   string keyName = "Golden Key";
-  MerchantItem key = {keyName, goldenKeyChance <= KEY_CHANCE, 100};
-  shop.push_back(key);
+  int keySuccess = goldenKeyChance <= KEY_CHANCE;
+  if (keySuccess)
+  {
+    MerchantItem key = {keyName, keySuccess, 100};
+    shop.push_back(key);
+  }
 
   // Slot 7 - Exit Index
   string exitName = "Exit";
   MerchantItem exit = {exitName, -1, -1};
+  shop.push_back(exit);
 
   // Loop the shop until the player is ready to leave
   bool shopLoop = true;
@@ -147,13 +164,13 @@ void roomMerchant(Player *player)
       if (shop[i].quantity > 1)
       {
         cout << "|" << setw(10) << " " << i + 1 << ". " << shop[i].name << "(s) x" << shop[i].quantity
-              << setw(24 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
+             << setw(24 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
       }
       // Don't print the quantity if there's only one
       else if (shop[i].quantity == 1)
       {
         cout << "|" << setw(10) << " " << i + 1 << ". " << shop[i].name
-              << setw(30 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
+             << setw(30 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
       }
       // Prints the exit
       else if (shop[i].quantity == -1)
@@ -175,7 +192,7 @@ void roomMerchant(Player *player)
       cout << "\tWhat would you like to purchase? ";
       cin >> userShopSelection;
       cout << "\n";
-      if (validateInput(userShopSelection, 1, shop.size() - 1))
+      if (validateInput(userShopSelection, 1, shop.size()))
         loopFlag = false;
     } while (loopFlag);
 
@@ -185,32 +202,12 @@ void roomMerchant(Player *player)
     // Variable to hold amount of items to purchase
     int purchaseAmount = 0;
 
-    if (shop[userShopSelection].quantity > 0)
+    // Call purchase function on everything but the key and exit
+    if (shop[userShopSelection].quantity > 0 && shop[userShopSelection].name != keyName && shop[userShopSelection].name != exitName)
       roomMerchantPurchase(player, shop, userShopSelection, purchaseAmount);
 
-    if (purchaseAmount > 0)
-    {
-      shop[userShopSelection].quantity -= purchaseAmount;
-      player->removeGold(shop[userShopSelection].cost * purchaseAmount);
-
-      // Player chose to buy potions
-      if (shop[userShopSelection].name == potionName)
-        player->addPotion(purchaseAmount);
-      // Player chose to buy armor upgrades
-      else if (shop[userShopSelection].name == armorName)
-        player->addArmor(purchaseAmount);
-      // Player chose to buy the sword upgrade
-      else if (shop[userShopSelection].name == meleeUpgradeName)
-        player->upgradeWeapon("Melee");
-      // Player chose to buy the magic upgrade
-      else if (shop[userShopSelection].name == magicUpgradeName)
-        player->upgradeWeapon("Magic");
-      // Player chose to buy the ranged upgrade
-      else if (shop[userShopSelection].name == rangedUpgradeName)
-        player->upgradeWeapon("Ranged");
-    }
-    // Player chose to purchase the golden key
-    else if (shop[userShopSelection].name == keyName)
+    // Player chose to purchase the key
+    if (shop[userShopSelection].name == keyName)
     {
       // Make sure the player has enough gold
       if (player->getGold() >= shop[userShopSelection].cost)
@@ -236,7 +233,6 @@ void roomMerchant(Player *player)
           player->addKey();
         }
       }
-      // Player doesn't have enough gold
       else
         cout << "\tYou don't have enough gold!\n\n";
     }
@@ -245,6 +241,36 @@ void roomMerchant(Player *player)
     {
       cout << "\tGoodbye!\n\n";
       shopLoop = false;
+    }
+    // Proceed with standard transaction - no key or exit
+    else if (purchaseAmount > 0)
+    {
+      // Perform transaction
+      shop[userShopSelection].quantity -= purchaseAmount;
+      player->removeGold(shop[userShopSelection].cost * purchaseAmount);
+
+      // Player chose to buy potions
+      if (shop[userShopSelection].name == potionName)
+        player->addPotion(purchaseAmount);
+      // Player chose to buy armor upgrades
+      else if (shop[userShopSelection].name == armorName)
+        player->addArmor(purchaseAmount);
+      // Player chose to buy the sword upgrade
+      else if (shop[userShopSelection].name == meleeUpgradeName)
+        player->upgradeWeapon("Melee");
+      // Player chose to buy the magic upgrade
+      else if (shop[userShopSelection].name == magicUpgradeName)
+        player->upgradeWeapon("Magic");
+      // Player chose to buy the ranged upgrade
+      else if (shop[userShopSelection].name == rangedUpgradeName)
+        player->upgradeWeapon("Ranged");
+    }
+
+    // Remove empty values from shop vector
+    if (shop[userShopSelection].quantity == 0)
+    {
+      vector<MerchantItem>::iterator iter = shop.begin() + userShopSelection;
+      shop.erase(iter);
     }
   } while (shopLoop);
 
@@ -286,14 +312,6 @@ void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int 
   // Selected item has 1 remaining qty
   else if (shop[userShopSelection].quantity == 1)
     purchaseAmount = 1;
-
-  // Selected item has 0 remaining qty
-  else if (shop[userShopSelection].quantity == 0)
-  {
-    purchaseAmount = 0;
-    cout << "\tI'm fresh out of that item, check back later\n\n";
-    return;
-  }
 
   // Make sure the player has enough gold for the purchase
   if (player->getGold() >= purchaseAmount * shop[userShopSelection].cost)
