@@ -34,6 +34,7 @@
 # Custom
 .vscode
 .build
+.cache
 build
 .DS_Store
 .idea
