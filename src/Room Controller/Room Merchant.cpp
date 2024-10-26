@@ -245,6 +245,9 @@ void roomMerchant(Player *player)
     // Proceed with standard transaction - no key or exit
     else if (purchaseAmount > 0)
     {
+      // Indent purchase output message
+      cout << "\t";
+
       // Perform transaction
       shop[userShopSelection].quantity -= purchaseAmount;
       player->removeGold(shop[userShopSelection].cost * purchaseAmount);
@@ -257,13 +260,16 @@ void roomMerchant(Player *player)
         player->addArmor(purchaseAmount);
       // Player chose to buy the sword upgrade
       else if (shop[userShopSelection].name == meleeUpgradeName)
-        player->upgradeWeapon("Melee");
+        player->upgradeWeapon("Melee", meleeUpgradeName);
       // Player chose to buy the magic upgrade
       else if (shop[userShopSelection].name == magicUpgradeName)
-        player->upgradeWeapon("Magic");
+        player->upgradeWeapon("Magic", magicUpgradeName);
       // Player chose to buy the ranged upgrade
       else if (shop[userShopSelection].name == rangedUpgradeName)
-        player->upgradeWeapon("Ranged");
+        player->upgradeWeapon("Ranged", rangedUpgradeName);
+
+      // Add newline to purchase output message
+      cout << "\n";
     }
 
     // Remove empty values from shop vector
@@ -323,11 +329,11 @@ void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int 
     {
       // Purchase confirmation with qty printed
       if (shop[userShopSelection].quantity > 1)
-        cout << "\tConfirm purchase of " << purchaseAmount << "x " << shop[userShopSelection].name << " for x" << purchaseAmount * shop[userShopSelection].cost << " gold?\n";
+        cout << "\tConfirm purchase of " << purchaseAmount << "x " << shop[userShopSelection].name << " for " << purchaseAmount * shop[userShopSelection].cost << "x Gold?\n";
 
       // Purchase confirmation without qty printed
       else if (shop[userShopSelection].quantity == 1)
-        cout << "\tConfirm purchase of " << shop[userShopSelection].name << " for x" << purchaseAmount * shop[userShopSelection].cost << " gold?\n";
+        cout << "\tConfirm purchase of " << shop[userShopSelection].name << " for " << purchaseAmount * shop[userShopSelection].cost << "x Gold?\n";
 
       cout << "\tY or N: ";
       cin >> merchantConfirm;
@@ -338,17 +344,8 @@ void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int 
       }
     } while (loopFlag);
 
-    // Player chose to purchase the item
-    if (merchantConfirm == 'Y' || merchantConfirm == 'y')
-    {
-      if (shop[userShopSelection].quantity > 1)
-        cout << "\t" << shop[userShopSelection].name << " x" << purchaseAmount << " acquired!\n\n";
-      else
-        cout << "\t" << shop[userShopSelection].name << " acquired!\n\n";
-    }
-
     // Player chose not to purchase the item
-    else
+    if (merchantConfirm == 'N' || merchantConfirm == 'n')
       purchaseAmount = 0;
   }
 

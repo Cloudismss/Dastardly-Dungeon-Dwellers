@@ -209,13 +209,22 @@ void Player::addPotion(int potionAdjust)
     fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion x{0} added\n", potionAdjust);
 }
 
+void Player::addArmor(int armorAdjust)
+{
+  armor += armorAdjust;
+  if (armorAdjust == 1)
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating added\n");
+  else
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating x{0} added\n", armorAdjust);
+}
+
 void Player::addKey()
 {
   ++keys;
   displayMeInABox("GOLDEN KEY Acquired!");
 }
 
-void Player::upgradeWeapon(const string &weaponType)
+void Player::upgradeWeapon(const string &weaponType, const string &upgradeName)
 {
   if (weaponType == "Melee")
     ++meleeWeapon;
@@ -223,6 +232,8 @@ void Player::upgradeWeapon(const string &weaponType)
     ++magicWeapon;
   else if (weaponType == "Ranged")
     ++rangedWeapon;
+
+  fmt::print(fmt::emphasis::bold, "{0} added\n", upgradeName);
 }
 
 int Player::getWeaponLevel(const string &weaponType)

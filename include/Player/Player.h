@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "Globals.h"
-
 #include "Skills.h"
 
 using std::string;
@@ -43,10 +41,10 @@ public:
 
   void addGold(int goldAdjust);
   void addPotion(int potionAdjust);
-  void addArmor(int armorAdjust) { armor += armorAdjust; }
+  void addArmor(int armorAdjust);
   void addKey();
 
-  void upgradeWeapon(const string &weaponType);
+  void upgradeWeapon(const string &weaponType, const string &upgradeName);
 
   void removeGold(int goldAdjust) { gold -= goldAdjust; }
   void removePotion(int potionAdjust) { potions -= potionAdjust; }
