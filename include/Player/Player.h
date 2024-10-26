@@ -41,8 +41,8 @@ public:
   void heal();
   void setClass(const string &CLASS_NAME) { className = CLASS_NAME; }
 
-  void addGold(int goldAdjust) { gold += goldAdjust; }
-  void addPotion(int potionAdjust) { potions += potionAdjust; }
+  void addGold(int goldAdjust);
+  void addPotion(int potionAdjust);
   void addArmor(int armorAdjust) { armor += armorAdjust; }
   void addKey();
 

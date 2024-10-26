@@ -16,20 +16,11 @@ void loot(Player *player, Enemy *enemy)
     {
       // 10% chance to earn a potion
       if (lootRoll <= 10)
-      {
-        int potionAdded = 1;
-        player->addPotion(potionAdded);
-        cout << "Potion added\n";
-      }
+        player->addPotion(1);
 
-      // 85% chance to earn a random amount of gold
+      // 85% chance to earn a random amount of gold between 5-15
       if (lootRoll <= 85)
-      {
-        // Amount of gold returned is between 5-15
-        int goldAdded = 5 + (rand() % 11);
-        player->addGold(goldAdded);
-        cout << "Gold x" << goldAdded << " added\n";
-      }
+        player->addGold(5 + (rand() % 11));
 
       // Nothing found
       if (lootRoll > 85)
@@ -43,20 +34,11 @@ void loot(Player *player, Enemy *enemy)
     {
       // 30% chance to earn a potion
       if (lootRoll <= 30)
-      {
-        int potionAdded = 1;
-        player->addPotion(potionAdded);
-        cout << "Potion added\n";
-      }
+        player->addPotion(1);
 
-      // 90% chance to earn a random amount of gold
+      // 90% chance to earn a random amount of gold between 5-20
       if (lootRoll <= 90)
-      {
-        // Amount of gold returned is between 5-20
-        int goldAdded = 5 + (rand() % 16);
-        player->addGold(goldAdded);
-        cout << "Gold x" << goldAdded << " added\n";
-      }
+        player->addGold(5 + (rand() % 16));
 
       // Nothing found
       if (lootRoll > 90)
@@ -68,21 +50,12 @@ void loot(Player *player, Enemy *enemy)
     }
     case 3:
     {
-      // 60% chance to earn a potion(s)
+      // 60% chance to earn a potion(s) between 1 and 2
       if (lootRoll <= 60)
-      {
-        int potionAdded = 1 + (rand() % 2);
-        player->addPotion(potionAdded);
-        if (potionAdded == 1)
-          cout << "Potion added\n";
-        else
-          cout << "Potion x" << potionAdded << " added\n";
-      }
+        player->addPotion(1 + (rand() % 2));
 
       // 100% chance to earn a random amount of gold between 10-20
-      int goldAdded = 10 + (rand() % 11);
-      player->addGold(goldAdded);
-      cout << "Gold x" << goldAdded << " added\n";
+      player->addGold(10 + (rand() % 11));
 
       cout << "\n";    
 
@@ -90,21 +63,12 @@ void loot(Player *player, Enemy *enemy)
     }
     case 4:
     {
-      // 90% chance to earn a potion(s)
+      // 90% chance to earn a potion(s) between 1 and 2
       if (lootRoll <= 90)
-      {
-        int potionAdded = 1 + (rand() % 2);
-        player->addPotion(potionAdded);
-        if (potionAdded == 1)
-          cout << "Potion added\n";
-        else
-          cout << "Potion x" << potionAdded << " added\n";
-      }
+        player->addPotion(1 + (rand() % 2));
 
       // 100% chance to earn a random amount of gold between 15-20
-      int goldAdded = 15 + (rand() % 6);
-      player->addGold(goldAdded);
-      cout << "Gold x" << goldAdded << " added\n";
+      player->addGold(15 + (rand() % 6));
 
       cout << "\n";
 
@@ -116,15 +80,11 @@ void loot(Player *player, Enemy *enemy)
     }
     case 5:
     {
-      // 100% chance to earn a potion(s)
-      int potionAdded = 1 + (rand() % 2);
-      player->addPotion(potionAdded);
-      cout << "Potion x" << potionAdded << " added\n";
+      // 100% chance to earn a potion(s) between 1 and 2
+      player->addPotion(1 + (rand() % 2));
 
       // 100% chance to earn a random amount of gold between 15-20
-      int goldAdded = 15 + (rand() % 6);
-      player->addGold(goldAdded);
-      cout << "Gold x" << goldAdded << " added\n";
+      player->addGold(15 + (rand() % 6));
 
       cout << "\n";
 
@@ -137,14 +97,10 @@ void loot(Player *player, Enemy *enemy)
     case 10:
     {
       // 100% chance to earn 5-10 potions
-      int potionAdded = 5 + (rand() % 6);
-      player->addPotion(potionAdded);
-      cout << "Potion x" << potionAdded << " added\n";
+      player->addPotion(5 + (rand() % 6));
 
       // 100% chance to earn a random amount of gold between 25-50
-      int goldAdded = 25 + (rand() % 26);
-      player->addGold(goldAdded);
-      cout << "Gold x" << goldAdded << " added\n";
+      player->addGold(25 + (rand() % 26));
 
       cout << "\n";
 

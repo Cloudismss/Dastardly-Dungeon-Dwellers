@@ -20,9 +20,6 @@ using std::string;
 // *
 /*
 
-#include "fmt/base.h"
-#include "fmt/color.h"
-
 #include "boost/random/mersenne_twister.hpp"
 #include "boost/random/uniform_int_distribution.hpp"
 #include "boost/random/discrete_distribution.hpp"
@@ -42,9 +39,6 @@ int main()
   // ?
   // *
   /*
-
-  // Print red text
-  fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Test\n");
 
   // Random number 1-100
   boost::random::mt19937 gen(std::time(nullptr));

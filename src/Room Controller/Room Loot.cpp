@@ -39,23 +39,13 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
       cout << " and found the following items:\n";
 
       // Player is guaranteed a random amount of gold between 15-30
-      int goldAdded = 15 + (rand() % 16);
-      player->addGold(goldAdded);
-      cout << "Gold x" << goldAdded << " added\n";
+      player->addGold(15 + (rand() % 16));
 
       int lootRoll = 1 + (rand() % 100);
 
-      // 75% chance the player is given potion(s)
+      // 75% chance the player is given potion(s) between 2-3
       if (lootRoll <= 75)
-      {
-        // Player is given a random amount of potions between 2-3
-        int potionAdded = 2 + (rand() % 2);
-        player->addPotion(potionAdded);
-        if (potionAdded > 1)
-          cout << "Potion x" << potionAdded << " added\n";
-        else
-          cout << "Potion added\n";
-      }
+        player->addPotion(2 + (rand() % 2));
 
       cout << "\n";
 

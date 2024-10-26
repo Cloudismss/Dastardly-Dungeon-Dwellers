@@ -5,6 +5,8 @@
 #include "Art.h"
 #include "Validation.h"
 
+#include "../../lib/fmt/include/fmt/color.h"
+
 using std::cin;
 using std::cout;
 
@@ -190,6 +192,21 @@ double Player::attack(Player *player, const double &enemyVulnerability, const st
   player->skills->useSkill(battleMenuSelection, player->getClass());
 
   return attackValue;
+}
+
+void Player::addGold(int goldAdjust)
+{
+  gold += goldAdjust;
+  fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "Gold x{0} added\n", goldAdjust);
+}
+
+void Player::addPotion(int potionAdjust)
+{
+  potions += potionAdjust;
+  if (potionAdjust == 1)
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion added\n");
+  else
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion x{0} added\n", potionAdjust);
 }
 
 void Player::addKey()
