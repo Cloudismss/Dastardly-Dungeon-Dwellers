@@ -62,4 +62,7 @@ int battleController(Player *player, Enemy *enemy)
     // Returning a 0 means the player lost the battle
     return 0;
   }
+
+  // TODO: Implement clean fix for return in all control paths
+  return -1;
 }

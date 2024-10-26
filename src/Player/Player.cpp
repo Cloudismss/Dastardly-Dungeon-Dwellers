@@ -216,6 +216,9 @@ int Player::getWeaponLevel(const string &weaponType)
     return magicWeapon;
   else if (weaponType == "Ranged")
     return rangedWeapon;
+
+  // TODO: Implement clean fix for return in all control paths
+  return -1;
 }
 
 // Pre-condition: called by battleController(), passed potionCount

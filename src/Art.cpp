@@ -58,6 +58,9 @@ string battleMenu(Player *player, Enemy *enemy)
     return "Heal";
   else if (battleMenuSelection == 5)
     return "Run";
+
+  // TODO: Implement clean fix for return in all control paths
+  return "Error";
 }
 
 // Pre-condition: called by battleMenu(), passed health variables

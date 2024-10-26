@@ -15,6 +15,9 @@ string Skills::getSkillName(const string &battleMenuSelection)
     return magicName;
   else if (battleMenuSelection == "Ranged")
     return rangedName;
+
+  // TODO: Implement clean fix for return in all control paths
+  return "Error";
 }
 
 int Skills::getSkillTier(const string &battleMenuSelection)
@@ -38,6 +41,9 @@ int Skills::getSkillTier(const string &battleMenuSelection)
   // Level 3
   else if (*skillCounter >= SKILL_UPGRADE * 2)
     return 3;
+
+  // TODO: Implement clean fix for return in all control paths
+  return -1;
 }
 
 void Skills::useSkill(const string &battleMenuSelection, const string &className)
