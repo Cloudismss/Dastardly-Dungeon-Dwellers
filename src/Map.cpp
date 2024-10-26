@@ -14,20 +14,9 @@ using std::setw;
 // Post=condition: constructs a map object and initializes default values with a randomly generated map
 Map::Map()
 {
-  // Initialize all the arrays
-  for (int i = 0; i < MAP_ROWS; ++i)
-  {
-      for (int j = 0; j < MAP_COLUMNS; ++j)
-      {
-          mapArray[i][j] = ' ';
-          roomExplored[i][j] = false;
-          roomContents[i][j] = " ";
-      }
-  }
-
   // Position Tracking Variables
-  rowPosition = MAP_ROWS / 2;
-  columnPosition = MAP_COLUMNS / 2;
+  rowPos = ROWS / 2;
+  colPos = COLS / 2;
 
   // Generate map
   generateMap();
@@ -42,31 +31,31 @@ void Map::mapPrint()
   cout << "\n\n";
   cout << "MAP SELECTION" << "\n\n";
   cout << "You are here [*]\n";
-  for (int i = 0; i < MAP_ROWS; ++i)
+  for (int i = 0; i < ROWS; ++i)
   {
-    for (int j = 0; j < MAP_COLUMNS; ++j)
-      cout << "[" << mapArray[i][j] << "]" ;
+    for (int j = 0; j < COLS; ++j)
+      cout << "[" << position[i][j].symbol << "]" ;
     cout << "\n";
   }
 
-  // DEBUG OPTION - prints other array maps
+  // DEBUG OPTION - prints additional helpful debug maps
   if (debug)
   {
     cout << "\n";
     cout << setfill('-') << setw(64) << " " << setfill(' ');
     cout << "\n\n";
     cout << setw(65/2) << "DEBUG MAPS" << "\n\n";
-    for (int i = 0; i < MAP_ROWS; ++i)
+    for (int i = 0; i < ROWS; ++i)
     {
-      for (int j = 0; j < MAP_COLUMNS; ++j)
-        cout << "[" << roomExplored[i][j] << "]" ;
+      for (int j = 0; j < COLS; ++j)
+        cout << "[" << position[i][j].explored << "]" ;
       cout << "\n";
     }
     cout << "\n";
-    for (int i = 0; i < MAP_ROWS; ++i)
+    for (int i = 0; i < ROWS; ++i)
     {
-      for (int j = 0; j < MAP_COLUMNS; ++j)
-        cout << "[" << roomContents[i][j] << "]" ;
+      for (int j = 0; j < COLS; ++j)
+        cout << "[" << position[i][j].contents << "]" ;
       cout << "\n";
     }
     cout << "\n" << setfill('-') << setw(64) << " " << setfill(' ');
@@ -82,30 +71,26 @@ bool Map::move()
    // Prints the map
   mapPrint();
 
-  // Set previousPlayerPosition to player position, to record the last movement
-  previousPlayerPosition = &mapArray[rowPosition][columnPosition];
+  // Overwrite current position symbol before moving
+  if (!(position[rowPos][colPos].contents == "Merchant" || position[rowPos][colPos].contents == "Exit"))
+    position[rowPos][colPos].symbol = 'o'; // Place a 'o' value in position's symbol element to indicate a previously cleared room
+  else if (position[rowPos][colPos].contents == "Merchant")
+    position[rowPos][colPos].symbol = '$'; // Place a '$' value in position's symbol element to indicate a discovered merchant shop
+  else if (position[rowPos][colPos].contents == "Exit")
+    position[rowPos][colPos].symbol = '#'; // Place a '#' value in position's symbol element to indicate the exit
 
-  // Place new value in previousPlayerPosition
-  if (!(roomContents[rowPosition][columnPosition] == "Merchant" || roomContents[rowPosition][columnPosition] == "Exit"))
-    *previousPlayerPosition = 'o'; // Place a 'o' value in previousPlayerPosition pointer's element to indicate a previously cleared room
-  else if (roomContents[rowPosition][columnPosition] == "Merchant")
-    *previousPlayerPosition = '$'; // Place a '$' value in previousPlayerPosition pointer's element to indicate a discovered merchant shop
-  else if (roomContents[rowPosition][columnPosition] == "Exit")
-    *previousPlayerPosition = '#'; // Place a '#' value in previousPlayerPosition pointer's element to indicate the exit
-
-  // Adjusts either rowPosition or columnPosition by 1 or -1 based on direction choice by the user
+  // Adjusts either rowPos or colPos by 1 or -1 based on direction choice by the user
   mapMovement();
 
   // Check if we've been in this room before
   bool roomCleared = false;
-  if (roomExplored[rowPosition][columnPosition])
+  if (position[rowPos][colPos].explored)
     roomCleared = true;
   else
-    // Set the current index to true, since we'll be clearing this room next
-    roomExplored[rowPosition][columnPosition] = true;
+    position[rowPos][colPos].explored = true; // Set the current index to true, since we'll be clearing this room next
 
-  // Place new value in player's current position
-  mapArray[rowPosition][columnPosition] = '*';
+  // Place new value in player's new position
+  position[rowPos][colPos].symbol = '*';
 
   // Prints the map
   mapPrint();
@@ -132,7 +117,7 @@ void Map::mapMovement()
     cout << "Which direction would you like to go? (N|E|S|W): ";
     cin >> directionChoice;
     cout << "\n";
-    if (validateDirection(rowPosition, columnPosition, directionChoice, MAP_ROWS, MAP_COLUMNS))
+    if (validateDirection(rowPos, colPos, directionChoice, ROWS, COLS))
       loopFlag = false;
   } while (loopFlag);
 
@@ -141,22 +126,22 @@ void Map::mapMovement()
   {
     case 'N':
     {
-      --rowPosition;
+      --rowPos;
       break;
     }
     case 'S':
     {
-      ++rowPosition;
+      ++rowPos;
       break;
     }
     case 'E':
     {
-      ++columnPosition;
+      ++colPos;
       break;
     }
     case 'W':
     {
-      --columnPosition;
+      --colPos;
       break;
     }
   }
@@ -166,64 +151,64 @@ void Map::mapMovement()
 // Post-condition: Performs calculations to decide where and how many of each room to spawn when calling generateRooms(). The spawn room is marked with an '*' in mapArray[] and 'true' in roomExplored[]. If debug is on - mapArray[] is additionally filled with room contents indicators
 void Map::generateMap()
 {
-  // Place the player icon in the starter room and sets the starter room to "explored" with "start" contents
-  mapArray[ROW_MIDPOINT][COLUMN_MIDPOINT] = '*';
-  roomExplored[ROW_MIDPOINT][COLUMN_MIDPOINT] = true;
-  roomContents[ROW_MIDPOINT][COLUMN_MIDPOINT] = "Start";
+  // Place the player icon in the starter room and sets the starter room to "explored" with "Start" contents
+  position[ROW_MIDPOINT][COL_MIDPOINT].symbol = '*';
+  position[ROW_MIDPOINT][COL_MIDPOINT].explored = true;
+  position[ROW_MIDPOINT][COL_MIDPOINT].contents = "Start";
 
   // Spawn an exit on the map
   const int MIN_EXIT_DISTANCE = 3; // The exit must spawn 3 tiles away from the center
-  bool validExitSpawns[MAP_ROWS][MAP_COLUMNS] = {0}; // This array finds a valid spawn location based on distance from spawn
-  for (int i = 0; i < MAP_ROWS; ++i)
+  bool validExitSpawns[ROWS][COLS] = {0}; // This array finds a valid spawn location based on distance from spawn
+  for (int i = 0; i < ROWS; ++i)
   {
-    for (int j = 0; j < MAP_COLUMNS; ++j)
+    for (int j = 0; j < COLS; ++j)
     {
-      if ((i <= ROW_MIDPOINT - MIN_EXIT_DISTANCE || i >= ROW_MIDPOINT + MIN_EXIT_DISTANCE) || (j <= COLUMN_MIDPOINT - MIN_EXIT_DISTANCE || j >= COLUMN_MIDPOINT + MIN_EXIT_DISTANCE))
+      if ((i <= ROW_MIDPOINT - MIN_EXIT_DISTANCE || i >= ROW_MIDPOINT + MIN_EXIT_DISTANCE) || (j <= COL_MIDPOINT - MIN_EXIT_DISTANCE || j >= COL_MIDPOINT + MIN_EXIT_DISTANCE))
         validExitSpawns[i][j] = true;
     }
   }
   bool exitPlaced = false;
   do
   {
-    int randomRow = rand() % MAP_ROWS;
-    int randomColumn = rand() % MAP_COLUMNS;
+    int randomRow = rand() % ROWS;
+    int randomColumn = rand() % COLS;
     if (validExitSpawns[randomRow][randomColumn])
     {
-      mapArray[randomRow][randomColumn] = '#';
-      roomContents[randomRow][randomColumn] = "Exit";
+      position[randomRow][randomColumn].symbol = '#';
+      position[randomRow][randomColumn].contents = "Exit";
       exitPlaced = true;
     }
   } while (!exitPlaced);
 
   // Spawn Merchants
   const int MERCHANT_ROOMS_DISTANCE = 2; // Merchants must spawn 2 tiles away from the center
-  const int MERCHANT_ROOMS_SIMILAR_DISTANCE = 1; // Merchants rooms must spawn 1 tile away from each other
-  const int MERCHANT_ROOMS_ALLOWED = MAP_ROWS / 2 + 1; // Number of merchants to spawn is based on map size
+  const int MERCHANT_ROOMS_DUPE_DISTANCE = 1; // Merchants rooms must spawn 1 tile away from each other
+  const int MERCHANT_ROOMS_ALLOWED = ROWS / 2 + 1; // Number of merchants to spawn is based on map size
   const string MERCHANT_ROOMS_NAME = "Merchant";
   const char MERCHANT_SYMBOL = '$';
-  generateRooms(MERCHANT_ROOMS_NAME, MERCHANT_SYMBOL, MERCHANT_ROOMS_DISTANCE, MERCHANT_ROOMS_SIMILAR_DISTANCE, MERCHANT_ROOMS_ALLOWED);
+  generateRooms(MERCHANT_ROOMS_NAME, MERCHANT_SYMBOL, MERCHANT_ROOMS_DISTANCE, MERCHANT_ROOMS_DUPE_DISTANCE, MERCHANT_ROOMS_ALLOWED);
 
   // Calculate Remaining Non-Enemy Rooms
   int REMAINING_ROOMS_DISTANCE = 2; // Non-enemy rooms must spawn 2 tiles away from the center, this is so the first room is guaranteed to contain an enemy
-  int REMAINING_ROOMS_SIMILAR_DISTANCE = 1; // Non-enemy rooms must spawn 1 tiles away from each other
-  int REMAINING_ROOMS_ALLOWED = (MAP_ROWS * MAP_COLUMNS) - 2 - MERCHANT_ROOMS_ALLOWED; // The literal 2 is for 1 exit and 1 spawn location
+  int REMAINING_ROOMS_DUPE_DISTANCE = 1; // Non-enemy rooms must spawn 1 tiles away from each other
+  int REMAINING_ROOMS_ALLOWED = (ROWS * COLS) - 2 - MERCHANT_ROOMS_ALLOWED; // The literal 2 is for 1 exit and 1 spawn location
 
   // Spawn Loot Room
   const int LOOT_ROOMS_ALLOWED = REMAINING_ROOMS_ALLOWED * 0.15f; // 15% of remaining rooms can be loot rooms
   const string LOOT_ROOMS_NAME = "Loot";
   const char LOOT_ROOMS_SYMBOL = 'L';
-  generateRooms(LOOT_ROOMS_NAME, LOOT_ROOMS_SYMBOL, REMAINING_ROOMS_DISTANCE, REMAINING_ROOMS_SIMILAR_DISTANCE, LOOT_ROOMS_ALLOWED);
+  generateRooms(LOOT_ROOMS_NAME, LOOT_ROOMS_SYMBOL, REMAINING_ROOMS_DISTANCE, REMAINING_ROOMS_DUPE_DISTANCE, LOOT_ROOMS_ALLOWED);
 
   // Spawn Enemy Rooms
-  for (int i = 0; i < MAP_ROWS; ++i)
+  for (int i = 0; i < ROWS; ++i)
   {
-    for (int j = 0; j < MAP_COLUMNS; ++j)
+    for (int j = 0; j < COLS; ++j)
     {
-      if (roomContents[i][j] == " ")
+      if (position[i][j].contents == " ")
       {
-        roomContents[i][j] = "Enemy";
+        position[i][j].contents = "Enemy";
         if (debug)
-          mapArray[i][j] = 'E';
+          position[i][j].symbol = 'E';
       }
     }
   }
@@ -231,14 +216,14 @@ void Map::generateMap()
 
 // Pre-condition: called by generateMap() to randomly generate a selected room(s) for roomContets[]
 // Post-condition: roomContents[] is filled with a random selection of the passed in room. If debug is on - mapArray[] is additionally filled with room contents indicators
-void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int SIMILAR_DISTANCE, const int ROOMS_ALLOWED)
+void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED)
 {
-  bool validSpawns[MAP_COLUMNS][MAP_COLUMNS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function
-  for (int i = 0; i < MAP_ROWS; ++i)
+  bool validSpawns[COLS][COLS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function
+  for (int i = 0; i < ROWS; ++i)
   {
-    for (int j = 0; j < MAP_COLUMNS; ++j)
+    for (int j = 0; j < COLS; ++j)
       // Mark the room as valid if the room is empty and a valid distance away from spawn
-      if (roomContents[i][j] == " " && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COLUMN_MIDPOINT - ROOM_DISTANCE || j >= COLUMN_MIDPOINT + ROOM_DISTANCE))
+      if (position[i][j].contents == " " && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COL_MIDPOINT - ROOM_DISTANCE || j >= COL_MIDPOINT + ROOM_DISTANCE))
         validSpawns[i][j] = true;
   }
 
@@ -252,45 +237,45 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
   do
   {
     // Select a random location
-    int randomRow = rand() % MAP_ROWS;
-    int randomColumn = rand() % MAP_COLUMNS;
+    int randomRow = rand() % ROWS;
+    int randomColumn = rand() % COLS;
 
     // Check to make sure the room is valid and empty before spawning the room
-    if (validSpawns[randomRow][randomColumn] && roomContents[randomRow][randomColumn] == " ")
+    if (validSpawns[randomRow][randomColumn] && position[randomRow][randomColumn].contents == " ")
     {
       // Place room
-      roomContents[randomRow][randomColumn] = ROOM_NAME;
+      position[randomRow][randomColumn].contents = ROOM_NAME;
       validSpawns[randomRow][randomColumn] = false;
       ++roomsPlaced;
 
       // DEBUG Option - Print loot room icons on map
       if (debug)
-        mapArray[randomRow][randomColumn] = ROOM_SYMBOL;
+        position[randomRow][randomColumn].symbol = ROOM_SYMBOL;
 
-      // Mark spaces SIMILAR_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
+      // Mark spaces DUPE_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
       // TODO num merchants not always correct
-      if (randomRow + SIMILAR_DISTANCE < MAP_ROWS)
+      if (randomRow + DUPE_DISTANCE < ROWS)
       {
-        validSpawns[randomRow + SIMILAR_DISTANCE][randomColumn] = false;
-        if (randomColumn + SIMILAR_DISTANCE < MAP_COLUMNS)
-          validSpawns[randomRow + SIMILAR_DISTANCE][randomColumn + SIMILAR_DISTANCE] = false;
-        if (randomColumn - SIMILAR_DISTANCE >= 0)
-          validSpawns[randomRow + SIMILAR_DISTANCE][randomColumn - SIMILAR_DISTANCE] = false;
+        validSpawns[randomRow + DUPE_DISTANCE][randomColumn] = false;
+        if (randomColumn + DUPE_DISTANCE < COLS)
+          validSpawns[randomRow + DUPE_DISTANCE][randomColumn + DUPE_DISTANCE] = false;
+        if (randomColumn - DUPE_DISTANCE >= 0)
+          validSpawns[randomRow + DUPE_DISTANCE][randomColumn - DUPE_DISTANCE] = false;
       }
 
-      if (randomRow - SIMILAR_DISTANCE >= 0)
+      if (randomRow - DUPE_DISTANCE >= 0)
       {
-        validSpawns[randomRow - SIMILAR_DISTANCE][randomColumn] = false;
-        if (randomColumn - SIMILAR_DISTANCE >= 0)
-          validSpawns[randomRow - SIMILAR_DISTANCE][randomColumn - SIMILAR_DISTANCE] = false;
-        if (randomColumn + SIMILAR_DISTANCE < MAP_COLUMNS)
-          validSpawns[randomRow - SIMILAR_DISTANCE][randomColumn + SIMILAR_DISTANCE] = false;
+        validSpawns[randomRow - DUPE_DISTANCE][randomColumn] = false;
+        if (randomColumn - DUPE_DISTANCE >= 0)
+          validSpawns[randomRow - DUPE_DISTANCE][randomColumn - DUPE_DISTANCE] = false;
+        if (randomColumn + DUPE_DISTANCE < COLS)
+          validSpawns[randomRow - DUPE_DISTANCE][randomColumn + DUPE_DISTANCE] = false;
       }
 
-      if (randomColumn + SIMILAR_DISTANCE < MAP_COLUMNS)
-        validSpawns[randomRow][randomColumn + SIMILAR_DISTANCE] = false;
-      if (randomColumn - SIMILAR_DISTANCE >= 0)
-        validSpawns[randomRow][randomColumn - SIMILAR_DISTANCE] = false;
+      if (randomColumn + DUPE_DISTANCE < COLS)
+        validSpawns[randomRow][randomColumn + DUPE_DISTANCE] = false;
+      if (randomColumn - DUPE_DISTANCE >= 0)
+        validSpawns[randomRow][randomColumn - DUPE_DISTANCE] = false;
     }
 
     // Fallback exit if the spawning luck is poor

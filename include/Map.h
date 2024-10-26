@@ -6,33 +6,39 @@
 using std::string;
 
 // Map Constants - feel free to change - have to both be odd numbers or positioning will be weird
-const int MAP_ROWS = 9;
-const int MAP_COLUMNS = 9;
+const int ROWS = 9;
+const int COLS = 9;
+// Map Midpoints
+const int ROW_MIDPOINT = ROWS / 2;
+const int COL_MIDPOINT = COLS / 2;
+
+class Position
+{
+public:
+  char symbol;
+  bool explored;
+  string contents;
+  Position() { symbol = ' '; explored = false; contents = " "; }
+};
 
 class Map
 {
+private:
+  Position position[ROWS][COLS];
+  int rowPos;
+  int colPos;
+
+  void generateMap();
+  void generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED);
+  void mapPrint();
+  void mapMovement();
 public:
   Map();
   ~Map() { }
 
-private:
-  const int ROW_MIDPOINT = MAP_ROWS / 2;
-  const int COLUMN_MIDPOINT = MAP_COLUMNS / 2;
-  char mapArray[MAP_ROWS][MAP_COLUMNS];
-  bool roomExplored[MAP_ROWS][MAP_COLUMNS];
-  string roomContents[MAP_ROWS][MAP_COLUMNS];
-  int rowPosition;
-  int columnPosition;
-  char *previousPlayerPosition;
-
-  void generateMap();
-  void generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int SIMILAR_DISTANCE, const int ROOMS_ALLOWED);
-  void mapPrint();
-  void mapMovement();
-
-public:
+  // Functions
   bool move();
-  string getRoomContents() { return roomContents[rowPosition][columnPosition]; }
+  string getRoomContents() const { return position[rowPos][colPos].contents; }
 };
 
 #endif //DASTARDLY_DUNGEON_DWELLERS_MAP_H

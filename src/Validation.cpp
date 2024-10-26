@@ -46,7 +46,7 @@ bool validateInput(int userChoice, int rangeLow, int rangeHigh)
 
 // Pre-condition: called to validate a direction input, passed userChoice by reference
 // Post-condition: returns whether the choice was valid or not, updates userChoice value to uppercase
-bool validateDirection(int rowPosition, int columnPosition, char &userChoice, const int MAP_ROWS, const int MAP_COLUMNS)
+bool validateDirection(int rowPos, int colPos, char &userChoice, const int ROWS, const int COLS)
 {
   bool validFlag = true;
   if ((cin.fail()) || (!(userChoice == 'N' || userChoice == 'n' || userChoice == 'E' || userChoice == 'e' || userChoice == 'S' || userChoice == 's' || userChoice == 'W' || userChoice == 'w')))
@@ -68,7 +68,7 @@ bool validateDirection(int rowPosition, int columnPosition, char &userChoice, co
     {
       case 'N':
       {
-        if (--rowPosition < 0)
+        if (--rowPos < 0)
         {
           cout << boundsFail;
           validFlag = false;
@@ -77,7 +77,7 @@ bool validateDirection(int rowPosition, int columnPosition, char &userChoice, co
       }
       case 'S':
       {
-        if (++rowPosition > MAP_ROWS - 1)
+        if (++rowPos > ROWS - 1)
         {
           cout << boundsFail;
           validFlag = false;
@@ -86,7 +86,7 @@ bool validateDirection(int rowPosition, int columnPosition, char &userChoice, co
       }
       case 'E':
       {
-        if (++columnPosition > MAP_COLUMNS - 1)
+        if (++colPos > COLS - 1)
         {
           cout << boundsFail;
           validFlag = false;
@@ -95,7 +95,7 @@ bool validateDirection(int rowPosition, int columnPosition, char &userChoice, co
       }
       case 'W':
       {
-        if (--columnPosition < 0)
+        if (--colPos < 0)
         {
           cout << boundsFail;
           validFlag = false;
