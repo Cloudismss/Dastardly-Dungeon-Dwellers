@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "Art.h"
-
 using std::cout;
 
 void loot(Player *player, Enemy *enemy)

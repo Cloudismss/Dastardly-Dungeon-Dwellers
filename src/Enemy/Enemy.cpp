@@ -5,7 +5,6 @@
 
 #include "Globals.h"
 
-using std::cerr;
 using std::cout;
 
 // Enemy Class Constructor
