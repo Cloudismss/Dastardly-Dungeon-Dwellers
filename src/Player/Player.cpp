@@ -176,7 +176,9 @@ double Player::attack(Player *player, const double &enemyVulnerability, const st
   if (1 + (rand() % 100) <= critChance * 100)
   {
     attackValue *= 2;
-    cout << "\tYou landed a critical hit!\n";
+    cout << "\tYou landed a ";
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "critical hit");
+    cout << "!\n";
   }
 
   // Calculate vulnerability
@@ -257,8 +259,12 @@ void Player::heal()
   {
     // Picks a random number between 10 and 20 to return a heal amount
     double healValue = 10 + (rand() % 11);
-    cout << "\tYou used a potion and healed for " << healValue << " health\n"
-         << "\tYou now have " << --potions << " potions.\n\n";
+    cout << "\tYou used a potion and healed for ";
+         fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
+    cout << " health\n";
+    cout << "\tYou now have ";
+         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --potions);
+    cout << " potions\n\n";
     health += healValue;
   }
   else
