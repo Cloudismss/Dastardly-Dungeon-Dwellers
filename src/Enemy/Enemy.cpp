@@ -235,7 +235,7 @@ double Enemy::getVulnerability(const string &battleMenuSelection, const string &
   {
     cout << "\t" << skillName << " is ";
     fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "not very effective");
-    cout << "against " << name << "!\n";
+    cout << " against " << name << "!\n";
   }
   else if (*vulnerability > 1.0)
   {
