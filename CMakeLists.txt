@@ -7,17 +7,19 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (CMAKE_HOST_WIN32)
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE INTERNAL "")
+  # Enable static compilation
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+  # UTF-8 option is required when using fmt
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 else()
-  set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
+  # set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
 endif()
 
-# executable
+# Executable
 add_executable(${PROJECT_NAME} "Dastardly Dungeon Dwellers.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Dastardly Dungeon Dwellers")
 
-# dirs
+# Dirs
 add_subdirectory(include)
 add_subdirectory(src)
 target_link_libraries(${PROJECT_NAME} include)
