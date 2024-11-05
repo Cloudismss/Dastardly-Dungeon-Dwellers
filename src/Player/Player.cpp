@@ -58,82 +58,32 @@ void Player::classSelection()
          << "|                                                             |\n"
          << "'-------------------------------------------------------------'\n";
     cin >> classChoice;
-    if (validateInput(classChoice, 1, 999))
+    if (validateInput(classChoice, 1, 999)) // High range is 999 to allow the joke selection of bard if a number is entered
     {
-      char confirmSelection = ' ';
-      bool confirmLoop = true;
       switch (classChoice)
       {
         // Player chose Warrior
         case 1:
         {
+          className = "Warrior";
           warriorArt();
-          do
-          {
-            cout << "You have selected 'Warrior', continue?\n"
-                 << "Y or N: ";
-            cin >> confirmSelection;
-            if (validateDecision(confirmSelection))
-            {
-              if (confirmSelection == 'Y' || confirmSelection == 'y')
-              {
-                className = "Warrior";
-                cout << "\nYou've chosen the path of the Warrior\n\n";
-                loopFlag = false;
-              }
-              confirmLoop = false;
-            }
-          } while (confirmLoop);
           break;
         }
-
-          // Player chose Mage
+        // Player chose Mage
         case 2:
         {
+          className = "Mage";
           mageArt();
-          do
-          {
-            cout << "You have selected 'Mage', continue?\n"
-                 << "Y or N: ";
-            cin >> confirmSelection;
-            if (validateDecision(confirmSelection))
-            {
-              if (confirmSelection == 'Y' || confirmSelection == 'y')
-              {
-                className = "Mage";
-                cout << "\nYou've chosen the path of the Mage\n\n";
-                loopFlag = false;
-              }
-              confirmLoop = false;
-            }
-          } while (confirmLoop);
           break;
         }
-
-          // Player chose Archer
+        // Player chose Archer
         case 3:
         {
+          className = "Archer";
           archerArt();
-          do
-          {
-            cout << "You have selected 'Archer', continue?\n"
-                 << "Y or N: ";
-            cin >> confirmSelection;
-            if (validateDecision(confirmSelection))
-            {
-              if (confirmSelection == 'Y' || confirmSelection == 'y')
-              {
-                className = "Archer";
-                cout << "\nYou've chosen the path of the Archer\n\n";
-                loopFlag = false;
-              }
-              confirmLoop = false;
-            }
-          } while (confirmLoop);
           break;
         }
-
-          // Player chose an invalid number
+        // Player chose an invalid number, and is auto-assigned to bard
         default:
         {
           className = "Bard";
@@ -145,9 +95,34 @@ void Player::classSelection()
         }
       }
     }
+    // Confirm class selection
+    if (loopFlag)
+      loopFlag = classSelectionConfirm();
+    
   } while (loopFlag);
 }
 
+bool Player::classSelectionConfirm()
+{
+  char confirmSelection = ' ';
+  bool confirmLoop = true;
+  do
+  {
+    cout << "You have selected '" << className << "', continue?\n"
+          << "Y or N: ";
+    cin >> confirmSelection;
+    if (validateDecision(confirmSelection))
+    {
+      if (confirmSelection == 'Y' || confirmSelection == 'y')
+      {
+        cout << "\nYou've chosen the path of the " << className << "\n\n";
+        confirmLoop = false;
+      }
+    }
+  } while (confirmLoop);
+
+  return confirmLoop;
+}
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
 double Player::attack(Player *player, const double &enemyVulnerability, const string &battleMenuSelection)

@@ -28,6 +28,7 @@ private:
 
   // Class selector
   void classSelection();
+  bool classSelectionConfirm();
 
 public:
   // Initialize skills
