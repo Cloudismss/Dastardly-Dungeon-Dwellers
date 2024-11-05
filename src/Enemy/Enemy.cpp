@@ -5,7 +5,7 @@
 
 #include "Globals.h"
 
-#include "../../lib/fmt/include/fmt/color.h"
+#include "fmt/color.h"
 
 using std::cout;
 

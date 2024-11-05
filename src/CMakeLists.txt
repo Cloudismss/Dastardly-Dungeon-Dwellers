@@ -21,6 +21,7 @@ set(Dirs
         "../include/Enemy"
         "../include/Player"
         "../include/Room Controller"
+        "../lib/fmt/include"
 )
 
 add_library(src ${Sources})

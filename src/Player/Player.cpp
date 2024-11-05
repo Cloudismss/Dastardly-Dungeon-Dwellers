@@ -5,7 +5,7 @@
 #include "Art.h"
 #include "Validation.h"
 
-#include "../../lib/fmt/include/fmt/color.h"
+#include "fmt/color.h"
 
 using std::cin;
 using std::cout;
