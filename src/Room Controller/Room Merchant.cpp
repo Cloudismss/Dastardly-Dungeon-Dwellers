@@ -15,7 +15,7 @@ using std::setw;
 void roomMerchant(Player *player)
 {
   // Initialize Merchant Shop arrays
-  const string className = player->getClass();
+  const string className = player->getClassName();
   vector<MerchantItem> shop;
 
   // Upgrade variables

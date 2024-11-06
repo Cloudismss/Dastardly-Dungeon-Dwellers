@@ -7,6 +7,22 @@
 
 #include "Art.h"
 
+Skills::Skills(const string &className)
+{
+  meleeName = " ";
+  magicName = " ";
+  rangedName = " ";
+  meleeCounter = 0;
+  magicCounter = 0;
+  rangedCounter = 0;
+  meleeSkill = 0;
+  magicSkill = 0;
+  rangedSkill = 0;
+  critSkill = 1.0;
+  initSkillNames(className);
+  readSkills(className);
+}
+
 string Skills::getSkillName(const string &battleMenuSelection)
 {
   if (battleMenuSelection == "Melee")

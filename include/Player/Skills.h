@@ -7,22 +7,11 @@ using std::string;
 
 class Skills
 {
+private:
+  friend class Characters;
+
 public:
-  Skills(const string &className)
-  {
-    meleeName = " ";
-    magicName = " ";
-    rangedName = " ";
-    meleeCounter = 0;
-    magicCounter = 0;
-    rangedCounter = 0;
-    meleeSkill = 0;
-    magicSkill = 0;
-    rangedSkill = 0;
-    critSkill = 1.0;
-    initSkillNames(className);
-    readSkills(className);
-  }
+  Skills(const string &className);
   ~Skills() { };
 
 private:

@@ -3,17 +3,15 @@
 #include <iostream>
 
 #include "Art.h"
-#include "Validation.h"
+#include "Globals.h"
 
 #include "fmt/color.h"
 
-using std::cin;
 using std::cout;
 
 Player::Player()
 {
-  health = 20.0;
-  className = " ";
+  characters = new Characters;
   gold = 0;
   potions = 3;
   armor = 0;
@@ -24,125 +22,35 @@ Player::Player()
   rooms = 0;
   progression = 0;
 
-  // Class selection menu
-  classSelection();
-
-  // Initialize skills
-  skills = new Skills(className);
-
   // DEBUG Option - Extra potions, gold, keys
   if (debug)
   {
-    health = 100.0;
     potions = 100;
     gold = 1000;
     keys = 10;
   }
 }
 
-// Pre-condition: passed className
-// Post-condition: displays class selection menu and stores result in className
-void Player::classSelection()
-{
-  bool loopFlag = true;
-  do
-  {
-    short int classChoice = 0;
-    cout << ".-------------------------------------------------------------.\n"
-         << "|                                                             |\n"
-         << "|           Please choose a class using numbers 1-3:          |\n"
-         << "|                                                             |\n"
-         << "|            1. Warrior             Skill: Melee              |\n"
-         << "|            2. Mage                Skill: Magic              |\n"
-         << "|            3. Archer              Skill: Ranged             |\n"
-         << "|                                                             |\n"
-         << "'-------------------------------------------------------------'\n";
-    cin >> classChoice;
-    if (validateInput(classChoice, 1, 999)) // High range is 999 to allow the joke selection of bard if a number is entered
-    {
-      switch (classChoice)
-      {
-        // Player chose Warrior
-        case 1:
-        {
-          className = "Warrior";
-          warriorArt();
-          break;
-        }
-        // Player chose Mage
-        case 2:
-        {
-          className = "Mage";
-          mageArt();
-          break;
-        }
-        // Player chose Archer
-        case 3:
-        {
-          className = "Archer";
-          archerArt();
-          break;
-        }
-        // Player chose an invalid number, and is auto-assigned to bard
-        default:
-        {
-          className = "Bard";
-          bardArt();
-          cout << "That's wasn't an option >:(\n"
-               << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
-          loopFlag = false;
-          break;
-        }
-      }
-    }
-    // Confirm class selection
-    if (loopFlag)
-      loopFlag = classSelectionConfirm();
-    
-  } while (loopFlag);
-}
-
-bool Player::classSelectionConfirm()
-{
-  char confirmSelection = ' ';
-  bool confirmLoop = true;
-  do
-  {
-    cout << "You have selected '" << className << "', continue?\n"
-          << "Y or N: ";
-    cin >> confirmSelection;
-    if (validateDecision(confirmSelection))
-    {
-      if (confirmSelection == 'Y' || confirmSelection == 'y')
-      {
-        cout << "\nYou've chosen the path of the " << className << "\n\n";
-        confirmLoop = false;
-      }
-    }
-  } while (confirmLoop);
-
-  return confirmLoop;
-}
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
-double Player::attack(Player *player, const double &enemyVulnerability, const string &battleMenuSelection)
+double Player::attack(const double &enemyVulnerability, const string &battleMenuSelection)
 {
   // Attack Variables
   double attackValue = 0;
-  double critChance = BASE_CRIT_CHANCE * player->skills->getCritSkill();
+  double critChance = BASE_CRIT_CHANCE * getCritSkill();
 
   if (battleMenuSelection == "Melee")
-    attackValue = BASE_MELEE_DAMAGE * player->skills->getMeleeSkill();
+    attackValue = BASE_MELEE_DAMAGE * getMeleeSkill();
   else if (battleMenuSelection == "Magic")
-    attackValue = BASE_MAGIC_DAMAGE * player->skills->getMagicSkill();
+    attackValue = BASE_MAGIC_DAMAGE * getMagicSkill();
   else if (battleMenuSelection == "Ranged")
-    attackValue = BASE_RANGED_DAMAGE * player->skills->getRangedSkill();
+    attackValue = BASE_RANGED_DAMAGE * getRangedSkill();
 
   // Get skill upgrade tier
-  short unsigned int skillTier = player->skills->getSkillTier(battleMenuSelection);
+  short unsigned int skillTier = getSkillTier(battleMenuSelection);
 
   // Calculate attackValue
-  attackValue *= skillTier * player->getWeaponLevel(battleMenuSelection);
+  attackValue *= skillTier * getWeaponLevel(battleMenuSelection);
 
   // Add a small offset to the damage for a touch of variability
   attackValue += skillTier * (-1 + (rand() % 3));
@@ -163,10 +71,10 @@ double Player::attack(Player *player, const double &enemyVulnerability, const st
   if (debug)
     attackValue = 1000.0;
 
-  cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " dealt " << static_cast<int>(attackValue) << " damage\n\n";
+  cout << "\t" << getSkillName(battleMenuSelection) << " dealt " << static_cast<int>(attackValue) << " damage\n\n";
 
   // Increment skill counter and check for upgrade
-  player->skills->useSkill(battleMenuSelection, player->getClass());
+  useSkill(battleMenuSelection);
 
   return attackValue;
 }
@@ -240,7 +148,7 @@ void Player::heal()
     cout << "\tYou now have ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --potions);
     cout << " potions\n\n";
-    health += healValue;
+    adjustHealth(healValue);
   }
   else
     cout << "\tYou don't have any potions!\n";

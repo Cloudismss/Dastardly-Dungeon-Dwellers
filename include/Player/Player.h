@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Skills.h"
+#include "Characters.h"
 
 using std::string;
 
@@ -12,12 +12,11 @@ class Player
 public:
   // Constructor
   Player();
-  ~Player() { delete skills; }
+  ~Player() { delete characters; }
 
 private:
-  // Player Information
-  double health;
-  string className;
+  // Character linked list
+  Characters *characters;
 
   // Inventory Variables
   short unsigned int gold, potions, armor, keys;
@@ -26,20 +25,12 @@ private:
   // Progression Variables
   short unsigned int rooms, progression;
 
-  // Class selector
-  void classSelection();
-  bool classSelectionConfirm();
-
 public:
-  // Initialize skills
-  Skills *skills;
-  
-  // Mutators
-  double attack(Player *player, const double &enemyVulnerability, const string &battleMenuSelection);
-  void receive(double healthAdjust) { health -= healthAdjust; }
+  // Helper Functions
   void heal();
-  void setClass(const string &CLASS_NAME) { className = CLASS_NAME; }
+  double attack(const double &enemyVulnerability, const string &battleMenuSelection);
 
+  // Mutators
   void addGold(int goldAdjust);
   void addPotion(int potionAdjust);
   void addArmor(int armorAdjust);
@@ -55,9 +46,19 @@ public:
   void roomCleared() { ++rooms; }
   void progress() { ++progression; }
 
-  // Accessors
-  double getHealth() { return health; }
-  string getClass() { return className; }
+  // Mutators for character stats
+  void adjustHealth(double healValue) { characters->adjustHealth(healValue); }
+  void useSkill(const string &battleMenuSelection) { characters->current->skills->useSkill(battleMenuSelection, getClassName()); }
+
+  // Accessors for character stats
+  double getHealth() { return characters->current->health; }
+  string getClassName() { return characters->current->className; }
+  double getCritSkill() { return characters->current->skills->getCritSkill(); }
+  int getMeleeSkill() { return characters->current->skills->getMeleeSkill(); }
+  int getMagicSkill() { return characters->current->skills->getMagicSkill(); }
+  int getRangedSkill() { return characters->current->skills->getRangedSkill(); }
+  int getSkillTier(const string &battleMenuSelection) { return characters->current->skills->getSkillTier(battleMenuSelection); }
+  string getSkillName(const string &battleMenuSelection) { return characters->current->skills->getSkillName(battleMenuSelection); }
 
   int getGold() { return gold; }
   int getPotions() { return potions; }

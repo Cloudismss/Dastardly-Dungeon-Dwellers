@@ -17,7 +17,7 @@ string battleMenu(Player *player, Enemy *enemy)
   // Menu Variables
   int boxWidth = 63;
   int borderSpacing = ((boxWidth - 23) / 2);
-  string choiceName[] = {player->skills->getSkillName("Melee"), player->skills->getSkillName("Magic"), player->skills->getSkillName("Ranged")};
+  string choiceName[] = {player->getSkillName("Melee"), player->getSkillName("Magic"), player->getSkillName("Ranged")};
 
   short int battleMenuSelection = 0;
   bool loopFlag = true;
