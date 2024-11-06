@@ -8,6 +8,7 @@ set(Sources
         "Enemy/Enemy.cpp"
         "Enemy/Loot.cpp"
         "Player/Player.cpp"
+        "Player/Characters.cpp"
         "Player/Skills.cpp"
         "Room Controller/Room Controller.cpp"
         "Room Controller/Room Enemy.cpp"

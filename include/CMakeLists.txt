@@ -11,6 +11,7 @@ set(Includes
         "Enemy/Enemy.h"
         "Enemy/Loot.h"
         "Player/Player.h"
+        "Player/Characters.h"
         "Player/Skills.h"
         "Room Controller/Room Controller.h"
         "Room Controller/Room Enemy.h"
