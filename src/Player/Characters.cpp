@@ -24,19 +24,19 @@ Characters::Characters()
 
 Characters::~Characters()
 {
-  if (!head)
-    return;
-
-  current = head;
-  Node *temp = nullptr;
-  while(current->next != head)
+  if (head)
   {
-    temp = current->next;
-    delete current->skills;
-    delete current;
-    current = temp;
+    current = head;
+    Node *temp = nullptr;
+    while(current->next != head)
+    {
+      temp = current->next;
+      delete current->skills;
+      delete current;
+      current = temp;
+    }
+    delete head;
   }
-  delete head;
 }
 
 void Characters::append(const string &className)
