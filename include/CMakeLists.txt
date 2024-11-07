@@ -13,6 +13,7 @@ set(Includes
         "Player/Player.h"
         "Player/Characters.h"
         "Player/Skills.h"
+        "Player/Inventory.h"
         "Room Controller/Room Controller.h"
         "Room Controller/Room Enemy.h"
         "Room Controller/Room Exit.h"

@@ -10,6 +10,7 @@ set(Sources
         "Player/Player.cpp"
         "Player/Characters.cpp"
         "Player/Skills.cpp"
+        "Player/Inventory.cpp"
         "Room Controller/Room Controller.cpp"
         "Room Controller/Room Enemy.cpp"
         "Room Controller/Room Exit.cpp"

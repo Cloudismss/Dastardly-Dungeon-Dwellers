@@ -4,17 +4,18 @@
 #include <string>
 
 #include "Characters.h"
+#include "Inventory.h"
 
 using std::string;
 
 class Player
 {
 private:
-  // Character linked list
+  // Character Linked List
   Characters *characters;
 
-  // Inventory Variables
-  short unsigned int gold, potions, armor, keys;
+  // Player Inventory
+  Inventory *inventory;
 
   // Progression Variables
   short unsigned int rooms, progression;
@@ -33,18 +34,18 @@ public:
   void addArmor(int armorAdjust);
   void addKey();
 
-  void removeGold(int goldAdjust) { gold -= goldAdjust; }
-  void removePotion(int potionAdjust) { potions -= potionAdjust; }
-  void removeArmor(int armorAdjust) { armor -= armorAdjust; }
-  void removeKey() { --keys; }
+  void removeGold(int goldAdjust) { inventory->gold -= goldAdjust; }
+  void removePotion(int potionAdjust) { inventory->potions -= potionAdjust; }
+  void removeArmor(int armorAdjust) { inventory->armor -= armorAdjust; }
+  void removeKey() { --inventory->keys; }
 
   void upgradeWeapon(const string &weaponType, const string &upgradeName);
 
   // Inventory Accessors
-  int getGold() { return gold; }
-  int getPotions() { return potions; }
-  int getArmor() { return armor; }
-  int getKeys() { return keys; }
+  int getGold() { return inventory->gold; }
+  int getPotions() { return inventory->potions; }
+  int getArmor() { return inventory->armor; }
+  int getKeys() { return inventory->keys; }
   
   int getWeaponLevel(const string &weaponType);
 
@@ -61,6 +62,7 @@ public:
   void useSkill(const string &battleMenuSelection) { characters->current->skills->useSkill(battleMenuSelection, getClassName()); }
 
   // Character Stat Accessors
+  double getMaxHealth() { return characters->current->maxHealth; }
   double getHealth() { return characters->current->health; }
   string getClassName() { return characters->current->className; }
   double getCritSkill() { return characters->current->skills->getCritSkill(); }

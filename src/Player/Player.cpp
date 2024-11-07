@@ -12,20 +12,9 @@ using std::cout;
 Player::Player()
 {
   characters = new Characters;
-  gold = 0;
-  potions = 3;
-  armor = 0;
-  keys = 0;
+  inventory = new Inventory;
   rooms = 0;
   progression = 0;
-
-  // DEBUG Option - Extra potions, gold, keys
-  if (debug)
-  {
-    potions = 100;
-    gold = 1000;
-    keys = 10;
-  }
 }
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
@@ -78,13 +67,13 @@ double Player::attack(const double &enemyVulnerability, const string &battleMenu
 
 void Player::addGold(int goldAdjust)
 {
-  gold += goldAdjust;
+  inventory->gold += goldAdjust;
   fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "Gold x{0} added\n", goldAdjust);
 }
 
 void Player::addPotion(int potionAdjust)
 {
-  potions += potionAdjust;
+  inventory->potions += potionAdjust;
   if (potionAdjust == 1)
     fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion added\n");
   else
@@ -93,7 +82,7 @@ void Player::addPotion(int potionAdjust)
 
 void Player::addArmor(int armorAdjust)
 {
-  armor += armorAdjust;
+  inventory->armor += armorAdjust;
   if (armorAdjust == 1)
     fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating added\n");
   else
@@ -102,7 +91,7 @@ void Player::addArmor(int armorAdjust)
 
 void Player::addKey()
 {
-  ++keys;
+  ++inventory->keys;
   displayMeInABox("GOLDEN KEY Acquired!");
 }
 
@@ -135,7 +124,7 @@ int Player::getWeaponLevel(const string &weaponType)
 // Post-condition: returns an amount to heal the player and updates potionCount
 void Player::heal()
 {
-  if (potions > 0)
+  if (inventory->potions > 0)
   {
     // Picks a random number between 10 and 20 to return a heal amount
     double healValue = 10 + (rand() % 11);
@@ -143,7 +132,7 @@ void Player::heal()
          fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
     cout << " health\n";
     cout << "\tYou now have ";
-         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --potions);
+         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --inventory->potions);
     cout << " potions\n\n";
     adjustHealth(healValue);
   }
