@@ -15,9 +15,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   const bool ROOM_EXPLORED = map->move();
   const string ROOM_NAME = map->getRoomContents();
 
-  // Dialogue controller - determines which text should display when it comes to room explored vs not explored
-  int dialogueSwitch = 0;
-
   // This variable is set to true if an enemy is encountered
   bool isEnemyRoom = false;
 
@@ -25,8 +22,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   {
     if (ROOM_EXPLORED)
     {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A powerful foe once inhabited this room");
       
       // There is a 50% chance the room will respawn
@@ -36,7 +31,7 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
     else
       isEnemyRoom = true;
 
-    roomEnemyMonologue(dialogueSwitch);
+    roomEnemyMonologue(ROOM_EXPLORED);
 
     // Initiate enemy room
     if (!roomEnemy(player))
@@ -49,8 +44,6 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   {
     if (ROOM_EXPLORED)
     {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A chest used to sit before me in this room");
       
       // There is a 50% chance the room will respawn
@@ -58,7 +51,7 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
         return;
     }
 
-    roomLootMonologue(dialogueSwitch);
+    roomLootMonologue(ROOM_EXPLORED);
     treasureArt();
     
     // Initiate loot room
@@ -71,13 +64,9 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   else if (ROOM_NAME == "Merchant")
   {
     if (ROOM_EXPLORED)
-    {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A friendly traveling merchant resides here");
-    }
 
-    roomMerchantMonologue(dialogueSwitch);
+    roomMerchantMonologue(ROOM_EXPLORED);
     merchantArt();
 
     // Initiate merchant room
@@ -86,13 +75,9 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   else if (ROOM_NAME == "Exit")
   {
     if (ROOM_EXPLORED)
-    {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A strange sensation controls my actions");
-    }
 
-    roomExitMonologue(dialogueSwitch);
+    roomExitMonologue(ROOM_EXPLORED);
     doorArt();
 
     // Initiate exit room

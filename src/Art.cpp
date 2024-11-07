@@ -176,12 +176,12 @@ void monologueInABox (const string &message)
 
 // Pre-condition: called to display randomized roomEnemy text
 // Post-condition: displays randomized room entry text
-void roomEnemyMonologue(int dialogueSwitch)
+void roomEnemyMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 5);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {
@@ -248,12 +248,12 @@ void roomEnemyMonologue(int dialogueSwitch)
 
 // Pre-condition: called to display randomized roomLoot text
 // Post-condition: displays randomized room entry text
-void roomLootMonologue(int dialogueSwitch)
+void roomLootMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 5);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {
@@ -322,12 +322,12 @@ void roomLootMonologue(int dialogueSwitch)
 
 // Pre-condition: called to display randomized roomMerchant text
 // Post-condition: displays randomized room entry text
-void roomMerchantMonologue(int dialogueSwitch)
+void roomMerchantMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 2);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {
@@ -366,12 +366,12 @@ void roomMerchantMonologue(int dialogueSwitch)
 
 // Pre-condition: called to display randomized roomExit text
 // Post-condition: displays randomized room entry text
-void roomExitMonologue(int dialogueSwitch)
+void roomExitMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 5);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {
