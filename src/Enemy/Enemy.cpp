@@ -192,7 +192,7 @@ void Enemy::receive(double playerAttack)
 
 // Pre-condition: called by battleController(), passed enemy variables
 // Post-condition: returns a damage amount based on enemy attributes
-double Enemy::attack(int playerArmor)
+double Enemy::attack(int playerArmor, double playerMaxHealth)
 { 
   double damage = 0;
   if (!boss)
@@ -207,7 +207,7 @@ double Enemy::attack(int playerArmor)
   damage -= playerArmor;
 
   // One-shot protection
-  if (damage > 19)
+  if (damage > playerMaxHealth)
     damage = 19;
 
   // Stops players from healing when stacking a bunch of armor

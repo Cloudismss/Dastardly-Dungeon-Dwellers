@@ -16,7 +16,7 @@ private:
   struct Node
   {
     string className;
-    double health;
+    double maxHealth, health;
     short unsigned int meleeWeapon, magicWeapon, rangedWeapon;
     Skills *skills;
     Node *next;
@@ -33,9 +33,12 @@ public:
   Characters();
   ~Characters();
 
-  // Append
+  // Append new character
   void append(const string &className);
+
+  // Switch current character
   void cycle(char direction);
+  void select(const string &characterName);
 
   // Mutators
   void setClassName(string className) { current->className = className; }

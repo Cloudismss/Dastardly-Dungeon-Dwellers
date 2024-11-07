@@ -34,7 +34,7 @@ protected:
 public:
   // Mutators
   void receive(double playerAttack);
-  double attack(int playerArmor);
+  double attack(int playerArmor, double playerMaxHealth);
 
   // Accessors
   string getName() const { return name; }

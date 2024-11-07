@@ -44,7 +44,7 @@ int battleController(Player *player, Enemy *enemy)
     // The enemy is permitted to attack only if their health is > 0, this prevents the enemy from attacking after their health reaches 0
     // Enemy damage is based on the (enemy tier * base enemy damage) + a random number between 1 and 3
     if (enemy->getHealth() > 0)
-      player->adjustHealth(-1 * enemy->attack(player->getArmor()));
+      player->adjustHealth(-1 * enemy->attack(player->getArmor(), player->getMaxHealth()));
   }
 
   // Checks if the player won the battle

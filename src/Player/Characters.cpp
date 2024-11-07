@@ -18,7 +18,10 @@ Characters::Characters()
 
   // Set the class name in the current node
   classSelection();
-  current->health = 20.0;
+
+  // Initialize character data
+  current->maxHealth = 20.0;
+  current->health = current->maxHealth;
   current->meleeWeapon = 1;
   current->magicWeapon = 1;
   current->rangedWeapon = 1;
@@ -61,6 +64,12 @@ void Characters::cycle(char direction)
   if (direction == 'L')
     current = current->previous;
   else if (direction == 'R')
+    current = current->next;
+}
+
+void Characters::select(const string &characterName)
+{
+  while (current->className != characterName)
     current = current->next;
 }
 
