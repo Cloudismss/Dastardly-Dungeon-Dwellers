@@ -17,6 +17,7 @@ private:
   {
     string className;
     double health;
+    short unsigned int meleeWeapon, magicWeapon, rangedWeapon;
     Skills *skills;
     Node *next;
     Node *previous;

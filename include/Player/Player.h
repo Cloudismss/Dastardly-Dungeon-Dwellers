@@ -15,7 +15,6 @@ private:
 
   // Inventory Variables
   short unsigned int gold, potions, armor, keys;
-  short unsigned int meleeWeapon, magicWeapon, rangedWeapon;
 
   // Progression Variables
   short unsigned int rooms, progression;

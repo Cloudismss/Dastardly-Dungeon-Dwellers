@@ -19,6 +19,9 @@ Characters::Characters()
   // Set the class name in the current node
   classSelection();
   current->health = 20.0;
+  current->meleeWeapon = 1;
+  current->magicWeapon = 1;
+  current->rangedWeapon = 1;
   current->skills = new Skills(current->className);
 }
 
@@ -88,28 +91,28 @@ void Characters::classSelection()
         // Player chose Warrior
         case 1:
         {
-          tempClassName = "Warrior";
+          setClassName("Warrior");
           warriorArt();
           break;
         }
         // Player chose Mage
         case 2:
         {
-          tempClassName = "Mage";
+          setClassName("Mage");
           mageArt();
           break;
         }
         // Player chose Archer
         case 3:
         {
-          tempClassName = "Archer";
+          setClassName("Archer");
           archerArt();
           break;
         }
         // Player chose an invalid number, and is auto-assigned to bard
         default:
         {
-          tempClassName = "Bard";
+          setClassName("Bard");
           bardArt();
           cout << "That's wasn't an option >:(\n"
                << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
@@ -124,9 +127,6 @@ void Characters::classSelection()
       loopFlag = classSelectionConfirm();
     
   } while (loopFlag);
-
-  // Set class name
-  setClassName(tempClassName);
 }
 
 bool Characters::classSelectionConfirm()

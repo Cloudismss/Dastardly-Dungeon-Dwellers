@@ -16,9 +16,6 @@ Player::Player()
   potions = 3;
   armor = 0;
   keys = 0;
-  meleeWeapon = 1;
-  magicWeapon = 1;
-  rangedWeapon = 1;
   rooms = 0;
   progression = 0;
 
@@ -112,11 +109,11 @@ void Player::addKey()
 void Player::upgradeWeapon(const string &weaponType, const string &upgradeName)
 {
   if (weaponType == "Melee")
-    ++meleeWeapon;
+    ++characters->current->meleeWeapon;
   else if (weaponType == "Magic")
-    ++magicWeapon;
+    ++characters->current->magicWeapon;
   else if (weaponType == "Ranged")
-    ++rangedWeapon;
+    ++characters->current->rangedWeapon;
 
   fmt::print(fmt::emphasis::bold, "{0} added\n", upgradeName);
 }
@@ -124,11 +121,11 @@ void Player::upgradeWeapon(const string &weaponType, const string &upgradeName)
 int Player::getWeaponLevel(const string &weaponType)
 {
   if (weaponType == "Melee")
-    return meleeWeapon;
+    return characters->current->meleeWeapon;
   else if (weaponType == "Magic")
-    return magicWeapon;
+    return characters->current->magicWeapon;
   else if (weaponType == "Ranged")
-    return rangedWeapon;
+    return characters->current->rangedWeapon;
 
   // TODO: Implement clean fix for return in all control paths
   return -1;
