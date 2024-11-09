@@ -1,10 +1,12 @@
 #ifndef DASTARDLY_DUNGEON_DWELLERS_CHARACTERS_H
 #define DASTARDLY_DUNGEON_DWELLERS_CHARACTERS_H
 
+#include <set>
 #include <string>
 
 #include "Skills.h"
 
+using std::set;
 using std::string;
 
 class Characters
@@ -24,6 +26,7 @@ private:
   };
   Node *head;
   Node *current;
+  set<string> availableCharacters;
 
   // Class selector
   void classSelection();
@@ -34,7 +37,7 @@ public:
   ~Characters();
 
   // Append new character
-  void append(const string &className);
+  void addCharacter();
 
   // Switch current character
   void cycle(char direction);

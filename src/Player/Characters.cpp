@@ -16,8 +16,14 @@ Characters::Characters()
   current->next = head;
   current->previous = head;
 
+  // Set of available characters
+  availableCharacters = {"Warrior", "Mage", "Archer", "Bard"};
+
   // Set the class name in the current node
   classSelection();
+
+  // Remove selected class from available characters set
+  availableCharacters.erase(availableCharacters.find(current->className));
 
   // Initialize character data
   current->maxHealth = 20.0;
@@ -45,8 +51,21 @@ Characters::~Characters()
   }
 }
 
-void Characters::append(const string &className)
+void Characters::addCharacter()
 {
+  // Check set of available characters
+  if (availableCharacters.empty())
+    return;
+
+  // Select random class name
+  string className = " ";
+  int classIndex = rand() % availableCharacters.size();
+  set<string>::iterator iter = availableCharacters.begin();
+  for (int i = 0; i != classIndex; ++i)
+    ++iter;
+  className = *iter;
+  availableCharacters.erase(iter);
+
   // Connect pointers on doubly linked list
   Node *node = new Node;
   node->previous = current;
@@ -57,6 +76,8 @@ void Characters::append(const string &className)
   // Assign value
   node->className = className;
   node->skills = new Skills(className);
+
+  // TODO: Output text indicating new character added
 }
 
 void Characters::cycle(char direction)
