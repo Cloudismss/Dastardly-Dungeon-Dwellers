@@ -47,3 +47,8 @@ The following art was used in this project:
 -dc - Game Over Page - https://www.asciiart.eu/art-and-design/borders
 
 -Unknown - Victory Page - https://www.asciiart.eu/art-and-design/borders
+
+## Building
+
+Run `git submodule update --init --recursive` in the project folder to pull in the libraries
+Build via CMake
