@@ -128,12 +128,18 @@ void Player::heal()
   {
     // Picks a random number between 10 and 20 to return a heal amount
     double healValue = 10 + (rand() % 11);
+
+    // Update heal value to not overheal
+    if (healValue + getHealth() > getMaxHealth())
+      healValue = getMaxHealth() - getHealth();
+
     cout << "\tYou used a potion and healed for ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
     cout << " health\n";
     cout << "\tYou now have ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --inventory->potions);
     cout << " potions\n\n";
+
     adjustHealth(healValue);
   }
   else
