@@ -14,4 +14,7 @@ doing elemental stuff
 move globals - use externs if necessary
 make exit cost 5 keys and add ability to open chests with golden keys
 
+add character specific xp
+add level up formula
+
 git submodule update --init --recursive
