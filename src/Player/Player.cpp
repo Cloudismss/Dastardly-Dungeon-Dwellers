@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Art.h"
+#include "Game.h"
 #include "Globals.h"
 
 #include "fmt/color.h"
@@ -54,7 +55,7 @@ double Player::attack(const double &enemyVulnerability, const string &battleMenu
   attackValue *= enemyVulnerability;
 
   // DEBUG OPTION - Max damage
-  if (debug)
+  if (Game::getDebug())
     attackValue = 1000.0;
 
   cout << "\t" << getSkillName(battleMenuSelection) << " dealt " << static_cast<int>(attackValue) << " damage\n\n";

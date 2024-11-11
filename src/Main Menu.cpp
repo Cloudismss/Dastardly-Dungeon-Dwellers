@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Art.h"
+#include "Game.h"
 #include "Validation.h"
 
 using std::cin;
@@ -49,8 +50,7 @@ void mainMenu()
     }
     else if (selection == -37) // Secret entry to activate debug mode
     {
-      // TODO: find new implementation
-      //debug = true;
+      Game::toggleDebug();
       std::cerr << "Debug mode enabled\n\n";
     }
   } while (loopFlag);

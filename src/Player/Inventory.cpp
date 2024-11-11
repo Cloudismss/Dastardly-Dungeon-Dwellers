@@ -1,6 +1,6 @@
 #include "Inventory.h"
 
-#include "Globals.h"
+#include "Game.h"
 
 Inventory::Inventory()
 {
@@ -10,7 +10,7 @@ Inventory::Inventory()
   keys = 0;
 
   // DEBUG Option - Extra potions, gold, keys
-  if (debug)
+  if (Game::getDebug())
   {
     potions = 100;
     gold = 1000;
