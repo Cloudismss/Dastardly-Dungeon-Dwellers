@@ -17,6 +17,7 @@ void roomMerchant(Player *player)
   // Initialize Merchant Shop arrays
   const string className = player->getClassName();
   vector<MerchantItem> shop;
+  shop.reserve(6);
 
   // Upgrade variables
   const int KEY_CHANCE = 75;

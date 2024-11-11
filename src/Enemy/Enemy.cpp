@@ -101,7 +101,8 @@ void Enemy::setEnemyTier(int playerProgression)
 void Enemy::setEnemyName(int playerProgression)
 {
   // TODO: Weighted implementation with vector
-  static std::vector<string> baddies = { };
+  static std::vector<string> baddies;
+  baddies.reserve(6);
   std::vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton", "Troll"};
   std::vector<string> stage2Baddies = {"Cyclops"};
   std::vector<string> stage3Baddies = {"Minotaur"};
