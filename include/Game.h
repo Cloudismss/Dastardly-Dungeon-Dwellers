@@ -8,7 +8,7 @@ class Game
 {
 private:
   // Debug toggle - displays useful debug information in the console and gives resources / increased damage
-  inline static bool debug; // Enter -37 at the main menu to enter debug mode
+  inline static bool debug = false; // Enter -37 at the main menu to enter debug mode
 public:
   static void toggleDebug() { debug = true; }
   static bool getDebug() { return debug; }

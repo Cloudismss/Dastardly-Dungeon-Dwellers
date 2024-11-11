@@ -13,8 +13,6 @@ using std::string;
 
 void Game::start()
 {
-  debug = false;
-
   // Seed the random number generator
   std::srand(std::time(nullptr));
 
