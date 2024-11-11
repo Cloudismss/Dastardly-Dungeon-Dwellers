@@ -72,8 +72,6 @@ int main()
   string enterKey = " ";
   getline(cin, enterKey);
   cout << "\n";
-
-  return 0;
 }
 
 // Pre-condition: valid input file open
