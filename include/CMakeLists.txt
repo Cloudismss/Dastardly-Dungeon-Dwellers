@@ -10,6 +10,7 @@ set(Includes
         "Battle Controller.h"
         "Enemy/Enemy.h"
         "Enemy/Loot.h"
+        "Game.h"
         "Player/Player.h"
         "Player/Characters.h"
         "Player/Skills.h"

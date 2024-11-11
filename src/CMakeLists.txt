@@ -7,6 +7,7 @@ set(Sources
         "Battle Controller.cpp"
         "Enemy/Enemy.cpp"
         "Enemy/Loot.cpp"
+        "Game.cpp"
         "Player/Player.cpp"
         "Player/Characters.cpp"
         "Player/Skills.cpp"
