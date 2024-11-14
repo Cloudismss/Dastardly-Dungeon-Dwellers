@@ -231,7 +231,7 @@ void roomMerchant(Player *player)
         {
           shop[userShopSelection].quantity -= 1;
           player->removeGold(shop[userShopSelection].cost);
-          player->addKey();
+          player->addKeys(1);
         }
       }
       else
@@ -255,7 +255,7 @@ void roomMerchant(Player *player)
 
       // Player chose to buy potions
       if (shop[userShopSelection].name == potionName)
-        player->addPotion(purchaseAmount);
+        player->addPotions(purchaseAmount);
       // Player chose to buy armor upgrades
       else if (shop[userShopSelection].name == armorName)
         player->addArmor(purchaseAmount);

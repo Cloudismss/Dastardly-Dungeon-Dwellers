@@ -45,13 +45,13 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
 
       // 75% chance the player is given potion(s) between 2-3
       if (lootRoll <= 75)
-        player->addPotion(2 + (rand() % 2));
+        player->addPotions(2 + (rand() % 2));
 
       cout << "\n";
 
       // 30% chance the player is given the golden key
       if (lootRoll <= 30)
-        player->addKey();
+        player->addKeys();
 
       // Player successfully cleared the room
       lootSuccess = true;

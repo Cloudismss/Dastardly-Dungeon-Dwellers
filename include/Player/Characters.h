@@ -12,13 +12,13 @@ using std::string;
 class Characters
 {
 private:
-  friend class Player;
-
   // Doubley Linked Circular List
   struct Node
   {
     string className;
     double maxHealth, health;
+    double xp;
+    short unsigned int level;
     short unsigned int meleeWeapon, magicWeapon, rangedWeapon;
     Skills *skills;
     Node *next;
@@ -27,10 +27,6 @@ private:
   Node *head;
   Node *current;
   set<string> availableCharacters;
-
-  // Class selector
-  void classSelection();
-  bool classSelectionConfirm();
 
 public:
   Characters();
@@ -43,9 +39,37 @@ public:
   void cycle(char direction);
   void select(const string &characterName);
 
+private:
+  // Class selector
+  void classSelection();
+  bool classSelectionConfirm();
+
+public:
+  // Accessors
+  string getClassName() { return current->className; }
+  double getMaxHealth() { return current->maxHealth; }
+  double getHealth() { return current->health; }
+  double getXp() { return current->xp; }
+  short unsigned int getLevel() { return current->level; }
+  short unsigned int getWeaponLevel(const string &weaponType);
+
   // Mutators
   void setClassName(string className) { current->className = className; }
   void adjustHealth(double healthAdjust) { current->health += healthAdjust; }
+  void adjustMaxHealth(double maxHealthAdjust) { current->maxHealth += maxHealthAdjust; }
+  void addXp(int XpAdjust);
+  void addLevel(int levelAdjust = 1) { current->level += levelAdjust; }
+  void upgradeWeapon(const string &weaponType, const string &upgradeName);
+
+  // Skills Accessors (Friend link)
+  short unsigned int getSkillLevel(const string &skillType);
+  short unsigned int getSkillUpgrade(const string &skillType);
+  string getSkillName(const string &skillType);
+  double getcritLevel() { return current->skills->critLevel; }
+
+  // Skills Mutators (Friend link)
+  void useSkill(const string &skillType);
+  void setSkillName(const string &skillType, string &upgradeMessage, int tier);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_CHARACTERS_H

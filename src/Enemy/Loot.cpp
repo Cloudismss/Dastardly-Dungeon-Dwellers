@@ -16,7 +16,7 @@ void loot(Player *player, Enemy *enemy)
     {
       // 10% chance to earn a potion
       if (lootRoll <= 10)
-        player->addPotion(1);
+        player->addPotions(1);
 
       // 85% chance to earn a random amount of gold between 5-15
       if (lootRoll <= 85)
@@ -34,7 +34,7 @@ void loot(Player *player, Enemy *enemy)
     {
       // 30% chance to earn a potion
       if (lootRoll <= 30)
-        player->addPotion(1);
+        player->addPotions(1);
 
       // 90% chance to earn a random amount of gold between 5-20
       if (lootRoll <= 90)
@@ -52,7 +52,7 @@ void loot(Player *player, Enemy *enemy)
     {
       // 60% chance to earn a potion(s) between 1 and 2
       if (lootRoll <= 60)
-        player->addPotion(1 + (rand() % 2));
+        player->addPotions(1 + (rand() % 2));
 
       // 100% chance to earn a random amount of gold between 10-20
       player->addGold(10 + (rand() % 11));
@@ -65,7 +65,7 @@ void loot(Player *player, Enemy *enemy)
     {
       // 90% chance to earn a potion(s) between 1 and 2
       if (lootRoll <= 90)
-        player->addPotion(1 + (rand() % 2));
+        player->addPotions(1 + (rand() % 2));
 
       // 100% chance to earn a random amount of gold between 15-20
       player->addGold(15 + (rand() % 6));
@@ -74,14 +74,14 @@ void loot(Player *player, Enemy *enemy)
 
       // 5% chance to earn the golden key
       if (lootRoll <= 5)
-        player->addKey();
+        player->addKeys(1);
 
       break;
     }
     case 5:
     {
       // 100% chance to earn a potion(s) between 1 and 2
-      player->addPotion(1 + (rand() % 2));
+      player->addPotions(1 + (rand() % 2));
 
       // 100% chance to earn a random amount of gold between 15-20
       player->addGold(15 + (rand() % 6));
@@ -90,14 +90,14 @@ void loot(Player *player, Enemy *enemy)
 
       // 15% chance to earn the golden key
       if (lootRoll <= 15)
-        player->addKey();
+        player->addKeys(1);
 
       break;
     }
     case 10:
     {
       // 100% chance to earn 5-10 potions
-      player->addPotion(5 + (rand() % 6));
+      player->addPotions(5 + (rand() % 6));
 
       // 100% chance to earn a random amount of gold between 25-50
       player->addGold(25 + (rand() % 26));
@@ -105,7 +105,7 @@ void loot(Player *player, Enemy *enemy)
       cout << "\n";
 
       // 100% chance to earn the golden key
-      player->addKey();
+      player->addKeys();
 
       break;
     }

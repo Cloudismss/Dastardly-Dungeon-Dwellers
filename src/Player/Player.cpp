@@ -23,26 +23,25 @@ Player::Player()
 double Player::attack(const double &enemyVulnerability, const string &battleMenuSelection)
 {
   // Attack Variables
-  double attackValue = 0;
-  double critChance = BASE_CRIT_CHANCE * getCritSkill();
-
+  double attackValue;
   if (battleMenuSelection == "Melee")
-    attackValue = BASE_MELEE_DAMAGE * getMeleeSkill();
+    attackValue = BASE_MELEE_DAMAGE;
   else if (battleMenuSelection == "Magic")
-    attackValue = BASE_MAGIC_DAMAGE * getMagicSkill();
+    attackValue = BASE_MAGIC_DAMAGE;
   else if (battleMenuSelection == "Ranged")
-    attackValue = BASE_RANGED_DAMAGE * getRangedSkill();
+    attackValue = BASE_RANGED_DAMAGE;
 
-  // Get skill upgrade tier
-  short unsigned int skillTier = getSkillTier(battleMenuSelection);
+  // Add the product of skillLevel and skillUpgrade
+  attackValue += characters->getSkillLevel(battleMenuSelection) * characters->getSkillUpgrade(battleMenuSelection);
 
-  // Calculate attackValue
-  attackValue *= skillTier * getWeaponLevel(battleMenuSelection);
+  // Multiply by weapon level
+  attackValue *= characters->getWeaponLevel(battleMenuSelection);
 
   // Add a small offset to the damage for a touch of variability
-  attackValue += skillTier * (-1 + (rand() % 3));
+  attackValue += characters->getSkillUpgrade(battleMenuSelection) * (-1 + (rand() % 3));
 
   // Calculate crit
+  double critChance = BASE_CRIT_CHANCE * characters->getcritLevel();
   if (1 + (rand() % 100) <= critChance * 100)
   {
     attackValue *= 2;
@@ -58,10 +57,10 @@ double Player::attack(const double &enemyVulnerability, const string &battleMenu
   if (Game::getDebug())
     attackValue = 1000.0;
 
-  cout << "\t" << getSkillName(battleMenuSelection) << " dealt " << static_cast<int>(attackValue) << " damage\n\n";
+  cout << "\t" << characters->getSkillName(battleMenuSelection) << " dealt " << static_cast<int>(attackValue) << " damage\n\n";
 
   // Increment skill counter and check for upgrade
-  useSkill(battleMenuSelection);
+  characters->useSkill(battleMenuSelection);
 
   return attackValue;
 }
@@ -72,7 +71,7 @@ void Player::addGold(int goldAdjust)
   fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "Gold x{0} added\n", goldAdjust);
 }
 
-void Player::addPotion(int potionAdjust)
+void Player::addPotions(int potionAdjust)
 {
   inventory->potions += potionAdjust;
   if (potionAdjust == 1)
@@ -90,35 +89,10 @@ void Player::addArmor(int armorAdjust)
     fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating x{0} added\n", armorAdjust);
 }
 
-void Player::addKey()
+void Player::addKeys(int keyAdjust)
 {
   ++inventory->keys;
   displayMeInABox("GOLDEN KEY Acquired!");
-}
-
-void Player::upgradeWeapon(const string &weaponType, const string &upgradeName)
-{
-  if (weaponType == "Melee")
-    ++characters->current->meleeWeapon;
-  else if (weaponType == "Magic")
-    ++characters->current->magicWeapon;
-  else if (weaponType == "Ranged")
-    ++characters->current->rangedWeapon;
-
-  fmt::print(fmt::emphasis::bold, "{0} added\n", upgradeName);
-}
-
-int Player::getWeaponLevel(const string &weaponType)
-{
-  if (weaponType == "Melee")
-    return characters->current->meleeWeapon;
-  else if (weaponType == "Magic")
-    return characters->current->magicWeapon;
-  else if (weaponType == "Ranged")
-    return characters->current->rangedWeapon;
-
-  // TODO: Implement clean fix for return in all control paths
-  return -1;
 }
 
 // Pre-condition: called by battleController(), passed potionCount
@@ -131,8 +105,8 @@ void Player::heal()
     double healValue = 10 + (rand() % 11);
 
     // Update heal value to not overheal
-    if (healValue + getHealth() > getMaxHealth())
-      healValue = getMaxHealth() - getHealth();
+    if (healValue + characters->getHealth() > characters->getMaxHealth())
+      healValue = characters->getMaxHealth() - characters->getHealth();
 
     cout << "\tYou used a potion and healed for ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
@@ -141,7 +115,7 @@ void Player::heal()
          fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --inventory->potions);
     cout << " potions\n\n";
 
-    adjustHealth(healValue);
+    characters->adjustHealth(healValue);
   }
   else
     cout << "\tYou don't have any potions!\n";
