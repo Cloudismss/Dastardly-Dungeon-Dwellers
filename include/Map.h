@@ -41,4 +41,4 @@ public:
   string getRoomContents() const { return position[rowPos][colPos].contents; }
 };
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_MAP_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_MAP_H

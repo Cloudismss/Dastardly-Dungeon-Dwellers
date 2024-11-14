@@ -29,4 +29,4 @@ void gameOverArt(Player *player);
 void tutorialGame();
 void tutorialBattle();
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ART_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ART_H

@@ -6,4 +6,4 @@
 
 void loot(Player *player, Enemy *enemy);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_LOOT_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_LOOT_H

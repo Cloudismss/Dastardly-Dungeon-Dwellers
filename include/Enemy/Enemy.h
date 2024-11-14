@@ -47,4 +47,4 @@ public:
   void debugPrint();
 };
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ENEMY_H

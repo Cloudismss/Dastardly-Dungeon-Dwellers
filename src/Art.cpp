@@ -119,7 +119,6 @@ void displayMeInABox(const string &message)
   }
   borderSpacing = ((boxWidth - 4) / 2);
 
-
   cout << setw(indent) << "." << setfill('-') << setw(boxWidth) << ".\n" << setfill(' ')
        << setw(indent) << "|" << setfill(' ') << setw(boxWidth) << "|\n"
        << setw(indent) << "|" << setw(offset + borderSpacing - message.length() / 2) << " " << message << setw(borderSpacing - message.length() / 2) << " " << " |\n"

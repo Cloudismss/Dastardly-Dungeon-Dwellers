@@ -30,4 +30,4 @@ public:
   void initSkillNames(const string &className);
 };
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_SKILLS_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_SKILLS_H

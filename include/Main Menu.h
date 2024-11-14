@@ -4,4 +4,4 @@
 // Main Menu Group
 void mainMenu();
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_MAIN_MENU_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_MAIN_MENU_H

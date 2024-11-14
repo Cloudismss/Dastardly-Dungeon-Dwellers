@@ -64,4 +64,4 @@ public:
   void upgradeWeapon(const string &weaponType, const string &upgradeName) { characters->upgradeWeapon(weaponType, upgradeName); }
 };
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
