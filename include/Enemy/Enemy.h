@@ -32,16 +32,16 @@ protected:
   void announceEnemy();
 
 public:
-  // Mutators
-  void receive(double playerAttack);
-  double attack(int playerArmor, double playerMaxHealth);
-
   // Accessors
   string getName() const { return name; }
   double getHealth() const { return health; }
   double getVulnerability(const string &battleMenuSelection, const string &skillName);
   int getTier() const { return tier; }
   int getRewardTier() const { return rewardTier; }
+
+  // Mutators
+  void receive(double playerAttack);
+  double attack(int playerArmor, double playerMaxHealth);
 
   // Debug
   void debugPrint();
