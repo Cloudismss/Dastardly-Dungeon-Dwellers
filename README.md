@@ -3,6 +3,10 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 
 ![Main Menu](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/main%20menu.png)
 
+## Building
+Run `git clone --recursive https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers.git` to clone the project with dependencies
+Build via `cmake` command within a build folder of your choosing
+
 ## Game Information
 
 ![Game Info](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/info.png)
@@ -47,7 +51,3 @@ The following art was used in this project:
 -dc - Game Over Page - https://www.asciiart.eu/art-and-design/borders
 
 -Unknown - Victory Page - https://www.asciiart.eu/art-and-design/borders
-
-## Building
-
-Run `git submodule update --init --recursive` in the project folder to pull in the libraries then build via CMake
