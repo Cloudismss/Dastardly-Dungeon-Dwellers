@@ -215,7 +215,10 @@ double Enemy::attack(int playerArmor, double playerMaxHealth)
   if (damage < 0)
     damage = 0;
 
-  cout << "\t" << name << " dealt " << static_cast<int>(damage) << " damage\n\n";
+  // TODO: Temp floor until custom GUI healthbar is implemented
+  damage = floor(damage);
+
+  cout << "\t" << name << " dealt " << damage << " damage\n\n";
   return damage;
 }
 

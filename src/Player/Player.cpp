@@ -22,6 +22,10 @@ Player::Player()
 // Post-condition: returns a damage amount based on all passed variables
 double Player::attack(const double &enemyVulnerability, const string &battleMenuSelection)
 {
+  // DEBUG OPTION - Max damage
+  if (Game::getDebug())
+    return 1000.0;
+
   // Attack Variables
   double attackValue;
   if (battleMenuSelection == "Melee")
@@ -53,11 +57,10 @@ double Player::attack(const double &enemyVulnerability, const string &battleMenu
   // Calculate vulnerability
   attackValue *= enemyVulnerability;
 
-  // DEBUG OPTION - Max damage
-  if (Game::getDebug())
-    attackValue = 1000.0;
+  // TODO: Temp floor until custom GUI healthbar is implemented
+  attackValue = floor(attackValue);
 
-  cout << "\t" << characters->getSkillName(battleMenuSelection) << " dealt " << static_cast<int>(attackValue) << " damage\n\n";
+  cout << "\t" << characters->getSkillName(battleMenuSelection) << " dealt " << attackValue << " damage\n\n";
 
   // Increment skill counter and check for upgrade
   characters->useSkill(battleMenuSelection);
@@ -107,6 +110,9 @@ void Player::heal()
     // Update heal value to not overheal
     if (healValue + characters->getHealth() > characters->getMaxHealth())
       healValue = characters->getMaxHealth() - characters->getHealth();
+
+    // TODO: Temp floor until custom GUI healthbar is implemented
+    healValue = floor(healValue);
 
     cout << "\tYou used a potion and healed for ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
