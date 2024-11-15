@@ -5,4 +5,4 @@
 
 void roomExit(Player *player, bool &gameVictory);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H

@@ -5,4 +5,4 @@
 
 bool roomEnemy(Player *player);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_ENEMY_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_ENEMY_H

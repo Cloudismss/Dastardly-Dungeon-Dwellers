@@ -19,4 +19,4 @@ struct MerchantItem
 void roomMerchant(Player *player);
 void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int userShopSelection, int &purchaseAmount);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H
