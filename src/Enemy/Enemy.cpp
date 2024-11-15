@@ -174,7 +174,7 @@ void Enemy::setEnemyVulnerabilities()
   }
 }
 
-// TODO varied dialogue implementation
+// TODO: varied dialogue implementation
 void Enemy::announceEnemy()
 {
   // Print enemy attributes

@@ -254,7 +254,7 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
         position[randomRow][randomColumn].symbol = ROOM_SYMBOL;
 
       // Mark spaces DUPE_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
-      // TODO num merchants not always correct
+      // TODO: num merchants not always correct
       if (randomRow + DUPE_DISTANCE < ROWS)
       {
         validSpawns[randomRow + DUPE_DISTANCE][randomColumn] = false;
