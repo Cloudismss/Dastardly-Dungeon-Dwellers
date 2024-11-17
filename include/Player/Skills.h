@@ -25,6 +25,7 @@ private:
   short unsigned int meleeCounter = 0, magicCounter = 0, rangedCounter = 0;
   short unsigned int meleeLevel = 0, rangedLevel = 0, magicLevel = 0;
   double critLevel = 1.0;
+  double maxHealth = 0.0;
 
   // Map of skill names with array for indicating skill level - key is ability type [ Melee, Magic, or Ranged ]
   unordered_map<string, string [3]> skillNames;

@@ -29,12 +29,11 @@ Characters::Characters()
   availableCharacters.erase(availableCharacters.find(current->className));
 
   // Initialize character data
-  current->maxHealth = 20.0;
-  current->health = current->maxHealth;
+  current->skills = new Skills(current->className);
+  current->health = current->skills->maxHealth;
   current->meleeWeapon = 1;
   current->magicWeapon = 1;
   current->rangedWeapon = 1;
-  current->skills = new Skills(current->className);
 }
 
 Characters::~Characters()
@@ -160,6 +159,12 @@ void Characters::classSelection()
       loopFlag = classSelectionConfirm();
     
   } while (loopFlag);
+
+  // Pause the screen until the user is ready to play
+  cout << "Press enter to begin your journey: ";
+  string enterKey = " ";
+  getline(cin, enterKey);
+  cout << "\n";
 }
 
 bool Characters::classSelectionConfirm()

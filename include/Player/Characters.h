@@ -16,7 +16,7 @@ private:
   struct Node
   {
     string className;
-    double maxHealth, health;
+    double health;
     double xp;
     short unsigned int level;
     short unsigned int meleeWeapon, magicWeapon, rangedWeapon;
@@ -47,7 +47,7 @@ private:
 public:
   // Accessors
   string getClassName() { return current->className; }
-  double getMaxHealth() { return current->maxHealth; }
+  double getMaxHealth() { return current->skills->maxHealth; }
   double getHealth() { return current->health; }
   double getXp() { return current->xp; }
   short unsigned int getLevel() { return current->level; }
@@ -56,7 +56,7 @@ public:
   // Mutators
   void setClassName(string className) { current->className = className; }
   void adjustHealth(double healthAdjust) { current->health += healthAdjust; }
-  void adjustMaxHealth(double maxHealthAdjust) { current->maxHealth += maxHealthAdjust; }
+
   void addXp(int XpAdjust);
   void addLevel(int levelAdjust = 1) { current->level += levelAdjust; }
   void upgradeWeapon(const string &weaponType, const string &upgradeName);
@@ -70,6 +70,7 @@ public:
   // Skills Mutators (Friend link)
   void useSkill(const string &skillType);
   void upgradeSkillName(const string &skillType);
+  void adjustMaxHealth(double maxHealthAdjust) { current->skills->maxHealth += maxHealthAdjust; }
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_CHARACTERS_H

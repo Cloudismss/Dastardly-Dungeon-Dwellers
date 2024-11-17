@@ -40,7 +40,7 @@ void Skills::readSkills(const string &className)
     getline(characterStats, classNameChecker, ',');
     // Check the class name
     if (classNameChecker == className)
-      characterStats >> meleeLevel >> rangedLevel >> magicLevel >> critLevel;
+      characterStats >> meleeLevel >> rangedLevel >> magicLevel >> critLevel >> maxHealth;
     // Check the next line if className doesn't match
     else
       getline(characterStats, classNameChecker);
@@ -53,12 +53,12 @@ void Skills::readSkills(const string &className)
 // Post-condition: writes default character stats to created file "Character Stats.cfg"
 void Skills::generateSkills(std::ofstream &defaultCharacterStats)
 {
-  defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill\n"
+  defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill | Max Health\n"
                         << "\n"
-                        << "Warrior, 3 2 2 1.0\n"
-                        << "Mage, 1 3 2 3.0\n"
-                        << "Archer, 2 2 3 1.0\n"
-                        << "Bard, 1 1 1 9.0";
+                        << "Warrior, 3 2 2 1.0 20.0\n"
+                        << "Mage, 1 3 1 3.0 25.0\n"
+                        << "Archer, 2 2 3 2.0 15.0\n"
+                        << "Bard, 1 1 1 9.0 10.0";
 }
 
 void Skills::generateSkillNames(const string &className)
