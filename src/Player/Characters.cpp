@@ -224,6 +224,8 @@ void Characters::addLevel()
   ++current->skills->magicLevel;
   ++current->skills->rangedLevel;
   ++current->skills->critLevel;
+  current->skills->maxHealth += 2;
+  current->health += 2;
 }
 
 void Characters::upgradeWeapon(const string &weaponType, const string &upgradeName)
