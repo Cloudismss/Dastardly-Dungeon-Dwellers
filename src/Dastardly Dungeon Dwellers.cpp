@@ -3,8 +3,8 @@
 int main()
 {
   Game DDD;
-  while(DDD.running())
+  while(DDD.running)
   {
-    DDD.progress();
+    DDD.loop();
   }
 }

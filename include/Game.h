@@ -17,18 +17,20 @@ public:
 public:
   inline static bool gameOver = false;
   inline static bool gameVictory = false;
+  inline static bool running = true;
 
 private:
   Player *player;
   Map *map;
+
+private:
   void start();
   void end();
 
 public:
   Game() { start(); }
   ~Game() { end(); }
-  bool running();
-  void progress();
+  void loop();
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_GAME_H

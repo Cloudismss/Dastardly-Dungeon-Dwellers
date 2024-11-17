@@ -49,13 +49,8 @@ void Game::end()
   cout << "\n";
 }
 
-bool Game::running()
+void Game::loop()
 {
-  // Runs the game until the player loses all of their health or wins the game
-  return !(gameOver || gameVictory);
-}
-
-void Game::progress()
-{
-  roomController(player, map);
+  if(!roomController(player, map))
+    running = false;
 }

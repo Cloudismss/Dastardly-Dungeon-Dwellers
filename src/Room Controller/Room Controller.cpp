@@ -10,7 +10,7 @@
 
 // Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
 // Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
-void roomController(Player *player, Map *map)
+bool roomController(Player *player, Map *map)
 {
   // map->move() allows the player to move between rooms. It returns false if the room has not been explored yet
   const bool ROOM_EXPLORED = map->move();
@@ -27,7 +27,7 @@ void roomController(Player *player, Map *map)
       
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
-        return;
+        return true;
     }
     else
       isEnemyRoom = true;
@@ -38,9 +38,10 @@ void roomController(Player *player, Map *map)
     if (!roomEnemy(player))
     {
       Game::gameOver = true;
-      return;
+      return false;
     }
   }
+
   else if (ROOM_NAME == "Loot")
   {
     if (ROOM_EXPLORED)
@@ -49,7 +50,7 @@ void roomController(Player *player, Map *map)
       
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
-        return;
+        return true;
     }
 
     roomLootMonologue(ROOM_EXPLORED);
@@ -59,9 +60,10 @@ void roomController(Player *player, Map *map)
     if(!roomLoot(player, isEnemyRoom))
     {
       Game::gameOver = true;
-      return;
+      return false;
     }
   }
+
   else if (ROOM_NAME == "Merchant")
   {
     if (ROOM_EXPLORED)
@@ -73,6 +75,7 @@ void roomController(Player *player, Map *map)
     // Initiate merchant room
     roomMerchant(player);
   }
+
   else if (ROOM_NAME == "Exit")
   {
     if (ROOM_EXPLORED)
@@ -84,6 +87,7 @@ void roomController(Player *player, Map *map)
     // Initiate exit room
     roomExit(player);
   }
+  
   else if (ROOM_NAME == "Start")
     monologueInABox("This room seems familiar... have I gone in a circle???");
 
@@ -105,4 +109,6 @@ void roomController(Player *player, Map *map)
     // Increment room counter
     player->roomCleared();
   }
+
+  return true;
 }
