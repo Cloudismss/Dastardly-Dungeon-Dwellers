@@ -66,48 +66,48 @@ void Skills::generateSkillNames(const string &className)
   // Number of skill levels per skill
   const short unsigned int SIZE = 3;
 
+  // Warrior Skill Names
+  const string warriorMelee[] = {"Slash", "Cleave", "Behemoth Strike"};
+  const string warriorMagic[] = {"Shield Charge", "Vortex Slam", "Arcane Lunge"};
+  const string warriorRanged[] = {"Rock Throw", "Shield Throw", "Javelin Toss"};
+
+  // Mage Skill Names
+  const string mageMelee[] = {"Bonk", "Whack", "Astral Thump"};
+  const string mageMagic[] = {"Frost Blast", "Arctic Veil", "Flash Freeze"};
+  const string mageRanged[] = {"Zap", "Thunderbolt", "Thunderstorm"};
+
+  // Archer Skill Names
+  const string archerMelee[] = {"Slice", "Sever", "Blade Dance"};
+  const string archerMagic[] = {"Poison Bomb", "Intoxicate", "Pestilence"};
+  const string archerRanged[] = {"Pierce", "Perforate", "Serpent Shot"};
+
+  // Bard Skill Names
+  const string bardMelee[] = {"Slap", "Snuggle", "Strum"};
+  const string bardMagic[] = {"Beg", "Sing", "Serenade"};
+  const string bardRanged[] = {"Waft", "Whistle", "Seduce"};
+
   const string *meleeName, *magicName, *rangedName;
 
   if (className == "Warrior")
   {
-    // Warrior Skill Names
-    const string warriorMelee[] = {"Slash", "Cleave", "Behemoth Strike"};
-    const string warriorMagic[] = {"Shield Charge", "Vortex Slam", "Arcane Lunge"};
-    const string warriorRanged[] = {"Rock Throw", "Shield Throw", "Javelin Toss"};
-
     meleeName = warriorMelee;
     magicName = warriorMagic;
     rangedName = warriorRanged;
   }
   else if (className == "Mage")
   {
-    // Mage Skill Names
-    const string mageMelee[] = {"Bonk", "Whack", "Astral Thump"};
-    const string mageMagic[] = {"Frost Blast", "Arctic Veil", "Flash Freeze"};
-    const string mageRanged[] = {"Zap", "Thunderbolt", "Thunderstorm"};
-
     meleeName = mageMelee;
     magicName = mageMagic;
     rangedName = mageRanged;
   }
   else if (className == "Archer")
   {
-    // Archer Skill Names
-    const string archerMelee[] = {"Slice", "Sever", "Blade Dance"};
-    const string archerMagic[] = {"Poison Bomb", "Intoxicate", "Pestilence"};
-    const string archerRanged[] = {"Pierce", "Perforate", "Serpent Shot"};
-
     meleeName = archerMelee;
     magicName = archerMagic;
     rangedName = archerRanged;
   }
   else if (className == "Bard")
   {
-    // Bard Skill Names
-    const string bardMelee[] = {"Slap", "Snuggle", "Strum"};
-    const string bardMagic[] = {"Beg", "Sing", "Serenade"};
-    const string bardRanged[] = {"Waft", "Whistle", "Seduce"};
-
     meleeName = bardMelee;
     magicName = bardMagic;
     rangedName = bardRanged;

@@ -32,6 +32,7 @@ Characters::Characters()
   current->skills = new Skills(current->className);
   current->health = current->skills->maxHealth;
   current->level = 1;
+  current->xp = 0;
   current->meleeWeapon = 1;
   current->magicWeapon = 1;
   current->rangedWeapon = 1;
