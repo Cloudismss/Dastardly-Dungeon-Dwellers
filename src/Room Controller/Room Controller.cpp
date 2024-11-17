@@ -1,6 +1,7 @@
 #include "Room Controller.h"
 
 #include "Art.h"
+#include "Game.h"
 #include "Globals.h"
 #include "Room Enemy.h"
 #include "Room Exit.h"
@@ -9,7 +10,7 @@
 
 // Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
 // Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
-void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
+void roomController(Player *player, Map *map)
 {
   // map->move() allows the player to move between rooms. It returns false if the room has not been explored yet
   const bool ROOM_EXPLORED = map->move();
@@ -36,7 +37,7 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
     // Initiate enemy room
     if (!roomEnemy(player))
     {
-      gameOver = true;
+      Game::gameOver = true;
       return;
     }
   }
@@ -57,7 +58,7 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
     // Initiate loot room
     if(!roomLoot(player, isEnemyRoom))
     {
-      gameOver = true;
+      Game::gameOver = true;
       return;
     }
   }
@@ -81,7 +82,7 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
     doorArt();
 
     // Initiate exit room
-    roomExit(player, gameVictory);
+    roomExit(player);
   }
   else if (ROOM_NAME == "Start")
     monologueInABox("This room seems familiar... have I gone in a circle???");

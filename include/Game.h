@@ -9,13 +9,16 @@ class Game
 private:
   // Debug toggle - displays useful debug information in the console and gives resources / increased damage
   inline static bool debug = false; // Enter -37 at the main menu to enter debug mode
+
 public:
-  static void toggleDebug() { debug = true; }
+  static void toggleDebug() { debug = !debug; }
   static bool getDebug() { return debug; }
 
+public:
+  inline static bool gameOver = false;
+  inline static bool gameVictory = false;
+
 private:
-  bool gameOver;
-  bool gameVictory;
   Player *player;
   Map *map;
   void start();
