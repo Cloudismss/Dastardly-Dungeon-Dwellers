@@ -86,6 +86,9 @@ bool roomController(Player *player, Map *map)
 
     // Initiate exit room
     roomExit(player);
+
+    if (Game::gameVictory)
+      return false;
   }
   
   else if (ROOM_NAME == "Start")
