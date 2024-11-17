@@ -28,10 +28,13 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
+      player->addXp(15 + (rand() % 16));
+
       break;
     }
     case 2:
     {
+
       // 30% chance to earn a potion
       if (lootRoll <= 30)
         player->addPotions(1);
@@ -46,6 +49,8 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
+      player->addXp(25 + (rand() % 16));
+
       break;
     }
     case 3:
@@ -59,6 +64,8 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";    
 
+      player->addXp(35 + (rand() % 16));
+
       break;
     }
     case 4:
@@ -71,6 +78,8 @@ void loot(Player *player, Enemy *enemy)
       player->addGold(15 + (rand() % 6));
 
       cout << "\n";
+
+      player->addXp(45 + (rand() % 16));
 
       // 5% chance to earn the golden key
       if (lootRoll <= 5)
@@ -88,6 +97,8 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
+      player->addXp(55 + (rand() % 16));
+
       // 15% chance to earn the golden key
       if (lootRoll <= 15)
         player->addKeys(1);
@@ -103,6 +114,8 @@ void loot(Player *player, Enemy *enemy)
       player->addGold(25 + (rand() % 26));
 
       cout << "\n";
+
+      player->addXp(200 + (rand() % 101));
 
       // 100% chance to earn the golden key
       player->addKeys();

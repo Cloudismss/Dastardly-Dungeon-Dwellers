@@ -17,7 +17,7 @@ private:
   {
     string className;
     double health;
-    double xp;
+    short unsigned int xp;
     short unsigned int level;
     short unsigned int meleeWeapon, magicWeapon, rangedWeapon;
     Skills *skills;
@@ -26,6 +26,9 @@ private:
   };
   Node *head;
   Node *current;
+
+private:
+  short unsigned int xpRequiredPerLevel = 100;
   set<string> availableCharacters;
 
 public:
@@ -57,8 +60,8 @@ public:
   void setClassName(string className) { current->className = className; }
   void adjustHealth(double healthAdjust) { current->health += healthAdjust; }
 
-  void addXp(int XpAdjust);
-  void addLevel(int levelAdjust = 1) { current->level += levelAdjust; }
+  void addXp(int xpAdjust);
+  void addLevel();
   void upgradeWeapon(const string &weaponType, const string &upgradeName);
 
   // Skills Accessors (Friend link)

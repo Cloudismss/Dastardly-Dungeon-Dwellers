@@ -31,6 +31,7 @@ Characters::Characters()
   // Initialize character data
   current->skills = new Skills(current->className);
   current->health = current->skills->maxHealth;
+  current->level = 1;
   current->meleeWeapon = 1;
   current->magicWeapon = 1;
   current->rangedWeapon = 1;
@@ -187,6 +188,41 @@ bool Characters::classSelectionConfirm()
   } while (confirmLoop);
 
   return confirmLoop;
+}
+
+void Characters::addXp(int xpAdjust)
+{
+  cout << current->className << " gained " << xpAdjust << " xp!\n";
+
+  // XP amount exceeds a full level
+  while(xpAdjust >= xpRequiredPerLevel)
+  {
+    addLevel();
+    xpAdjust -= xpRequiredPerLevel;
+  }
+
+  // Player levels up with adkustment
+  if (current->xp + xpAdjust >= xpRequiredPerLevel)
+  {
+    int difference = xpRequiredPerLevel - current->xp;
+    xpAdjust -= difference;
+    addLevel();
+    current->xp = 0;
+  }
+
+  current->xp += xpAdjust;
+
+  cout << "\n";
+}
+
+void Characters::addLevel()
+{
+  cout << current->className << " is now level " << ++current->level << "!\n";
+  
+  ++current->skills->meleeLevel;
+  ++current->skills->magicLevel;
+  ++current->skills->rangedLevel;
+  ++current->skills->critLevel;
 }
 
 void Characters::upgradeWeapon(const string &weaponType, const string &upgradeName)

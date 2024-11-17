@@ -60,8 +60,9 @@ public:
   string getSkillName(const string &skillType) { return characters->getSkillName(skillType); }
 
   // Characters Mutators
-  void adjustHealth(double healthAdjust) { return characters->adjustHealth(healthAdjust); }
+  void adjustHealth(double healthAdjust) { characters->adjustHealth(healthAdjust); }
   void upgradeWeapon(const string &weaponType, const string &upgradeName) { characters->upgradeWeapon(weaponType, upgradeName); }
+  void addXp(int xpAdjust) { characters->addXp(xpAdjust); }
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
