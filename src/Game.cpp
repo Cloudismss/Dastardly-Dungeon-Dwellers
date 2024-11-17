@@ -57,5 +57,5 @@ bool Game::running()
 
 void Game::progress()
 {
-  roomController(player, map, gameOver, gameVictory);
+  roomController(player, map);
 }
