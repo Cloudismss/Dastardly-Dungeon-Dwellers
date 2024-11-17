@@ -1,4 +1,7 @@
 set(Includes
+        # Main
+        "../docs/Test.h"
+
         # Header Only
         "Globals.h"
 
