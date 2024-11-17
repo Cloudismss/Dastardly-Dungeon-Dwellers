@@ -7,35 +7,25 @@
 
 Skills::Skills(const string &className)
 {
-  meleeName = " ";
-  magicName = " ";
-  rangedName = " ";
-  meleeCounter = 0;
-  magicCounter = 0;
-  rangedCounter = 0;
-  meleeLevel = 0;
-  magicLevel = 0;
-  rangedLevel = 0;
-  critLevel = 1.0;
-  initSkillNames(className);
   readSkills(className);
+  generateSkillNames(className);
 }
 
 void Skills::readSkills(const string &className)
 {
-  // Load Character Stats.txt or create and load Character Stats.txt with defaults, the player can edit the .txt file if they want custom stats
+  // Load 'Character Stats.cfg' or create and load 'Character Stats.cfg' with defaults, the player can edit the .cfg file if they want custom stats
   std::ifstream characterStats;
-  characterStats.open("Character Stats.txt");
+  characterStats.open("Character Stats.cfg");
   if (!characterStats)
   {
     std::ofstream defaultCharacterStats;
-    defaultCharacterStats.open("Character Stats.txt");
+    defaultCharacterStats.open("Character Stats.cfg");
     generateSkills(defaultCharacterStats);
     defaultCharacterStats.close();
-    characterStats.open("Character Stats.txt");
+    characterStats.open("Character Stats.cfg");
     if (!characterStats)
     {
-      std::cerr << "Character Stats.txt failed to open!\n";
+      std::cerr << "\"Character Stats.cfg\" failed to open!\n";
     }
   }
 
@@ -60,7 +50,7 @@ void Skills::readSkills(const string &className)
 }
 
 // Pre-condition: valid output file open
-// Post-condition: writes default character stats to created file "Character Stats.txt"
+// Post-condition: writes default character stats to created file "Character Stats.cfg"
 void Skills::generateSkills(std::ofstream &defaultCharacterStats)
 {
   defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill\n"
@@ -71,37 +61,62 @@ void Skills::generateSkills(std::ofstream &defaultCharacterStats)
                         << "Bard, 1 1 1 9.0";
 }
 
-void Skills::initSkillNames(const string &className)
+void Skills::generateSkillNames(const string &className)
 {
-  // Warrior Skills
+  // Number of skill levels per skill
+  const short unsigned int SIZE = 3;
+
+  const string *meleeName, *magicName, *rangedName;
+
   if (className == "Warrior")
   {
-    meleeName = "Slash";
-    magicName = "Shield Charge";
-    rangedName = "Rock Throw";
-  }
+    // Warrior Skill Names
+    const string warriorMelee[] = {"Slash", "Cleave", "Behemoth Strike"};
+    const string warriorMagic[] = {"Shield Charge", "Vortex Slam", "Arcane Lunge"};
+    const string warriorRanged[] = {"Rock Throw", "Shield Throw", "Javelin Toss"};
 
-  // Mage Skills
+    meleeName = warriorMelee;
+    magicName = warriorMagic;
+    rangedName = warriorRanged;
+  }
   else if (className == "Mage")
   {
-    meleeName = "Bonk";
-    magicName = "Frost Blast";
-    rangedName = "Zap";
-  }
+    // Mage Skill Names
+    const string mageMelee[] = {"Bonk", "Whack", "Astral Thump"};
+    const string mageMagic[] = {"Frost Blast", "Arctic Veil", "Flash Freeze"};
+    const string mageRanged[] = {"Zap", "Thunderbolt", "Thunderstorm"};
 
-  // Archer Skills
+    meleeName = mageMelee;
+    magicName = mageMagic;
+    rangedName = mageRanged;
+  }
   else if (className == "Archer")
   {
-    meleeName = "Slice";
-    magicName = "Poison Bomb";
-    rangedName = "Pierce";
-  }
+    // Archer Skill Names
+    const string archerMelee[] = {"Slice", "Sever", "Blade Dance"};
+    const string archerMagic[] = {"Poison Bomb", "Intoxicate", "Pestilence"};
+    const string archerRanged[] = {"Pierce", "Perforate", "Serpent Shot"};
 
-  // Bard Skills
+    meleeName = archerMelee;
+    magicName = archerMagic;
+    rangedName = archerRanged;
+  }
   else if (className == "Bard")
   {
-      meleeName = "Slap";
-      magicName = "Beg";
-      rangedName = "Waft";
+    // Bard Skill Names
+    const string bardMelee[] = {"Slap", "Snuggle", "Strum"};
+    const string bardMagic[] = {"Beg", "Sing", "Serenade"};
+    const string bardRanged[] = {"Waft", "Whistle", "Seduce"};
+
+    meleeName = bardMelee;
+    magicName = bardMagic;
+    rangedName = bardRanged;
+  }
+
+  for (int i = 0; i != SIZE; ++i)
+  {
+    skillNames["Melee"][i] = meleeName[i];
+    skillNames["Magic"][i] = magicName[i];
+    skillNames["Ranged"][i] = rangedName[i];
   }
 }

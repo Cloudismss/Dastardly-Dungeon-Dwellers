@@ -2,6 +2,9 @@
 #define DASTARDLY_DUNGEON_DWELLERS_SKILLS_H
 
 #include <string>
+#include <unordered_map>
+
+using std::unordered_map;
 
 using std::string;
 
@@ -18,16 +21,19 @@ public:
 
 private:
   // Skill Variables
-  string meleeName, magicName, rangedName;
-  short unsigned int meleeCounter, magicCounter, rangedCounter;
-  short unsigned int meleeLevel, rangedLevel, magicLevel;
-  double critLevel;
+  short unsigned int meleeUpgradeTier = 0, magicUpgradeTier = 0, rangedUpgradeTier = 0;
+  short unsigned int meleeCounter = 0, magicCounter = 0, rangedCounter = 0;
+  short unsigned int meleeLevel = 0, rangedLevel = 0, magicLevel = 0;
+  double critLevel = 1.0;
 
-public:
+  // Map of skill names with array for indicating skill level - key is ability type [ Melee, Magic, or Ranged ]
+  unordered_map<string, string [3]> skillNames;
+
+private:
   // Helper Functions
   void readSkills(const string &className);
   void generateSkills(std::ofstream &defaultCharacterStats);
-  void initSkillNames(const string &className);
+  void generateSkillNames(const string &className);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_SKILLS_H

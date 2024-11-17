@@ -69,7 +69,7 @@ public:
 
   // Skills Mutators (Friend link)
   void useSkill(const string &skillType);
-  void setSkillName(const string &skillType, string &upgradeMessage, int tier);
+  void upgradeSkillName(const string &skillType);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_CHARACTERS_H
