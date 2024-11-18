@@ -61,6 +61,7 @@ public:
 
   // Characters Mutators
   void addCharacter() { characters->addCharacter(); }
+  bool removeCharacter() { return characters->removeCharacter(); }
   bool cycle(char direction) { return characters->cycle(direction); }
   void adjustHealth(double healthAdjust) { characters->adjustHealth(healthAdjust); }
   void upgradeWeapon(const string &weaponType, const string &upgradeName) { characters->upgradeWeapon(weaponType, upgradeName); }

@@ -39,7 +39,7 @@ public:
   void addCharacter();
 
   // Remove character
-  void removeCharacter(Node *node);
+  bool removeCharacter();
 
   // Switch current character
   bool cycle(char direction);

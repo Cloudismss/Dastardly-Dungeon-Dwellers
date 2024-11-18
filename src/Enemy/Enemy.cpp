@@ -209,7 +209,7 @@ double Enemy::attack(int playerArmor, double playerMaxHealth)
 
   // One-shot protection
   if (damage > playerMaxHealth)
-    damage = 19;
+    damage = playerMaxHealth - 1;
 
   // Stops players from healing when stacking a bunch of armor
   if (damage < 0)

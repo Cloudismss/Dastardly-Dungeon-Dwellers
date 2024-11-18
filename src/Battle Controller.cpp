@@ -49,7 +49,7 @@ int battleController(Player *player, Enemy *enemy)
     if (player->getHealth() <= 0)
     {
       // Checks if the player has another character to switch to
-      if (!player->cycle('R'))
+      if (!player->removeCharacter())
       {
         // Player is out of characters - game over
         cout << "Player Defeated!\n\n";

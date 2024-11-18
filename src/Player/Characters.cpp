@@ -40,18 +40,27 @@ Characters::Characters()
 
 Characters::~Characters()
 {
-  if (head)
+  // TODO: Investigate double free
+  if (head->next == head)
+  {
+    delete head->skills;
+    delete head;
+  }
+  else if (head)
   {
     current = head;
     Node *temp = nullptr;
     while(current->next != head)
     {
       temp = current->next;
+      delete current->skills;
       delete current;
       current = temp;
     }
+    delete head->skills;
     delete head;
   }
+  head = nullptr;
 }
 
 void Characters::addCharacter()
@@ -90,15 +99,25 @@ void Characters::addCharacter()
   cout << node->className << " has joined your party\n\n";
 }
 
-void Characters::removeCharacter(Node *node)
+bool Characters::removeCharacter()
 {
-  delete node->skills;
-  node = nullptr;
+  auto temp = current;
+  
+  if(!cycle('R'))
+    return false;
+
+  temp->previous->next = temp->next;
+  temp->next->previous = temp->previous;
+  delete temp->skills;
+  delete temp;
+  temp = nullptr;
+
+  return true;
 }
 
 bool Characters::cycle(char direction)
 {
-  if (!current->next)
+  if (current->next == current)
     return false;
 
   auto previous = current;
