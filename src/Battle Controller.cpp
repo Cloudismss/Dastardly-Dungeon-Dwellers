@@ -45,6 +45,17 @@ int battleController(Player *player, Enemy *enemy)
     // Enemy damage is based on the (enemy tier * base enemy damage) + a random number between 1 and 3
     if (enemy->getHealth() > 0)
       player->adjustHealth(-1 * enemy->attack(player->getArmor(), player->getMaxHealth()));
+
+    if (player->getHealth() <= 0)
+    {
+      // Checks if the player has another character to switch to
+      if (!player->cycle('R'))
+      {
+        // Player is out of characters - game over
+        cout << "Player Defeated!\n\n";
+        return 0;
+      }
+    }
   }
 
   // Checks if the player won the battle
@@ -53,14 +64,6 @@ int battleController(Player *player, Enemy *enemy)
     cout << "Enemy defeated!\n\n";
     // Returning a 1 means the player won the battle
     return 1;
-  }
-
-  // Checks if the player lost the battle
-  if (player->getHealth() <= 0)
-  {
-    cout << "Player Defeated!\n\n";
-    // Returning a 0 means the player lost the battle
-    return 0;
   }
 
   // TODO: Implement clean fix for return in all control paths

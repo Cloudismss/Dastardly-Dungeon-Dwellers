@@ -38,8 +38,11 @@ public:
   // Append new character
   void addCharacter();
 
+  // Remove character
+  void removeCharacter(Node *node);
+
   // Switch current character
-  void cycle(char direction);
+  bool cycle(char direction);
   void select(const string &characterName);
 
 private:

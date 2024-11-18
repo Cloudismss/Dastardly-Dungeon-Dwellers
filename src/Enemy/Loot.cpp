@@ -6,6 +6,9 @@ using std::cout;
 
 void loot(Player *player, Enemy *enemy)
 {
+  player->addCharacter();
+  player->cycle('R');
+
   cout << "You check the enemy for valuables:\n";
   int rewardTier = enemy->getRewardTier();
   int lootRoll = 1 + (rand() % 100);

@@ -31,8 +31,8 @@ Characters::Characters()
   // Initialize character data
   current->skills = new Skills(current->className);
   current->health = current->skills->maxHealth;
-  current->level = 1;
   current->xp = 0;
+  current->level = 1;
   current->meleeWeapon = 1;
   current->magicWeapon = 1;
   current->rangedWeapon = 1;
@@ -47,7 +47,6 @@ Characters::~Characters()
     while(current->next != head)
     {
       temp = current->next;
-      delete current->skills;
       delete current;
       current = temp;
     }
@@ -77,19 +76,41 @@ void Characters::addCharacter()
   current->next = node;
   head->previous = node;
   
-  // Assign value
+  // Initialize character data
   node->className = className;
   node->skills = new Skills(className);
+  node->health = node->skills->maxHealth;
+  node->xp = 0;
+  node->level = 1;
+  node->meleeWeapon = 1;
+  node->magicWeapon = 1;
+  node->rangedWeapon = 1;
 
   // TODO: Output text indicating new character added
+  cout << node->className << " has joined your party\n\n";
 }
 
-void Characters::cycle(char direction)
+void Characters::removeCharacter(Node *node)
 {
+  delete node->skills;
+  node = nullptr;
+}
+
+bool Characters::cycle(char direction)
+{
+  if (!current->next)
+    return false;
+
+  auto previous = current;
+
   if (direction == 'L')
     current = current->previous;
   else if (direction == 'R')
     current = current->next;
+
+  cout << previous->className << " is tired, your turn " << current->className << "\n\n";
+
+  return true;
 }
 
 void Characters::select(const string &characterName)

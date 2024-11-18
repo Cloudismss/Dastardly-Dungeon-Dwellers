@@ -60,6 +60,8 @@ public:
   string getSkillName(const string &skillType) { return characters->getSkillName(skillType); }
 
   // Characters Mutators
+  void addCharacter() { characters->addCharacter(); }
+  bool cycle(char direction) { return characters->cycle(direction); }
   void adjustHealth(double healthAdjust) { characters->adjustHealth(healthAdjust); }
   void upgradeWeapon(const string &weaponType, const string &upgradeName) { characters->upgradeWeapon(weaponType, upgradeName); }
   void addXp(int xpAdjust) { characters->addXp(xpAdjust); }
