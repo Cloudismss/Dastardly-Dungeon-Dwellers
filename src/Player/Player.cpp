@@ -12,10 +12,14 @@ using std::cout;
 
 Player::Player()
 {
-  characters = new Characters;
+  characters = new CharacterList;
   inventory = new Inventory;
-  rooms = 0;
-  progression = 0;
+}
+
+Player::~Player()
+{
+  delete characters;
+  delete inventory;
 }
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
@@ -36,16 +40,16 @@ double Player::attack(const double &enemyVulnerability, const string &battleMenu
     attackValue = BASE_RANGED_DAMAGE;
 
   // Add the product of skillLevel and skillUpgrade
-  attackValue += characters->getSkillLevel(battleMenuSelection) * characters->getSkillUpgrade(battleMenuSelection);
+  attackValue += characters->getSkillLevel(battleMenuSelection) * characters->getSkillUpgradeTier(battleMenuSelection);
 
   // Multiply by weapon level
   attackValue *= characters->getWeaponLevel(battleMenuSelection);
 
   // Add a small offset to the damage for a touch of variability
-  attackValue += characters->getSkillUpgrade(battleMenuSelection) * (-1 + (rand() % 3));
+  attackValue += characters->getSkillUpgradeTier(battleMenuSelection) * (-1 + (rand() % 3));
 
   // Calculate crit
-  double critChance = BASE_CRIT_CHANCE * characters->getcritLevel();
+  double critChance = BASE_CRIT_CHANCE * characters->getCritLevel();
   if (1 + (rand() % 100) <= critChance * 100)
   {
     attackValue *= 2;
@@ -68,42 +72,15 @@ double Player::attack(const double &enemyVulnerability, const string &battleMenu
   return attackValue;
 }
 
-void Player::addGold(int goldAdjust)
-{
-  inventory->gold += goldAdjust;
-  fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "Gold x{0} added\n", goldAdjust);
-}
-
-void Player::addPotions(int potionAdjust)
-{
-  inventory->potions += potionAdjust;
-  if (potionAdjust == 1)
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion added\n");
-  else
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion x{0} added\n", potionAdjust);
-}
-
-void Player::addArmor(int armorAdjust)
-{
-  inventory->armor += armorAdjust;
-  if (armorAdjust == 1)
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating added\n");
-  else
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating x{0} added\n", armorAdjust);
-}
-
-void Player::addKeys(int keyAdjust)
-{
-  ++inventory->keys;
-  displayMeInABox("GOLDEN KEY Acquired!");
-}
-
 // Pre-condition: called by battleController(), passed potionCount
 // Post-condition: returns an amount to heal the player and updates potionCount
 void Player::heal()
 {
-  if (inventory->potions > 0)
+  if (getPotions() > 0)
   {
+    // Remove a potion
+    removePotions();
+    
     // Picks a random number between 10 and 20 to return a heal amount
     double healValue = 10 + (rand() % 11);
 
@@ -118,7 +95,7 @@ void Player::heal()
          fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
     cout << " health\n";
     cout << "\tYou now have ";
-         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --inventory->potions);
+         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", getPotions());
     cout << " potions\n\n";
 
     characters->adjustHealth(healValue);

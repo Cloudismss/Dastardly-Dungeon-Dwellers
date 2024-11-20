@@ -5,7 +5,8 @@
 
 class Warrior : public Character
 {
-
+private:
+  void setClassName() override { className = "Warrior"; }
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_WARRIOR_H
