@@ -164,19 +164,19 @@ void roomMerchant(Player *player)
       // Only print the quantity if there are more than one
       if (shop[i].quantity > 1)
       {
-        cout << "|" << setw(10) << " " << i + 1 << ". " << shop[i].name << "(s) x" << shop[i].quantity
+        cout << "|" << setw(10) << " " << i + 1 << ": " << shop[i].name << "(s) x" << shop[i].quantity
              << setw(24 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
       }
       // Don't print the quantity if there's only one
       else if (shop[i].quantity == 1)
       {
-        cout << "|" << setw(10) << " " << i + 1 << ". " << shop[i].name
+        cout << "|" << setw(10) << " " << i + 1 << ": " << shop[i].name
              << setw(30 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
       }
       // Prints the exit
       else if (shop[i].quantity == -1)
       {
-        cout << "|" << setw(10) << " " << i + 1 << ". Exit" << setw(46) << "|\n";
+        cout << "|" << setw(10) << " " << i + 1 << ": Exit" << setw(46) << "|\n";
       }
     }
 

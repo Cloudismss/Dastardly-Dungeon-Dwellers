@@ -214,9 +214,9 @@ string CharacterList::classSelection()
          << "|                                                             |\n"
          << "|       Please choose a starting class using numbers 1-3:     |\n"
          << "|                                                             |\n"
-         << "|            1. Warrior             Skill: Melee              |\n"
-         << "|            2. Mage                Skill: Magic              |\n"
-         << "|            3. Archer              Skill: Ranged             |\n"
+         << "|            1: Warrior             Skill: Melee              |\n"
+         << "|            2: Mage                Skill: Magic              |\n"
+         << "|            3: Archer              Skill: Ranged             |\n"
          << "|                                                             |\n"
          << "'-------------------------------------------------------------'\n";
     cin >> classChoice;
