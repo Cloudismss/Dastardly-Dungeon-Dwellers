@@ -19,8 +19,8 @@ private:
     Node *next;
     Node *previous;
   };
-  Node *head;
-  Node *current;
+  Node *head = nullptr;
+  Node *current = nullptr;
 
 private:
   short unsigned int xpRequiredPerLevel = 100;
