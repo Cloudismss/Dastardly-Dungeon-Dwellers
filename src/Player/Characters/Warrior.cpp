@@ -1,6 +1,14 @@
 #include "Warrior.h"
 
-void Character::generateSkillNames()
+Warrior::Warrior()
+{
+  setClassName();
+  readSkills();
+  generateSkillNames();
+  health = maxHealth;
+}
+
+void Warrior::generateSkillNames()
 {
   // Number of skill levels per skill
   const short unsigned int SIZE = 3;

@@ -14,7 +14,7 @@ public:
   static bool getDebug() { return debug; }
 
 public:
-  static bool winCondition;
+  inline static bool winCondition;
   inline static bool running = true;
 
 private:

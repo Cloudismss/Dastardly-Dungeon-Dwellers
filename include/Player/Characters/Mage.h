@@ -5,8 +5,12 @@
 
 class Mage : public Character
 {
+public:
+  Mage();
+  
 private:
-  void setClassName() override { className = "Mage"; }
+  void setClassName() { className = "Mage"; }
+  void generateSkillNames();
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_MAGE_H

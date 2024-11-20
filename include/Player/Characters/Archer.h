@@ -5,8 +5,12 @@
 
 class Archer : public Character
 {
+public:
+  Archer();
+
 private:
-  void setClassName() override { className = "Archer"; }
+  void setClassName() { className = "Archer"; }
+  void generateSkillNames();
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_ARCHER_H

@@ -1,6 +1,14 @@
 #include "Bard.h"
 
-void Character::generateSkillNames()
+Bard::Bard()
+{
+  setClassName();
+  readSkills();
+  generateSkillNames();
+  health = maxHealth;
+}
+
+void Bard::generateSkillNames()
 {
   // Number of skill levels per skill
   const short unsigned int SIZE = 3;

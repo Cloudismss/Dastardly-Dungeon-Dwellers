@@ -24,7 +24,7 @@ public:
   Player();
   ~Player();
 
-private:
+public:
   // Helper Functions
   void heal();
   double attack(const double &enemyVulnerability, const string &battleMenuSelection);
@@ -54,6 +54,9 @@ public:
   void removePotions(int potionAdjust = 1) { inventory->removePotions(potionAdjust); }
   void removeArmor(int armorAdjust = 1) { inventory->removeArmor(armorAdjust); }
   void removeKeys(int keysAdjust = 1) { inventory->removeKeys(keysAdjust); }
+
+  // Character List Accessors
+  CharacterList* getCharacter() { return characters; }
 
   // Character List Mutators
   void addRandomCharacter() { characters->addRandomCharacter(); }

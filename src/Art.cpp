@@ -17,13 +17,13 @@ string battleMenu(Player *player, Enemy *enemy)
   // Menu Variables
   int boxWidth = 63;
   int borderSpacing = ((boxWidth - 23) / 2);
-  string choiceName[] = {player->getSkillName("Melee"), player->getSkillName("Magic"), player->getSkillName("Ranged")};
+  string choiceName[] = {player->getCharacter()->getSkillName("Melee"), player->getCharacter()->getSkillName("Magic"), player->getCharacter()->getSkillName("Ranged")};
 
   short int battleMenuSelection = 0;
   bool loopFlag = true;
   do
   {
-    battleHealthArt(player->getHealth(), enemy->getHealth());
+    battleHealthArt(player->getCharacter()->getHealth(), enemy->getHealth());
     cout << "." << setfill('-') << setw(boxWidth) << ".\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
          << "|" << setw(12) << " " << "1. " << choiceName[0] << setw(borderSpacing - choiceName[0].length()) << " " << "4. Heal" << setw(18) << " " << " |\n"

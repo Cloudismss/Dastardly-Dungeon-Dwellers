@@ -15,7 +15,7 @@ using std::setw;
 void roomMerchant(Player *player)
 {
   // Initialize Merchant Shop arrays
-  const string className = player->getClassName();
+  const string className = player->getCharacter()->getClassName();
   vector<MerchantItem> shop;
   shop.reserve(6);
 
@@ -261,13 +261,13 @@ void roomMerchant(Player *player)
         player->addArmor(purchaseAmount);
       // Player chose to buy the sword upgrade
       else if (shop[userShopSelection].name == meleeUpgradeName)
-        player->upgradeWeapon("Melee", meleeUpgradeName);
+        player->getCharacter()->upgradeWeapon("Melee", meleeUpgradeName);
       // Player chose to buy the magic upgrade
       else if (shop[userShopSelection].name == magicUpgradeName)
-        player->upgradeWeapon("Magic", magicUpgradeName);
+        player->getCharacter()->upgradeWeapon("Magic", magicUpgradeName);
       // Player chose to buy the ranged upgrade
       else if (shop[userShopSelection].name == rangedUpgradeName)
-        player->upgradeWeapon("Ranged", rangedUpgradeName);
+        player->getCharacter()->upgradeWeapon("Ranged", rangedUpgradeName);
 
       // Add newline to purchase output message
       cout << "\n";

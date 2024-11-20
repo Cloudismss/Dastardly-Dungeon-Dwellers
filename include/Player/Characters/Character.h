@@ -12,7 +12,7 @@ using std::unordered_map;
 class Character
 {
 public:
-  Character();
+  Character() { }
   ~Character() { }
 
 private:
@@ -23,8 +23,8 @@ public:
   static void checkoutCharacter(const string &className);
 
 protected:
-  virtual void setClassName();
-  virtual void generateSkillNames();
+  void setClassName();
+  void generateSkillNames();
 
 protected:
   // Generic Class Variables

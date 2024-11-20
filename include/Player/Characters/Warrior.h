@@ -5,8 +5,12 @@
 
 class Warrior : public Character
 {
+public:
+  Warrior();
+  
 private:
-  void setClassName() override { className = "Warrior"; }
+  void setClassName() { className = "Warrior"; }
+  void generateSkillNames();
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_WARRIOR_H

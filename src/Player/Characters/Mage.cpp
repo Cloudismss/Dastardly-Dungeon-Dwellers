@@ -1,6 +1,14 @@
 #include "Mage.h"
 
-void Character::generateSkillNames()
+Mage::Mage()
+{
+  setClassName();
+  readSkills();
+  generateSkillNames();
+  health = maxHealth;
+}
+
+void Mage::generateSkillNames()
 {
   // Number of skill levels per skill
   const short unsigned int SIZE = 3;

@@ -1,6 +1,14 @@
 #include "Archer.h"
 
-void Character::generateSkillNames()
+Archer::Archer()
+{
+  setClassName();
+  readSkills();
+  generateSkillNames();
+  health = maxHealth;
+}
+
+void Archer::generateSkillNames()
 {
   // Number of skill levels per skill
   const short unsigned int SIZE = 3;

@@ -10,14 +10,6 @@
 
 using std::cout;
 
-Character::Character()
-{
-  setClassName();
-  readSkills();
-  generateSkillNames();
-  health = maxHealth;
-}
-
 string Character::getRandomAvailableCharacter()
 {
   // Check set of available characters

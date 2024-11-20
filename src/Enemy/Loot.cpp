@@ -6,8 +6,8 @@ using std::cout;
 
 void loot(Player *player, Enemy *enemy)
 {
-  player->addCharacter();
-  player->cycle('R');
+  player->getCharacter()->addRandomCharacter();
+  player->cycle();
 
   cout << "You check the enemy for valuables:\n";
   int rewardTier = enemy->getRewardTier();
@@ -31,7 +31,7 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
-      player->addXp(15 + (rand() % 16));
+      player->getCharacter()->addXp(15 + (rand() % 16));
 
       break;
     }
@@ -52,7 +52,7 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
-      player->addXp(25 + (rand() % 16));
+      player->getCharacter()->addXp(25 + (rand() % 16));
 
       break;
     }
@@ -67,7 +67,7 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";    
 
-      player->addXp(35 + (rand() % 16));
+      player->getCharacter()->addXp(35 + (rand() % 16));
 
       break;
     }
@@ -82,7 +82,7 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
-      player->addXp(45 + (rand() % 16));
+      player->getCharacter()->addXp(45 + (rand() % 16));
 
       // 5% chance to earn the golden key
       if (lootRoll <= 5)
@@ -100,7 +100,7 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
-      player->addXp(55 + (rand() % 16));
+      player->getCharacter()->addXp(55 + (rand() % 16));
 
       // 15% chance to earn the golden key
       if (lootRoll <= 15)
@@ -118,7 +118,7 @@ void loot(Player *player, Enemy *enemy)
 
       cout << "\n";
 
-      player->addXp(200 + (rand() % 101));
+      player->getCharacter()->addXp(200 + (rand() % 101));
 
       // 100% chance to earn the golden key
       player->addKeys();
