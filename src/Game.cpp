@@ -50,6 +50,5 @@ void Game::end()
 
 void Game::loop()
 {
-  if(!roomController(player, map))
-    running = false;
+  roomController(player, map);
 }
