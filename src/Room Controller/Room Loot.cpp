@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Art.h"
+#include "Game.h"
 #include "Room Enemy.h"
 #include "Validation.h"
 
@@ -78,7 +79,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
     }
 
     // There is a 30% chance to find a new character
-    if (1 + (rand() % 100) <= 30)
+    if (1 + (rand() % 100) <= 30 || Game::getDebug())
     {
       cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
       bool loopFlag = true;
