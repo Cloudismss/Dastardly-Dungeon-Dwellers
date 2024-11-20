@@ -36,7 +36,7 @@ CharacterList::~CharacterList()
       delete current;
       current = temp;
     }
-    delete head;
+    current = nullptr;
     head = nullptr;
   }
 }
@@ -79,7 +79,8 @@ void CharacterList::addRandomCharacter()
     node->character = new Warrior;
 
   // TODO: Output text indicating new character added
-  cout << className << " has joined your party\n\n";
+  string message = className + " has joined your party!";
+  displayMeInABox(message);
 }
 
 void CharacterList::addSpecificCharacter(const string &className)
@@ -104,6 +105,10 @@ void CharacterList::addSpecificCharacter(const string &className)
     node->next = head;
     current->next = node;
     head->previous = node;
+
+    // TODO: Output text indicating new character added
+    string message = className + " has joined your party!";
+    displayMeInABox(message);
   }
 
   // Remove character from list of available characters
@@ -117,9 +122,6 @@ void CharacterList::addSpecificCharacter(const string &className)
     node->character = new Mage;
   else if (className == "Warrior")
     node->character = new Warrior;
-
-  // TODO: Output text indicating new character added
-  cout << className << " has joined your party\n\n";
 }
 
 bool CharacterList::removeCurrentCharacter()
@@ -128,6 +130,9 @@ bool CharacterList::removeCurrentCharacter()
     return false; // Out of characters
 
   Node *temp = current;
+
+  if (!cycle())
+    return false; // Cycle to next character
 
   temp->previous->next = temp->next;
   temp->next->previous = temp->previous;

@@ -76,6 +76,27 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
         isEnemyRoom = true;
       }
     }
+
+    // There is a 30% chance to find a new character
+    if (1 + (rand() % 100) <= 30)
+    {
+      cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
+      bool loopFlag = true;
+      char confirmSelection;
+      do
+      {
+        cout << "Do you invite them to join your party?\n"
+             << "Y or N: ";
+        cin >> confirmSelection;
+        if (validateDecision(confirmSelection))
+          loopFlag = false;
+      } while (loopFlag);
+
+      cout << "\n";
+
+      if (confirmSelection == 'Y' || 'y')
+        player->addRandomCharacter();
+    }
   }
 
   // Player chose not to open the chest
