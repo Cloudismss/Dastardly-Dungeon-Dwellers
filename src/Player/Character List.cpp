@@ -282,10 +282,12 @@ bool CharacterList::classSelectionConfirm(const string &className)
       if (confirmSelection == 'Y' || confirmSelection == 'y')
       {
         cout << "\nYou've chosen the path of the " << className << "\n\n";
-        confirmLoop = false;
+        return false; // Exit main character select loop
       }
+      return true; // Return to beginning of character select loop
     }
   } while (confirmLoop);
-
-  return confirmLoop;
+  
+  // TODO: Clean solution for return in all control paths
+  return true;
 }
