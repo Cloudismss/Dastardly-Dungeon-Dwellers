@@ -18,7 +18,6 @@ set(Sources
         "Art.cpp"
         "Battle Controller.cpp"
         "Game.cpp"
-        "Main Menu.cpp"
         "Map.cpp"
         "Validation.cpp"
 )

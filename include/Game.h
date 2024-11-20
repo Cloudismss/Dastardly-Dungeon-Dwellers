@@ -11,7 +11,6 @@ private:
   inline static bool debug = false; // Enter -37 at the main menu to enter debug mode
 
 public:
-  static void toggleDebug() { debug = !debug; }
   static bool getDebug() { return debug; }
 
 public:
@@ -25,6 +24,7 @@ private:
 private:
   void start();
   void end();
+  void mainMenu();
 
 public:
   Game() { start(); }

@@ -24,7 +24,6 @@ set(Includes
         "Art.h"
         "Battle Controller.h"
         "Game.h"
-        "Main Menu.h"
         "Map.h"
         "Validation.h"
 )
