@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <string>
 
 #include "Validation.h"
 
@@ -18,6 +19,7 @@ string battleMenu(Player *player, Enemy *enemy)
   int boxWidth = 63;
   int borderSpacing = ((boxWidth - 23) / 2);
   string choiceName[] = {player->getCharacter()->getSkillName("Melee"), player->getCharacter()->getSkillName("Magic"), player->getCharacter()->getSkillName("Ranged")};
+  string potionElement = "Potions: " + std::to_string(player->getPotions());
 
   short int battleMenuSelection = 0;
   bool loopFlag = true;
@@ -26,18 +28,23 @@ string battleMenu(Player *player, Enemy *enemy)
     battleHealthArt(player->getCharacter()->getClassName(), player->getCharacter()->getHealth(), enemy->getNickname(), enemy->getHealth());
     cout << "." << setfill('-') << setw(boxWidth) << ".\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
-         << "|" << setw(12) << " " << "1. " << choiceName[0] << setw(borderSpacing - choiceName[0].length()) << " " << "4. Heal" << setw(18) << " " << " |\n"
-         << "|" << setw(12) << " " << "2. " << choiceName[1] << setw(borderSpacing - choiceName[1].length()) << " " << "5. Run Away" << setw(14) << " " << " |\n"
-         << "|" << setw(12) << " " << "3. " << choiceName[2] << setw(borderSpacing - choiceName[2].length()) << " " << "6. Switch Character" << setw(18 - 12) << " " << " |\n"
-         << "|" << setw(12) << " " << "7. Help" << setw(borderSpacing + 22) << " " << "|\n"
+         << "|" << setw(12) << " " << "1: " << choiceName[0] << setw(borderSpacing - choiceName[0].length()) << " " << "4: Heal" << setw(18) << " " << " |\n"
+         << "|" << setw(12) << " " << "2: " << choiceName[1] << setw(borderSpacing - choiceName[1].length()) << " " << "5: Run Away" << setw(14) << " " << " |\n"
+         << "|" << setw(12) << " " << "3: " << choiceName[2] << setw(borderSpacing - choiceName[2].length()) << " " << "6: Switch Character" << setw(18 - 12) << " " << " |\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
+         << "|" << " " << potionElement << setfill(' ') << setw(boxWidth - potionElement.size() - 1) << "0: Help |\n"
          << "'" << setfill('-') << setw(boxWidth) << "'\n"
          << setfill(' ') << "\n"
          << "\tMake a selection: ";
     battleMenuSelection = 0;
     cin >> battleMenuSelection;
-    if (validateInput(battleMenuSelection, 1, 7))
+    if (validateInput(battleMenuSelection, 0, 6))
     {
+      if (battleMenuSelection == 0)
+      {
+        cout << "\n";
+        tutorialBattle();
+      }
       if (battleMenuSelection < 6)
         loopFlag = false;
       else if (battleMenuSelection == 6)
@@ -46,11 +53,6 @@ string battleMenu(Player *player, Enemy *enemy)
           cout << "\n\tI cannot abandon this fight...\n\n";
         else
           loopFlag = false;
-      }
-      else if (battleMenuSelection == 7)
-      {
-        cout << "\n";
-        tutorialBattle();
       }
     }
   } while (loopFlag);
