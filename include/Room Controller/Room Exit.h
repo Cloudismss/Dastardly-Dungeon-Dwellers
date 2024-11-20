@@ -3,6 +3,6 @@
 
 #include "Player.h"
 
-void roomExit(Player *player, bool &gameVictory);
+void roomExit(Player *player);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H

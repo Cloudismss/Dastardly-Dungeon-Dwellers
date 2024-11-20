@@ -5,4 +5,4 @@
 
 bool roomLoot(Player *player, bool &isEnemyRoom);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_LOOT_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_LOOT_H

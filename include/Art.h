@@ -9,14 +9,14 @@
 using std::string;
 
 string battleMenu(Player *player, Enemy *enemy);
-void battleHealthArt(int playerHealth, int enemyHealth);
+void battleHealthArt(const string &className, int playerHealth, const string &enemyName, int enemyHealth);
 void displayMeInABox(const string &message);
 void displayMeInABox(const string &message1, const string &message2);
 void monologueInABox (const string &message);
-void roomEnemyMonologue(int = 0);
-void roomLootMonologue(int = 0);
-void roomMerchantMonologue(int = 0);
-void roomExitMonologue(int = 0);
+void roomEnemyMonologue(const bool ROOM_EXPLORED);
+void roomLootMonologue(const bool ROOM_EXPLORED);
+void roomMerchantMonologue(const bool ROOM_EXPLORED);
+void roomExitMonologue(const bool ROOM_EXPLORED);
 void warriorArt();
 void mageArt();
 void archerArt();
@@ -29,4 +29,4 @@ void gameOverArt(Player *player);
 void tutorialGame();
 void tutorialBattle();
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ART_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ART_H

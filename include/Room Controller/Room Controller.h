@@ -5,6 +5,6 @@
 #include "Player.h"
 
 // roomController group, these functions are top-level and handle a majority of the game
-void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory);
+void roomController(Player *player, Map *map);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_ROOM_CONTROLLER_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_CONTROLLER_H

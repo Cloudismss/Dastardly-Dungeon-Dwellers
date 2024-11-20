@@ -16,7 +16,7 @@ else()
 endif()
 
 # Executable
-add_executable(${PROJECT_NAME} "Dastardly Dungeon Dwellers.cpp")
+add_executable(${PROJECT_NAME} "src/Dastardly Dungeon Dwellers.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Dastardly Dungeon Dwellers")
 
 # Dirs

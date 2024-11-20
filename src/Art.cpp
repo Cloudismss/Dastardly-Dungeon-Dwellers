@@ -17,29 +17,37 @@ string battleMenu(Player *player, Enemy *enemy)
   // Menu Variables
   int boxWidth = 63;
   int borderSpacing = ((boxWidth - 23) / 2);
-  string choiceName[] = {player->skills->getSkillName("Melee"), player->skills->getSkillName("Magic"), player->skills->getSkillName("Ranged")};
+  string choiceName[] = {player->getCharacter()->getSkillName("Melee"), player->getCharacter()->getSkillName("Magic"), player->getCharacter()->getSkillName("Ranged")};
 
   short int battleMenuSelection = 0;
   bool loopFlag = true;
   do
   {
-    battleHealthArt(player->getHealth(), enemy->getHealth());
+    battleHealthArt(player->getCharacter()->getClassName(), player->getCharacter()->getHealth(), enemy->getNickname(), enemy->getHealth());
     cout << "." << setfill('-') << setw(boxWidth) << ".\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
          << "|" << setw(12) << " " << "1. " << choiceName[0] << setw(borderSpacing - choiceName[0].length()) << " " << "4. Heal" << setw(18) << " " << " |\n"
-         << "|" << setw(12) << " " << "2. " << choiceName[1] << setw( borderSpacing - choiceName[1].length()) << " " << "5. Run Away" << setw(14) << " " << " |\n"
-         << "|" << setw(12) << " " << "3. " << choiceName[2] << setw(borderSpacing - choiceName[2].length()) << " " << "6. Help" << setw(18) << " " << " |\n"
+         << "|" << setw(12) << " " << "2. " << choiceName[1] << setw(borderSpacing - choiceName[1].length()) << " " << "5. Run Away" << setw(14) << " " << " |\n"
+         << "|" << setw(12) << " " << "3. " << choiceName[2] << setw(borderSpacing - choiceName[2].length()) << " " << "6. Switch Character" << setw(18 - 12) << " " << " |\n"
+         << "|" << setw(12) << " " << "7. Help" << setw(borderSpacing + 22) << " " << "|\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
          << "'" << setfill('-') << setw(boxWidth) << "'\n"
          << setfill(' ') << "\n"
          << "\tMake a selection: ";
     battleMenuSelection = 0;
     cin >> battleMenuSelection;
-    if (validateInput(battleMenuSelection, 1, 6))
+    if (validateInput(battleMenuSelection, 1, 7))
     {
-      if (battleMenuSelection != 6)
+      if (battleMenuSelection < 6)
         loopFlag = false;
-      else
+      else if (battleMenuSelection == 6)
+      {
+        if (!player->cycle())
+          cout << "\n\tI cannot abandon this fight...\n\n";
+        else
+          loopFlag = false;
+      }
+      else if (battleMenuSelection == 7)
       {
         cout << "\n";
         tutorialBattle();
@@ -48,16 +56,27 @@ string battleMenu(Player *player, Enemy *enemy)
   } while (loopFlag);
   cout << "\n";
 
-  if (battleMenuSelection == 1)
-    return "Melee";
-  else if (battleMenuSelection == 2)
-    return "Magic";
-  else if (battleMenuSelection == 3)
-    return "Ranged";
-  else if (battleMenuSelection == 4)
-    return "Heal";
-  else if (battleMenuSelection == 5)
-    return "Run";
+  switch (battleMenuSelection)
+  {
+    case 1:
+      return "Melee";
+      break;
+    case 2:
+      return "Magic";
+      break;
+    case 3:
+      return "Ranged";
+      break;
+    case 4:
+      return "Heal";
+      break;
+    case 5:
+      return "Run";
+      break;
+    case 6:
+      return "Switch";
+      break;
+  }
 
   // TODO: Implement clean fix for return in all control paths
   return "Error";
@@ -65,7 +84,7 @@ string battleMenu(Player *player, Enemy *enemy)
 
 // Pre-condition: called by battleMenu(), passed health variables
 // Post-condition: displays health art
-void battleHealthArt(int playerHealth, int enemyHealth)
+void battleHealthArt(const string &className, int playerHealth, const string &enemyName, int enemyHealth)
 {
   // Don't print health if either the player or the enemy has 0 health
   if (playerHealth <= 0 || enemyHealth <= 0)
@@ -74,22 +93,19 @@ void battleHealthArt(int playerHealth, int enemyHealth)
   // Print health
   else
   {
-    string playerHealthDisplay = "Player health: ";
+    string playerHealthDisplay = className + " health: ";
     playerHealthDisplay += std::to_string(playerHealth);
-    string enemyHealthDisplay = "Enemy health: ";
+    string enemyHealthDisplay = enemyName + " health: ";
     enemyHealthDisplay += std::to_string(enemyHealth);
 
-    // Check amount of playerHealth digits to determine offset for blank spacing between player and enemy health boxes
-    int offset = 1;
-    int playerHealthDigits = (std::to_string(playerHealth)).length();
-    for (int i = 1; i < playerHealthDigits; ++i)
-    {
-      --offset;
-    }
+    int boxWidth = 63;
+    int midpoint = boxWidth / 2;
+    int leftGap = 5, rightGap = 6;
+    int gapSize = ((midpoint - playerHealthDisplay.length()) + (midpoint - enemyHealthDisplay.length()) - (leftGap + rightGap));
 
-    cout << "." << setfill('-') << setw(5 + playerHealthDisplay.length()) << "." << setfill(' ') << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "." << setfill('-') << setw(6 + enemyHealthDisplay.length()) << ".\n"
-         << "|" << setfill(' ') << setw(2) << " " << playerHealthDisplay << setw(2) << " " << "|" << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "|" << setw(2) << " " << enemyHealthDisplay << setw(4) << "|\n"
-         << "'" << setfill('-') << setw(5 + playerHealthDisplay.length()) << "'" << setfill(' ') << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "'" << setfill('-') << setw(6 + enemyHealthDisplay.length()) << "'\n"
+    cout << "." << setfill('-') << setw(leftGap + playerHealthDisplay.length()) << "." << setfill(' ') << setw(gapSize) << " " << "." << setfill('-') << setw(rightGap + enemyHealthDisplay.length()) << ".\n"
+         << "|" << setfill(' ') << setw(2) << " " << playerHealthDisplay << setw(2) << " " << "|" << setw(gapSize) << " " << "|" << setw(2) << " " << enemyHealthDisplay << setw(4) << "|\n"
+         << "'" << setfill('-') << setw(leftGap + playerHealthDisplay.length()) << "'" << setfill(' ') << setw(gapSize) << " " << "'" << setfill('-') << setw(rightGap + enemyHealthDisplay.length()) << "'\n"
          << setfill(' ');
   }
 }
@@ -118,7 +134,6 @@ void displayMeInABox(const string &message)
     indent = 5;
   }
   borderSpacing = ((boxWidth - 4) / 2);
-
 
   cout << setw(indent) << "." << setfill('-') << setw(boxWidth) << ".\n" << setfill(' ')
        << setw(indent) << "|" << setfill(' ') << setw(boxWidth) << "|\n"
@@ -176,12 +191,12 @@ void monologueInABox (const string &message)
 
 // Pre-condition: called to display randomized roomEnemy text
 // Post-condition: displays randomized room entry text
-void roomEnemyMonologue(int dialogueSwitch)
+void roomEnemyMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 5);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {
@@ -248,12 +263,12 @@ void roomEnemyMonologue(int dialogueSwitch)
 
 // Pre-condition: called to display randomized roomLoot text
 // Post-condition: displays randomized room entry text
-void roomLootMonologue(int dialogueSwitch)
+void roomLootMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 5);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {
@@ -316,18 +331,19 @@ void roomLootMonologue(int dialogueSwitch)
         break;
       }
     }
+    cout << "The chest magically refilled its contents!\n\n";
   }
 
 }
 
 // Pre-condition: called to display randomized roomMerchant text
 // Post-condition: displays randomized room entry text
-void roomMerchantMonologue(int dialogueSwitch)
+void roomMerchantMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 2);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {
@@ -366,12 +382,12 @@ void roomMerchantMonologue(int dialogueSwitch)
 
 // Pre-condition: called to display randomized roomExit text
 // Post-condition: displays randomized room entry text
-void roomExitMonologue(int dialogueSwitch)
+void roomExitMonologue(const bool ROOM_EXPLORED)
 {
   // Random dialogue selection
   int randomChoice = 1 + (rand() % 5);
 
-  if (dialogueSwitch == 0)
+  if (!ROOM_EXPLORED)
   {
     switch (randomChoice)
     {

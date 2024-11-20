@@ -15,8 +15,9 @@ using std::setw;
 void roomMerchant(Player *player)
 {
   // Initialize Merchant Shop arrays
-  const string className = player->getClass();
+  const string className = player->getCharacter()->getClassName();
   vector<MerchantItem> shop;
+  shop.reserve(6);
 
   // Upgrade variables
   const int KEY_CHANCE = 75;
@@ -30,12 +31,12 @@ void roomMerchant(Player *player)
   // Slot 1 - The Merchant has a random number of potions between 2-5
   string potionName = "Potion";
   MerchantItem potion = {potionName, 2 + (rand() % 4), 15};
-  shop.push_back(potion);
+  shop.emplace_back(potion);
 
   // Slot 2 - The Merchant has a random number of armor platings between 1-3
   string armorName = "Armor Plating";
   MerchantItem armor = {armorName, 1 + (rand() % 3), 30};
-  shop.push_back(armor);
+  shop.emplace_back(armor);
 
   // Slot 3 - Melee Upgrade
   string meleeUpgradeName = " ";
@@ -65,7 +66,7 @@ void roomMerchant(Player *player)
     }
     meleeUpgradeMessage += "\tYour melee damage has been upgraded!\n\n";
     MerchantItem melee = {meleeUpgradeName, meleeSuccess, UPGRADE_COST};
-    shop.push_back(melee);
+    shop.emplace_back(melee);
   }
 
   // Slot 4 - Staff Upgrade
@@ -96,7 +97,7 @@ void roomMerchant(Player *player)
     }
     magicUpgradeMessage += "\tYour magic damage has been upgraded!\n\n";
     MerchantItem magic = {magicUpgradeName, magicSuccess, UPGRADE_COST};
-    shop.push_back(magic);
+    shop.emplace_back(magic);
   }
 
   // Slot 5 - Arrow Upgrade
@@ -127,7 +128,7 @@ void roomMerchant(Player *player)
     }
     rangedUpgradeMessage += "\tYour ranged damage has been upgraded!\n\n";
     MerchantItem ranged = {rangedUpgradeName, rangedSuccess, UPGRADE_COST};
-    shop.push_back(ranged);
+    shop.emplace_back(ranged);
   }
 
   // Slot 6 - Golden Key
@@ -136,13 +137,13 @@ void roomMerchant(Player *player)
   if (keySuccess)
   {
     MerchantItem key = {keyName, keySuccess, 100};
-    shop.push_back(key);
+    shop.emplace_back(key);
   }
 
   // Slot 7 - Exit Index
   string exitName = "Exit";
   MerchantItem exit = {exitName, -1, -1};
-  shop.push_back(exit);
+  shop.emplace_back(exit);
 
   // Loop the shop until the player is ready to leave
   bool shopLoop = true;
@@ -230,7 +231,7 @@ void roomMerchant(Player *player)
         {
           shop[userShopSelection].quantity -= 1;
           player->removeGold(shop[userShopSelection].cost);
-          player->addKey();
+          player->addKeys(1);
         }
       }
       else
@@ -254,19 +255,19 @@ void roomMerchant(Player *player)
 
       // Player chose to buy potions
       if (shop[userShopSelection].name == potionName)
-        player->addPotion(purchaseAmount);
+        player->addPotions(purchaseAmount);
       // Player chose to buy armor upgrades
       else if (shop[userShopSelection].name == armorName)
         player->addArmor(purchaseAmount);
       // Player chose to buy the sword upgrade
       else if (shop[userShopSelection].name == meleeUpgradeName)
-        player->upgradeWeapon("Melee", meleeUpgradeName);
+        player->getCharacter()->upgradeWeapon("Melee", meleeUpgradeName);
       // Player chose to buy the magic upgrade
       else if (shop[userShopSelection].name == magicUpgradeName)
-        player->upgradeWeapon("Magic", magicUpgradeName);
+        player->getCharacter()->upgradeWeapon("Magic", magicUpgradeName);
       // Player chose to buy the ranged upgrade
       else if (shop[userShopSelection].name == rangedUpgradeName)
-        player->upgradeWeapon("Ranged", rangedUpgradeName);
+        player->getCharacter()->upgradeWeapon("Ranged", rangedUpgradeName);
 
       // Add newline to purchase output message
       cout << "\n";

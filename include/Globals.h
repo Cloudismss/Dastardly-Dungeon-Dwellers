@@ -16,8 +16,4 @@ const int CHECKPOINT_1 = 5;
 const int CHECKPOINT_2 = 10;
 const int CHECKPOINT_3 = 15;
 
-// TODO: Find new implementation
-// Debug toggle - displays useful debug information in the console and gives resources / increased damage
-const bool debug = false; // Enter -37 at the main menu to enter debug mode
-
-#endif //DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H

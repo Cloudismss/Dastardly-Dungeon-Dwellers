@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <iostream>
 
+#include "Game.h"
 #include "Validation.h"
 
 using std::cin;
@@ -39,7 +40,7 @@ void Map::mapPrint()
   }
 
   // DEBUG OPTION - prints additional helpful debug maps
-  if (debug)
+  if (Game::getDebug())
   {
     cout << "\n";
     cout << setfill('-') << setw(64) << " " << setfill(' ');
@@ -207,7 +208,7 @@ void Map::generateMap()
       if (position[i][j].contents == " ")
       {
         position[i][j].contents = "Enemy";
-        if (debug)
+        if (Game::getDebug())
           position[i][j].symbol = 'E';
       }
     }
@@ -249,11 +250,11 @@ void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const i
       ++roomsPlaced;
 
       // DEBUG Option - Print loot room icons on map
-      if (debug)
+      if (Game::getDebug())
         position[randomRow][randomColumn].symbol = ROOM_SYMBOL;
 
       // Mark spaces DUPE_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
-      // TODO num merchants not always correct
+      // TODO: num merchants not always correct
       if (randomRow + DUPE_DISTANCE < ROWS)
       {
         validSpawns[randomRow + DUPE_DISTANCE][randomColumn] = false;

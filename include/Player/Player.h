@@ -3,71 +3,67 @@
 
 #include <string>
 
-#include "Skills.h"
+#include "Character List.h"
+#include "Inventory.h"
 
 using std::string;
 
 class Player
 {
-public:
-  // Constructor
-  Player();
-  ~Player() { delete skills; }
-
 private:
-  // Player Information
-  double health;
-  string className;
-
-  // Inventory Variables
-  short unsigned int gold, potions, armor, keys;
-  short unsigned int meleeWeapon, magicWeapon, rangedWeapon;
-
   // Progression Variables
-  short unsigned int rooms, progression;
+  short unsigned int rooms = 0, progression = 0;
 
-  // Class selector
-  void classSelection();
-  bool classSelectionConfirm();
+  // Character Linked List
+  CharacterList *characters;
+
+  // Player Inventory
+  Inventory *inventory;
 
 public:
-  // Initialize skills
-  Skills *skills;
-  
-  // Mutators
-  double attack(Player *player, const double &enemyVulnerability, const string &battleMenuSelection);
-  void receive(double healthAdjust) { health -= healthAdjust; }
+  Player();
+  ~Player();
+
+public:
+  // Helper Functions
   void heal();
-  void setClass(const string &CLASS_NAME) { className = CLASS_NAME; }
+  double attack(const double &enemyVulnerability, const string &battleMenuSelection);
 
-  void addGold(int goldAdjust);
-  void addPotion(int potionAdjust);
-  void addArmor(int armorAdjust);
-  void addKey();
+public:
+  // Progression Accessors
+  int getRoomCount() { return rooms; }
+  int getProgression() { return progression; }
 
-  void upgradeWeapon(const string &weaponType, const string &upgradeName);
+  // Inventory Accessors
+  int getGold() { return inventory->getGold(); }
+  int getPotions() { return inventory->getPotions(); }
+  int getArmor() { return inventory->getArmor(); }
+  int getKeys() { return inventory->getKeys(); }
 
-  void removeGold(int goldAdjust) { gold -= goldAdjust; }
-  void removePotion(int potionAdjust) { potions -= potionAdjust; }
-  void removeArmor(int armorAdjust) { armor -= armorAdjust; }
-  void removeKey() { --keys; }
-
+  // Progression Mutators
   void roomCleared() { ++rooms; }
   void progress() { ++progression; }
 
-  // Accessors
-  double getHealth() { return health; }
-  string getClass() { return className; }
+  // Inventory Mutators
+  void addGold(int goldAdjust) { inventory->addGold(goldAdjust); }
+  void addPotions(int potionAdjust = 1) { inventory->addPotions(potionAdjust); }
+  void addArmor(int armorAdjust = 1) { inventory->addArmor(armorAdjust); }
+  void addKeys(int keyAdjust = 1) { inventory->addKeys(keyAdjust); }
 
-  int getGold() { return gold; }
-  int getPotions() { return potions; }
-  int getArmor() { return armor; }
-  int getKeys() { return keys; }
+  void removeGold(int goldAdjust) { inventory->removeGold(goldAdjust); }
+  void removePotions(int potionAdjust = 1) { inventory->removePotions(potionAdjust); }
+  void removeArmor(int armorAdjust = 1) { inventory->removeArmor(armorAdjust); }
+  void removeKeys(int keysAdjust = 1) { inventory->removeKeys(keysAdjust); }
 
-  int getWeaponLevel(const string &weaponType);
-  
-  int getRoomCount() { return rooms; }
-  int getProgression() { return progression; }
+  // Character List Accessors
+  CharacterList* getCharacter() { return characters; }
+
+  // Character List Mutators
+  void addRandomCharacter() { characters->addRandomCharacter(); }
+  void addSpecificCharacter(const string &className) { characters->addSpecificCharacter(className); }
+  bool removeCurrentCharacter() { return characters->removeCurrentCharacter(); }
+  bool removeSpecificCharacter(const string &className) { return characters->removeSpecificCharacter(className); }
+  bool cycle(char direction = 'R') { return characters->cycle(direction); }
 };
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_PLAYER_H

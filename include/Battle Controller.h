@@ -6,4 +6,4 @@
 
 int battleController(Player *player, Enemy *enemy);
 
-#endif //DASTARDLY_DUNGEON_DWELLERS_BATTLE_CONTROLLER_H
+#endif // DASTARDLY_DUNGEON_DWELLERS_BATTLE_CONTROLLER_H

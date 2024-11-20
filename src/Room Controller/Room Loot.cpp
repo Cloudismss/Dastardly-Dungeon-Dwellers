@@ -45,13 +45,13 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
 
       // 75% chance the player is given potion(s) between 2-3
       if (lootRoll <= 75)
-        player->addPotion(2 + (rand() % 2));
+        player->addPotions(2 + (rand() % 2));
 
       cout << "\n";
 
       // 30% chance the player is given the golden key
       if (lootRoll <= 30)
-        player->addKey();
+        player->addKeys();
 
       // Player successfully cleared the room
       lootSuccess = true;
@@ -75,6 +75,27 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
         lootSuccess = true;
         isEnemyRoom = true;
       }
+    }
+
+    // There is a 30% chance to find a new character
+    if (1 + (rand() % 100) <= 30)
+    {
+      cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
+      bool loopFlag = true;
+      char confirmSelection;
+      do
+      {
+        cout << "Do you invite them to join your party?\n"
+             << "Y or N: ";
+        cin >> confirmSelection;
+        if (validateDecision(confirmSelection))
+          loopFlag = false;
+      } while (loopFlag);
+
+      cout << "\n";
+
+      if (confirmSelection == 'Y' || 'y')
+        player->addRandomCharacter();
     }
   }
 

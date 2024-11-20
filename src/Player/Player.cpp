@@ -3,151 +3,53 @@
 #include <iostream>
 
 #include "Art.h"
-#include "Validation.h"
+#include "Game.h"
+#include "Globals.h"
 
 #include "fmt/color.h"
 
-using std::cin;
 using std::cout;
 
 Player::Player()
 {
-  health = 20.0;
-  className = " ";
-  gold = 0;
-  potions = 3;
-  armor = 0;
-  keys = 0;
-  meleeWeapon = 1;
-  magicWeapon = 1;
-  rangedWeapon = 1;
-  rooms = 0;
-  progression = 0;
-
-  // Class selection menu
-  classSelection();
-
-  // Initialize skills
-  skills = new Skills(className);
-
-  // DEBUG Option - Extra potions, gold, keys
-  if (debug)
-  {
-    health = 100.0;
-    potions = 100;
-    gold = 1000;
-    keys = 10;
-  }
+  characters = new CharacterList;
+  inventory = new Inventory;
 }
 
-// Pre-condition: passed className
-// Post-condition: displays class selection menu and stores result in className
-void Player::classSelection()
+Player::~Player()
 {
-  bool loopFlag = true;
-  do
-  {
-    short int classChoice = 0;
-    cout << ".-------------------------------------------------------------.\n"
-         << "|                                                             |\n"
-         << "|           Please choose a class using numbers 1-3:          |\n"
-         << "|                                                             |\n"
-         << "|            1. Warrior             Skill: Melee              |\n"
-         << "|            2. Mage                Skill: Magic              |\n"
-         << "|            3. Archer              Skill: Ranged             |\n"
-         << "|                                                             |\n"
-         << "'-------------------------------------------------------------'\n";
-    cin >> classChoice;
-    if (validateInput(classChoice, 1, 999)) // High range is 999 to allow the joke selection of bard if a number is entered
-    {
-      switch (classChoice)
-      {
-        // Player chose Warrior
-        case 1:
-        {
-          className = "Warrior";
-          warriorArt();
-          break;
-        }
-        // Player chose Mage
-        case 2:
-        {
-          className = "Mage";
-          mageArt();
-          break;
-        }
-        // Player chose Archer
-        case 3:
-        {
-          className = "Archer";
-          archerArt();
-          break;
-        }
-        // Player chose an invalid number, and is auto-assigned to bard
-        default:
-        {
-          className = "Bard";
-          bardArt();
-          cout << "That's wasn't an option >:(\n"
-               << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
-          loopFlag = false;
-          break;
-        }
-      }
-    }
-    // Confirm class selection
-    if (loopFlag)
-      loopFlag = classSelectionConfirm();
-    
-  } while (loopFlag);
+  delete characters;
+  delete inventory;
 }
 
-bool Player::classSelectionConfirm()
-{
-  char confirmSelection = ' ';
-  bool confirmLoop = true;
-  do
-  {
-    cout << "You have selected '" << className << "', continue?\n"
-          << "Y or N: ";
-    cin >> confirmSelection;
-    if (validateDecision(confirmSelection))
-    {
-      if (confirmSelection == 'Y' || confirmSelection == 'y')
-      {
-        cout << "\nYou've chosen the path of the " << className << "\n\n";
-        confirmLoop = false;
-      }
-    }
-  } while (confirmLoop);
-
-  return confirmLoop;
-}
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
-double Player::attack(Player *player, const double &enemyVulnerability, const string &battleMenuSelection)
+double Player::attack(const double &enemyVulnerability, const string &battleMenuSelection)
 {
+  // DEBUG OPTION - Max damage
+  if (Game::getDebug())
+    return 1000.0;
+
   // Attack Variables
-  double attackValue = 0;
-  double critChance = BASE_CRIT_CHANCE * player->skills->getCritSkill();
-
+  double attackValue;
   if (battleMenuSelection == "Melee")
-    attackValue = BASE_MELEE_DAMAGE * player->skills->getMeleeSkill();
+    attackValue = BASE_MELEE_DAMAGE;
   else if (battleMenuSelection == "Magic")
-    attackValue = BASE_MAGIC_DAMAGE * player->skills->getMagicSkill();
+    attackValue = BASE_MAGIC_DAMAGE;
   else if (battleMenuSelection == "Ranged")
-    attackValue = BASE_RANGED_DAMAGE * player->skills->getRangedSkill();
+    attackValue = BASE_RANGED_DAMAGE;
 
-  // Get skill upgrade tier
-  short unsigned int skillTier = player->skills->getSkillTier(battleMenuSelection);
+  // Add the product of skillLevel and skillUpgrade
+  attackValue += characters->getSkillLevel(battleMenuSelection) * characters->getSkillUpgradeTier(battleMenuSelection);
 
-  // Calculate attackValue
-  attackValue *= skillTier * player->getWeaponLevel(battleMenuSelection);
+  // Multiply by weapon level
+  attackValue *= characters->getWeaponLevel(battleMenuSelection);
 
   // Add a small offset to the damage for a touch of variability
-  attackValue += skillTier * (-1 + (rand() % 3));
+  attackValue += characters->getSkillUpgradeTier(battleMenuSelection) * (-1 + (rand() % 3));
 
   // Calculate crit
+  double critChance = BASE_CRIT_CHANCE * characters->getCritLevel();
   if (1 + (rand() % 100) <= critChance * 100)
   {
     attackValue *= 2;
@@ -159,88 +61,44 @@ double Player::attack(Player *player, const double &enemyVulnerability, const st
   // Calculate vulnerability
   attackValue *= enemyVulnerability;
 
-  // DEBUG OPTION - Max damage
-  if (debug)
-    attackValue = 1000.0;
+  // TODO: Temp floor until custom GUI healthbar is implemented
+  attackValue = floor(attackValue);
 
-  cout << "\t" << player->skills->getSkillName(battleMenuSelection) << " dealt " << static_cast<int>(attackValue) << " damage\n\n";
+  cout << "\t" << characters->getSkillName(battleMenuSelection) << " dealt " << attackValue << " damage\n\n";
 
   // Increment skill counter and check for upgrade
-  player->skills->useSkill(battleMenuSelection, player->getClass());
+  characters->useSkill(battleMenuSelection);
 
   return attackValue;
-}
-
-void Player::addGold(int goldAdjust)
-{
-  gold += goldAdjust;
-  fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "Gold x{0} added\n", goldAdjust);
-}
-
-void Player::addPotion(int potionAdjust)
-{
-  potions += potionAdjust;
-  if (potionAdjust == 1)
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion added\n");
-  else
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion x{0} added\n", potionAdjust);
-}
-
-void Player::addArmor(int armorAdjust)
-{
-  armor += armorAdjust;
-  if (armorAdjust == 1)
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating added\n");
-  else
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating x{0} added\n", armorAdjust);
-}
-
-void Player::addKey()
-{
-  ++keys;
-  displayMeInABox("GOLDEN KEY Acquired!");
-}
-
-void Player::upgradeWeapon(const string &weaponType, const string &upgradeName)
-{
-  if (weaponType == "Melee")
-    ++meleeWeapon;
-  else if (weaponType == "Magic")
-    ++magicWeapon;
-  else if (weaponType == "Ranged")
-    ++rangedWeapon;
-
-  fmt::print(fmt::emphasis::bold, "{0} added\n", upgradeName);
-}
-
-int Player::getWeaponLevel(const string &weaponType)
-{
-  if (weaponType == "Melee")
-    return meleeWeapon;
-  else if (weaponType == "Magic")
-    return magicWeapon;
-  else if (weaponType == "Ranged")
-    return rangedWeapon;
-
-  // TODO: Implement clean fix for return in all control paths
-  return -1;
 }
 
 // Pre-condition: called by battleController(), passed potionCount
 // Post-condition: returns an amount to heal the player and updates potionCount
 void Player::heal()
 {
-  if (potions > 0)
+  if (getPotions() > 0)
   {
+    // Remove a potion
+    removePotions();
+    
     // Picks a random number between 10 and 20 to return a heal amount
     double healValue = 10 + (rand() % 11);
+
+    // Update heal value to not overheal
+    if (healValue + characters->getHealth() > characters->getMaxHealth())
+      healValue = characters->getMaxHealth() - characters->getHealth();
+
+    // TODO: Temp floor until custom GUI healthbar is implemented
+    healValue = floor(healValue);
+
     cout << "\tYou used a potion and healed for ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
     cout << " health\n";
     cout << "\tYou now have ";
-         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", --potions);
+         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", getPotions());
     cout << " potions\n\n";
-    health += healValue;
+
+    characters->adjustHealth(healValue);
   }
   else
     cout << "\tYou don't have any potions!\n";

@@ -101,10 +101,9 @@ void Enemy::setEnemyTier(int playerProgression)
 void Enemy::setEnemyName(int playerProgression)
 {
   // TODO: Weighted implementation with vector
-  static std::vector<string> baddies = { };
-  std::vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton", "Troll"};
-  std::vector<string> stage2Baddies = {"Cyclops"};
-  std::vector<string> stage3Baddies = {"Minotaur"};
+  static vector<string> baddies;
+  baddies.reserve(6);
+
   std::vector<string> bosses =
   {
     "Voidshaper Nihilus",
@@ -173,7 +172,7 @@ void Enemy::setEnemyVulnerabilities()
   }
 }
 
-// TODO varied dialogue implementation
+// TODO: varied dialogue implementation
 void Enemy::announceEnemy()
 {
   // Print enemy attributes
@@ -183,39 +182,33 @@ void Enemy::announceEnemy()
     cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
 }
 
-void Enemy::receive(double playerAttack)
+string Enemy::getNickname() const
 {
-  health -= playerAttack;
-  if (health < 0)
-    health = 0;
-}
-
-// Pre-condition: called by battleController(), passed enemy variables
-// Post-condition: returns a damage amount based on enemy attributes
-double Enemy::attack(int playerArmor)
-{ 
-  double damage = 0;
   if (!boss)
-  {
-    damage = (BASE_ENEMY_DAMAGE * tier) + (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
-    if (tier > 3)
-      damage *= 0.85f;
-  }
-  else
-    damage = BOSS_DAMAGE_LOW + (rand() % (BOSS_DAMAGE_HIGH + 1 - BOSS_DAMAGE_LOW));
+    return name;
 
-  damage -= playerArmor;
+  if (name == "Voidshaper Nihilus")
+    return "Nihilus";
+  else if (name == "Snarltooth the Feral")
+    return "Snarltooth";
+  else if (name == "Dreadlord Vorkar")
+    return "Vorkar";
+  else if (name == "Soulstealer Malgrimor")
+    return "Malgrimor";
+  else if (name == "King Rattleclaw")
+    return "Rattleclaw";
+  else if (name == "Ignatius the Infernal")
+    return "Ignatius";
+  else if (name == "Dreadmaw the Bonecrusher")
+    return "Dreadmaw";
+  else if (name == "Rotclaw the Pustulant")
+    return "Rotclaw";
+  else if (name == "Sludgeheart the Grotesque")
+    return "Sludgeheart";
+  else if (name == "Drak'thar the Trollking")
+    return "Drak'thar";
 
-  // One-shot protection
-  if (damage > 19)
-    damage = 19;
-
-  // Stops players from healing when stacking a bunch of armor
-  if (damage < 0)
-    damage = 0;
-
-  cout << "\t" << name << " dealt " << static_cast<int>(damage) << " damage\n\n";
-  return damage;
+  return "Error";
 }
 
 // Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
@@ -245,4 +238,42 @@ double Enemy::getVulnerability(const string &battleMenuSelection, const string &
   }
 
   return *vulnerability;
+}
+
+void Enemy::receive(double playerAttack)
+{
+  health -= playerAttack;
+  if (health < 0)
+    health = 0;
+}
+
+// Pre-condition: called by battleController(), passed enemy variables
+// Post-condition: returns a damage amount based on enemy attributes
+double Enemy::attack(int playerArmor, double playerMaxHealth)
+{ 
+  double damage = 0;
+  if (!boss)
+  {
+    damage = (BASE_ENEMY_DAMAGE * tier) + (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
+    if (tier > 3)
+      damage *= 0.85f;
+  }
+  else
+    damage = BOSS_DAMAGE_LOW + (rand() % (BOSS_DAMAGE_HIGH + 1 - BOSS_DAMAGE_LOW));
+
+  damage -= playerArmor;
+
+  // One-shot protection
+  if (damage > playerMaxHealth)
+    damage = playerMaxHealth - 1;
+
+  // Stops players from healing when stacking a bunch of armor
+  if (damage < 0)
+    damage = 0;
+
+  // TODO: Temp floor until custom GUI healthbar is implemented
+  damage = floor(damage);
+
+  cout << "\t" << name << " dealt " << damage << " damage\n\n";
+  return damage;
 }

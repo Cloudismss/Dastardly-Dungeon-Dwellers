@@ -1,6 +1,7 @@
 #include "Room Controller.h"
 
 #include "Art.h"
+#include "Game.h"
 #include "Globals.h"
 #include "Room Enemy.h"
 #include "Room Exit.h"
@@ -9,14 +10,11 @@
 
 // Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
 // Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
-void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
+void roomController(Player *player, Map *map)
 {
   // map->move() allows the player to move between rooms. It returns false if the room has not been explored yet
   const bool ROOM_EXPLORED = map->move();
   const string ROOM_NAME = map->getRoomContents();
-
-  // Dialogue controller - determines which text should display when it comes to room explored vs not explored
-  int dialogueSwitch = 0;
 
   // This variable is set to true if an enemy is encountered
   bool isEnemyRoom = false;
@@ -25,79 +23,79 @@ void roomController(Player *player, Map *map, bool &gameOver, bool &gameVictory)
   {
     if (ROOM_EXPLORED)
     {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A powerful foe once inhabited this room");
       
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
-        return;
+        return; // Room did not respawn
     }
     else
       isEnemyRoom = true;
 
-    roomEnemyMonologue(dialogueSwitch);
+    roomEnemyMonologue(ROOM_EXPLORED);
 
     // Initiate enemy room
     if (!roomEnemy(player))
     {
-      gameOver = true;
+      Game::winCondition = false;
+      Game::running = false;
       return;
     }
   }
+
   else if (ROOM_NAME == "Loot")
   {
     if (ROOM_EXPLORED)
     {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A chest used to sit before me in this room");
       
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
-        return;
+        return; // Room did not respawn
     }
 
-    roomLootMonologue(dialogueSwitch);
+    roomLootMonologue(ROOM_EXPLORED);
     treasureArt();
     
     // Initiate loot room
     if(!roomLoot(player, isEnemyRoom))
     {
-      gameOver = true;
+      Game::winCondition = false;
+      Game::running = false;
       return;
     }
   }
+
   else if (ROOM_NAME == "Merchant")
   {
     if (ROOM_EXPLORED)
-    {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A friendly traveling merchant resides here");
-    }
 
-    roomMerchantMonologue(dialogueSwitch);
+    roomMerchantMonologue(ROOM_EXPLORED);
     merchantArt();
 
     // Initiate merchant room
     roomMerchant(player);
   }
+
   else if (ROOM_NAME == "Exit")
   {
     if (ROOM_EXPLORED)
-    {
-      // Set dialogue switch to -1, so it runs room cleared dialogue
-      dialogueSwitch = -1;
       monologueInABox("A strange sensation controls my actions");
-    }
 
-    roomExitMonologue(dialogueSwitch);
+    roomExitMonologue(ROOM_EXPLORED);
     doorArt();
 
     // Initiate exit room
-    roomExit(player, gameVictory);
+    roomExit(player);
+
+    if (Game::winCondition)
+    {
+      Game::running = false;
+      return;
+    }
   }
+  
   else if (ROOM_NAME == "Start")
     monologueInABox("This room seems familiar... have I gone in a circle???");
 
