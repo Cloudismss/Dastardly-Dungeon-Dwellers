@@ -21,6 +21,7 @@ CharacterList::CharacterList()
 
 CharacterList::~CharacterList()
 {
+  // TODO: Investigate double free crash on game over
   if (head->next == head)
   {
     delete head;
@@ -59,11 +60,17 @@ void CharacterList::addRandomCharacter()
   }
   else 
   {
+    Node *last;
+    if (head->previous == head)
+      last = head;
+    else
+      last = head->previous;
+
     node = new Node;
-    node->previous = current;
-    node->next = head;
-    current->next = node;
     head->previous = node;
+    node->next = head;
+    node->previous = last;
+    last->next = node;
   }
 
   // Remove character from list of available characters
@@ -100,11 +107,17 @@ void CharacterList::addSpecificCharacter(const string &className)
   }
   else 
   {
+    Node *last;
+    if (head->previous == head)
+      last = head;
+    else
+      last = head->previous;
+
     node = new Node;
-    node->previous = current;
-    node->next = head;
-    current->next = node;
     head->previous = node;
+    node->next = head;
+    node->previous = last;
+    last->next = node;
 
     // TODO: Output text indicating new character added
     string message = className + " has joined your party!";
@@ -126,13 +139,15 @@ void CharacterList::addSpecificCharacter(const string &className)
 
 bool CharacterList::removeCurrentCharacter()
 {
+  // TODO: Investigate access violation crash on perish with multiple characters
   if (head->next == head)
     return false; // Out of characters
 
   Node *temp = current;
 
-  if (!cycle())
-    return false; // Cycle to next character
+  // Cycle to next character
+  if (!cycle('R', "Delete"))
+    return false;
 
   temp->previous->next = temp->next;
   temp->next->previous = temp->previous;
@@ -160,7 +175,7 @@ bool CharacterList::removeSpecificCharacter(const string &className)
   return true;
 }
 
-bool CharacterList::cycle(char direction)
+bool CharacterList::cycle(char direction, const string &context)
 {
   if (current->next == current)
     return false;
@@ -171,8 +186,11 @@ bool CharacterList::cycle(char direction)
     current = current->previous;
   else if (direction == 'R')
     current = current->next;
-
-  cout << previous->character->getClassName() << " is tired, your turn " << current->character->getClassName() << "\n\n";
+  
+  if (context == "Switch")
+    cout << "\n\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n";
+  else
+    cout << "\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n\n";
 
   return true;
 }

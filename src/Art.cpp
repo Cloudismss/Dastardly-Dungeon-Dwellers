@@ -27,19 +27,27 @@ string battleMenu(Player *player, Enemy *enemy)
     cout << "." << setfill('-') << setw(boxWidth) << ".\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
          << "|" << setw(12) << " " << "1. " << choiceName[0] << setw(borderSpacing - choiceName[0].length()) << " " << "4. Heal" << setw(18) << " " << " |\n"
-         << "|" << setw(12) << " " << "2. " << choiceName[1] << setw( borderSpacing - choiceName[1].length()) << " " << "5. Run Away" << setw(14) << " " << " |\n"
-         << "|" << setw(12) << " " << "3. " << choiceName[2] << setw(borderSpacing - choiceName[2].length()) << " " << "6. Help" << setw(18) << " " << " |\n"
+         << "|" << setw(12) << " " << "2. " << choiceName[1] << setw(borderSpacing - choiceName[1].length()) << " " << "5. Run Away" << setw(14) << " " << " |\n"
+         << "|" << setw(12) << " " << "3. " << choiceName[2] << setw(borderSpacing - choiceName[2].length()) << " " << "6. Switch Character" << setw(18 - 12) << " " << " |\n"
+         << "|" << setw(12) << " " << "7. Help" << setw(borderSpacing + 22) << " " << "|\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
          << "'" << setfill('-') << setw(boxWidth) << "'\n"
          << setfill(' ') << "\n"
          << "\tMake a selection: ";
     battleMenuSelection = 0;
     cin >> battleMenuSelection;
-    if (validateInput(battleMenuSelection, 1, 6))
+    if (validateInput(battleMenuSelection, 1, 7))
     {
-      if (battleMenuSelection != 6)
+      if (battleMenuSelection < 6)
         loopFlag = false;
-      else
+      else if (battleMenuSelection == 6)
+      {
+        if (!player->cycle())
+          cout << "\n\tI cannot abandon this fight...\n\n";
+        else
+          loopFlag = false;
+      }
+      else if (battleMenuSelection == 7)
       {
         cout << "\n";
         tutorialBattle();
@@ -48,16 +56,27 @@ string battleMenu(Player *player, Enemy *enemy)
   } while (loopFlag);
   cout << "\n";
 
-  if (battleMenuSelection == 1)
-    return "Melee";
-  else if (battleMenuSelection == 2)
-    return "Magic";
-  else if (battleMenuSelection == 3)
-    return "Ranged";
-  else if (battleMenuSelection == 4)
-    return "Heal";
-  else if (battleMenuSelection == 5)
-    return "Run";
+  switch (battleMenuSelection)
+  {
+    case 1:
+      return "Melee";
+      break;
+    case 2:
+      return "Magic";
+      break;
+    case 3:
+      return "Ranged";
+      break;
+    case 4:
+      return "Heal";
+      break;
+    case 5:
+      return "Run";
+      break;
+    case 6:
+      return "Switch";
+      break;
+  }
 
   // TODO: Implement clean fix for return in all control paths
   return "Error";
@@ -312,6 +331,7 @@ void roomLootMonologue(const bool ROOM_EXPLORED)
         break;
       }
     }
+    cout << "The chest magically refilled its contents!\n\n";
   }
 
 }

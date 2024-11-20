@@ -39,7 +39,7 @@ public:
   bool removeSpecificCharacter(const string &className);
 
   // Switch current character
-  bool cycle(char direction = 'R');
+  bool cycle(char direction = 'R', const string &context = "Switch");
   void select(const string &characterName);
 
 private:
