@@ -37,7 +37,7 @@ bool roomController(Player *player, Map *map)
     // Initiate enemy room
     if (!roomEnemy(player))
     {
-      Game::gameOver = true;
+      Game::winCondition = false;
       return false;
     }
   }
@@ -59,7 +59,7 @@ bool roomController(Player *player, Map *map)
     // Initiate loot room
     if(!roomLoot(player, isEnemyRoom))
     {
-      Game::gameOver = true;
+      Game::winCondition = false;
       return false;
     }
   }
@@ -87,7 +87,7 @@ bool roomController(Player *player, Map *map)
     // Initiate exit room
     roomExit(player);
 
-    if (Game::gameVictory)
+    if (Game::winCondition)
       return false;
   }
   

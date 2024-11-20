@@ -8,7 +8,7 @@
 using std::cin;
 using std::cout;
 
-// Pre-condition: called by roomController(), passed keyCount and gameVictory
+// Pre-condition: called by roomController(), passed keyCount
 // Post-condition: updates gameVictory to true if the player chooses to leave the dungeon - game ends
 void roomExit(Player *player)
 {
@@ -30,7 +30,7 @@ void roomExit(Player *player)
     if (selection == 'Y' || selection == 'y')
     {
       cout << "\n";
-      Game::gameVictory = true;
+      Game::winCondition = true;
       return;
     }
   }

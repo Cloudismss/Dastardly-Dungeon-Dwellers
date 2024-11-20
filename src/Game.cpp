@@ -24,7 +24,6 @@ void Game::start()
 
   // These variables will be constantly tracked / updated while the game is played
   player = new Player;
-  gameOver = false, gameVictory = false;
 
   // Generates the map with rooms to traverse
   map = new Map;
@@ -33,9 +32,9 @@ void Game::start()
 void Game::end()
 {
   // Print game results
-  if (gameVictory)
+  if (winCondition)
     victoryArt(player);
-  if (gameOver)
+  else
     gameOverArt(player);
 
   // Free memory

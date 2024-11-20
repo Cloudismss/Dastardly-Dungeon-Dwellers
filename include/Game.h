@@ -15,8 +15,7 @@ public:
   static bool getDebug() { return debug; }
 
 public:
-  inline static bool gameOver = false;
-  inline static bool gameVictory = false;
+  static bool winCondition;
   inline static bool running = true;
 
 private:
