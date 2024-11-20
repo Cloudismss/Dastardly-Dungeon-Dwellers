@@ -67,7 +67,7 @@ void Character::readSkills()
     getline(characterStats, classNameChecker, ',');
     // Check the class name
     if (classNameChecker == className)
-      characterStats >> meleeLevel >> rangedLevel >> magicLevel >> critLevel >> maxHealth;
+      characterStats >> meleeLevel >> magicLevel >> rangedLevel >> critLevel >> maxHealth;
     // Check the next line if className doesn't match
     else
       getline(characterStats, classNameChecker);
