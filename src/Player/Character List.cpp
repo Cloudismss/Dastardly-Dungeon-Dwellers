@@ -124,10 +124,10 @@ void CharacterList::addSpecificCharacter(const string &className)
 
 bool CharacterList::removeCurrentCharacter()
 {
-  Node *temp = current;
-  
-  if(!cycle())
+  if (head->next == head)
     return false; // Out of characters
+
+  Node *temp = current;
 
   temp->previous->next = temp->next;
   temp->next->previous = temp->previous;
@@ -139,13 +139,13 @@ bool CharacterList::removeCurrentCharacter()
 
 bool CharacterList::removeSpecificCharacter(const string &className)
 {
+  if (head->next == head)
+    return false; // Out of characters
+
   Node *temp = head;
 
   while (temp->character->getClassName() != className && temp->next != temp)
     temp = temp->next;
-  
-  if(!cycle())
-    return false; // Out of characters
 
   temp->previous->next = temp->next;
   temp->next->previous = temp->previous;
