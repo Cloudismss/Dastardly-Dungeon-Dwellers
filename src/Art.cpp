@@ -23,7 +23,7 @@ string battleMenu(Player *player, Enemy *enemy)
   bool loopFlag = true;
   do
   {
-    battleHealthArt(player->getCharacter()->getHealth(), enemy->getHealth());
+    battleHealthArt(player->getCharacter()->getClassName(), player->getCharacter()->getHealth(), enemy->getNickname(), enemy->getHealth());
     cout << "." << setfill('-') << setw(boxWidth) << ".\n"
          << "|" << setfill(' ') << setw(boxWidth) << "|\n"
          << "|" << setw(12) << " " << "1. " << choiceName[0] << setw(borderSpacing - choiceName[0].length()) << " " << "4. Heal" << setw(18) << " " << " |\n"
@@ -65,7 +65,7 @@ string battleMenu(Player *player, Enemy *enemy)
 
 // Pre-condition: called by battleMenu(), passed health variables
 // Post-condition: displays health art
-void battleHealthArt(int playerHealth, int enemyHealth)
+void battleHealthArt(const string &className, int playerHealth, const string &enemyName, int enemyHealth)
 {
   // Don't print health if either the player or the enemy has 0 health
   if (playerHealth <= 0 || enemyHealth <= 0)
@@ -74,22 +74,19 @@ void battleHealthArt(int playerHealth, int enemyHealth)
   // Print health
   else
   {
-    string playerHealthDisplay = "Player health: ";
+    string playerHealthDisplay = className + " health: ";
     playerHealthDisplay += std::to_string(playerHealth);
-    string enemyHealthDisplay = "Enemy health: ";
+    string enemyHealthDisplay = enemyName + " health: ";
     enemyHealthDisplay += std::to_string(enemyHealth);
 
-    // Check amount of playerHealth digits to determine offset for blank spacing between player and enemy health boxes
-    int offset = 1;
-    int playerHealthDigits = (std::to_string(playerHealth)).length();
-    for (int i = 1; i < playerHealthDigits; ++i)
-    {
-      --offset;
-    }
+    int boxWidth = 63;
+    int midpoint = boxWidth / 2;
+    int leftGap = 5, rightGap = 6;
+    int gapSize = ((midpoint - playerHealthDisplay.length()) + (midpoint - enemyHealthDisplay.length()) - (leftGap + rightGap));
 
-    cout << "." << setfill('-') << setw(5 + playerHealthDisplay.length()) << "." << setfill(' ') << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "." << setfill('-') << setw(6 + enemyHealthDisplay.length()) << ".\n"
-         << "|" << setfill(' ') << setw(2) << " " << playerHealthDisplay << setw(2) << " " << "|" << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "|" << setw(2) << " " << enemyHealthDisplay << setw(4) << "|\n"
-         << "'" << setfill('-') << setw(5 + playerHealthDisplay.length()) << "'" << setfill(' ') << setw(offset + 34 - enemyHealthDisplay.length()) << " " << "'" << setfill('-') << setw(6 + enemyHealthDisplay.length()) << "'\n"
+    cout << "." << setfill('-') << setw(leftGap + playerHealthDisplay.length()) << "." << setfill(' ') << setw(gapSize) << " " << "." << setfill('-') << setw(rightGap + enemyHealthDisplay.length()) << ".\n"
+         << "|" << setfill(' ') << setw(2) << " " << playerHealthDisplay << setw(2) << " " << "|" << setw(gapSize) << " " << "|" << setw(2) << " " << enemyHealthDisplay << setw(4) << "|\n"
+         << "'" << setfill('-') << setw(leftGap + playerHealthDisplay.length()) << "'" << setfill(' ') << setw(gapSize) << " " << "'" << setfill('-') << setw(rightGap + enemyHealthDisplay.length()) << "'\n"
          << setfill(' ');
   }
 }

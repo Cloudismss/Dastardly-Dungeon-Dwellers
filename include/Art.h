@@ -9,7 +9,7 @@
 using std::string;
 
 string battleMenu(Player *player, Enemy *enemy);
-void battleHealthArt(int playerHealth, int enemyHealth);
+void battleHealthArt(const string &className, int playerHealth, const string &enemyName, int enemyHealth);
 void displayMeInABox(const string &message);
 void displayMeInABox(const string &message1, const string &message2);
 void monologueInABox (const string &message);

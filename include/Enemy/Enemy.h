@@ -2,8 +2,10 @@
 #define DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
 
 #include <string>
+#include <vector>
 
 using std::string;
+using std::vector;
 
 class Enemy
 {
@@ -13,6 +15,11 @@ public:
 public:
   Enemy(int playerProgression);
   ~Enemy() { };
+
+private:
+  const vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton", "Troll"};
+  const vector<string> stage2Baddies = {"Cyclops"};
+  const vector<string> stage3Baddies = {"Minotaur"};
 
 protected:
   string name;
@@ -37,6 +44,7 @@ protected:
 public:
   // Accessors
   string getName() const { return name; }
+  string getNickname() const;
   double getHealth() const { return health; }
   double getVulnerability(const string &battleMenuSelection, const string &skillName);
   int getTier() const { return tier; }

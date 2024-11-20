@@ -101,11 +101,9 @@ void Enemy::setEnemyTier(int playerProgression)
 void Enemy::setEnemyName(int playerProgression)
 {
   // TODO: Weighted implementation with vector
-  static std::vector<string> baddies;
+  static vector<string> baddies;
   baddies.reserve(6);
-  std::vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton", "Troll"};
-  std::vector<string> stage2Baddies = {"Cyclops"};
-  std::vector<string> stage3Baddies = {"Minotaur"};
+
   std::vector<string> bosses =
   {
     "Voidshaper Nihilus",
@@ -184,6 +182,64 @@ void Enemy::announceEnemy()
     cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
 }
 
+string Enemy::getNickname() const
+{
+  if (!boss)
+    return name;
+
+  if (name == "Voidshaper Nihilus")
+    return "Nihilus";
+  else if (name == "Snarltooth the Feral")
+    return "Snarltooth";
+  else if (name == "Dreadlord Vorkar")
+    return "Vorkar";
+  else if (name == "Soulstealer Malgrimor")
+    return "Malgrimor";
+  else if (name == "King Rattleclaw")
+    return "Rattleclaw";
+  else if (name == "Ignatius the Infernal")
+    return "Ignatius";
+  else if (name == "Dreadmaw the Bonecrusher")
+    return "Dreadmaw";
+  else if (name == "Rotclaw the Pustulant")
+    return "Rotclaw";
+  else if (name == "Sludgeheart the Grotesque")
+    return "Sludgeheart";
+  else if (name == "Drak'thar the Trollking")
+    return "Drak'thar";
+
+  return "Error";
+}
+
+// Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
+// Post-condition: updates damageValue based on enemy stats
+double Enemy::getVulnerability(const string &battleMenuSelection, const string &skillName)
+{
+  double *vulnerability = nullptr;
+
+  if (battleMenuSelection == "Melee")
+    vulnerability = &meleeVulnerability;
+  else if (battleMenuSelection == "Magic")
+    vulnerability = &magicVulnerability;
+  else if (battleMenuSelection == "Ranged")
+    vulnerability = &rangedVulnerability;
+
+  if (*vulnerability < 1.0)
+  {
+    cout << "\t" << skillName << " is ";
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "not very effective");
+    cout << " against " << name << "!\n";
+  }
+  else if (*vulnerability > 1.0)
+  {
+    cout << "\t" << skillName << " is ";
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "super effective");
+    cout << " against " << name << "!\n";
+  }
+
+  return *vulnerability;
+}
+
 void Enemy::receive(double playerAttack)
 {
   health -= playerAttack;
@@ -220,33 +276,4 @@ double Enemy::attack(int playerArmor, double playerMaxHealth)
 
   cout << "\t" << name << " dealt " << damage << " damage\n\n";
   return damage;
-}
-
-// Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
-// Post-condition: updates damageValue based on enemy stats
-double Enemy::getVulnerability(const string &battleMenuSelection, const string &skillName)
-{
-  double *vulnerability = nullptr;
-
-  if (battleMenuSelection == "Melee")
-    vulnerability = &meleeVulnerability;
-  else if (battleMenuSelection == "Magic")
-    vulnerability = &magicVulnerability;
-  else if (battleMenuSelection == "Ranged")
-    vulnerability = &rangedVulnerability;
-
-  if (*vulnerability < 1.0)
-  {
-    cout << "\t" << skillName << " is ";
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "not very effective");
-    cout << " against " << name << "!\n";
-  }
-  else if (*vulnerability > 1.0)
-  {
-    cout << "\t" << skillName << " is ";
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "super effective");
-    cout << " against " << name << "!\n";
-  }
-
-  return *vulnerability;
 }
