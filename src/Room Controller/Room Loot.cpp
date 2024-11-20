@@ -57,6 +57,28 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
       // Player successfully cleared the room
       lootSuccess = true;
 
+      // There is a 30% chance to find a new character
+      if (1 + (rand() % 100) <= 30 || Game::getDebug())
+      {
+        cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
+        bool loopFlag = true;
+        char characterSelection;
+        do
+        {
+          cout << "Do you invite them to join your party?\n"
+              << "Y or N: ";
+          cin >> characterSelection;
+          if (validateDecision(characterSelection))
+            loopFlag = false;
+        } while (loopFlag);
+
+        cout << "\n";
+
+        if (characterSelection == 'Y' || characterSelection == 'y')
+          player->addRandomCharacter();
+
+      }
+
       // Pause the game until the user is ready
       cout << "Press enter to continue to the next room: ";
       string enterKey = " ";
@@ -76,27 +98,6 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
         lootSuccess = true;
         isEnemyRoom = true;
       }
-    }
-
-    // There is a 30% chance to find a new character
-    if (1 + (rand() % 100) <= 30 || Game::getDebug())
-    {
-      cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
-      bool loopFlag = true;
-      char confirmSelection;
-      do
-      {
-        cout << "Do you invite them to join your party?\n"
-             << "Y or N: ";
-        cin >> confirmSelection;
-        if (validateDecision(confirmSelection))
-          loopFlag = false;
-      } while (loopFlag);
-
-      cout << "\n";
-
-      if (confirmSelection == 'Y' || 'y')
-        player->addRandomCharacter();
     }
   }
 
