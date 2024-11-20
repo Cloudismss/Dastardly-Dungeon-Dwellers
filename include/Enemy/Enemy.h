@@ -8,6 +8,9 @@ using std::string;
 class Enemy
 {
 public:
+  static Enemy *getEnemy();
+
+public:
   Enemy(int playerProgression);
   ~Enemy() { };
 
