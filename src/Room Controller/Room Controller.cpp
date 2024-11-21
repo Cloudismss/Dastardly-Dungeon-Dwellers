@@ -23,7 +23,7 @@ void roomController(Player *player, Map *map)
   {
     if (ROOM_EXPLORED)
     {
-      monologueInABox("A powerful foe once inhabited this room");
+      art::box::monologueInABox("A powerful foe once inhabited this room");
       
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
@@ -32,7 +32,7 @@ void roomController(Player *player, Map *map)
     else
       isEnemyRoom = true;
 
-    roomEnemyMonologue(ROOM_EXPLORED);
+    art::room::roomEnemyMonologue(ROOM_EXPLORED);
 
     // Initiate enemy room
     if (!roomEnemy(player))
@@ -47,15 +47,15 @@ void roomController(Player *player, Map *map)
   {
     if (ROOM_EXPLORED)
     {
-      monologueInABox("A chest used to sit before me in this room");
+      art::box::monologueInABox("A chest used to sit before me in this room");
       
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
         return; // Room did not respawn
     }
 
-    roomLootMonologue(ROOM_EXPLORED);
-    treasureArt();
+    art::room::roomLootMonologue(ROOM_EXPLORED);
+    art::room::treasureArt();
     
     // Initiate loot room
     if(!roomLoot(player, isEnemyRoom))
@@ -69,10 +69,10 @@ void roomController(Player *player, Map *map)
   else if (ROOM_NAME == "Merchant")
   {
     if (ROOM_EXPLORED)
-      monologueInABox("A friendly traveling merchant resides here");
+      art::box::monologueInABox("A friendly traveling merchant resides here");
 
-    roomMerchantMonologue(ROOM_EXPLORED);
-    merchantArt();
+    art::room::roomMerchantMonologue(ROOM_EXPLORED);
+    art::room::merchantArt();
 
     // Initiate merchant room
     roomMerchant(player);
@@ -81,10 +81,10 @@ void roomController(Player *player, Map *map)
   else if (ROOM_NAME == "Exit")
   {
     if (ROOM_EXPLORED)
-      monologueInABox("A strange sensation controls my actions");
+      art::box::monologueInABox("A strange sensation controls my actions");
 
-    roomExitMonologue(ROOM_EXPLORED);
-    doorArt();
+    art::room::roomExitMonologue(ROOM_EXPLORED);
+    art::room::doorArt();
 
     // Initiate exit room
     roomExit(player);
@@ -97,7 +97,7 @@ void roomController(Player *player, Map *map)
   }
   
   else if (ROOM_NAME == "Start")
-    monologueInABox("This room seems familiar... have I gone in a circle???");
+    art::box::monologueInABox("This room seems familiar... have I gone in a circle???");
 
   // Increment room count if this room was not explored previously
   if (!ROOM_EXPLORED)
@@ -110,7 +110,7 @@ void roomController(Player *player, Map *map)
       if (progression + 1 == CHECKPOINT_1 ||
           progression + 1 == CHECKPOINT_2 ||
           progression + 1 == CHECKPOINT_3)
-          monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
+          art::box::monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
       player->progress();
     }
 

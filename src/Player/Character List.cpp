@@ -87,7 +87,7 @@ void CharacterList::addRandomCharacter()
 
   // TODO: Output text indicating new character added
   string message = className + " has joined your party!";
-  displayMeInABox(message);
+  art::box::displayMeInABox(message);
 }
 
 void CharacterList::addSpecificCharacter(const string &className)
@@ -121,7 +121,7 @@ void CharacterList::addSpecificCharacter(const string &className)
 
     // TODO: Output text indicating new character added
     string message = className + " has joined your party!";
-    displayMeInABox(message);
+    art::box::displayMeInABox(message);
   }
 
   // Remove character from list of available characters
@@ -229,28 +229,28 @@ string CharacterList::classSelection()
         case 1:
         {
           className = "Warrior";
-          warriorArt();
+          art::character::warriorArt();
           break;
         }
         // Player chose Mage
         case 2:
         {
           className = "Mage";
-          mageArt();
+          art::character::mageArt();
           break;
         }
         // Player chose Archer
         case 3:
         {
           className = "Archer";
-          archerArt();
+          art::character::archerArt();
           break;
         }
         // Player chose an invalid number, and is auto-assigned to bard
         default:
         {
           className = "Bard";
-          bardArt();
+          art::character::bardArt();
           cout << "That's wasn't an option >:(\n"
                << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
           loopFlag = false;

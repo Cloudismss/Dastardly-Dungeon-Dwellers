@@ -33,9 +33,9 @@ void Game::end()
 {
   // Print game results
   if (winCondition)
-    victoryArt(player);
+    art::game::victoryArt(player);
   else
-    gameOverArt(player);
+    art::game::gameOverArt(player);
 
   // Free memory
   delete player;
@@ -81,7 +81,7 @@ void Game::mainMenu()
         loopFlag = false;
       else if (selection == 2)
       {
-        tutorialGame();
+        art::tutorial::tutorialGame();
         cout << "\n";
       }
     }

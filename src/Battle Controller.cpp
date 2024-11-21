@@ -16,7 +16,7 @@ int battleController(Player *player, Enemy *enemy)
   while (enemy->getHealth() > 0 && player->getCharacter()->getHealth() > 0)
   {
     // Displays the battleMenu and the player's choice is stored in battleMenuSelection
-    const string battleMenuSelection = battleMenu(player, enemy);
+    const string battleMenuSelection = art::battle::battleMenu(player, enemy);
 
     // Player chose a damaging move
     if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ranged")

@@ -230,5 +230,5 @@ void Character::upgradeSkillName(const string &skillType)
   ++(*skillUpgradeTier);
  
   // Print skill upgrade notification
-  displayMeInABox("Congratulations!", upgradeMessage);
+  art::box::displayMeInABox("Congratulations!", upgradeMessage);
 }

@@ -48,5 +48,5 @@ void Inventory::addArmor(int armorAdjust)
 void Inventory::addKeys(int keyAdjust)
 {
   ++keys;
-  displayMeInABox("GOLDEN KEY Acquired!");
+  art::box::displayMeInABox("GOLDEN KEY Acquired!");
 }
