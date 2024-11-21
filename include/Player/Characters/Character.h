@@ -35,7 +35,7 @@ protected:
   short unsigned int meleeWeapon = 1, magicWeapon = 1, rangedWeapon = 1;
 
   // Class Specific Variables
-  short unsigned int maxHealth = 0.0;
+  short unsigned int maxHealth = 0;
   short unsigned int meleeCounter = 0, magicCounter = 0, rangedCounter = 0;
   short unsigned int meleeUpgradeTier = 0, magicUpgradeTier = 0, rangedUpgradeTier = 0;
   short unsigned int meleeLevel = 0, rangedLevel = 0, magicLevel = 0;

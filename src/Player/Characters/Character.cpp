@@ -84,10 +84,10 @@ void Character::generateSkills(std::ofstream &defaultCharacterStats)
 {
   defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill | Max Health\n"
                         << "\n"
-                        << "Warrior, 30 15 20 1.0 20.0\n"
-                        << "Mage, 10 30 15 3.0 25.0\n"
-                        << "Archer, 20 20 30 2.0 15.0\n"
-                        << "Bard, 10 10 10 9.0 10.0";
+                        << "Warrior, 30 15 20 1.0 90\n"
+                        << "Mage, 10 30 15 3.0 80\n"
+                        << "Archer, 20 20 30 2.0 60\n"
+                        << "Bard, 10 10 10 9.0 40";
 }
 
 // Generic Class Accessors
