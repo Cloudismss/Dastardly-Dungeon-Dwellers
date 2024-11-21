@@ -7,12 +7,12 @@ class Troll : public Enemy
 {
 public:
   // Pass value to base constructor
-  Troll(int playerProgression) : Enemy(playerProgression) {}
+  Troll(short unsigned int playerProgression) : Enemy(playerProgression) {}
   // OR
   using Enemy::Enemy;
 
   // Example of redefined function
-  void setEnemyTier(int playerProgression)
+  void setEnemyTier(short unsigned int playerProgression)
   {
     tier = playerProgression;
     Enemy::setEnemyTier(tier * 5);

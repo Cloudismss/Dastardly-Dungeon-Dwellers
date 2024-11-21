@@ -860,7 +860,7 @@ namespace art
           << "|     critical damage.                                        |\n"
           << "|                                                             |\n"
           << "|     Ranged attacks deal a high amount of damage, but        |\n"
-          << "|     they have a chance to miss.                             |\n"
+          << "|     they have a higher chance to miss.                      |\n"
           << "|                                                             |\n"
           << "|     Potions are finite and heal for a random amount,        |\n"
           << "|     you can acquire more potions in the dungeon.            |\n"

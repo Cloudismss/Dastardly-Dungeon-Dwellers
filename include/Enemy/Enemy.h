@@ -10,10 +10,11 @@ using std::vector;
 class Enemy
 {
 public:
+  // TODO: Generate child enemy similar to Character.h
   static Enemy *getEnemy();
 
 public:
-  Enemy(int playerProgression);
+  Enemy(short unsigned int playerProgression);
   ~Enemy() { };
 
 private:
@@ -24,20 +25,16 @@ private:
 protected:
   string name;
   bool boss = false;
-  int tier;
-  int rewardTier;
-  double health;
+  short int health;
+  short unsigned int tier;
+  short unsigned int rewardTier;
   double meleeVulnerability = 1.0;
   double magicVulnerability = 1.0;
   double rangedVulnerability = 1.0;
-
-  // ! TODO: balance
-  int attackLow = 2;
-  int attackHigh = 5;
   
   // Helper Functions
-  void setEnemyTier(int playerProgression);
-  void setEnemyName(int playerProgression);
+  void setEnemyTier(short unsigned int playerProgression);
+  void setEnemyName(short unsigned int playerProgression);
   void setEnemyVulnerabilities();
   void announceEnemy();
 
@@ -45,14 +42,14 @@ public:
   // Accessors
   string getName() const { return name; }
   string getNickname() const;
-  double getHealth() const { return health; }
+  short int getHealth() const { return health; }
+  short unsigned int getTier() const { return tier; }
+  short unsigned int getRewardTier() const { return rewardTier; }
   double getVulnerability(const string &battleMenuSelection, const string &skillName);
-  int getTier() const { return tier; }
-  int getRewardTier() const { return rewardTier; }
 
   // Mutators
-  void receive(double playerAttack);
-  double attack(int playerArmor, double playerMaxHealth);
+  void receive(short unsigned int playerAttack);
+  short unsigned int attack(short unsigned int playerArmor, short unsigned int playerMaxHealth);
 
   // Debug
   void debugPrint();

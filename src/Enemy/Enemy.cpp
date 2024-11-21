@@ -10,7 +10,7 @@
 using std::cout;
 
 // Enemy Class Constructor
-Enemy::Enemy(int playerProgression)
+Enemy::Enemy(short unsigned int playerProgression)
 {
   // Generate tier for enemy
   setEnemyTier(playerProgression);
@@ -25,13 +25,13 @@ Enemy::Enemy(int playerProgression)
   announceEnemy();
 }
 
-void Enemy::setEnemyTier(int playerProgression)
+void Enemy::setEnemyTier(short unsigned int playerProgression)
 {
   // Randomizer variable for tier
-  int randomTier = 1 + (rand() % 100);
+  short unsigned int randomTier = 1 + (rand() % 100);
 
   // Variables for Tier chance
-  int tier1 = 0, tier2 = 0, tier3 = 0, tier4 = 0, tier5 = 0;
+  short unsigned int tier1 = 0, tier2 = 0, tier3 = 0, tier4 = 0, tier5 = 0;
 
   // The first 5 rooms can spawn enemies Tier 1-2
   if (playerProgression < CHECKPOINT_1)
@@ -98,7 +98,7 @@ void Enemy::setEnemyTier(int playerProgression)
   }
 }
 
-void Enemy::setEnemyName(int playerProgression)
+void Enemy::setEnemyName(short unsigned int playerProgression)
 {
   // TODO: Weighted implementation with vector
   static vector<string> baddies;
@@ -136,26 +136,26 @@ void Enemy::setEnemyVulnerabilities()
 {
   if (name == "Goblin")
   {
-    meleeVulnerability = 2.0;
+    meleeVulnerability = 1.3;
     magicVulnerability = 1.0;
-    rangedVulnerability = 1.0;
+    rangedVulnerability = 1.4;
   }
   else if (name == "Orc")
   {
-    meleeVulnerability = 1.0;
+    meleeVulnerability = 0.7;
     magicVulnerability = 2.0;
     rangedVulnerability = 1.0;
   }
   else if (name == "Skeleton")
   {
     meleeVulnerability = 2.0;
-    magicVulnerability = 1.0;
+    magicVulnerability = 1.2;
     rangedVulnerability = 0.5;
   }
   else if (name == "Troll")
   {
-    meleeVulnerability = 2.0;
-    magicVulnerability = 1.0;
+    meleeVulnerability = 1.3;
+    magicVulnerability = 0.6;
     rangedVulnerability = 2.0;
   }
   else if (name == "Cyclops")
@@ -166,9 +166,9 @@ void Enemy::setEnemyVulnerabilities()
   }
   else if (name == "Minotaur")
   {
-    meleeVulnerability = 2.0;
-    magicVulnerability = 1.0;
-    rangedVulnerability = 0.5;
+    meleeVulnerability = 1.4;
+    magicVulnerability = 1.3;
+    rangedVulnerability = 0.8;
   }
 }
 
@@ -230,7 +230,7 @@ double Enemy::getVulnerability(const string &battleMenuSelection, const string &
     fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "not very effective");
     cout << " against " << name << "!\n";
   }
-  else if (*vulnerability > 1.0)
+  else if (*vulnerability > 1.5)
   {
     cout << "\t" << skillName << " is ";
     fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "super effective");
@@ -240,7 +240,7 @@ double Enemy::getVulnerability(const string &battleMenuSelection, const string &
   return *vulnerability;
 }
 
-void Enemy::receive(double playerAttack)
+void Enemy::receive(short unsigned int playerAttack)
 {
   health -= playerAttack;
   if (health < 0)
@@ -249,18 +249,33 @@ void Enemy::receive(double playerAttack)
 
 // Pre-condition: called by battleController(), passed enemy variables
 // Post-condition: returns a damage amount based on enemy attributes
-double Enemy::attack(int playerArmor, double playerMaxHealth)
+short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned int playerMaxHealth)
 { 
-  double damage = 0;
+  short int damage = 0;
+  short unsigned int attackLow;
+  short unsigned int attackHigh;
   if (!boss)
   {
-    damage = (BASE_ENEMY_DAMAGE * tier) + (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
+    damage = BASE_ENEMY_DAMAGE * tier;
+
     if (tier > 3)
       damage *= 0.85f;
+    
+    attackLow = (-0.1 * playerMaxHealth) + (-0.1 * damage);
+    attackHigh = (0.1 * playerMaxHealth) + (0.1 * damage);
   }
   else
-    damage = BOSS_DAMAGE_LOW + (rand() % (BOSS_DAMAGE_HIGH + 1 - BOSS_DAMAGE_LOW));
+  {
+    damage = BASE_BOSS_DAMAGE;
 
+    attackLow = (-0.1 * playerMaxHealth) + (-0.1 * BASE_BOSS_DAMAGE);
+    attackHigh = (0.1 * playerMaxHealth) + (0.1 * BASE_BOSS_DAMAGE);
+  }
+
+  // Damage offset for fun variance
+  damage += (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
+
+  // Flat damage reduction via armor
   damage -= playerArmor;
 
   // One-shot protection
@@ -270,9 +285,6 @@ double Enemy::attack(int playerArmor, double playerMaxHealth)
   // Stops players from healing when stacking a bunch of armor
   if (damage < 0)
     damage = 0;
-
-  // TODO: Temp floor until custom GUI healthbar is implemented
-  damage = floor(damage);
 
   cout << "\t" << name << " dealt " << damage << " damage\n\n";
   return damage;

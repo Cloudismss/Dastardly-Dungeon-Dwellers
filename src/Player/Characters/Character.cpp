@@ -84,10 +84,10 @@ void Character::generateSkills(std::ofstream &defaultCharacterStats)
 {
   defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill | Max Health\n"
                         << "\n"
-                        << "Warrior, 3 2 2 1.0 20.0\n"
-                        << "Mage, 1 3 1 3.0 25.0\n"
-                        << "Archer, 2 2 3 2.0 15.0\n"
-                        << "Bard, 1 1 1 9.0 10.0";
+                        << "Warrior, 30 15 20 1.0 20.0\n"
+                        << "Mage, 10 30 15 3.0 25.0\n"
+                        << "Archer, 20 20 30 2.0 15.0\n"
+                        << "Bard, 10 10 10 9.0 10.0";
 }
 
 // Generic Class Accessors
@@ -146,7 +146,7 @@ string Character::getSkillName(const string &skillType)
 }
 
 // Generic Class Mutators
-void Character::addXp(int xpAdjust)
+void Character::addXp(short unsigned int xpAdjust)
 {
   cout << className << " gained " << xpAdjust << " xp!\n";
 

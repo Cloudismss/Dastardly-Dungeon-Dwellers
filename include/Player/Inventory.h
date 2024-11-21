@@ -22,15 +22,15 @@ public:
   short unsigned int getKeys() { return keys; }
 
   // Inventory Mutators
-  void addGold(int goldAdjust);
-  void addPotions(int potionAdjust);
-  void addArmor(int armorAdjust);
-  void addKeys(int keyAdjust);
+  void addGold(short unsigned int goldAdjust);
+  void addPotions(short unsigned int potionAdjust);
+  void addArmor(short unsigned int armorAdjust);
+  void addKeys(short unsigned int keyAdjust);
 
-  void removeGold(int goldAdjust) { gold -= goldAdjust; }
-  void removePotions(int potionAdjust) { potions -= potionAdjust; }
-  void removeArmor(int armorAdjust) { armor -= armorAdjust; }
-  void removeKeys(int keysAdjust) { keys -= keysAdjust; }
+  void removeGold(short unsigned int goldAdjust) { gold -= goldAdjust; }
+  void removePotions(short unsigned int potionAdjust) { potions -= potionAdjust; }
+  void removeArmor(short unsigned int armorAdjust) { armor -= armorAdjust; }
+  void removeKeys(short unsigned int keysAdjust) { keys -= keysAdjust; }
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_INVENTORY_H

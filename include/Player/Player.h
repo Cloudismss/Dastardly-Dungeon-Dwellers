@@ -27,33 +27,33 @@ public:
 public:
   // Helper Functions
   void heal();
-  double attack(const double &enemyVulnerability, const string &battleMenuSelection);
+  short unsigned int attack(const double &enemyVulnerability, const string &battleMenuSelection);
 
 public:
   // Progression Accessors
-  int getRoomCount() { return rooms; }
-  int getProgression() { return progression; }
+  short unsigned int getRoomCount() { return rooms; }
+  short unsigned int getProgression() { return progression; }
 
   // Inventory Accessors
-  int getGold() { return inventory->getGold(); }
-  int getPotions() { return inventory->getPotions(); }
-  int getArmor() { return inventory->getArmor(); }
-  int getKeys() { return inventory->getKeys(); }
+  short unsigned int getGold() { return inventory->getGold(); }
+  short unsigned int getPotions() { return inventory->getPotions(); }
+  short unsigned int getArmor() { return inventory->getArmor(); }
+  short unsigned int getKeys() { return inventory->getKeys(); }
 
   // Progression Mutators
   void roomCleared() { ++rooms; }
   void progress() { ++progression; }
 
   // Inventory Mutators
-  void addGold(int goldAdjust) { inventory->addGold(goldAdjust); }
-  void addPotions(int potionAdjust = 1) { inventory->addPotions(potionAdjust); }
-  void addArmor(int armorAdjust = 1) { inventory->addArmor(armorAdjust); }
-  void addKeys(int keyAdjust = 1) { inventory->addKeys(keyAdjust); }
+  void addGold(short unsigned int goldAdjust) { inventory->addGold(goldAdjust); }
+  void addPotions(short unsigned int potionAdjust = 1) { inventory->addPotions(potionAdjust); }
+  void addArmor(short unsigned int armorAdjust = 1) { inventory->addArmor(armorAdjust); }
+  void addKeys(short unsigned int keyAdjust = 1) { inventory->addKeys(keyAdjust); }
 
-  void removeGold(int goldAdjust) { inventory->removeGold(goldAdjust); }
-  void removePotions(int potionAdjust = 1) { inventory->removePotions(potionAdjust); }
-  void removeArmor(int armorAdjust = 1) { inventory->removeArmor(armorAdjust); }
-  void removeKeys(int keysAdjust = 1) { inventory->removeKeys(keysAdjust); }
+  void removeGold(short unsigned int goldAdjust) { inventory->removeGold(goldAdjust); }
+  void removePotions(short unsigned int potionAdjust = 1) { inventory->removePotions(potionAdjust); }
+  void removeArmor(short unsigned int armorAdjust = 1) { inventory->removeArmor(armorAdjust); }
+  void removeKeys(short unsigned int keysAdjust = 1) { inventory->removeKeys(keysAdjust); }
 
   // Character List Accessors
   CharacterList* getCharacter() { return characters; }
