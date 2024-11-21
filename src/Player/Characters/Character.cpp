@@ -40,19 +40,19 @@ void Character::checkoutCharacter(const string &className)
 // Skills based functions
 void Character::readSkills()
 {
-  // Load 'Character Stats.cfg' or create and load 'Character Stats.cfg' with defaults, the player can edit the .cfg file if they want custom stats
+  // Load 'Dastardly Dungeon Dwellers.cfg' or create and load 'Dastardly Dungeon Dwellers.cfg' with defaults, the player can edit the .cfg file if they want custom stats
   std::ifstream characterStats;
-  characterStats.open("Character Stats.cfg");
+  characterStats.open("Dastardly Dungeon Dwellers.cfg");
   if (!characterStats)
   {
     std::ofstream defaultCharacterStats;
-    defaultCharacterStats.open("Character Stats.cfg");
+    defaultCharacterStats.open("Dastardly Dungeon Dwellers.cfg");
     generateSkills(defaultCharacterStats);
     defaultCharacterStats.close();
-    characterStats.open("Character Stats.cfg");
+    characterStats.open("Dastardly Dungeon Dwellers.cfg");
     if (!characterStats)
     {
-      std::cerr << "\"Character Stats.cfg\" failed to open!\n";
+      std::cerr << "\"Dastardly Dungeon Dwellers.cfg\" failed to open!\n";
     }
   }
 
@@ -79,7 +79,7 @@ void Character::readSkills()
 
 
 // Pre-condition: valid output file open
-// Post-condition: writes default character stats to created file "Character Stats.cfg"
+// Post-condition: writes default character stats to created file "Dastardly Dungeon Dwellers.cfg"
 void Character::generateSkills(std::ofstream &defaultCharacterStats)
 {
   defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill | Max Health\n"
