@@ -245,9 +245,9 @@ short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned 
     return 0;
   }
 
-  short int damage;
-  short int attackLow;
-  short int attackHigh;
+  short int damage = 0;
+  short int attackLow = 0;
+  short int attackHigh = 0;
   if (!boss)
   {
     damage = BASE_ENEMY_DAMAGE;
