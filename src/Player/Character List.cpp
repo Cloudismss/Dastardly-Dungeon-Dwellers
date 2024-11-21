@@ -187,7 +187,7 @@ bool CharacterList::cycle(char direction, const string &context)
   else if (direction == 'R')
     current = current->next;
   
-  if (context == "Switch")
+  if (context == "Switch") // This is just a check for context based newline output formatting
     cout << "\n\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n";
   else
     cout << "\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n\n";
