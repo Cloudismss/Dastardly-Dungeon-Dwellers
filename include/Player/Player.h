@@ -27,7 +27,7 @@ public:
 public:
   // Helper Functions
   void heal();
-  short unsigned int attack(const double &enemyVulnerability, const string &battleMenuSelection);
+  short unsigned int attack(const string &battleMenuSelection, const string &enemyName, double enemyVulnerability);
 
 public:
   // Progression Accessors

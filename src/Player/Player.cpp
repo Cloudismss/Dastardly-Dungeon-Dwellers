@@ -24,7 +24,7 @@ Player::~Player()
 
 // Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
 // Post-condition: returns a damage amount based on all passed variables
-short unsigned int Player::attack(const double &enemyVulnerability, const string &battleMenuSelection)
+short unsigned int Player::attack(const string &battleMenuSelection, const string &enemyName, double enemyVulnerability)
 {
   // DEBUG OPTION - Max damage
   if (Game::getDebug())
@@ -51,17 +51,9 @@ short unsigned int Player::attack(const double &enemyVulnerability, const string
 
   if (1 + (rand() % 100) <= missChance * 100)
   {
-    cout << "Your attack missed!\n\n";
+    cout << "\tYour attack missed!\n\n";
     return 0;
   }
-
-  // Add the product of skillLevel and skillUpgrade
-  short unsigned int skillLevel = characters->getSkillLevel(battleMenuSelection);
-  short unsigned int skillUpgradeTier = characters->getSkillUpgradeTier(battleMenuSelection);
-  short unsigned int skillBoost = 1;
-  for (int i = 1; i < skillUpgradeTier; ++i)
-    skillBoost += skillLevel * 1.5;
-  attackValue += skillBoost;
 
   // Multiply by weapon level damage boost
   short unsigned int weaponLevel = characters->getWeaponLevel(battleMenuSelection);
@@ -70,22 +62,46 @@ short unsigned int Player::attack(const double &enemyVulnerability, const string
     weaponBoost += 0.30; // 30% weapon damage boost per weapon level
   attackValue *= weaponBoost;
 
+  // Multiply by skillUpgrade
+  short unsigned int skillUpgradeTier = characters->getSkillUpgradeTier(battleMenuSelection);
+  short unsigned int skillTierBoost = 0;
+  for (int i = 1; i < skillUpgradeTier; ++i)
+    skillTierBoost += 10;
+  attackValue += skillTierBoost;
+
+  // Flat skillLevel boost
+  short unsigned int skillLevel = characters->getSkillLevel(battleMenuSelection);
+  attackValue += skillLevel;
+
   // Add a small offset to the damage for a touch of variability
-  short unsigned int attackLow = -0.1 * attackValue;
-  short unsigned int attackHigh = 0.1 * attackValue;
+  short int attackLow = -0.1 * attackValue;
+  short int attackHigh = 0.1 * attackValue;
   attackValue += (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
 
   // Calculate crit
   double critChance = BASE_CRIT_CHANCE * characters->getCritLevel();
   if (1 + (rand() % 100) <= critChance * 100)
   {
-    attackValue *= 1.5;
+    attackValue *= 1.2;
     cout << "\tYou landed a ";
     fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "critical hit");
     cout << "!\n";
   }
 
   // Calculate vulnerability
+  const string skillName = characters->getSkillName(battleMenuSelection);
+  if (enemyVulnerability < 1.0)
+  {
+    cout << "\t" << skillName << " is ";
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "not very effective");
+    cout << " against " << enemyName << "!\n";
+  }
+  else if (enemyVulnerability > 1.5)
+  {
+    cout << "\t" << skillName << " is ";
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "super effective");
+    cout << " against " << enemyName << "!\n";
+  }
   attackValue *= enemyVulnerability;
 
   cout << "\t" << characters->getSkillName(battleMenuSelection) << " dealt " << attackValue << " damage\n\n";

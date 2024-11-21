@@ -67,7 +67,11 @@ void Character::readSkills()
     getline(characterStats, classNameChecker, ',');
     // Check the class name
     if (classNameChecker == className)
-      characterStats >> meleeLevel >> magicLevel >> rangedLevel >> critLevel >> maxHealth;
+    {
+      double healthSkill;
+      characterStats >> meleeLevel >> magicLevel >> rangedLevel >> critLevel >> healthSkill;
+      maxHealth = BASE_PLAYER_HEALTH * healthSkill;
+    }
     // Check the next line if className doesn't match
     else
       getline(characterStats, classNameChecker);
@@ -76,18 +80,16 @@ void Character::readSkills()
   characterStats.close();
 }
 
-
-
 // Pre-condition: valid output file open
 // Post-condition: writes default character stats to created file "Dastardly Dungeon Dwellers.cfg"
 void Character::generateSkills(std::ofstream &defaultCharacterStats)
 {
-  defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill | Max Health\n"
+  defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill | Health Skill\n"
                         << "\n"
-                        << "Warrior, 30 15 20 1.0 90\n"
-                        << "Mage, 10 30 15 3.0 80\n"
-                        << "Archer, 20 20 30 2.0 60\n"
-                        << "Bard, 10 10 10 9.0 40";
+                        << "Warrior, 20 12 12 1.0 0.9\n"
+                        << "Mage, 12 20 14 3.0 0.8\n"
+                        << "Archer, 16 12 20 2.0 0.6\n"
+                        << "Bard, 15 15 15 9.0 0.4";
 }
 
 // Generic Class Accessors
@@ -177,12 +179,11 @@ void Character::addLevel()
   
   // TODO: Make interesting and print, possibly make virtual
 
-  ++meleeLevel;
-  ++magicLevel;
-  ++rangedLevel;
-  ++critLevel;
-  maxHealth += 2;
-  health += 2;
+  meleeLevel *= 1.1;
+  magicLevel *= 1.1;
+  rangedLevel *= 1.1;
+  health += maxHealth * 0.1;
+  maxHealth *= 1.1;
 }
 
 void Character::upgradeWeapon(const string &weaponType, const string &upgradeName)

@@ -18,22 +18,22 @@ public:
   ~Enemy() { };
 
 private:
-  const vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton", "Troll"};
-  const vector<string> stage2Baddies = {"Cyclops"};
+  const vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton"};
+  const vector<string> stage2Baddies = {"Troll", "Cyclops"};
   const vector<string> stage3Baddies = {"Minotaur"};
 
 protected:
   string name;
   bool boss = false;
   short int health;
-  short unsigned int tier;
+  short unsigned int level;
   short unsigned int rewardTier;
   double meleeVulnerability = 1.0;
   double magicVulnerability = 1.0;
   double rangedVulnerability = 1.0;
   
   // Helper Functions
-  void setEnemyTier(short unsigned int playerProgression);
+  void setEnemyLevel(short unsigned int playerProgression);
   void setEnemyName(short unsigned int playerProgression);
   void setEnemyVulnerabilities();
   void announceEnemy();
@@ -43,9 +43,9 @@ public:
   string getName() const { return name; }
   string getNickname() const;
   short int getHealth() const { return health; }
-  short unsigned int getTier() const { return tier; }
+  short unsigned int getLevel() const { return level; }
   short unsigned int getRewardTier() const { return rewardTier; }
-  double getVulnerability(const string &battleMenuSelection, const string &skillName);
+  double getVulnerability(const string &battleMenuSelection);
 
   // Mutators
   void receive(short unsigned int playerAttack);

@@ -12,10 +12,10 @@ public:
   using Enemy::Enemy;
 
   // Example of redefined function
-  void setEnemyTier(short unsigned int playerProgression)
+  void setEnemyLevel(short unsigned int playerProgression)
   {
-    tier = playerProgression;
-    Enemy::setEnemyTier(tier * 5);
+    level = playerProgression;
+    Enemy::setEnemyLevel(level * 5);
   }
 };
 

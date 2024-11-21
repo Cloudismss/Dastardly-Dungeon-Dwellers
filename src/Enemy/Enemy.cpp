@@ -5,92 +5,93 @@
 
 #include "Globals.h"
 
-#include "fmt/color.h"
-
 using std::cout;
 
 // Enemy Class Constructor
 Enemy::Enemy(short unsigned int playerProgression)
 {
-  // Generate tier for enemy
-  setEnemyTier(playerProgression);
+  // Generate level for enemy
+  setEnemyLevel(playerProgression);
 
   // Generate enemy type
   setEnemyName(playerProgression);
   setEnemyVulnerabilities();
 
-  // Calculates health of the enemy based off of base enemy health and enemy tier
-  health = BASE_ENEMY_HEALTH * tier;
+  // Calculates health of the enemy based off of base enemy health and enemy level
+  short unsigned int levelBoost = 0;
+  for (int i = 1; i < level; ++i)
+    levelBoost += BASE_ENEMY_HEALTH * 0.5;
+  health = BASE_ENEMY_HEALTH + levelBoost;
   
   announceEnemy();
 }
 
-void Enemy::setEnemyTier(short unsigned int playerProgression)
+void Enemy::setEnemyLevel(short unsigned int playerProgression)
 {
-  // Randomizer variable for tier
-  short unsigned int randomTier = 1 + (rand() % 100);
+  // Randomizer variable for level
+  short unsigned int randomLevel = 1 + (rand() % 100);
 
-  // Variables for Tier chance
-  short unsigned int tier1 = 0, tier2 = 0, tier3 = 0, tier4 = 0, tier5 = 0;
+  // Variables for Level chance
+  short unsigned int level1 = 0, level2 = 0, level3 = 0, level4 = 0, level5 = 0;
 
-  // The first 5 rooms can spawn enemies Tier 1-2
+  // The first 5 rooms can spawn enemies Level 1-2
   if (playerProgression < CHECKPOINT_1)
   {
-    if (randomTier <= 80)
-      tier = 1;
+    if (randomLevel <= 80)
+      level = 1;
     else
-      tier = 2;
+      level = 2;
   }
 
-  // The next 5 rooms can spawn enemies Tier 1-3
+  // The next 5 rooms can spawn enemies Level 1-3
   else if (playerProgression < CHECKPOINT_2)
   {
-    // Calculates a random tier for the enemy - 60% chance of Tier 1, 30% chance of Tier 2, 10% chance of Tier 3
-    tier1 = 60, tier2 = tier1 + 30;
-    if (randomTier <= tier1)
-      tier = 1;
-    else if (randomTier <= tier2)
-      tier = 2;
+    // Calculates a random level for the enemy - 60% chance of Level 1, 30% chance of Level 2, 10% chance of Level 3
+    level1 = 60, level2 = level1 + 30;
+    if (randomLevel <= level1)
+      level = 1;
+    else if (randomLevel <= level2)
+      level = 2;
     else
-      tier = 3;
+      level = 3;
   }
 
-  // The next 5 rooms can spawn enemies Tier 1-4
+  // The next 5 rooms can spawn enemies Level 1-4
   else if (playerProgression < CHECKPOINT_3)
   {
-    // Calculates a random tier for the enemy - 35% chance of Tier 1, 30% chance of Tier 2, 25% chance of Tier 3, 10% chance of Tier 4
-    tier1 = 35, tier2 = tier1 + 30, tier3 = tier2 + 25;
-    if (randomTier <= tier1)
-      tier = 1;
-    else if (randomTier <= tier2)
-      tier = 2;
-    else if (randomTier <= tier3)
-      tier = 3;
+    // Calculates a random level for the enemy - 35% chance of Level 1, 30% chance of Level 2, 25% chance of Level 3, 10% chance of Level 4
+    level1 = 35, level2 = level1 + 30, level3 = level2 + 25;
+    if (randomLevel <= level1)
+      level = 1;
+    else if (randomLevel <= level2)
+      level = 2;
+    else if (randomLevel <= level3)
+      level = 3;
     else
-      tier = 4;
+      level = 4;
   }
 
-  // The final rooms can spawn enemies Tier 2-5
+  // The final rooms can spawn enemies Level 2-5
   else
   {
-    // Calculates a random tier for the enemy - 35% chance of Tier 2, 25% chance of Tier 3, 20% chance of Tier 4, 15% chance of Tier 5, 5% chance of BOSS
-    tier2 = 35, tier3 = tier2 + 25, tier4 = tier3 + 20, tier5 = tier4 + 15;
-    if (randomTier <= tier2)
-      tier = 2;
-    else if (randomTier <= tier3)
-      tier = 3;
-    else if (randomTier <= tier4)
-      tier = 4;
-    else if (randomTier <= tier5)
-      tier = 5;
+    // Calculates a random level for the enemy - 35% chance of Level 2, 25% chance of Level 3, 20% chance of Level 4, 15% chance of Level 5, 5% chance of BOSS
+    level2 = 35, level3 = level2 + 25, level4 = level3 + 20, level5 = level4 + 15;
+    if (randomLevel <= level2)
+      level = 2;
+    else if (randomLevel <= level3)
+      level = 3;
+    else if (randomLevel <= level4)
+      level = 4;
+    else if (randomLevel <= level5)
+      level = 5;
     else
     {
       boss = true;
-      tier = 10;
+      level = 10;
     }
   }
 
-  rewardTier = tier;
+  rewardTier = level;
 
   if (boss)
   {
@@ -177,7 +178,7 @@ void Enemy::announceEnemy()
 {
   // Print enemy attributes
   if (!boss)
-    cout << "A tier " << tier << " " << name << " is guarding this room!\n\n";
+    cout << "A level " << level << " " << name << " is guarding this room!\n\n";
   else
     cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
 }
@@ -213,7 +214,7 @@ string Enemy::getNickname() const
 
 // Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
 // Post-condition: updates damageValue based on enemy stats
-double Enemy::getVulnerability(const string &battleMenuSelection, const string &skillName)
+double Enemy::getVulnerability(const string &battleMenuSelection)
 {
   double *vulnerability = nullptr;
 
@@ -223,19 +224,6 @@ double Enemy::getVulnerability(const string &battleMenuSelection, const string &
     vulnerability = &magicVulnerability;
   else if (battleMenuSelection == "Ranged")
     vulnerability = &rangedVulnerability;
-
-  if (*vulnerability < 1.0)
-  {
-    cout << "\t" << skillName << " is ";
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "not very effective");
-    cout << " against " << name << "!\n";
-  }
-  else if (*vulnerability > 1.5)
-  {
-    cout << "\t" << skillName << " is ";
-    fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "super effective");
-    cout << " against " << name << "!\n";
-  }
 
   return *vulnerability;
 }
@@ -251,15 +239,24 @@ void Enemy::receive(short unsigned int playerAttack)
 // Post-condition: returns a damage amount based on enemy attributes
 short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned int playerMaxHealth)
 { 
-  short int damage = 0;
-  short unsigned int attackLow;
-  short unsigned int attackHigh;
+  if (1 + (rand() % 100) <= BASE_ENEMY_MISS_CHANCE * 100)
+  {
+    cout << "\t" << name << " missed!\n\n";
+    return 0;
+  }
+
+  short int damage;
+  short int attackLow;
+  short int attackHigh;
   if (!boss)
   {
-    damage = BASE_ENEMY_DAMAGE * tier;
+    damage = BASE_ENEMY_DAMAGE;
 
-    if (tier > 3)
-      damage *= 0.85f;
+    for (int i = 1; i < level; ++i)
+      damage *= 1.3;
+
+    if (level > 3)
+      damage *= 0.85;
     
     attackLow = (-0.1 * playerMaxHealth) + (-0.1 * damage);
     attackHigh = (0.1 * playerMaxHealth) + (0.1 * damage);
@@ -276,9 +273,18 @@ short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned 
   damage += (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
 
   // Flat damage reduction via armor
-  damage -= playerArmor;
+  short unsigned int playerArmorProtection = 0;
+  double percentBlocked = 1.0;
+  for (int i = 0; i < playerArmor; ++i)
+  {
+    if (playerArmor == 1)
+      playerArmorProtection = 1; // So we don't multiply by 0 below
+    percentBlocked += 5;
+  }
+  playerArmorProtection *= percentBlocked;
+  damage -= playerArmorProtection;
 
-  // One-shot protection
+  // Player one-shot protection
   if (damage > playerMaxHealth)
     damage = playerMaxHealth - 1;
 

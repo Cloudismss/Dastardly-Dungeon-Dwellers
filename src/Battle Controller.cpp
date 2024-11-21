@@ -21,15 +21,16 @@ int battleController(Player *player, Enemy *enemy)
     // Player chose a damaging move
     if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ranged")
     {
-      // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
-      short unsigned int playerAttack = player->attack(enemy->getVulnerability(battleMenuSelection, player->getCharacter()->getSkillName(battleMenuSelection)), battleMenuSelection);
+      short unsigned int playerAttack = player->attack(battleMenuSelection, enemy->getName(),enemy->getVulnerability(battleMenuSelection));
       if (playerAttack > 0)
-        enemy->receive(playerAttack);
-    }
+      {
+        string skillName = player->getCharacter()->getSkillName(battleMenuSelection);
+        enemy->receive(playerAttack); // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
+      }
+    }  
     // Player chose to heal
     else if (battleMenuSelection == "Heal")
-      // A random heal amount is added to playerHealth
-      player->heal();
+      player->heal(); // A random heal amount is added to playerHealth
     // Player chose to run
     else if (battleMenuSelection == "Run")
     {
@@ -37,8 +38,7 @@ int battleController(Player *player, Enemy *enemy)
       if (player->getCharacter()->getClassName() == "Bard" || 1 + (rand() % 100) <= 50)
       {
         cout << "\tYou escaped successfully!\n\n";
-        // Returning a -1 indicates a successful escape
-        return -1;
+        return -1; // Returning a -1 indicates a successful escape
       }
       // Player failed to run
       else
@@ -46,7 +46,7 @@ int battleController(Player *player, Enemy *enemy)
     }
 
     // The enemy is permitted to attack only if their health is > 0, this prevents the enemy from attacking after their health reaches 0
-    // Enemy damage is based on the (enemy tier * base enemy damage) + a random number between 1 and 3
+    // Enemy damage is based on the (enemy level * base enemy damage) + a random number between 1 and 3
     if (enemy->getHealth() > 0)
       player->getCharacter()->adjustHealth(-1 * enemy->attack(player->getArmor(), player->getCharacter()->getMaxHealth()));
 
