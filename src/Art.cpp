@@ -45,7 +45,7 @@ string battleMenu(Player *player, Enemy *enemy)
         cout << "\n";
         tutorialBattle();
       }
-      if (battleMenuSelection < 6)
+      else if (battleMenuSelection < 6)
         loopFlag = false;
       else if (battleMenuSelection == 6)
       {
