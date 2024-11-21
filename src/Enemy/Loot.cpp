@@ -2,7 +2,10 @@
 
 #include <iostream>
 
+#include "Validation.h"
+
 using std::cout;
+using std::cin;
 
 void loot(Player *player, Enemy *enemy)
 {
@@ -122,5 +125,25 @@ void loot(Player *player, Enemy *enemy)
 
       break;
     }
+  }
+
+  if (lootRoll <= 5)
+  {
+    cout << "One of your fellow adventurers enters the room and compliments you on your victory...\n";
+    bool loopFlag = true;
+    char characterSelection;
+    do
+    {
+      cout << "Do you invite them to join your party?\n"
+          << "Y or N: ";
+      cin >> characterSelection;
+      if (validateDecision(characterSelection))
+        loopFlag = false;
+    } while (loopFlag);
+
+    cout << "\n";
+
+    if (characterSelection == 'Y' || characterSelection == 'y')
+      player->addRandomCharacter();
   }
 }
