@@ -66,7 +66,7 @@ public:
   string getSkillName(const string &skillType);
 
   // Generic Class Mutators
-  void adjustHealth(short unsigned int healthAdjust) { health += healthAdjust; }
+  void adjustHealth(short int healthAdjust) { health += healthAdjust; }
   void addXp(short unsigned int xpAdjust);
   void addLevel();
   void upgradeWeapon(const string &weaponType, const string &upgradeName);
