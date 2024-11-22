@@ -100,10 +100,7 @@ bool Map::move()
   cout << setfill('-') << setw(64) << " " << setfill(' ') << "\n\n";
 
   // If the room was already visited, return true, if not, return false
-  if (roomCleared)
-    return true;
-  else
-    return false;
+  return roomCleared;
 }
 
 // Pre-condition: called by Map::move()
