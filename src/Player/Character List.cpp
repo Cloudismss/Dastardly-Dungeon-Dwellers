@@ -21,12 +21,8 @@ CharacterList::CharacterList()
 
 CharacterList::~CharacterList()
 {
-  // TODO: Investigate double free crash on game over
   if (head->next == head)
-  {
     delete head;
-    head = nullptr;
-  }
   else
   {
     current = head;
@@ -37,9 +33,9 @@ CharacterList::~CharacterList()
       delete current;
       current = temp;
     }
-    current = nullptr;
-    head = nullptr;
   }
+  current = nullptr;
+  head = nullptr;
 }
 
 void CharacterList::addRandomCharacter()
@@ -139,9 +135,11 @@ void CharacterList::addSpecificCharacter(const string &className)
 
 bool CharacterList::removeCurrentCharacter()
 {
-  // TODO: Investigate access violation crash on perish with multiple characters
   if (head->next == head)
     return false; // Out of characters
+
+  if (current == head)
+    head = current->next; // Need to reassign the head since it is deleted in the destructor
 
   Node *temp = current;
 
@@ -161,6 +159,9 @@ bool CharacterList::removeSpecificCharacter(const string &className)
 {
   if (head->next == head)
     return false; // Out of characters
+
+  if (current == head)
+    head = current->next; // Need to reassign the head since it is deleted in the destructor
 
   Node *temp = head;
 
