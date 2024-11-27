@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Battle Controller.h"
+#include "Enemy Spawner.h"
 #include "Loot.h"
 
 using std::cin;
@@ -15,7 +16,7 @@ using std::string;
 bool roomEnemy(Player *player)
 {
   // Generate enemy
-  Enemy *enemy = new Enemy(player->getProgression());
+  Enemy *enemy = EnemySpawner::generateEnemy(player->getCharacter()->getLevel());
 
   // Run the battleController function. It returns 1 if the player wins the battle, -1 if the player successfully runs away, and 0 if they lose.
   int battleResult = battleController(player, enemy);

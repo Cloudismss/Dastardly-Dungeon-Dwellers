@@ -1,6 +1,7 @@
 #include "Room Controller.h"
 
 #include "Art.h"
+#include "Enemy Spawner.h"
 #include "Game.h"
 #include "Globals.h"
 #include "Room Enemy.h"
@@ -106,7 +107,7 @@ void roomController(Player *player, Map *map)
     if (isEnemyRoom)
     {
       // Display text indicating the enemy spawner has become more challenging
-      short unsigned int progression = player->getProgression();
+      short unsigned int progression = EnemySpawner::getProgression();
       if (progression + 1 == CHECKPOINT_1 ||
           progression + 1 == CHECKPOINT_2 ||
           progression + 1 == CHECKPOINT_3)

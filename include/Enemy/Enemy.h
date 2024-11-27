@@ -10,17 +10,8 @@ using std::vector;
 class Enemy
 {
 public:
-  // TODO: Generate child enemy similar to Character.h
-  static Enemy *getEnemy();
-
-public:
-  Enemy(short unsigned int playerProgression);
+  Enemy();
   ~Enemy() { };
-
-private:
-  const vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton"};
-  const vector<string> stage2Baddies = {"Troll", "Cyclops"};
-  const vector<string> stage3Baddies = {"Minotaur"};
 
 protected:
   string name;
@@ -33,8 +24,8 @@ protected:
   double rangedVulnerability = 1.0;
   
   // Helper Functions
-  void setEnemyLevel(short unsigned int playerProgression);
-  void setEnemyName(short unsigned int playerProgression);
+  void setEnemyLevel();
+  void setEnemyName();
   void setEnemyVulnerabilities();
   void announceEnemy();
 

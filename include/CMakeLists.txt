@@ -6,8 +6,10 @@ set(Includes
         "Globals.h"
 
         # Headers
+        "Enemy/Enemy Spawner.h"
         "Enemy/Enemy.h"
         "Enemy/Loot.h"
+        "Enemy/Troll.h"
         "Player/Characters/Archer.h"
         "Player/Characters/Bard.h"
         "Player/Characters/Character.h"

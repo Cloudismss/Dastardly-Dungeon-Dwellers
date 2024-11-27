@@ -1,7 +1,9 @@
 set(Sources
         # Sources
+        "Enemy/Enemy Spawner.cpp"
         "Enemy/Enemy.cpp"
         "Enemy/Loot.cpp"
+        "Enemy/Troll.cpp"
         "Player/Characters/Archer.cpp"
         "Player/Characters/Bard.cpp"
         "Player/Characters/Character.cpp"

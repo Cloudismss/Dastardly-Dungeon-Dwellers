@@ -3,18 +3,19 @@
 #include <iostream>
 #include <vector>
 
+#include "Enemy Spawner.h"
 #include "Globals.h"
 
 using std::cout;
 
 // Enemy Class Constructor
-Enemy::Enemy(short unsigned int playerProgression)
+Enemy::Enemy()
 {
   // Generate level for enemy
-  setEnemyLevel(playerProgression);
+  setEnemyLevel();
 
   // Generate enemy type
-  setEnemyName(playerProgression);
+  setEnemyName();
   setEnemyVulnerabilities();
 
   // Calculates health of the enemy based off of base enemy health and enemy level
@@ -26,7 +27,7 @@ Enemy::Enemy(short unsigned int playerProgression)
   announceEnemy();
 }
 
-void Enemy::setEnemyLevel(short unsigned int playerProgression)
+void Enemy::setEnemyLevel()
 {
   // Randomizer variable for level
   short unsigned int randomLevel = 1 + (rand() % 100);
@@ -35,7 +36,7 @@ void Enemy::setEnemyLevel(short unsigned int playerProgression)
   short unsigned int level1 = 0, level2 = 0, level3 = 0, level4 = 0, level5 = 0;
 
   // The first 5 rooms can spawn enemies Level 1-2
-  if (playerProgression < CHECKPOINT_1)
+  if (EnemySpawner::getProgression() < CHECKPOINT_1)
   {
     if (randomLevel <= 80)
       level = 1;
@@ -44,7 +45,7 @@ void Enemy::setEnemyLevel(short unsigned int playerProgression)
   }
 
   // The next 5 rooms can spawn enemies Level 1-3
-  else if (playerProgression < CHECKPOINT_2)
+  else if (EnemySpawner::getProgression() < CHECKPOINT_2)
   {
     // Calculates a random level for the enemy - 60% chance of Level 1, 30% chance of Level 2, 10% chance of Level 3
     level1 = 60, level2 = level1 + 30;
@@ -57,7 +58,7 @@ void Enemy::setEnemyLevel(short unsigned int playerProgression)
   }
 
   // The next 5 rooms can spawn enemies Level 1-4
-  else if (playerProgression < CHECKPOINT_3)
+  else if (EnemySpawner::getProgression() < CHECKPOINT_3)
   {
     // Calculates a random level for the enemy - 35% chance of Level 1, 30% chance of Level 2, 25% chance of Level 3, 10% chance of Level 4
     level1 = 35, level2 = level1 + 30, level3 = level2 + 25;
@@ -99,7 +100,7 @@ void Enemy::setEnemyLevel(short unsigned int playerProgression)
   }
 }
 
-void Enemy::setEnemyName(short unsigned int playerProgression)
+void Enemy::setEnemyName()
 {
   // TODO: Weighted implementation with vector
   static vector<string> baddies;
@@ -121,12 +122,12 @@ void Enemy::setEnemyName(short unsigned int playerProgression)
 
   if (!boss)
   {
-    if (playerProgression == 0)
-      baddies.insert(baddies.end(), stage1Baddies.begin(), stage1Baddies.end());
-    else if (playerProgression == CHECKPOINT_1)
-      baddies.insert(baddies.end(), stage2Baddies.begin(), stage2Baddies.end());
-    else if (playerProgression == CHECKPOINT_2)
-      baddies.insert(baddies.end(), stage3Baddies.begin(), stage3Baddies.end());
+    if (EnemySpawner::getProgression() == 0)
+      baddies.insert(baddies.end(), EnemySpawner::getStage1Baddies().begin(), EnemySpawner::getStage1Baddies().end());
+    else if (EnemySpawner::getProgression() == CHECKPOINT_1)
+      baddies.insert(baddies.end(), EnemySpawner::getStage2Baddies().begin(), EnemySpawner::getStage2Baddies().end());
+    else if (EnemySpawner::getProgression() == CHECKPOINT_2)
+      baddies.insert(baddies.end(), EnemySpawner::getStage3Baddies().begin(), EnemySpawner::getStage3Baddies().end());
     name = baddies[rand() % baddies.size()];
   }
   else
