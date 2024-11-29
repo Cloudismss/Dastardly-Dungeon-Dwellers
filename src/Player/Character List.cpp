@@ -252,7 +252,7 @@ string CharacterList::classSelection()
         {
           className = "Bard";
           art::character::bardArt();
-          cout << "That's wasn't an option >:(\n"
+          cout << "That wasn't an option >:(\n"
                << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
           loopFlag = false;
           break;

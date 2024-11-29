@@ -816,8 +816,8 @@ namespace art
           << "|                      Game Information                       |\n"
           << "|                                                             |\n"
           << "|     Dastardly Dungeon Dwellers follows the story of         |\n"
-          << "|     three brave adventures. You've entered this dungeon in  |\n"
-          << "|     search of glory and riches beyond your desires.         |\n"
+          << "|     three brave adventurers. You've entered this dungeon    |\n"
+          << "|     in search of glory and riches beyond your desires.      |\n"
           << "|                                                             |\n"
           << "|     Only the courageous prevail, this dungeon is crawling   |\n"
           << "|     with baddies. If you're lucky, you'll encounter a       |\n"
@@ -827,7 +827,7 @@ namespace art
           << "|     its fearsome protector, if you feel capable.            |\n"
           << "|     Once you find the Golden Key, you can exit the          |\n"
           << "|     dungeon with your riches. Be warned, a powerful         |\n"
-          << "|     foe hopes to exploit your hybris.                       |\n"
+          << "|     foe hopes to exploit your hubris.                       |\n"
           << "|                                                             |\n"
           << "'-------------------------------------------------------------'\n";
 
