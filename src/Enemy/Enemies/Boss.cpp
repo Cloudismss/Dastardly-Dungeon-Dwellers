@@ -44,7 +44,7 @@ string Boss::getNickname() const
   return "Error";
 }
 
-short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned int playerMaxHealth)
+short unsigned int Boss::attack(short unsigned int playerArmor, short unsigned int playerMaxHealth)
 {
   if (1 + (rand() % 100) <= BASE_ENEMY_MISS_CHANCE * 100)
   {

@@ -41,7 +41,7 @@ public:
 
   // Mutators
   void receive(short unsigned int playerAttack);
-  short unsigned int attack(short unsigned int playerArmor, short unsigned int playerMaxHealth);
+  virtual short unsigned int attack(short unsigned int playerArmor, short unsigned int playerMaxHealth);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_ENEMY_H

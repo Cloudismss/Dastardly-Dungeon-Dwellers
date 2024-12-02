@@ -26,6 +26,7 @@ private:
 public:
   Boss(short unsigned int playerLevel);
   string getNickname() const;
+  short unsigned int attack(short unsigned int playerArmor, short unsigned int playerMaxHealth) override;
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_BOSS_H
