@@ -21,7 +21,7 @@ private:
     "Sludgeheart the Grotesque",
     "Drak'thar the Trollking"
   };
-  void announceEnemy();
+  void announceEnemy() override;
 
 public:
   Boss(short unsigned int playerLevel);

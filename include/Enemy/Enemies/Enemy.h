@@ -28,7 +28,7 @@ protected:
   
   // Helper Functions
   void setEnemyLevel(short unsigned int playerLevel);
-  void announceEnemy();
+  virtual void announceEnemy();
 
 public:
   // Accessors
