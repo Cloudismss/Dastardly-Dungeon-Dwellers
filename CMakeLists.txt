@@ -17,14 +17,12 @@ if (CMAKE_HOST_WIN32)
   # UTF-8 option is required when using fmt
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
-elseif (CMAKE_HOST_UNIX)
+elseif (CMAKE_HOST_APPLE)
+  # TODO: Enable static compilation
 
+elseif (CMAKE_HOST_UNIX)
   # Enable static compilation
   set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
-
-elseif (CMAKE_HOST_APPLE)
-
-  # Enable static compilation
 
 endif()
 
