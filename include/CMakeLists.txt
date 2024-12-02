@@ -6,10 +6,16 @@ set(Includes
         "Globals.h"
 
         # Headers
+        "Enemy/Enemies/Boss.h"
+        "Enemy/Enemies/Cyclops.h"
+        "Enemy/Enemies/Enemy.h"
+        "Enemy/Enemies/Goblin.h"
+        "Enemy/Enemies/Minotaur.h"
+        "Enemy/Enemies/Orc.h"
+        "Enemy/Enemies/Skeleton.h"
+        "Enemy/Enemies/Troll.h"
         "Enemy/Enemy Spawner.h"
-        "Enemy/Enemy.h"
         "Enemy/Loot.h"
-        "Enemy/Troll.h"
         "Player/Characters/Archer.h"
         "Player/Characters/Bard.h"
         "Player/Characters/Character.h"

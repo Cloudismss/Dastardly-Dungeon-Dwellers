@@ -1,9 +1,15 @@
 set(Sources
         # Sources
+        "Enemy/Enemies/Boss.cpp"
+        "Enemy/Enemies/Cyclops.cpp"
+        "Enemy/Enemies/Enemy.cpp"
+        "Enemy/Enemies/Goblin.cpp"
+        "Enemy/Enemies/Minotaur.cpp"
+        "Enemy/Enemies/Orc.cpp"
+        "Enemy/Enemies/Skeleton.cpp"
+        "Enemy/Enemies/Troll.cpp"
         "Enemy/Enemy Spawner.cpp"
-        "Enemy/Enemy.cpp"
         "Enemy/Loot.cpp"
-        "Enemy/Troll.cpp"
         "Player/Characters/Archer.cpp"
         "Player/Characters/Bard.cpp"
         "Player/Characters/Character.cpp"
@@ -27,6 +33,7 @@ set(Sources
 set(Dirs
         "../include"
         "../include/Enemy"
+        "../include/Enemy/Enemies"
         "../include/Player"
         "../include/Player/Characters"
         "../include/Room Controller"
