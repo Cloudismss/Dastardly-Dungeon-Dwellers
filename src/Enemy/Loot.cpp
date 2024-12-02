@@ -108,7 +108,7 @@ void loot(Player *player, Enemy *enemy)
 
       break;
     }
-    case 10:
+    default:
     {
       // 100% chance to earn 5-10 potions
       player->addPotions(5 + (rand() % 6));
