@@ -5,12 +5,12 @@
 
 enum EnemyName
 {
-  Cyclops,
-  Goblin,
-  Minotaur,
-  Orc,
-  Skeleton,
-  Troll
+  CYCLOPS,
+  GOBLIN,
+  MINOTAUR,
+  ORC,
+  SKELETON,
+  TROLL
 };
 
 class EnemySpawner
@@ -27,9 +27,9 @@ public:
 
 private:
   static inline short unsigned int enemyProgression = 0;
-  const static inline vector<int> stage1Baddies = { Skeleton, Goblin, Orc };
-  const static inline vector<int> stage2Baddies = { Troll, Cyclops };
-  const static inline vector<int> stage3Baddies = { Minotaur };  
+  const static inline vector<int> stage1Baddies = { SKELETON, GOBLIN, ORC };
+  const static inline vector<int> stage2Baddies = { TROLL, CYCLOPS };
+  const static inline vector<int> stage3Baddies = { MINOTAUR };  
 
 private:
   // Helper functions

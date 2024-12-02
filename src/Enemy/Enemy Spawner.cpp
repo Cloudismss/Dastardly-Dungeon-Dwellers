@@ -12,28 +12,26 @@ Enemy *EnemySpawner::generateEnemy(short unsigned int playerLevel)
   ++enemyProgression;
 
   short unsigned int name = calculateName();
-
   switch(name)
   {
-    case Cyclops:
+    case CYCLOPS:
       return new Cyclops(playerLevel);
-    case Goblin:
+    case GOBLIN:
       return new Goblin(playerLevel);
-    case Minotaur:
+    case MINOTAUR:
       return new Minotaur(playerLevel);
-    case Orc:
+    case ORC:
       return new Orc(playerLevel);
-    case Skeleton:
+    case SKELETON:
       return new Skeleton(playerLevel);
-    case Troll:
+    case TROLL:
       return new Troll(playerLevel);
+    default:
+      return nullptr;
   }
-
-  return nullptr;
 }
 
 int EnemySpawner::calculateName()
 {
-  int name = Troll;
-  return name;
+  return TROLL;
 }
