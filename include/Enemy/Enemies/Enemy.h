@@ -10,8 +10,11 @@ using std::vector;
 class Enemy
 {
 public:
-  Enemy();
+  Enemy(short unsigned int playerLevel);
   ~Enemy() { };
+
+public:
+  friend std::ostream &operator<<(std::ostream &out, const Enemy &enemy);
 
 protected:
   string name;
@@ -24,9 +27,7 @@ protected:
   double rangedVulnerability = 1.0;
   
   // Helper Functions
-  void setEnemyLevel();
-  void setEnemyName();
-  void setEnemyVulnerabilities();
+  void setEnemyLevel(short unsigned int playerLevel);
   void announceEnemy();
 
 public:
@@ -41,9 +42,6 @@ public:
   // Mutators
   void receive(short unsigned int playerAttack);
   short unsigned int attack(short unsigned int playerArmor, short unsigned int playerMaxHealth);
-
-  // Debug
-  void debugPrint();
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_ENEMY_H

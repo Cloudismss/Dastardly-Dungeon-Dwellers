@@ -1,21 +1,39 @@
 #include "Enemy Spawner.h"
 
+#include "Cyclops.h"
+#include "Goblin.h"
+#include "Minotaur.h"
+#include "Orc.h"
+#include "Skeleton.h"
 #include "Troll.h"
 
 Enemy *EnemySpawner::generateEnemy(short unsigned int playerLevel)
 {
   ++enemyProgression;
 
-  string name = calculateName();
+  short unsigned int name = calculateName();
 
-  if (name == "Troll")
-    return new Troll;
+  switch(name)
+  {
+    case Cyclops:
+      return new Cyclops(playerLevel);
+    case Goblin:
+      return new Goblin(playerLevel);
+    case Minotaur:
+      return new Minotaur(playerLevel);
+    case Orc:
+      return new Orc(playerLevel);
+    case Skeleton:
+      return new Skeleton(playerLevel);
+    case Troll:
+      return new Troll(playerLevel);
+  }
 
   return nullptr;
 }
 
-string EnemySpawner::calculateName()
+int EnemySpawner::calculateName()
 {
-  string name = " ";
+  int name = Troll;
   return name;
 }

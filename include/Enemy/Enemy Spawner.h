@@ -3,6 +3,16 @@
 
 #include "Enemy.h"
 
+enum EnemyName
+{
+  Cyclops,
+  Goblin,
+  Minotaur,
+  Orc,
+  Skeleton,
+  Troll
+};
+
 class EnemySpawner
 {
 public:
@@ -11,20 +21,20 @@ public:
 
   // Acessors
   static inline short unsigned int getProgression() { return enemyProgression; }
-  static inline vector<string> getStage1Baddies() { return stage1Baddies; }
-  static inline vector<string> getStage2Baddies() { return stage2Baddies; }
-  static inline vector<string> getStage3Baddies() { return stage3Baddies; }
+  static inline vector<int> getStage1Baddies() { return stage1Baddies; }
+  static inline vector<int> getStage2Baddies() { return stage2Baddies; }
+  static inline vector<int> getStage3Baddies() { return stage3Baddies; }
 
 private:
   static inline short unsigned int enemyProgression = 0;
-  const static inline vector<string> stage1Baddies = {"Goblin", "Orc", "Skeleton"};
-  const static inline vector<string> stage2Baddies = {"Troll", "Cyclops"};
-  const static inline vector<string> stage3Baddies = {"Minotaur"};  
+  const static inline vector<int> stage1Baddies = { Skeleton, Goblin, Orc };
+  const static inline vector<int> stage2Baddies = { Troll, Cyclops };
+  const static inline vector<int> stage3Baddies = { Minotaur };  
 
 private:
   // Helper functions
   static short unsigned int calculateLevel();
-  static string calculateName();
+  static int calculateName();
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_ENEMY_SPAWNER_H
