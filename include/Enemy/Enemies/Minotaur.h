@@ -6,13 +6,7 @@
 class Minotaur : public Enemy
 {
 public:
-  Minotaur(short unsigned int playerLevel) : Enemy(playerLevel)
-  {
-    name = "Minotaur";
-    meleeVulnerability = 1.4;
-    magicVulnerability = 1.3;
-    rangedVulnerability = 0.8;
-  }
+  Minotaur(short unsigned int playerLevel);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_MINOTAUR_H

@@ -6,13 +6,7 @@
 class Skeleton : public Enemy
 {
 public:
-  Skeleton(short unsigned int playerLevel) : Enemy(playerLevel)
-  {
-    name = "Skeleton";
-    meleeVulnerability = 2.0;
-    magicVulnerability = 1.2;
-    rangedVulnerability = 0.5;
-  }
+  Skeleton(short unsigned int playerLevel);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_SKELETON_H

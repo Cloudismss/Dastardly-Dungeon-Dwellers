@@ -6,6 +6,13 @@
 
 using std::cout;
 
+Boss::Boss(short unsigned int playerLevel) : Enemy(playerLevel)
+{
+  rewardTier = 10;
+  name = bosses[rand() % bosses.size()];
+  boss = true;   
+}
+
 void Boss::announceEnemy()
 {
   cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";

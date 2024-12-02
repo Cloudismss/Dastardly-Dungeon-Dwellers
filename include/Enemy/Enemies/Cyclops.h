@@ -6,13 +6,7 @@
 class Cyclops : public Enemy
 {
 public:
-  Cyclops(short unsigned int playerLevel) : Enemy(playerLevel)
-  {
-    name = "Cyclops";
-    meleeVulnerability = 1.0;
-    magicVulnerability = 1.0;
-    rangedVulnerability = 1.0;  
-  }
+  Cyclops(short unsigned int playerLevel); 
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_CYCLOPS_H

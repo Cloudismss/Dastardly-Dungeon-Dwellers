@@ -24,12 +24,7 @@ private:
   void announceEnemy();
 
 public:
-  Boss(short unsigned int playerLevel) : Enemy(playerLevel)
-  {
-    rewardTier = 10;
-    name = bosses[rand() % bosses.size()];
-    boss = true;   
-  }
+  Boss(short unsigned int playerLevel);
   string getNickname() const;
 };
 
