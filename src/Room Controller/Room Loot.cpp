@@ -55,7 +55,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
       lootSuccess = true;
 
       // There is a 30% chance to find a new character
-      if (1 + (rand() % 100) <= 30 && Character::hasMoreCharacters())
+      if (1 + (rand() % 100) <= 30 && Character::available())
       {
         cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
         bool loopFlag = true;

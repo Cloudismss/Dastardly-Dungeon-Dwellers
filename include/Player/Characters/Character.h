@@ -19,7 +19,7 @@ private:
   inline static set<string> availableCharacters = { "Warrior", "Mage", "Archer", "Bard" };
 public:
   static string getRandomAvailableCharacter();
-  static bool hasMoreCharacters() { return !availableCharacters.empty(); }
+  static bool available() { return !availableCharacters.empty(); }
   static bool getAvailableCharacter(const string &className);
   static void checkoutCharacter(const string &className);
 
