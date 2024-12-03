@@ -21,11 +21,16 @@ private:
     "Sludgeheart the Grotesque",
     "Drak'thar the Trollking"
   };
-  void announceEnemy() override;
 
 public:
   Boss(int playerLevel);
+
+public:
+  // Accessors
+  void announceEnemy() const override;
   string getNickname() const override;
+
+  // Mutators
   int attack(int playerArmor, int playerMaxHealth) override;
 };
 

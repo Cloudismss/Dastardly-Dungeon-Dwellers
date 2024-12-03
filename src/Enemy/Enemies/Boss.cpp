@@ -14,7 +14,7 @@ Boss::Boss(int playerLevel) : Enemy(playerLevel)
   announceEnemy();
 }
 
-void Boss::announceEnemy()
+void Boss::announceEnemy() const
 {
   cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
 }
