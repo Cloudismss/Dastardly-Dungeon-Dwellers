@@ -8,8 +8,6 @@
 using std::cout;
 using std::string;
 
-// Pre-condition: called by roomEnemy(), passed player and enemy objects
-// Post-condition: returns 1 if the player won the battle, -1 if the player ran away, 0 if they lost, updates player variables
 int battleController(Player *player, Enemy *enemy)
 {
   // Battle loop - loops until either the enemy or the player hits 0 health
@@ -38,7 +36,7 @@ int battleController(Player *player, Enemy *enemy)
       if (player->getCharacter()->getClassName() == "Bard" || 1 + (rand() % 100) <= 50)
       {
         cout << "\tYou escaped successfully!\n\n";
-        return -1; // Returning a -1 indicates a successful escape
+        return RUN;
       }
       // Player failed to run
       else
@@ -57,7 +55,7 @@ int battleController(Player *player, Enemy *enemy)
       {
         // Player is out of characters - game over
         cout << "Player Defeated!\n\n";
-        return 0;
+        return LOSE;
       }
     }
   }
@@ -67,7 +65,7 @@ int battleController(Player *player, Enemy *enemy)
   {
     cout << "Enemy defeated!\n\n";
     // Returning a 1 means the player won the battle
-    return 1;
+    return WIN;
   }
 
   // TODO: Implement clean fix for return in all control paths

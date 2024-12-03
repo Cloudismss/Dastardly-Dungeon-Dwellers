@@ -8,7 +8,7 @@ using std::string;
 // Map Constants - feel free to change - have to both be odd numbers or positioning will be weird
 const int ROWS = 9;
 const int COLS = 9;
-// Map Midpoints
+
 const int ROW_MIDPOINT = ROWS / 2;
 const int COL_MIDPOINT = COLS / 2;
 

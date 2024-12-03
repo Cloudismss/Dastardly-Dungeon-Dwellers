@@ -22,15 +22,12 @@ Player::~Player()
   delete inventory;
 }
 
-// Pre-condition: called by battleController(), passed result of battleMenu(), skill variables, enemy variables, and characterStats
-// Post-condition: returns a damage amount based on all passed variables
 short unsigned int Player::attack(const string &battleMenuSelection, const string &enemyName, double enemyVulnerability)
 {
   // DEBUG OPTION - Max damage
   if (Game::getDebug())
     return 1000;
 
-  // Attack Variables
   short unsigned int attackValue;
   double missChance;
   if (battleMenuSelection == "Melee")
@@ -112,8 +109,6 @@ short unsigned int Player::attack(const string &battleMenuSelection, const strin
   return attackValue;
 }
 
-// Pre-condition: called by battleController(), passed potionCount
-// Post-condition: returns an amount to heal the player and updates potionCount
 void Player::heal()
 {
   if (getPotions() > 0)

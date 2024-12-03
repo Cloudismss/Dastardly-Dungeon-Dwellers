@@ -19,7 +19,7 @@ public:
   // Return random new enemy
   static Enemy *generateEnemy(short unsigned int playerLevel);
 
-  // Acessors
+  // Accessors
   static inline short unsigned int getProgression() { return enemyProgression; }
   static inline vector<int> getStage1Baddies() { return stage1Baddies; }
   static inline vector<int> getStage2Baddies() { return stage2Baddies; }

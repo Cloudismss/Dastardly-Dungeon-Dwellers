@@ -11,8 +11,6 @@ using std::cout;
 using std::setfill;
 using std::setw;
 
-// Prec=ondition: called to construct a map object
-// Post=condition: constructs a map object and initializes default values with a randomly generated map
 Map::Map()
 {
   // Position Tracking Variables
@@ -23,8 +21,6 @@ Map::Map()
   generateMap();
 }
 
-// Prec=ondition: called to print the map
-// Post=condition: prints the map, extra debug information is available
 void Map::mapPrint()
 {
   // Prints the map
@@ -65,8 +61,6 @@ void Map::mapPrint()
   cout << "\n";
 }
 
-// Pre-condition: called by roomController() to move along the map
-// Post-condition: returns true if the room has already been explored. Updates mapArray[] with current and previous player position. Updates roomExplored[] with true once a new room is entered
 bool Map::move()
 {
    // Prints the map
@@ -103,8 +97,6 @@ bool Map::move()
   return roomCleared;
 }
 
-// Pre-condition: called by Map::move()
-// Post-condition: updates row and column variables based on user selection
 void Map::mapMovement()
 {
   bool loopFlag = true;
@@ -145,8 +137,6 @@ void Map::mapMovement()
   }
 }
 
-// Pre-condition: called in the map constructor to generate a random map
-// Post-condition: Performs calculations to decide where and how many of each room to spawn when calling generateRooms(). The spawn room is marked with an '*' in mapArray[] and 'true' in roomExplored[]. If debug is on - mapArray[] is additionally filled with room contents indicators
 void Map::generateMap()
 {
   // Place the player icon in the starter room and sets the starter room to "explored" with "Start" contents
@@ -212,8 +202,6 @@ void Map::generateMap()
   }
 }
 
-// Pre-condition: called by generateMap() to randomly generate a selected room(s) for roomContets[]
-// Post-condition: roomContents[] is filled with a random selection of the passed in room. If debug is on - mapArray[] is additionally filled with room contents indicators
 void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED)
 {
   bool validSpawns[COLS][COLS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function

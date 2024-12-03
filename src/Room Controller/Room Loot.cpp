@@ -12,8 +12,6 @@ using std::cin;
 using std::cout;
 using std::string;
 
-// Pre-condition: called by roomController(), passed enemyProgression, isEnemyRoom, inventory variables and className / characterStats
-// Post-condition: Returns true if the player survives the room, updates inventory variables based on result, isEnemyRoom is updated to true if an enemy is spawned
 bool roomLoot(Player *player, bool &isEnemyRoom)
 {
   // This room could be a trap, ask the player if they want to attempt to loot the chest
@@ -29,7 +27,6 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
       loopFlag = false;
   } while (loopFlag);
 
-  // Player wants to open the chest
   if (chestSelection == 'Y' || chestSelection == 'y')
   {
     cout << "\nYou carefully lift the lid open";

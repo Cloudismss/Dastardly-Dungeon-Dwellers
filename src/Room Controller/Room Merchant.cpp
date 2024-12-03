@@ -10,8 +10,6 @@ using std::cout;
 using std::setfill;
 using std::setw;
 
-// Pre-condition: called by roomController(), passed inventory variables and className
-// Post-condition: Runs merchant shop loop until the player leaves, updates inventory variables
 void roomMerchant(Player *player)
 {
   // Initialize Merchant Shop arrays
@@ -100,7 +98,7 @@ void roomMerchant(Player *player)
     shop.emplace_back(magic);
   }
 
-  // Slot 5 - Arrow Upgrade
+  // Slot 5 - Ranged Upgrade
   string rangedUpgradeName = " ";
   string rangedUpgradeMessage = " ";
   int rangedSuccess = rangedChance <= UPGRADE_CHANCE;
@@ -173,7 +171,7 @@ void roomMerchant(Player *player)
         cout << "|" << setw(10) << " " << i + 1 << ": " << shop[i].name
              << setw(30 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
       }
-      // Prints the exit
+      // Prints the exit last
       else if (shop[i].quantity == -1)
       {
         cout << "|" << setw(10) << " " << i + 1 << ": Exit" << setw(46) << "|\n";
@@ -288,8 +286,6 @@ void roomMerchant(Player *player)
   cout << "\n";
 }
 
-// Pre-condition: called by roomMerchant(), passed item array and item information, along with inventory variables
-// Post-condition: asks how many of the item the player would like to buy, checks goldCount to validate purchase, updates purchaseAmount for usage in roomMerchant()
 void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int userShopSelection, int &purchaseAmount)
 {
   // Validate purchase amount
@@ -300,7 +296,6 @@ void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int 
   {
     do
     {
-      // Ask the player how many items they'd like to buy
       cout << "\t" << shop[userShopSelection].name << "(s) available: " << shop[userShopSelection].quantity << "\n";
       cout << "\tHow many " << shop[userShopSelection].name << "(s) would you like to buy?: ";
       cin >> purchaseAmount;

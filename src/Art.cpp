@@ -15,8 +15,6 @@ namespace art
 {
   namespace battle
   {
-    // Pre-condition: called by battleController(), passed player and enemy objects
-    // Post-condition: returns user selection from displayed battleMenu
     string battleMenu(Player *player, Enemy *enemy)
     {
       // Menu Variables
@@ -88,8 +86,6 @@ namespace art
       return "Error";
     }
 
-    // Pre-condition: called by battleMenu(), passed health variables
-    // Post-condition: displays health art
     void battleHealthArt(const string &className, int playerHealth, const string &enemyName, int enemyHealth)
     {
       // Don't print health if either the player or the enemy has 0 health
@@ -119,8 +115,6 @@ namespace art
 
   namespace box
   {
-    // Pre-condition: called to display text in a box. Ensure a newline is used prior to the call to this function, it can't be included here because of vaired implementaton
-    // Post-condition: displays text in a box based on string length
     void displayMeInABox(const string &message)
     {
       // Offsets are used to clean up integer division spacing
@@ -152,8 +146,6 @@ namespace art
           << "\n";
     }
 
-    // Pre-condition: called to display 2 lines of text in a box. Ensure a newline is used prior to the call to this function, it can't be included here because of vaired implementaton
-    // Post-condition: displays 2 lines of text in a box based on string length
     void displayMeInABox(const string &message1, const string &message2)
     {
       // Offsets are used to clean up integer division spacing
@@ -189,8 +181,6 @@ namespace art
           << "\n";
     }
 
-    // Pre-condition: called to display text in a box
-    // Post-condition: displays text in a box
     void monologueInABox (const string &message)
     {
       cout << "." << setfill('-') << setw(3 + message.length()) << "." << "\n" << setfill(' ')
@@ -201,8 +191,6 @@ namespace art
 
   namespace room
   {
-    // Pre-condition: called to display randomized roomEnemy text
-    // Post-condition: displays randomized room entry text
     void roomEnemyMonologue(const bool ROOM_EXPLORED)
     {
       // Random dialogue selection
@@ -273,8 +261,6 @@ namespace art
       }
     }
 
-    // Pre-condition: called to display randomized roomLoot text
-    // Post-condition: displays randomized room entry text
     void roomLootMonologue(const bool ROOM_EXPLORED)
     {
       // Random dialogue selection
@@ -348,8 +334,6 @@ namespace art
 
     }
 
-    // Pre-condition: called to display randomized roomMerchant text
-    // Post-condition: displays randomized room entry text
     void roomMerchantMonologue(const bool ROOM_EXPLORED)
     {
       // Random dialogue selection
@@ -392,8 +376,6 @@ namespace art
       }
     }
 
-    // Pre-condition: called to display randomized roomExit text
-    // Post-condition: displays randomized room entry text
     void roomExitMonologue(const bool ROOM_EXPLORED)
     {
       // Random dialogue selection
@@ -427,8 +409,6 @@ namespace art
 
   namespace character
   {
-    // Pre-condition: called to display warrior art
-    // Post-condition: displays art
     void warriorArt()
     {
       cout << "                                                                             \n"
@@ -482,8 +462,6 @@ namespace art
               "                                                                             \n";
     }
 
-    // Pre-condition: called to display mage art
-    // Post-condition: displays art
     void mageArt()
     {
       cout << "                                                                             \n"
@@ -538,8 +516,6 @@ namespace art
               "                                                                             \n";
     }
 
-    // Pre-condition: called to display archer art
-    // Post-condition: displays art
     void archerArt()
     {
       cout << "                                                                             \n"
@@ -595,8 +571,6 @@ namespace art
               "                                                                             \n";
     }
 
-    // Pre-condition: called to display bard art
-    // Post-condition: displays art
     void bardArt()
     {
       cout << "                                                                             \n"
@@ -656,8 +630,6 @@ namespace art
 
   namespace room
   {
-    // Pre-condition: called to display treasure art
-    // Post-condition: displays art
     void treasureArt()
     {
       cout << "*******************************************************************************\n"
@@ -682,8 +654,6 @@ namespace art
               "*******************************************************************************\n\n";
     }
 
-    // Pre-condition: called to display merchant art
-    // Post-condition: displays art
     void merchantArt()
     {
       cout << "             _.-;-._\n"
@@ -716,8 +686,6 @@ namespace art
               "      ||   '---'    '.___>\n\n";
     }
 
-    // Pre-condition: called to display exit/door art
-    // Post-condition: displays art
     void doorArt()
     {
       cout << "88888888888888888888888888888888888888888888888888888888888888888888888\n"
@@ -747,8 +715,6 @@ namespace art
 
   namespace game
   {
-    // Pre-condition: called to display victory art
-    // Post-condition: displays art with roomCount displayed
     void victoryArt(Player *player)
     {
       int roomCount = player->getRoomCount();
@@ -779,8 +745,6 @@ namespace art
               "    \\/______________________________________________________/\n\n";
     }
 
-    // Pre-condition: called to display game over art
-    // Post-condition: displays art with roomCount displayed
     void gameOverArt(Player *player)
     {
       int roomCount = player->getRoomCount();
@@ -807,8 +771,6 @@ namespace art
 
   namespace tutorial
   {
-    // Pre-condition: called to display tutorial
-    // Post-condition: displays tutorial
     void tutorialGame()
     {
       cout << ".-------------------------------------------------------------.\n"
@@ -836,8 +798,6 @@ namespace art
       getline(cin, enterKey);
     }
 
-    // Pre-condition: called to display tutorial
-    // Post-condition: displays tutorial
     void tutorialBattle()
     {
       cout << ".-------------------------------------------------------------.\n"

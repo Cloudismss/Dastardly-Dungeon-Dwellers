@@ -8,8 +8,6 @@
 using std::cin;
 using std::cout;
 
-// Pre-condition: called by roomController(), passed keyCount
-// Post-condition: updates gameVictory to true if the player chooses to leave the dungeon - game ends
 void roomExit(Player *player)
 {
   // Check if the player has the golden key

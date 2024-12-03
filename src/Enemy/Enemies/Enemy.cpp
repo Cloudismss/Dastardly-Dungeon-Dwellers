@@ -7,10 +7,8 @@
 
 using std::cout;
 
-// Enemy Class Constructor
 Enemy::Enemy(short unsigned int playerLevel)
 {
-  // Generate level for enemy
   setEnemyLevel(playerLevel);
 
   // Calculates health of the enemy based off of base enemy health and enemy level
@@ -76,8 +74,6 @@ void Enemy::announceEnemy()
   cout << "A level " << level << " " << name << " is guarding this room!\n\n";
 }
 
-// Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
-// Post-condition: updates damageValue based on enemy stats
 double Enemy::getVulnerability(const string &battleMenuSelection) const
 {
   const double *vulnerability = nullptr;
@@ -99,8 +95,6 @@ void Enemy::receive(short unsigned int playerAttack)
     health = 0;
 }
 
-// Pre-condition: called by battleController(), passed enemy variables
-// Post-condition: returns a damage amount based on enemy attributes
 short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned int playerMaxHealth)
 { 
   if (1 + (rand() % 100) <= BASE_ENEMY_MISS_CHANCE * 100)

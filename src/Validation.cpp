@@ -10,8 +10,6 @@ using std::cout;
 using std::setw;
 using std::string;
 
-// Pre-condition: called to validate a Y or N decision
-// Post-condition: returns whether the choice was valid or not
 bool validateDecision(int userChoice)
 {
   bool validFlag = true;
@@ -27,8 +25,6 @@ bool validateDecision(int userChoice)
   return validFlag;
 }
 
-// Pre-condition: called to validate a number input
-// Post-condition: returns whether the choice was valid or not
 bool validateInput(int userChoice, int rangeLow, int rangeHigh)
 {
   bool validFlag = true;
@@ -44,8 +40,6 @@ bool validateInput(int userChoice, int rangeLow, int rangeHigh)
   return validFlag;
 }
 
-// Pre-condition: called to validate a direction input, passed userChoice by reference
-// Post-condition: returns whether the choice was valid or not, updates userChoice value to uppercase
 bool validateDirection(int rowPos, int colPos, char &userChoice, const int ROWS, const int COLS)
 {
   bool validFlag = true;

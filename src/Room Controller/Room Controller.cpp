@@ -9,15 +9,12 @@
 #include "Room Loot.h"
 #include "Room Merchant.h"
 
-// Pre-condition: called by startGame() in a loop, passed className, inventory variables, game win/lose variables, map arrays and pointers, and characterStats file stream
-// Post-condition: a room is selected within roomController, and game win/lose variables are updated based on result of room. The game ends if the game is won or lost
 void roomController(Player *player, Map *map)
 {
   // map->move() allows the player to move between rooms. It returns false if the room has not been explored yet
   const bool ROOM_EXPLORED = map->move();
   const string ROOM_NAME = map->getRoomContents();
 
-  // This variable is set to true if an enemy is encountered
   bool isEnemyRoom = false;
 
   if (ROOM_NAME == "Enemy")

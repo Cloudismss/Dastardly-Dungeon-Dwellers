@@ -202,8 +202,6 @@ void CharacterList::select(const string &characterName)
     current = current->next;
 }
 
-// Pre-condition: passed className
-// Post-condition: displays class selection menu and stores result in className
 string CharacterList::classSelection()
 {
   bool loopFlag = true;
@@ -226,21 +224,18 @@ string CharacterList::classSelection()
     {
       switch (classChoice)
       {
-        // Player chose Warrior
         case 1:
         {
           className = "Warrior";
           art::character::warriorArt();
           break;
         }
-        // Player chose Mage
         case 2:
         {
           className = "Mage";
           art::character::mageArt();
           break;
         }
-        // Player chose Archer
         case 3:
         {
           className = "Archer";

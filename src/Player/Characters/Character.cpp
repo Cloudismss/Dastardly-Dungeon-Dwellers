@@ -80,8 +80,6 @@ void Character::readSkills()
   characterStats.close();
 }
 
-// Pre-condition: valid output file open
-// Post-condition: writes default character stats to created file "Dastardly Dungeon Dwellers.cfg"
 void Character::generateSkills(std::ofstream &defaultCharacterStats)
 {
   defaultCharacterStats << "Class Name, Melee Skill | Magic Skill | Ranged Skill | Crit Skill | Health Skill\n"
@@ -92,7 +90,6 @@ void Character::generateSkills(std::ofstream &defaultCharacterStats)
                         << "Bard, 15 15 15 9.0 0.4";
 }
 
-// Generic Class Accessors
 short unsigned int Character::getWeaponLevel(const string &weaponType)
 {
   if (weaponType == "Melee")
@@ -106,7 +103,6 @@ short unsigned int Character::getWeaponLevel(const string &weaponType)
   return -1;
 }
 
-// Class Specific Accessors
 short unsigned int Character::getSkillUpgradeTier(const string &skillType)
 {
   // Add 1 since upgradeTiers start at index 0
@@ -147,7 +143,6 @@ string Character::getSkillName(const string &skillType)
   return "Error";
 }
 
-// Generic Class Mutators
 void Character::addXp(short unsigned int xpAdjust)
 {
   cout << className << " gained " << xpAdjust << " xp!\n";
@@ -198,7 +193,6 @@ void Character::upgradeWeapon(const string &weaponType, const string &upgradeNam
   fmt::print(fmt::emphasis::bold, "{0} added\n", upgradeName);
 }
 
-// Class Specific Mutators
 void Character::useSkill(const string &skillType)
 {
   short unsigned int *upgradeCounter = nullptr;

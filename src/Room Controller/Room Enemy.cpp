@@ -11,22 +11,19 @@ using std::cin;
 using std::cout;
 using std::string;
 
-// Pre-condition: called by roomController(), passed enemyProgression, inventory variables and className / characterStats
-// Post-condition: Returns true if the player survives the room, updates inventory variables based on result
 bool roomEnemy(Player *player)
 {
-  // Generate enemy
   Enemy *enemy = EnemySpawner::generateEnemy(player->getCharacter()->getLevel());
 
   // Run the battleController function. It returns 1 if the player wins the battle, -1 if the player successfully runs away, and 0 if they lose.
   int battleResult = battleController(player, enemy);
 
   // Player lost the battle - end the program
-  if (battleResult == 0)
+  if (battleResult == LOSE)
     return false;
 
-  // Player won the battle
-  if (battleResult == 1)
+  // Player won the battle - collect loot
+  if (battleResult == WIN)
     loot(player, enemy);
 
   delete enemy;
@@ -37,6 +34,6 @@ bool roomEnemy(Player *player)
   getline(cin, enterKey);
   cout << "\n";
 
-  // Continue the game since the player won the battle
+  // Continue the game
   return true;
 }
