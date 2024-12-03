@@ -17,37 +17,42 @@ Enemy *EnemySpawner::generateEnemy(int playerLevel)
   {
     case CYCLOPS:
       return new Cyclops(playerLevel);
+      break;
     case GOBLIN:
       return new Goblin(playerLevel);
+      break;
     case MINOTAUR:
       return new Minotaur(playerLevel);
+      break;
     case ORC:
       return new Orc(playerLevel);
+      break;
     case SKELETON:
       return new Skeleton(playerLevel);
+      break;
     case TROLL:
       return new Troll(playerLevel);
+      break;
     case BOSS:
       return new Boss(playerLevel);
+      break;
     default:
       return nullptr;
   }
-
-  ++enemyProgression;
 }
 
 int EnemySpawner::calculateName()
 {
   static vector<int> baddies;
 
-  if (enemyProgression == 0)
+  if (Enemy::getProgression() == 0)
     baddies.insert(baddies.end(), stage1Baddies.begin(), stage1Baddies.end());
-  else if (enemyProgression == CHECKPOINT_1)
+  else if (Enemy::getProgression() == CHECKPOINT_1)
     baddies.insert(baddies.end(), stage2Baddies.begin(), stage2Baddies.end());
-  else if (enemyProgression == CHECKPOINT_2)
+  else if (Enemy::getProgression() == CHECKPOINT_2)
     baddies.insert(baddies.end(), stage3Baddies.begin(), stage3Baddies.end());
 
-  if (enemyProgression > CHECKPOINT_3 && (1 + rand() % 100) <= 10)
+  if (Enemy::getProgression() > CHECKPOINT_3 && (1 + rand() % 100) <= 10)
     return BOSS;
 
   return baddies[rand() % baddies.size()];

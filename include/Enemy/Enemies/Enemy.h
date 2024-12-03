@@ -11,7 +11,13 @@ class Enemy
 {
 public:
   Enemy(int playerLevel);
-  ~Enemy() { };
+  ~Enemy() { ++enemyProgression; }
+
+private:
+  static inline int enemyProgression = 0;
+
+public:
+  static inline int getProgression() { return enemyProgression; }
 
 protected:
   string name;

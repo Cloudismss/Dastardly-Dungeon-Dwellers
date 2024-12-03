@@ -20,11 +20,7 @@ public:
   // Return random new enemy
   static Enemy *generateEnemy(int playerLevel);
 
-  // Accessors
-  static inline int getProgression() { return enemyProgression; }
-
 private:
-  static inline int enemyProgression = 0;
   const static inline vector<int> stage1Baddies = { SKELETON, GOBLIN, ORC };
   const static inline vector<int> stage2Baddies = { TROLL, CYCLOPS };
   const static inline vector<int> stage3Baddies = { MINOTAUR };  

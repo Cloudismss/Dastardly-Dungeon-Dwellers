@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "Enemy Spawner.h"
 #include "Globals.h"
 
 using std::cout;
@@ -27,15 +26,15 @@ void Enemy::setEnemyLevel(int playerLevel)
   int randomLevelVariation = 1 + rand() % 100;
 
   // First room guarantees a level one enemy
-  if (EnemySpawner::getProgression() == 0)
+  if (Enemy::getProgression() == 0)
     return;
 
   // The first 5 rooms can only spawn enemies at player level
-  else if (EnemySpawner::getProgression() < CHECKPOINT_1)
+  else if (Enemy::getProgression() < CHECKPOINT_1)
     level = playerLevel;
   
   // The next 5 rooms can spawn enemies up to 1 level higher than the player
-  else if (EnemySpawner::getProgression() < CHECKPOINT_2)
+  else if (Enemy::getProgression() < CHECKPOINT_2)
   {
     if (randomLevelVariation < 50)
       level = playerLevel;
@@ -44,7 +43,7 @@ void Enemy::setEnemyLevel(int playerLevel)
   }
 
   // The next 5 rooms can spawn enemies up to 2 levels higher than the player
-  else if (EnemySpawner::getProgression() < CHECKPOINT_3)
+  else if (Enemy::getProgression() < CHECKPOINT_3)
   {
     if (randomLevelVariation < 10)
       level = playerLevel;
@@ -55,7 +54,7 @@ void Enemy::setEnemyLevel(int playerLevel)
   }
   
   // The final rooms guarantee enemies spawn at least 1 level higher than the player
-  else if (EnemySpawner::getProgression() >= CHECKPOINT_3)
+  else if (Enemy::getProgression() >= CHECKPOINT_3)
   {
     if (randomLevelVariation < 25)
       level = playerLevel + 1;

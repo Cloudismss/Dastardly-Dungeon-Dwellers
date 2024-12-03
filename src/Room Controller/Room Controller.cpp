@@ -1,7 +1,6 @@
 #include "Room Controller.h"
 
 #include "Art.h"
-#include "Enemy Spawner.h"
 #include "Game.h"
 #include "Globals.h"
 #include "Room Enemy.h"
@@ -100,16 +99,15 @@ void roomController(Player *player, Map *map)
   // Increment room count if this room was not explored previously
   if (!ROOM_EXPLORED)
   {
-    // Increment enemy progression if an enemy was defeated
+    // Check enemy progression if an enemy was defeated
     if (isEnemyRoom)
     {
       // Display text indicating the enemy spawner has become more challenging
-      int progression = EnemySpawner::getProgression();
+      int progression = Enemy::getProgression() - 1; // Subtract one since progression was already incremented
       if (progression + 1 == CHECKPOINT_1 ||
           progression + 1 == CHECKPOINT_2 ||
           progression + 1 == CHECKPOINT_3)
           art::box::monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
-      player->progress();
     }
 
     // Increment room counter

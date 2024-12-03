@@ -12,7 +12,7 @@ class Player
 {
 private:
   // Progression Variables
-  int rooms = 0, progression = 0;
+  int rooms = 0;
 
   // Character Linked List
   CharacterList *characters;
@@ -32,7 +32,6 @@ public:
 public:
   // Progression Accessors
   int getRoomCount() const { return rooms; }
-  int getProgression() const { return progression; }
 
   // Inventory Accessors
   int getGold() const { return inventory->getGold(); }
@@ -42,7 +41,6 @@ public:
 
   // Progression Mutators
   void roomCleared() { ++rooms; }
-  void progress() { ++progression; }
 
   // Inventory Mutators
   void addGold(int goldAdjust) { inventory->addGold(goldAdjust); }
