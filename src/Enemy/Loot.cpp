@@ -127,7 +127,7 @@ void loot(Player *player, Enemy *enemy)
     }
   }
 
-  if (lootRoll <= 5)
+  if (lootRoll <= 5 && Character::hasMoreCharacters())
   {
     cout << "One of your fellow adventurers enters the room and compliments you on your victory...\n";
     bool loopFlag = true;

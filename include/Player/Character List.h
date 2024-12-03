@@ -24,7 +24,6 @@ private:
 
 private:
   int xpRequiredPerLevel = 100;
-  set<string> availableCharacters;
 
 public:
   CharacterList();
