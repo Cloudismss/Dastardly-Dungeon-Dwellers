@@ -13,9 +13,6 @@ public:
   Enemy(int playerLevel);
   ~Enemy() { };
 
-public:
-  friend std::ostream &operator<<(std::ostream &out, const Enemy &enemy);
-
 protected:
   string name;
   bool boss = false;
@@ -26,22 +23,23 @@ protected:
   double magicVulnerability = 1.0;
   double rangedVulnerability = 1.0;
   
+protected:
   // Helper Functions
   void setEnemyLevel(int playerLevel);
-  virtual void announceEnemy();
 
 public:
   // Accessors
-  string getName() const { return name; }
+  virtual void announceEnemy() const;
   virtual string getNickname() const { return name; }
+  string getName() const { return name; }
   int getHealth() const { return health; }
   int getLevel() const { return level; }
   int getRewardTier() const { return rewardTier; }
   double getVulnerability(const string &battleMenuSelection) const;
 
   // Mutators
-  void receive(int playerAttack);
   virtual int attack(int playerArmor, int playerMaxHealth);
+  void receive(int playerAttack);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_ENEMY_H

@@ -69,7 +69,7 @@ void Enemy::setEnemyLevel(int playerLevel)
 }
 
 // TODO: varied dialogue implementation
-void Enemy::announceEnemy()
+void Enemy::announceEnemy() const
 {
   cout << "A level " << level << " " << name << " is guarding this room!\n\n";
 }
@@ -86,13 +86,6 @@ double Enemy::getVulnerability(const string &battleMenuSelection) const
     vulnerability = &rangedVulnerability;
 
   return *vulnerability;
-}
-
-void Enemy::receive(int playerAttack)
-{
-  health -= playerAttack;
-  if (health < 0)
-    health = 0;
 }
 
 int Enemy::attack(int playerArmor, int playerMaxHealth)
@@ -143,4 +136,11 @@ int Enemy::attack(int playerArmor, int playerMaxHealth)
 
   cout << "\t" << name << " dealt " << damage << " damage\n\n";
   return damage;
+}
+
+void Enemy::receive(int playerAttack)
+{
+  health -= playerAttack;
+  if (health < 0)
+    health = 0;
 }
