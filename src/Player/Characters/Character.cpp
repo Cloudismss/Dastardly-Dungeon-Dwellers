@@ -90,7 +90,7 @@ void Character::generateSkills(std::ofstream &defaultCharacterStats)
                         << "Bard, 15 15 15 9.0 0.4";
 }
 
-int Character::getWeaponLevel(const string &weaponType)
+int Character::getWeaponLevel(const string &weaponType) const
 {
   if (weaponType == "Melee")
     return meleeWeapon;
@@ -103,7 +103,7 @@ int Character::getWeaponLevel(const string &weaponType)
   return -1;
 }
 
-int Character::getSkillUpgradeTier(const string &skillType)
+int Character::getSkillUpgradeTier(const string &skillType) const
 {
   // Add 1 since upgradeTiers start at index 0
   if (skillType == "Melee")
@@ -117,7 +117,7 @@ int Character::getSkillUpgradeTier(const string &skillType)
   return -1;
 }
 
-int Character::getSkillLevel(const string &skillType)
+int Character::getSkillLevel(const string &skillType) const
 {
   if (skillType == "Melee")
     return meleeLevel;

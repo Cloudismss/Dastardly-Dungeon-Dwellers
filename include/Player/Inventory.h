@@ -12,14 +12,14 @@ public:
 
 public:
   // Art function
-  void display();
+  void display() const;
 
 public:
   // Inventory Accessors
-  int getGold() { return gold; }
-  int getPotions() { return potions; }
-  int getArmor() { return armor; }
-  int getKeys() { return keys; }
+  int getGold() const { return gold; }
+  int getPotions() const { return potions; }
+  int getArmor() const { return armor; }
+  int getKeys() const { return keys; }
 
   // Inventory Mutators
   void addGold(int goldAdjust);

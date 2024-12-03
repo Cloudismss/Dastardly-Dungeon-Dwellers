@@ -31,14 +31,14 @@ public:
 
 public:
   // Progression Accessors
-  int getRoomCount() { return rooms; }
-  int getProgression() { return progression; }
+  int getRoomCount() const { return rooms; }
+  int getProgression() const { return progression; }
 
   // Inventory Accessors
-  int getGold() { return inventory->getGold(); }
-  int getPotions() { return inventory->getPotions(); }
-  int getArmor() { return inventory->getArmor(); }
-  int getKeys() { return inventory->getKeys(); }
+  int getGold() const { return inventory->getGold(); }
+  int getPotions() const { return inventory->getPotions(); }
+  int getArmor() const { return inventory->getArmor(); }
+  int getKeys() const { return inventory->getKeys(); }
 
   // Progression Mutators
   void roomCleared() { ++rooms; }

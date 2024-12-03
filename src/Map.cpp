@@ -21,7 +21,7 @@ Map::Map()
   generateMap();
 }
 
-void Map::mapPrint()
+void Map::mapPrint() const
 {
   // Prints the map
   cout << setfill('-') << setw(64) << " " << setfill(' ');

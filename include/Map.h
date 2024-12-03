@@ -30,7 +30,7 @@ private:
 
   void generateMap();
   void generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED);
-  void mapPrint();
+  void mapPrint() const;
   void mapMovement();
 public:
   Map();

@@ -49,19 +49,19 @@ private:
 
 public:
   // Generic Class Accessors
-  string getClassName() { return current->character->getClassName(); }
-  double getHealth() { return current->character->getHealth(); }
-  double getXp() { return current->character->getXp(); }
-  int getLevel() { return current->character->getLevel(); }
-  int getWeaponLevel(const string &weaponType) { return current->character->getWeaponLevel(weaponType); }
+  string getClassName() const { return current->character->getClassName(); }
+  double getHealth() const { return current->character->getHealth(); }
+  double getXp() const { return current->character->getXp(); }
+  int getLevel() const { return current->character->getLevel(); }
+  int getWeaponLevel(const string &weaponType) const { return current->character->getWeaponLevel(weaponType); }
 
   // Class Specific Accessors
-  int getSkillUpgradeTier(const string &skillType) { return current->character->getSkillUpgradeTier(skillType); }
-  int getSkillLevel(const string &skillType) { return current->character->getSkillLevel(skillType); }
-  double getCritLevel() { return current->character->getCritLevel(); }
-  double getMaxHealth() { return current->character->getMaxHealth(); }
+  int getSkillUpgradeTier(const string &skillType) const { return current->character->getSkillUpgradeTier(skillType); }
+  int getSkillLevel(const string &skillType) const { return current->character->getSkillLevel(skillType); }
+  double getCritLevel() const { return current->character->getCritLevel(); }
+  double getMaxHealth() const { return current->character->getMaxHealth(); }
   // Retrieves value from skillNames
-  string getSkillName(const string &skillType) { return current->character->getSkillName(skillType); }
+  string getSkillName(const string &skillType) const { return current->character->getSkillName(skillType); }
 
   // Generic Class Mutators
   void adjustHealth(double healthAdjust) { current->character->adjustHealth(healthAdjust); }

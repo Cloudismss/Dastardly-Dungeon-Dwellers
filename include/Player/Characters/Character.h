@@ -51,17 +51,17 @@ protected:
 
 public:
   // Generic Class Accessors
-  string getClassName() { return className; }
-  int getHealth() { return health; }
-  int getXp() { return xp; }
-  int getLevel() { return level; }
-  int getWeaponLevel(const string &weaponType);
+  string getClassName() const { return className; }
+  int getHealth() const { return health; }
+  int getXp() const { return xp; }
+  int getLevel() const { return level; }
+  int getWeaponLevel(const string &weaponType) const;
 
   // Class Specific Accessors
-  int getMaxHealth() { return maxHealth; }
-  int getSkillUpgradeTier(const string &skillType);
-  int getSkillLevel(const string &skillType);
-  double getCritLevel() { return critLevel; }
+  int getMaxHealth() const { return maxHealth; }
+  int getSkillUpgradeTier(const string &skillType) const;
+  int getSkillLevel(const string &skillType) const;
+  double getCritLevel() const { return critLevel; }
   // Retrieves value from skillNames
   string getSkillName(const string &skillType);
 

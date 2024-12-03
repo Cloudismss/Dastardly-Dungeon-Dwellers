@@ -16,7 +16,7 @@ Inventory::Inventory()
   }
 }
 
-void Inventory::display()
+void Inventory::display() const
 {
   // TODO: Print inventory display menu
 }
