@@ -7,11 +7,11 @@
 #include "Skeleton.h"
 #include "Troll.h"
 
-Enemy *EnemySpawner::generateEnemy(short unsigned int playerLevel)
+Enemy *EnemySpawner::generateEnemy(int playerLevel)
 {
   ++enemyProgression;
 
-  short unsigned int name = calculateName();
+  int name = calculateName();
   switch(name)
   {
     case CYCLOPS:

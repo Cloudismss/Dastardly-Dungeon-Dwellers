@@ -1,6 +1,6 @@
 #include "Minotaur.h"
 
-Minotaur::Minotaur(short unsigned int playerLevel) : Enemy(playerLevel)
+Minotaur::Minotaur(int playerLevel) : Enemy(playerLevel)
 {
   name = "Minotaur";
   meleeVulnerability = 1.4;

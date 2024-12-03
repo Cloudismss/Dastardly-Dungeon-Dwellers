@@ -90,7 +90,7 @@ void Character::generateSkills(std::ofstream &defaultCharacterStats)
                         << "Bard, 15 15 15 9.0 0.4";
 }
 
-short unsigned int Character::getWeaponLevel(const string &weaponType)
+int Character::getWeaponLevel(const string &weaponType)
 {
   if (weaponType == "Melee")
     return meleeWeapon;
@@ -103,7 +103,7 @@ short unsigned int Character::getWeaponLevel(const string &weaponType)
   return -1;
 }
 
-short unsigned int Character::getSkillUpgradeTier(const string &skillType)
+int Character::getSkillUpgradeTier(const string &skillType)
 {
   // Add 1 since upgradeTiers start at index 0
   if (skillType == "Melee")
@@ -117,7 +117,7 @@ short unsigned int Character::getSkillUpgradeTier(const string &skillType)
   return -1;
 }
 
-short unsigned int Character::getSkillLevel(const string &skillType)
+int Character::getSkillLevel(const string &skillType)
 {
   if (skillType == "Melee")
     return meleeLevel;
@@ -143,7 +143,7 @@ string Character::getSkillName(const string &skillType)
   return "Error";
 }
 
-void Character::addXp(short unsigned int xpAdjust)
+void Character::addXp(int xpAdjust)
 {
   cout << className << " gained " << xpAdjust << " xp!\n";
 
@@ -195,7 +195,7 @@ void Character::upgradeWeapon(const string &weaponType, const string &upgradeNam
 
 void Character::useSkill(const string &skillType)
 {
-  short unsigned int *upgradeCounter = nullptr;
+  int *upgradeCounter = nullptr;
 
   if (skillType == "Melee")
     upgradeCounter = &meleeCounter;
@@ -212,7 +212,7 @@ void Character::useSkill(const string &skillType)
 
 void Character::upgradeSkillName(const string &skillType)
 {
-  short unsigned int *skillUpgradeTier = nullptr;
+  int *skillUpgradeTier = nullptr;
 
   if (skillType == "Melee")
     skillUpgradeTier = &meleeUpgradeTier;

@@ -6,7 +6,7 @@
 class Skeleton : public Enemy
 {
 public:
-  Skeleton(short unsigned int playerLevel);
+  Skeleton(int playerLevel);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_SKELETON_H

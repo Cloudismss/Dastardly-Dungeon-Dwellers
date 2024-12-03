@@ -11,7 +11,7 @@ Mage::Mage()
 void Mage::generateSkillNames()
 {
   // Number of skill levels per skill
-  const short unsigned int SIZE = 3;
+  const int SIZE = 3;
 
   // Mage Skill Names
   const string mageMelee[] = {"Bonk", "Whack", "Astral Thump"};

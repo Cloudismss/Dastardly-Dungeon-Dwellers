@@ -23,7 +23,7 @@ private:
   Node *current = nullptr;
 
 private:
-  short unsigned int xpRequiredPerLevel = 100;
+  int xpRequiredPerLevel = 100;
   set<string> availableCharacters;
 
 public:
@@ -52,12 +52,12 @@ public:
   string getClassName() { return current->character->getClassName(); }
   double getHealth() { return current->character->getHealth(); }
   double getXp() { return current->character->getXp(); }
-  short unsigned int getLevel() { return current->character->getLevel(); }
-  short unsigned int getWeaponLevel(const string &weaponType) { return current->character->getWeaponLevel(weaponType); }
+  int getLevel() { return current->character->getLevel(); }
+  int getWeaponLevel(const string &weaponType) { return current->character->getWeaponLevel(weaponType); }
 
   // Class Specific Accessors
-  short unsigned int getSkillUpgradeTier(const string &skillType) { return current->character->getSkillUpgradeTier(skillType); }
-  short unsigned int getSkillLevel(const string &skillType) { return current->character->getSkillLevel(skillType); }
+  int getSkillUpgradeTier(const string &skillType) { return current->character->getSkillUpgradeTier(skillType); }
+  int getSkillLevel(const string &skillType) { return current->character->getSkillLevel(skillType); }
   double getCritLevel() { return current->character->getCritLevel(); }
   double getMaxHealth() { return current->character->getMaxHealth(); }
   // Retrieves value from skillNames

@@ -6,7 +6,7 @@
 class Orc : public Enemy
 {
 public:
-  Orc(short unsigned int playerLevel);
+  Orc(int playerLevel);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_ORC_H

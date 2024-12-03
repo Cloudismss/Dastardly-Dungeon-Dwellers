@@ -208,7 +208,7 @@ string CharacterList::classSelection()
   string className = " ";
   do
   {
-    short int classChoice = 0;
+    int classChoice = 0;
     cout << ".-------------------------------------------------------------.\n"
          << "|                                                             |\n"
          << "|       Please choose a starting class using numbers 1-3:     |\n"

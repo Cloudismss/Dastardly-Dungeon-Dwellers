@@ -21,13 +21,13 @@ void Inventory::display()
   // TODO: Print inventory display menu
 }
 
-void Inventory::addGold(short unsigned int goldAdjust)
+void Inventory::addGold(int goldAdjust)
 {
   gold += goldAdjust;
   fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "Gold x{0} added\n", goldAdjust);
 }
 
-void Inventory::addPotions(short unsigned int potionAdjust)
+void Inventory::addPotions(int potionAdjust)
 {
   potions += potionAdjust;
   if (potionAdjust == 1)
@@ -36,7 +36,7 @@ void Inventory::addPotions(short unsigned int potionAdjust)
     fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Potion x{0} added\n", potionAdjust);
 }
 
-void Inventory::addArmor(short unsigned int armorAdjust)
+void Inventory::addArmor(int armorAdjust)
 {
   armor += armorAdjust;
   if (armorAdjust == 1)
@@ -45,7 +45,7 @@ void Inventory::addArmor(short unsigned int armorAdjust)
     fmt::print(fmt::emphasis::bold | fg(fmt::color::steel_blue), "Armor Plating x{0} added\n", armorAdjust);
 }
 
-void Inventory::addKeys(short unsigned int keyAdjust)
+void Inventory::addKeys(int keyAdjust)
 {
   ++keys;
   art::box::displayMeInABox("GOLDEN KEY Acquired!");

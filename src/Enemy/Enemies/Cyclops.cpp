@@ -1,6 +1,6 @@
 #include "Cyclops.h"
 
-Cyclops::Cyclops(short unsigned int playerLevel) : Enemy(playerLevel)
+Cyclops::Cyclops(int playerLevel) : Enemy(playerLevel)
 {
   name = "Cyclops";
   meleeVulnerability = 1.0;

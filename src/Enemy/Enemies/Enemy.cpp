@@ -7,19 +7,19 @@
 
 using std::cout;
 
-Enemy::Enemy(short unsigned int playerLevel)
+Enemy::Enemy(int playerLevel)
 {
   setEnemyLevel(playerLevel);
 
   // Calculates health of the enemy based off of base enemy health and enemy level
-  short unsigned int levelBoost = 0;
+  int levelBoost = 0;
   for (int i = 1; i < level; ++i)
     levelBoost += BASE_ENEMY_HEALTH * 0.5;
   health = BASE_ENEMY_HEALTH + levelBoost;
 }
 
 // TODO: add fun logic to allow lower AND higher level enemies
-void Enemy::setEnemyLevel(short unsigned int playerLevel)
+void Enemy::setEnemyLevel(int playerLevel)
 {
   level = 1;
   rewardTier = 1;
@@ -88,14 +88,14 @@ double Enemy::getVulnerability(const string &battleMenuSelection) const
   return *vulnerability;
 }
 
-void Enemy::receive(short unsigned int playerAttack)
+void Enemy::receive(int playerAttack)
 {
   health -= playerAttack;
   if (health < 0)
     health = 0;
 }
 
-short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned int playerMaxHealth)
+int Enemy::attack(int playerArmor, int playerMaxHealth)
 { 
   if (1 + (rand() % 100) <= BASE_ENEMY_MISS_CHANCE * 100)
   {
@@ -103,9 +103,9 @@ short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned 
     return 0;
   }
 
-  short int damage = 0;
-  short int attackLow = 0;
-  short int attackHigh = 0;
+  int damage = 0;
+  int attackLow = 0;
+  int attackHigh = 0;
 
   damage = BASE_ENEMY_DAMAGE;
 
@@ -122,7 +122,7 @@ short unsigned int Enemy::attack(short unsigned int playerArmor, short unsigned 
   damage += (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
 
   // Flat damage reduction via armor
-  short unsigned int playerArmorProtection = 0;
+  int playerArmorProtection = 0;
   double percentBlocked = 1.0;
   for (int i = 0; i < playerArmor; ++i)
   {

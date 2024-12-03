@@ -22,13 +22,13 @@ Player::~Player()
   delete inventory;
 }
 
-short unsigned int Player::attack(const string &battleMenuSelection, const string &enemyName, double enemyVulnerability)
+int Player::attack(const string &battleMenuSelection, const string &enemyName, double enemyVulnerability)
 {
   // DEBUG OPTION - Max damage
   if (Game::getDebug())
     return 1000;
 
-  short unsigned int attackValue;
+  int attackValue;
   double missChance;
   if (battleMenuSelection == "Melee")
   {
@@ -53,26 +53,26 @@ short unsigned int Player::attack(const string &battleMenuSelection, const strin
   }
 
   // Multiply by weapon level damage boost
-  short unsigned int weaponLevel = characters->getWeaponLevel(battleMenuSelection);
-  short unsigned int weaponBoost = 1;
+  int weaponLevel = characters->getWeaponLevel(battleMenuSelection);
+  int weaponBoost = 1;
   for (int i = 1; i < weaponLevel; ++i)
     weaponBoost += 0.30; // 30% weapon damage boost per weapon level
   attackValue *= weaponBoost;
 
   // Multiply by skillUpgrade
-  short unsigned int skillUpgradeTier = characters->getSkillUpgradeTier(battleMenuSelection);
-  short unsigned int skillTierBoost = 0;
+  int skillUpgradeTier = characters->getSkillUpgradeTier(battleMenuSelection);
+  int skillTierBoost = 0;
   for (int i = 1; i < skillUpgradeTier; ++i)
     skillTierBoost += 10;
   attackValue += skillTierBoost;
 
   // Flat skillLevel boost
-  short unsigned int skillLevel = characters->getSkillLevel(battleMenuSelection);
+  int skillLevel = characters->getSkillLevel(battleMenuSelection);
   attackValue += skillLevel;
 
   // Add a small offset to the damage for a touch of variability
-  short int attackLow = -0.1 * attackValue;
-  short int attackHigh = 0.1 * attackValue;
+  int attackLow = -0.1 * attackValue;
+  int attackHigh = 0.1 * attackValue;
   attackValue += (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
 
   // Calculate crit
@@ -116,11 +116,11 @@ void Player::heal()
     // Remove a potion
     removePotions();
 
-    short unsigned int thirty = (0.3 * characters->getMaxHealth());
-    short unsigned int fifty = (0.5 * characters->getMaxHealth());
+    int thirty = (0.3 * characters->getMaxHealth());
+    int fifty = (0.5 * characters->getMaxHealth());
     
     // Picks a random number between 30% and 50% of maxHealth to return a heal amount
-    short unsigned int healValue = thirty + (rand() % (fifty + 1));
+    int healValue = thirty + (rand() % (fifty + 1));
 
     // Update heal value to not overheal
     if (healValue + characters->getHealth() > characters->getMaxHealth())

@@ -6,7 +6,7 @@
 class Minotaur : public Enemy
 {
 public:
-  Minotaur(short unsigned int playerLevel);
+  Minotaur(int playerLevel);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_MINOTAUR_H

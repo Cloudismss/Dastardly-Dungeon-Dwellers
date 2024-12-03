@@ -1,6 +1,6 @@
 #include "Orc.h"
 
-Orc::Orc(short unsigned int playerLevel) : Enemy(playerLevel)
+Orc::Orc(int playerLevel) : Enemy(playerLevel)
 {
   name = "Orc";
   meleeVulnerability = 0.7;

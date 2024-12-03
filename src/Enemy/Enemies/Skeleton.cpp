@@ -1,6 +1,6 @@
 #include "Skeleton.h"
 
-Skeleton::Skeleton(short unsigned int playerLevel) : Enemy(playerLevel)
+Skeleton::Skeleton(int playerLevel) : Enemy(playerLevel)
 {
   name = "Skeleton";
   meleeVulnerability = 2.0;

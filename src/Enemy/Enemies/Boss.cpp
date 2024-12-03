@@ -6,7 +6,7 @@
 
 using std::cout;
 
-Boss::Boss(short unsigned int playerLevel) : Enemy(playerLevel)
+Boss::Boss(int playerLevel) : Enemy(playerLevel)
 {
   rewardTier = 10;
   name = bosses[rand() % bosses.size()];
@@ -45,7 +45,7 @@ string Boss::getNickname() const
   return "Error";
 }
 
-short unsigned int Boss::attack(short unsigned int playerArmor, short unsigned int playerMaxHealth)
+int Boss::attack(int playerArmor, int playerMaxHealth)
 {
   if (1 + (rand() % 100) <= BASE_ENEMY_MISS_CHANCE * 100)
   {
@@ -53,9 +53,9 @@ short unsigned int Boss::attack(short unsigned int playerArmor, short unsigned i
     return 0;
   }
 
-  short int damage = 0;
-  short int attackLow = 0;
-  short int attackHigh = 0;
+  int damage = 0;
+  int attackLow = 0;
+  int attackHigh = 0;
 
   damage = BASE_BOSS_DAMAGE;
 
@@ -66,7 +66,7 @@ short unsigned int Boss::attack(short unsigned int playerArmor, short unsigned i
   damage += (attackLow + (rand() % ((attackHigh + 1) - attackLow)));
 
   // Flat damage reduction via armor
-  short unsigned int playerArmorProtection = 0;
+  int playerArmorProtection = 0;
   double percentBlocked = 1.0;
   for (int i = 0; i < playerArmor; ++i)
   {

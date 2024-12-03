@@ -104,7 +104,7 @@ void roomController(Player *player, Map *map)
     if (isEnemyRoom)
     {
       // Display text indicating the enemy spawner has become more challenging
-      short unsigned int progression = EnemySpawner::getProgression();
+      int progression = EnemySpawner::getProgression();
       if (progression + 1 == CHECKPOINT_1 ||
           progression + 1 == CHECKPOINT_2 ||
           progression + 1 == CHECKPOINT_3)

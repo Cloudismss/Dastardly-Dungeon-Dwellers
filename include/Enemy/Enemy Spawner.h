@@ -17,23 +17,23 @@ class EnemySpawner
 {
 public:
   // Return random new enemy
-  static Enemy *generateEnemy(short unsigned int playerLevel);
+  static Enemy *generateEnemy(int playerLevel);
 
   // Accessors
-  static inline short unsigned int getProgression() { return enemyProgression; }
+  static inline int getProgression() { return enemyProgression; }
   static inline vector<int> getStage1Baddies() { return stage1Baddies; }
   static inline vector<int> getStage2Baddies() { return stage2Baddies; }
   static inline vector<int> getStage3Baddies() { return stage3Baddies; }
 
 private:
-  static inline short unsigned int enemyProgression = 0;
+  static inline int enemyProgression = 0;
   const static inline vector<int> stage1Baddies = { SKELETON, GOBLIN, ORC };
   const static inline vector<int> stage2Baddies = { TROLL, CYCLOPS };
   const static inline vector<int> stage3Baddies = { MINOTAUR };  
 
 private:
   // Helper functions
-  static short unsigned int calculateLevel();
+  static int calculateLevel();
   static int calculateName();
 };
 

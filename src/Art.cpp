@@ -23,7 +23,7 @@ namespace art
       string choiceName[] = {player->getCharacter()->getSkillName("Melee"), player->getCharacter()->getSkillName("Magic"), player->getCharacter()->getSkillName("Ranged")};
       string potionElement = "Potions: " + std::to_string(player->getPotions());
 
-      short int battleMenuSelection = 0;
+      int battleMenuSelection = 0;
       bool loopFlag = true;
       do
       {

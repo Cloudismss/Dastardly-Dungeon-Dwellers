@@ -19,7 +19,7 @@ int battleController(Player *player, Enemy *enemy)
     // Player chose a damaging move
     if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ranged")
     {
-      short unsigned int playerAttack = player->attack(battleMenuSelection, enemy->getName(),enemy->getVulnerability(battleMenuSelection));
+      int playerAttack = player->attack(battleMenuSelection, enemy->getName(),enemy->getVulnerability(battleMenuSelection));
       if (playerAttack > 0)
       {
         string skillName = player->getCharacter()->getSkillName(battleMenuSelection);

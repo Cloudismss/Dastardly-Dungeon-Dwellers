@@ -1,6 +1,6 @@
 #include "Troll.h"
 
-Troll::Troll(short unsigned int playerLevel) : Enemy(playerLevel)
+Troll::Troll(int playerLevel) : Enemy(playerLevel)
 {
   name = "Troll";
   meleeVulnerability = 1.3;

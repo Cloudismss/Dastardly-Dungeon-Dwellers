@@ -24,9 +24,9 @@ private:
   void announceEnemy() override;
 
 public:
-  Boss(short unsigned int playerLevel);
+  Boss(int playerLevel);
   string getNickname() const override;
-  short unsigned int attack(short unsigned int playerArmor, short unsigned int playerMaxHealth) override;
+  int attack(int playerArmor, int playerMaxHealth) override;
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_BOSS_H

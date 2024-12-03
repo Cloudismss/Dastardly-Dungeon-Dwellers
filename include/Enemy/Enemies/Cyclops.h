@@ -6,7 +6,7 @@
 class Cyclops : public Enemy
 {
 public:
-  Cyclops(short unsigned int playerLevel); 
+  Cyclops(int playerLevel); 
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_CYCLOPS_H

@@ -11,7 +11,7 @@ Bard::Bard()
 void Bard::generateSkillNames()
 {
   // Number of skill levels per skill
-  const short unsigned int SIZE = 3;
+  const int SIZE = 3;
 
   // Bard Skill Names
   const string bardMelee[] = {"Slap", "Snuggle", "Strum"};

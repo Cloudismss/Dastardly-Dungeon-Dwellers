@@ -11,7 +11,7 @@ Archer::Archer()
 void Archer::generateSkillNames()
 {
   // Number of skill levels per skill
-  const short unsigned int SIZE = 3;
+  const int SIZE = 3;
 
   // Archer Skill Names
   const string archerMelee[] = {"Slice", "Sever", "Blade Dance"};

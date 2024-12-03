@@ -11,7 +11,7 @@ Warrior::Warrior()
 void Warrior::generateSkillNames()
 {
   // Number of skill levels per skill
-  const short unsigned int SIZE = 3;
+  const int SIZE = 3;
 
   // Warrior Skill Names
   const string warriorMelee[] = {"Slash", "Cleave", "Behemoth Strike"};

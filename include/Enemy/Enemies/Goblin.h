@@ -6,7 +6,7 @@
 class Goblin : public Enemy
 {
 public:
-  Goblin(short unsigned int playerLevel);
+  Goblin(int playerLevel);
 };
 
 #endif // DASTARDLY_DUNGEON_DWELLERS_GOBLIN_H

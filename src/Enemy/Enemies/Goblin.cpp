@@ -1,6 +1,6 @@
 #include "Goblin.h"
 
-Goblin::Goblin(short unsigned int playerLevel) : Enemy(playerLevel)
+Goblin::Goblin(int playerLevel) : Enemy(playerLevel)
 {
   name = "Goblin";
   meleeVulnerability = 1.3;
