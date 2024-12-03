@@ -33,11 +33,11 @@ protected:
 public:
   // Accessors
   string getName() const { return name; }
-  string getNickname() const;
+  virtual string getNickname() const { return name; }
   short int getHealth() const { return health; }
   short unsigned int getLevel() const { return level; }
   short unsigned int getRewardTier() const { return rewardTier; }
-  double getVulnerability(const string &battleMenuSelection);
+  double getVulnerability(const string &battleMenuSelection) const;
 
   // Mutators
   void receive(short unsigned int playerAttack);

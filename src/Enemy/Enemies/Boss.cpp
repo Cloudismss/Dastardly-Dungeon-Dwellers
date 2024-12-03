@@ -10,7 +10,8 @@ Boss::Boss(short unsigned int playerLevel) : Enemy(playerLevel)
 {
   rewardTier = 10;
   name = bosses[rand() % bosses.size()];
-  boss = true;   
+  boss = true;
+  announceEnemy();
 }
 
 void Boss::announceEnemy()

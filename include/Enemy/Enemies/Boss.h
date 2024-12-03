@@ -25,7 +25,7 @@ private:
 
 public:
   Boss(short unsigned int playerLevel);
-  string getNickname() const;
+  string getNickname() const override;
   short unsigned int attack(short unsigned int playerArmor, short unsigned int playerMaxHealth) override;
 };
 

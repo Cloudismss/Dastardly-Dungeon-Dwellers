@@ -18,8 +18,6 @@ Enemy::Enemy(short unsigned int playerLevel)
   for (int i = 1; i < level; ++i)
     levelBoost += BASE_ENEMY_HEALTH * 0.5;
   health = BASE_ENEMY_HEALTH + levelBoost;
-  
-  announceEnemy();
 }
 
 // TODO: add fun logic to allow lower AND higher level enemies
@@ -78,16 +76,11 @@ void Enemy::announceEnemy()
   cout << "A level " << level << " " << name << " is guarding this room!\n\n";
 }
 
-string Enemy::getNickname() const
-{
-  return name;
-}
-
 // Pre-condition: called by playerDamage(), passed damageValue, skill variables, enemy variables, and result of battleMenu()
 // Post-condition: updates damageValue based on enemy stats
-double Enemy::getVulnerability(const string &battleMenuSelection)
+double Enemy::getVulnerability(const string &battleMenuSelection) const
 {
-  double *vulnerability = nullptr;
+  const double *vulnerability = nullptr;
 
   if (battleMenuSelection == "Melee")
     vulnerability = &meleeVulnerability;
