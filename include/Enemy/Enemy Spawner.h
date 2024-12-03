@@ -10,7 +10,8 @@ enum EnemyName
   MINOTAUR,
   ORC,
   SKELETON,
-  TROLL
+  TROLL,
+  BOSS
 };
 
 class EnemySpawner
@@ -21,9 +22,6 @@ public:
 
   // Accessors
   static inline int getProgression() { return enemyProgression; }
-  static inline vector<int> getStage1Baddies() { return stage1Baddies; }
-  static inline vector<int> getStage2Baddies() { return stage2Baddies; }
-  static inline vector<int> getStage3Baddies() { return stage3Baddies; }
 
 private:
   static inline int enemyProgression = 0;
