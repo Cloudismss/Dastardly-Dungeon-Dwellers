@@ -6,7 +6,7 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 ## Building
 Run `git clone --recursive https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers.git` to clone the project with dependencies.  
   
-Build via `cmake` command within a build folder of your choosing.  
+Build via `cmake` command targeting the root project directory from within a build folder of your choosing.  
 
 ## Game Information
 
