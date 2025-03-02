@@ -37,7 +37,6 @@ set(Dirs
         "../include/Player"
         "../include/Player/Characters"
         "../include/Room Controller"
-        "../lib/fmt/include"
 )
 
 add_library(src ${Sources})

@@ -3,8 +3,17 @@ project(Dastardly-Dungeon-Dwellers LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# fmt library
+include(FetchContent)
+
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG master
+)
+FetchContent_MakeAvailable(fmt)
 
 if (CMAKE_HOST_WIN32)
   # Set clang compiler
@@ -16,14 +25,6 @@ if (CMAKE_HOST_WIN32)
 
   # UTF-8 option is required when using fmt
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-
-elseif (CMAKE_HOST_APPLE)
-  # TODO: Enable static compilation
-
-elseif (CMAKE_HOST_UNIX)
-  # Enable static compilation
-  set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
-
 endif()
 
 # Executable
@@ -37,5 +38,4 @@ target_link_libraries(${PROJECT_NAME} include)
 target_link_libraries(${PROJECT_NAME} src)
 
 # fmt library
-add_subdirectory(lib/fmt)
-target_link_libraries(${PROJECT_NAME} fmt::fmt)
+target_link_libraries(src fmt::fmt)
