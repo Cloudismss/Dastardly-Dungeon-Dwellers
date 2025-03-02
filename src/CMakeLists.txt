@@ -15,7 +15,7 @@ set(Sources
         "Player/Characters/Character.cpp"
         "Player/Characters/Mage.cpp"
         "Player/Characters/Warrior.cpp"
-        "Player/Character List.cpp"
+        "Player/CharacterList.cpp"
         "Player/Inventory.cpp"
         "Player/Player.cpp"
         "Room Controller/Room Controller.cpp"

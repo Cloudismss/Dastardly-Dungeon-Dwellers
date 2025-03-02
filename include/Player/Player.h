@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Character List.h"
+#include "CharacterList.h"
 #include "Inventory.h"
 
 using std::string;

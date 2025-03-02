@@ -18,7 +18,7 @@ set(Includes
         "Player/Characters/Character.h"
         "Player/Characters/Mage.h"
         "Player/Characters/Warrior.h"
-        "Player/Character List.h"
+        "Player/CharacterList.h"
         "Player/Inventory.h"
         "Player/Player.h" 
         "Room Controller/Room Controller.h"
