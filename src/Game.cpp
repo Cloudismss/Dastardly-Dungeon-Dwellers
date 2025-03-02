@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Art.h"
-#include "Room Controller.h"
+#include "RoomController.h"
 #include "Validation.h"
 
 using std::cin;

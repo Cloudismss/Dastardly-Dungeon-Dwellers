@@ -1,4 +1,4 @@
-#include "Room Exit.h"
+#include "RoomExit.h"
 
 #include <iostream>
 

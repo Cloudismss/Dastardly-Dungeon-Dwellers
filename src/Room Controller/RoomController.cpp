@@ -1,12 +1,12 @@
-#include "Room Controller.h"
+#include "RoomController.h"
 
 #include "Art.h"
 #include "Game.h"
 #include "Globals.h"
-#include "Room Enemy.h"
-#include "Room Exit.h"
-#include "Room Loot.h"
-#include "Room Merchant.h"
+#include "RoomEnemy.h"
+#include "RoomExit.h"
+#include "RoomLoot.h"
+#include "RoomMerchant.h"
 
 void roomController(Player *player, Map *map)
 {

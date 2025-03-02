@@ -1,11 +1,11 @@
-#include "Room Loot.h"
+#include "RoomLoot.h"
 
 #include <iostream>
 #include <string>
 
 #include "Art.h"
 #include "Game.h"
-#include "Room Enemy.h"
+#include "RoomEnemy.h"
 #include "Validation.h"
 
 using std::cin;
