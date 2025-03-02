@@ -8,7 +8,7 @@ set(Sources
         "Enemy/Enemies/Orc.cpp"
         "Enemy/Enemies/Skeleton.cpp"
         "Enemy/Enemies/Troll.cpp"
-        "Enemy/Enemy Spawner.cpp"
+        "Enemy/EnemySpawner.cpp"
         "Enemy/Loot.cpp"
         "Player/Characters/Archer.cpp"
         "Player/Characters/Bard.cpp"

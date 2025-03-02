@@ -11,7 +11,7 @@ set(Includes
         "Enemy/Enemies/Orc.h"
         "Enemy/Enemies/Skeleton.h"
         "Enemy/Enemies/Troll.h"
-        "Enemy/Enemy Spawner.h"
+        "Enemy/EnemySpawner.h"
         "Enemy/Loot.h"
         "Player/Characters/Archer.h"
         "Player/Characters/Bard.h"

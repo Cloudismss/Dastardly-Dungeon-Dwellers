@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Battle Controller.h"
-#include "Enemy Spawner.h"
+#include "EnemySpawner.h"
 #include "Loot.h"
 
 using std::cin;
