@@ -27,7 +27,7 @@ set(Includes
         "Room Controller/RoomLoot.h"
         "Room Controller/RoomMerchant.h"
         "Art.h"
-        "Battle Controller.h"
+        "BattleController.h"
         "Game.h"
         "Map.h"
         "Validation.h"

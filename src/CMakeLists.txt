@@ -24,7 +24,7 @@ set(Sources
         "Room Controller/RoomLoot.cpp"
         "Room Controller/RoomMerchant.cpp"
         "Art.cpp"
-        "Battle Controller.cpp"
+        "BattleController.cpp"
         "Game.cpp"
         "Map.cpp"
         "Validation.cpp"
@@ -36,7 +36,7 @@ set(Dirs
         "../include/Enemy/Enemies"
         "../include/Player"
         "../include/Player/Characters"
-        "../include/Room Controller"
+        "../include/RoomController"
 )
 
 add_library(src ${Sources})

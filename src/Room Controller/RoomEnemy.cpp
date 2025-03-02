@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "Battle Controller.h"
+#include "BattleController.h"
 #include "EnemySpawner.h"
 #include "Loot.h"
 

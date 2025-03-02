@@ -1,4 +1,4 @@
-#include "Battle Controller.h"
+#include "BattleController.h"
 
 #include <iostream>
 #include <string>
