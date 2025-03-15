@@ -31,6 +31,7 @@ public:
   Boss(int playerLevel);
 
 private:
+  // Helper functions
   bool createBoss() override;
   void announceEnemy() const override;
 
