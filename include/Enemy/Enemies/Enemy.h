@@ -33,7 +33,7 @@ public:
   int getHealth() const { return health; }
   int getLevel() const { return level; }
   int getRewardTier() const { return rewardTier; }
-  double getVulnerability(int battleSelection) const { return vulnerability[battleSelection]; }
+  double getVulnerability(int skillType) const { return vulnerability[skillType]; }
 
 public:
   // Mutators

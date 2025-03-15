@@ -27,7 +27,7 @@ public:
 public:
   // Helper Functions
   void heal();
-  int attack(int battleSelection, const string &enemyName, double enemyVulnerability);
+  int attack(int skillType, const string &enemyName, double enemyVulnerability);
 
 public:
   // Progression Accessors
