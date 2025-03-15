@@ -2,13 +2,11 @@
 
 #include <iostream>
 
-#include "Art.h"
-#include "Game.h"
 #include "Globals.h"
 
-#include "fmt/color.h"
+#include "Game.h"
 
-using std::cout;
+#include "fmt/color.h"
 
 Player::Player()
 {
@@ -22,7 +20,7 @@ Player::~Player()
   delete inventory;
 }
 
-int Player::attack(const string &battleMenuSelection, const string &enemyName, double enemyVulnerability)
+int Player::attack(int skillType, const string &enemyName, double enemyVulnerability)
 {
   // DEBUG OPTION - Max damage
   if (Game::getDebug())
@@ -30,44 +28,45 @@ int Player::attack(const string &battleMenuSelection, const string &enemyName, d
 
   int attackValue;
   double missChance;
-  if (battleMenuSelection == "Melee")
+
+  switch (skillType)
   {
-    attackValue = BASE_PLAYER_MELEE_DAMAGE;
-    missChance = BASE_MELEE_MISS_CHANCE;
-  }
-  else if (battleMenuSelection == "Magic")
-  {
-    attackValue = BASE_PLAYER_MAGIC_DAMAGE;
-    missChance = BASE_MAGIC_MISS_CHANCE;
-  }
-  else if (battleMenuSelection == "Ranged")
-  {
-    attackValue = BASE_PLAYER_RANGED_DAMAGE;
-    missChance = BASE_RANGED_MISS_CHANCE;
+    case skill::MELEE:
+      attackValue = BASE_PLAYER_MELEE_DAMAGE;
+      missChance = BASE_MELEE_MISS_CHANCE;
+      break;
+    case skill::MAGIC:
+      attackValue = BASE_PLAYER_MAGIC_DAMAGE;
+      missChance = BASE_MAGIC_MISS_CHANCE;
+      break;
+    case skill::RANGED:
+      attackValue = BASE_PLAYER_RANGED_DAMAGE;
+      missChance = BASE_RANGED_MISS_CHANCE;
+      break;
   }
 
   if (1 + (rand() % 100) <= missChance * 100)
   {
-    cout << "\tYour attack missed!\n\n";
+    std::cout << "\tYour attack missed!\n\n";
     return 0;
   }
 
   // Multiply by weapon level damage boost
-  int weaponLevel = characters->getWeaponLevel(battleMenuSelection);
+  int weaponLevel = characters->getWeaponLevel(skillType);
   int weaponBoost = 1;
   for (int i = 1; i < weaponLevel; ++i)
     weaponBoost += 0.30; // 30% weapon damage boost per weapon level
   attackValue *= weaponBoost;
 
   // Multiply by skillUpgrade
-  int skillUpgradeTier = characters->getSkillUpgradeTier(battleMenuSelection);
+  int skillUpgradeTier = characters->getSkillUpgradeTier(skillType);
   int skillTierBoost = 0;
   for (int i = 1; i < skillUpgradeTier; ++i)
     skillTierBoost += 10;
   attackValue += skillTierBoost;
 
   // Flat skillLevel boost
-  int skillLevel = characters->getSkillLevel(battleMenuSelection);
+  int skillLevel = characters->getSkillLevel(skillType);
   attackValue += skillLevel;
 
   // Add a small offset to the damage for a touch of variability
@@ -80,31 +79,31 @@ int Player::attack(const string &battleMenuSelection, const string &enemyName, d
   if (1 + (rand() % 100) <= critChance * 100)
   {
     attackValue *= 1.2;
-    cout << "\tYou landed a ";
+    std::cout << "\tYou landed a ";
     fmt::print(fmt::emphasis::bold | fg(fmt::color::gold), "critical hit");
-    cout << "!\n";
+    std::cout << "!\n";
   }
 
   // Calculate vulnerability
-  const string skillName = characters->getSkillName(battleMenuSelection);
+  const string skillName = characters->getSkillName(skillType);
   if (enemyVulnerability < 1.0)
   {
-    cout << "\t" << skillName << " is ";
+    std::cout << "\t" << skillName << " is ";
     fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "not very effective");
-    cout << " against " << enemyName << "!\n";
+    std::cout << " against " << enemyName << "!\n";
   }
   else if (enemyVulnerability > 1.5)
   {
-    cout << "\t" << skillName << " is ";
+    std::cout << "\t" << skillName << " is ";
     fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "super effective");
-    cout << " against " << enemyName << "!\n";
+    std::cout << " against " << enemyName << "!\n";
   }
   attackValue *= enemyVulnerability;
 
-  cout << "\t" << characters->getSkillName(battleMenuSelection) << " dealt " << attackValue << " damage\n\n";
+  std::cout << "\t" << characters->getSkillName(skillType) << " dealt " << attackValue << " damage\n\n";
 
   // Increment skill counter and check for upgrade
-  characters->useSkill(battleMenuSelection);
+  characters->useSkill(skillType);
 
   return attackValue;
 }
@@ -126,15 +125,15 @@ void Player::heal()
     if (healValue + characters->getHealth() > characters->getMaxHealth())
       healValue = characters->getMaxHealth() - characters->getHealth();
 
-    cout << "\tYou used a potion and healed for ";
+    std::cout << "\tYou used a potion and healed for ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
-    cout << " health\n";
-    cout << "\tYou now have ";
+    std::cout << " health\n";
+    std::cout << "\tYou now have ";
          fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", getPotions());
-    cout << " potions\n\n";
+    std::cout << " potions\n\n";
 
     characters->adjustHealth(healValue);
   }
   else
-    cout << "\tYou don't have any potions!\n";
+    std::cout << "\tYou don't have any potions!\n";
 }

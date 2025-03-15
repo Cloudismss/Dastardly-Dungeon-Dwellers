@@ -1,8 +1,13 @@
 #include "RoomController.h"
 
-#include "Art.h"
 #include "Game.h"
+
 #include "Globals.h"
+
+#include "BoxArt.h"
+#include "DialogueArt.h"
+#include "RoomArt.h"
+
 #include "RoomEnemy.h"
 #include "RoomExit.h"
 #include "RoomLoot.h"
@@ -29,7 +34,7 @@ void roomController(Player *player, Map *map)
     else
       isEnemyRoom = true;
 
-    art::room::roomEnemyMonologue(ROOM_EXPLORED);
+    art::dialogue::roomEnemyMonologue(ROOM_EXPLORED);
 
     // Initiate enemy room
     if (!roomEnemy(player))
@@ -51,7 +56,7 @@ void roomController(Player *player, Map *map)
         return; // Room did not respawn
     }
 
-    art::room::roomLootMonologue(ROOM_EXPLORED);
+    art::dialogue::roomLootMonologue(ROOM_EXPLORED);
     art::room::treasureArt();
     
     // Initiate loot room
@@ -68,7 +73,7 @@ void roomController(Player *player, Map *map)
     if (ROOM_EXPLORED)
       art::box::monologueInABox("A friendly traveling merchant resides here");
 
-    art::room::roomMerchantMonologue(ROOM_EXPLORED);
+    art::dialogue::roomMerchantMonologue(ROOM_EXPLORED);
     art::room::merchantArt();
 
     // Initiate merchant room
@@ -80,7 +85,7 @@ void roomController(Player *player, Map *map)
     if (ROOM_EXPLORED)
       art::box::monologueInABox("A strange sensation controls my actions");
 
-    art::room::roomExitMonologue(ROOM_EXPLORED);
+    art::dialogue::roomExitMonologue(ROOM_EXPLORED);
     art::room::doorArt();
 
     // Initiate exit room

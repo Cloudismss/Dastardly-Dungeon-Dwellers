@@ -1,6 +1,6 @@
 #include "Inventory.h"
 
-#include "Art.h"
+#include "BoxArt.h"
 #include "Game.h"
 
 #include "fmt/color.h"

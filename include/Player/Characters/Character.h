@@ -43,7 +43,7 @@ protected:
   int xpRequiredPerLevel = 100;
   double critLevel = 1.0;
   // Map of skill names with array for indicating skill level - key is ability type [ Melee, Magic, or Ranged ]
-  unordered_map<string, string [3]> skillNames;
+  unordered_map<int, string [3]> skillNames;
 
 protected:
   // Skill Helper Functions
@@ -56,25 +56,25 @@ public:
   int getHealth() const { return health; }
   int getXp() const { return xp; }
   int getLevel() const { return level; }
-  int getWeaponLevel(const string &weaponType) const;
+  int getWeaponLevel(int skillType) const;
 
   // Class Specific Accessors
   int getMaxHealth() const { return maxHealth; }
-  int getSkillUpgradeTier(const string &skillType) const;
-  int getSkillLevel(const string &skillType) const;
+  int getSkillUpgradeTier(int skillType) const;
+  int getSkillLevel(int skillType) const;
   double getCritLevel() const { return critLevel; }
   // Retrieves value from skillNames
-  string getSkillName(const string &skillType);
+  string getSkillName(int skillType);
 
   // Generic Class Mutators
   void adjustHealth(int healthAdjust) { health += healthAdjust; }
   void addXp(int xpAdjust);
   void addLevel();
-  void upgradeWeapon(const string &weaponType, const string &upgradeName);
+  void upgradeWeapon(int skillType, const string &upgradeName);
 
   // Class Specific Mutators
-  void useSkill(const string &skillType);
-  void upgradeSkillName(const string &skillType);
+  void useSkill(int skillType);
+  void upgradeSkillName(int skillType);
   void adjustMaxHealth(int maxHealthAdjust) { maxHealth += maxHealthAdjust; }
 };
 

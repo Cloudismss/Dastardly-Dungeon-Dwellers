@@ -3,7 +3,9 @@
 #include <iostream>
 #include <string>
 
-#include "Art.h"
+#include "GameArt.h"
+#include "TutorialArt.h"
+
 #include "RoomController.h"
 #include "Validation.h"
 

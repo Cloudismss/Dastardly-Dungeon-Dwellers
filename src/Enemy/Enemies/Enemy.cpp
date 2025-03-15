@@ -4,15 +4,12 @@
 
 #include "Globals.h"
 
-Enemy::Enemy(int playerLevel, 
-             const std::string& name, 
-             bool boss,
-             const double vulnerability[])
-               : name(name),
-                 boss(boss),
-                 level(setLevel(playerLevel)),
-                 rewardTier(setRewardTier(playerLevel)),
-                 vulnerability(vulnerability[MELEE], vulnerability[MAGIC], vulnerability[RANGED])
+Enemy::Enemy(int playerLevel, const std::string& name, bool boss, const double vulnerability[]) :
+  name(name),
+  boss(boss),
+  level(setLevel(playerLevel)),
+  rewardTier(setRewardTier(playerLevel)),
+  vulnerability(vulnerability[skill::MELEE], vulnerability[skill::MAGIC], vulnerability[skill::RANGED])
 {
   // Calculates health of the enemy based off of base enemy health and enemy level
   int levelBoost = 0;

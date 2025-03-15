@@ -1,5 +1,12 @@
 set(Sources
         # Sources
+        "Art/BattleArt.cpp"
+        "Art/BoxArt.cpp"
+        "Art/CharacterArt.cpp"
+        "Art/DialogueArt.cpp"
+        "Art/GameArt.cpp"
+        "Art/RoomArt.cpp"
+        "Art/TutorialArt.cpp"
         "Enemy/Enemies/Boss.cpp"
         "Enemy/Enemies/Cyclops.cpp"
         "Enemy/Enemies/Enemy.cpp"
@@ -23,7 +30,6 @@ set(Sources
         "RoomController/RoomExit.cpp"
         "RoomController/RoomLoot.cpp"
         "RoomController/RoomMerchant.cpp"
-        "Art.cpp"
         "BattleController.cpp"
         "Game.cpp"
         "Map.cpp"
@@ -32,6 +38,7 @@ set(Sources
 
 set(Dirs
         "../include"
+        "../include/Art"
         "../include/Enemy"
         "../include/Enemy/Enemies"
         "../include/Player"

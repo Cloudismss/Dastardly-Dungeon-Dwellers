@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <Art.h>
+#include "BoxArt.h"
 #include "Globals.h"
 
 #include <fmt/color.h>
@@ -90,53 +90,53 @@ void Character::generateSkills(std::ofstream &defaultCharacterStats)
                         << "Bard, 15 15 15 9.0 0.4";
 }
 
-int Character::getWeaponLevel(const string &weaponType) const
+int Character::getWeaponLevel(int skillType) const
 {
-  if (weaponType == "Melee")
+  if (skillType == skill::MELEE)
     return meleeWeapon;
-  else if (weaponType == "Magic")
+  else if (skillType == skill::MAGIC)
     return magicWeapon;
-  else if (weaponType == "Ranged")
+  else if (skillType == skill::RANGED)
     return rangedWeapon;
 
   // TODO: Implement clean fix for return in all control paths
   return -1;
 }
 
-int Character::getSkillUpgradeTier(const string &skillType) const
+int Character::getSkillUpgradeTier(int skillType) const
 {
   // Add 1 since upgradeTiers start at index 0
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     return meleeUpgradeTier + 1;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     return magicUpgradeTier + 1;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     return magicUpgradeTier + 1;
 
   // TODO: Implement clean fix for return in all control paths
   return -1;
 }
 
-int Character::getSkillLevel(const string &skillType) const
+int Character::getSkillLevel(int skillType) const
 {
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     return meleeLevel;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     return magicLevel;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     return rangedLevel;
 
   // TODO: Implement clean fix for return in all control paths
   return -1;
 }
 
-string Character::getSkillName(const string &skillType)
+string Character::getSkillName(int skillType)
 {
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     return skillNames[skillType][meleeUpgradeTier];
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     return skillNames[skillType][magicUpgradeTier];
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     return skillNames[skillType][rangedUpgradeTier];
 
   // TODO: Implement clean fix for return in all control paths
@@ -181,27 +181,27 @@ void Character::addLevel()
   maxHealth *= 1.1;
 }
 
-void Character::upgradeWeapon(const string &weaponType, const string &upgradeName)
+void Character::upgradeWeapon(int skillType, const string &upgradeName)
 {
-  if (weaponType == "Melee")
+  if (skillType == skill::MELEE)
     ++meleeWeapon;
-  else if (weaponType == "Magic")
+  else if (skillType == skill::MAGIC)
     ++magicWeapon;
-  else if (weaponType == "Ranged")
+  else if (skillType == skill::RANGED)
     ++rangedWeapon;
 
   fmt::print(fmt::emphasis::bold, "{0} added\n", upgradeName);
 }
 
-void Character::useSkill(const string &skillType)
+void Character::useSkill(int skillType)
 {
   int *upgradeCounter = nullptr;
 
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     upgradeCounter = &meleeCounter;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     upgradeCounter = &magicCounter;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     upgradeCounter = &rangedCounter;
 
   if (*upgradeCounter + 1 == SKILL_UPGRADE || *upgradeCounter + 1 == SKILL_UPGRADE * 2)
@@ -210,19 +210,18 @@ void Character::useSkill(const string &skillType)
   ++(*upgradeCounter);
 }
 
-void Character::upgradeSkillName(const string &skillType)
+void Character::upgradeSkillName(int skillType)
 {
   int *skillUpgradeTier = nullptr;
 
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     skillUpgradeTier = &meleeUpgradeTier;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     skillUpgradeTier = &magicUpgradeTier;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     skillUpgradeTier = &rangedUpgradeTier;
 
-  const string upgradeMessage = skillNames[skillType][*skillUpgradeTier] + " has been upgraded to " + skillNames[skillType][(*skillUpgradeTier) + 1];
-  ++(*skillUpgradeTier);
+  const string upgradeMessage = skillNames[skillType][*skillUpgradeTier] + " has been upgraded to " + skillNames[skillType][(*skillUpgradeTier)++];
  
   // Print skill upgrade notification
   art::box::displayMeInABox("Congratulations!", upgradeMessage);

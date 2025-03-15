@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-#include "Art.h"
+#include "BoxArt.h"
+#include "CharacterArt.h"
 #include "Validation.h"
 
 #include "Archer.h"
@@ -227,26 +228,26 @@ string CharacterList::classSelection()
         case 1:
         {
           className = "Warrior";
-          art::character::warriorArt();
+          art::character::warrior();
           break;
         }
         case 2:
         {
           className = "Mage";
-          art::character::mageArt();
+          art::character::mage();
           break;
         }
         case 3:
         {
           className = "Archer";
-          art::character::archerArt();
+          art::character::archer();
           break;
         }
         // Player chose an invalid number, and is auto-assigned to bard
         default:
         {
           className = "Bard";
-          art::character::bardArt();
+          art::character::bard();
           cout << "That wasn't an option >:(\n"
                << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
           loopFlag = false;

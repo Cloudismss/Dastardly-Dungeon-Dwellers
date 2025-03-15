@@ -20,12 +20,15 @@ const int CHECKPOINT_1 = 5;
 const int CHECKPOINT_2 = 10;
 const int CHECKPOINT_3 = 15;
 
-enum skills
+namespace skill
 {
-  MELEE,
-  MAGIC,
-  RANGED
-};
+  enum skills
+  {
+    MELEE,
+    MAGIC,
+    RANGED
+  };
+}
 
 enum exitCodes
 {
