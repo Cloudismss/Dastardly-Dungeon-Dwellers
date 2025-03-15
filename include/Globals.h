@@ -20,4 +20,17 @@ const int CHECKPOINT_1 = 5;
 const int CHECKPOINT_2 = 10;
 const int CHECKPOINT_3 = 15;
 
+enum skills
+{
+  MELEE,
+  MAGIC,
+  RANGED
+};
+
+enum exitCodes
+{
+  SUCCESS = 0,
+  FAIL = -1,
+};
+
 #endif // GLOBALS_H
