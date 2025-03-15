@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_GOBLIN_H
-#define DASTARDLY_DUNGEON_DWELLERS_GOBLIN_H
+#ifndef GOBLIN_H
+#define GOBLIN_H
 
 #include "Enemy.h"
 
@@ -9,4 +9,4 @@ public:
   Goblin(int playerLevel);
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_GOBLIN_H
+#endif // GOBLIN_H

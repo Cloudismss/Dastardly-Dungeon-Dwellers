@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_WARRIOR_H
-#define DASTARDLY_DUNGEON_DWELLERS_WARRIOR_H
+#ifndef WARRIOR_H
+#define WARRIOR_H
 
 #include "Character.h"
 
@@ -13,4 +13,4 @@ private:
   void generateSkillNames();
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_WARRIOR_H
+#endif // WARRIOR_H

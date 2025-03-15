@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_ORC_H
-#define DASTARDLY_DUNGEON_DWELLERS_ORC_H
+#ifndef ORC_H
+#define ORC_H
 
 #include "Enemy.h"
 
@@ -9,4 +9,4 @@ public:
   Orc(int playerLevel);
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_ORC_H
+#endif // ORC_H

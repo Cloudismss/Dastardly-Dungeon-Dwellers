@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_BATTLE_CONTROLLER_H
-#define DASTARDLY_DUNGEON_DWELLERS_BATTLE_CONTROLLER_H
+#ifndef BATTLECONTROLLER_H
+#define BATTLECONTROLLER_H
 
 #include "Enemy.h"
 #include "Player.h"
@@ -13,4 +13,4 @@ enum Result
 
 int battleController(Player *player, Enemy *enemy);
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_BATTLE_CONTROLLER_H
+#endif // BATTLECONTROLLER_H

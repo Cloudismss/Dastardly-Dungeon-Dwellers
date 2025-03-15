@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_GAME_H
-#define DASTARDLY_DUNGEON_DWELLERS_GAME_H
+#ifndef GAME_H
+#define GAME_H
 
 #include "Map.h"
 #include "Player.h"
@@ -32,4 +32,4 @@ public:
   void loop();
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_GAME_H
+#endif // GAME_H

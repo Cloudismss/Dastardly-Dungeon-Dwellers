@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_TROLL_H
-#define DASTARDLY_DUNGEON_DWELLERS_TROLL_H
+#ifndef TROLL_H
+#define TROLL_H
 
 #include "Enemy.h"
 
@@ -9,4 +9,4 @@ public:
   Troll(int playerLevel);
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_TROLL_H
+#endif // TROLL_H

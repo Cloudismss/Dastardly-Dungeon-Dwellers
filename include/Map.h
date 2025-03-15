@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_MAP_H
-#define DASTARDLY_DUNGEON_DWELLERS_MAP_H
+#ifndef MAP_H
+#define MAP_H
 
 #include <string>
 
@@ -41,4 +41,4 @@ public:
   string getRoomContents() const { return position[rowPos][colPos].contents; }
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_MAP_H
+#endif // MAP_H

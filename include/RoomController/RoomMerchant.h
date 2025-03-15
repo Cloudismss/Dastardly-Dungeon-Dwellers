@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H
-#define DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H
+#ifndef ROOMMERCHANT_H
+#define ROOMMERCHANT_H
 
 #include <string>
 #include <vector>
@@ -19,4 +19,4 @@ struct MerchantItem
 void roomMerchant(Player *player);
 void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int userShopSelection, int &purchaseAmount);
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_MERCHANT_H
+#endif // ROOMMERCHANT_H

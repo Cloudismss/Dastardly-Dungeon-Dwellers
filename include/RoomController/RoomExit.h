@@ -1,8 +1,8 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H
-#define DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H
+#ifndef ROOMEXIT_H
+#define ROOMEXIT_H
 
 #include "Player.h"
 
 void roomExit(Player *player);
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_ROOM_EXIT_H
+#endif // ROOMEXIT_H

@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_CYCLOPS_H
-#define DASTARDLY_DUNGEON_DWELLERS_CYCLOPS_H
+#ifndef CYCLOPS_H
+#define CYCLOPS_H
 
 #include "Enemy.h"
 
@@ -9,4 +9,4 @@ public:
   Cyclops(int playerLevel); 
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_CYCLOPS_H
+#endif // CYCLOPS_H

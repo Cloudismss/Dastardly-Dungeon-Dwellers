@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_SKELETON_H
-#define DASTARDLY_DUNGEON_DWELLERS_SKELETON_H
+#ifndef SKELETON_H
+#define SKELETON_H
 
 #include "Enemy.h"
 
@@ -9,4 +9,4 @@ public:
   Skeleton(int playerLevel);
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_SKELETON_H
+#endif // SKELETON_H

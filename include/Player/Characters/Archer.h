@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_ARCHER_H
-#define DASTARDLY_DUNGEON_DWELLERS_ARCHER_H
+#ifndef ARCHER_H
+#define ARCHER_H
 
 #include "Character.h"
 
@@ -13,4 +13,4 @@ private:
   void generateSkillNames();
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_ARCHER_H
+#endif // ARCHER_H

@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_BARD_H
-#define DASTARDLY_DUNGEON_DWELLERS_BARD_H
+#ifndef BARD_H
+#define BARD_H
 
 #include "Character.h"
 
@@ -13,4 +13,4 @@ private:
   void generateSkillNames();
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_BARD_H
+#endif // BARD_H

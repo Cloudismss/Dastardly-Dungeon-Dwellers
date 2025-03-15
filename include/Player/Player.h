@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
-#define DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <string>
 
@@ -64,4 +64,4 @@ public:
   bool cycle(char direction = 'R') { return characters->cycle(direction); }
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_PLAYER_H
+#endif // PLAYER_H

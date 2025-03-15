@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H
-#define DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H
+#ifndef GLOBALS_H
+#define GLOBALS_H
 
 // Globals
 const double BASE_CRIT_CHANCE = 0.10;
@@ -20,4 +20,4 @@ const int CHECKPOINT_1 = 5;
 const int CHECKPOINT_2 = 10;
 const int CHECKPOINT_3 = 15;
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_GLOBALS_H
+#endif // GLOBALS_H

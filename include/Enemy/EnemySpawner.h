@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_ENEMY_SPAWNER_H
-#define DASTARDLY_DUNGEON_DWELLERS_ENEMY_SPAWNER_H
+#ifndef ENEMYSPAWNER_H
+#define ENEMYSPAWNER_H
 
 #include "Enemy.h"
 
@@ -31,4 +31,4 @@ private:
   static int calculateName();
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_ENEMY_SPAWNER_H
+#endif // ENEMYSPAWNER_H

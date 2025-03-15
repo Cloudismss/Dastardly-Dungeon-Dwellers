@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_BOSS_H
-#define DASTARDLY_DUNGEON_DWELLERS_BOSS_H
+#ifndef BOSS_H
+#define BOSS_H
 
 #include <vector>
 
@@ -34,4 +34,4 @@ public:
   int attack(int playerArmor, int playerMaxHealth) override;
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_BOSS_H
+#endif // BOSS_H

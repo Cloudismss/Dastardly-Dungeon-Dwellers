@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_CHARACTER_H
-#define DASTARDLY_DUNGEON_DWELLERS_CHARACTER_H
+#ifndef CHARACTER_H
+#define CHARACTER_H
 
 #include <set>
 #include <string>
@@ -78,4 +78,4 @@ public:
   void adjustMaxHealth(int maxHealthAdjust) { maxHealth += maxHealthAdjust; }
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_CHARACTER_H
+#endif // CHARACTER_H

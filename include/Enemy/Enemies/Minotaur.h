@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_MINOTAUR_H
-#define DASTARDLY_DUNGEON_DWELLERS_MINOTAUR_H
+#ifndef MINOTAUR_H
+#define MINOTAUR_H
 
 #include "Enemy.h"
 
@@ -9,4 +9,4 @@ public:
   Minotaur(int playerLevel);
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_MINOTAUR_H
+#endif // MINOTAUR_H

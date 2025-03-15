@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
-#define DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include <string>
 #include <vector>
@@ -48,4 +48,4 @@ public:
   void receive(int playerAttack);
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_ENEMY_H
+#endif // ENEMY_H

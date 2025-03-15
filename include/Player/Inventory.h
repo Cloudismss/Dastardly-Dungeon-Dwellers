@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_INVENTORY_H
-#define DASTARDLY_DUNGEON_DWELLERS_INVENTORY_H
+#ifndef INVENTORY_H
+#define INVENTORY_H
 
 class Inventory
 {
@@ -33,4 +33,4 @@ public:
   void removeKeys(int keysAdjust) { keys -= keysAdjust; }
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_INVENTORY_H
+#endif // INVENTORY_H

@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_MAGE_H
-#define DASTARDLY_DUNGEON_DWELLERS_MAGE_H
+#ifndef MAGE_H
+#define MAGE_H
 
 #include "Character.h"
 
@@ -13,4 +13,4 @@ private:
   void generateSkillNames();
 };
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_MAGE_H
+#endif // MAGE_H

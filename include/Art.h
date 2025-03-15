@@ -1,5 +1,5 @@
-#ifndef DASTARDLY_DUNGEON_DWELLERS_ART_H
-#define DASTARDLY_DUNGEON_DWELLERS_ART_H
+#ifndef ART_H
+#define ART_H
 
 #include <string>
 
@@ -53,4 +53,4 @@ namespace art
   }
 }
 
-#endif // DASTARDLY_DUNGEON_DWELLERS_ART_H
+#endif // ART_H
