@@ -6,7 +6,7 @@
 class Enemy
 {
 public:
-  Enemy(int playerLevel, const std::string& name, bool boss, const double vulnerability[]);
+  Enemy(int playerLevel, const std::string& name, const double vulnerability[], bool boss = false);
   ~Enemy() { ++enemyProgression; }
 
 private:
@@ -20,7 +20,7 @@ private:
   int setRewardTier(int playerLevel);
 
 protected:
-  virtual void announceEnemy() const = 0;
+  virtual void announceEnemy() const;
 
 public:
   // Virtual Accessors
@@ -41,10 +41,10 @@ public:
 
 protected:
   const std::string name;
+  const double vulnerability[3];
   const bool boss;
   const int level;
   const int rewardTier;
-  const double vulnerability[3];
 
 protected:
   int health = 20;

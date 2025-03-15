@@ -1,6 +1,7 @@
 #ifndef BOSS_H
 #define BOSS_H
 
+#include <string>
 #include <vector>
 
 #include "Enemy.h"
@@ -8,7 +9,7 @@
 class Boss : public Enemy
 {
 private:
-  std::vector<string> bosses =
+  const inline static std::vector<std::string> bosses =
   {
     "Voidshaper Nihilus",
     "Snarltooth the Feral",
@@ -21,6 +22,10 @@ private:
     "Sludgeheart the Grotesque",
     "Drak'thar the Trollking"
   };
+  const static inline double meleeVulnerability = 1.0;
+  const static inline double magicVulnerability = 1.0;
+  const static inline double rangedVulnerability = 1.0;
+  const static inline double vulnerabilities[] = { meleeVulnerability, magicVulnerability, rangedVulnerability };
 
 public:
   Boss(int playerLevel);
@@ -28,7 +33,7 @@ public:
 public:
   // Accessors
   void announceEnemy() const override;
-  string getNickname() const override;
+  std::string getNickname() const override;
 
   // Mutators
   int attack(int playerArmor, int playerMaxHealth) override;

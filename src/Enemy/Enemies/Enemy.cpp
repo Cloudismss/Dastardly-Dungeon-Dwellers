@@ -4,18 +4,20 @@
 
 #include "Globals.h"
 
-Enemy::Enemy(int playerLevel, const std::string& name, bool boss, const double vulnerability[]) :
+Enemy::Enemy(int playerLevel, const std::string& name, const double vulnerability[], bool boss) :
   name(name),
+  vulnerability(vulnerability[skill::MELEE], vulnerability[skill::MAGIC], vulnerability[skill::RANGED]),
   boss(boss),
   level(setLevel(playerLevel)),
-  rewardTier(setRewardTier(playerLevel)),
-  vulnerability(vulnerability[skill::MELEE], vulnerability[skill::MAGIC], vulnerability[skill::RANGED])
+  rewardTier(setRewardTier(playerLevel))
 {
   // Calculates health of the enemy based off of base enemy health and enemy level
   int levelBoost = 0;
   for (int i = 1; i < level; ++i)
     levelBoost += BASE_ENEMY_HEALTH * 0.5;
   health = BASE_ENEMY_HEALTH + levelBoost;
+
+  announceEnemy();
 }
 
 // TODO: add fun logic to allow lower AND higher level enemies
@@ -70,6 +72,9 @@ int setLevel(int playerLevel)
 // TODO: Add depth
 int Enemy::setRewardTier(int playerLevel)
 {
+  if (boss)
+    return 10;
+
   return level;
 }
 
