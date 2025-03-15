@@ -4,7 +4,13 @@
 
 #include "Globals.h"
 
-Boss::Boss(int playerLevel) : Enemy(playerLevel, bosses[rand() % bosses.size()], vulnerabilities, true) { }
+Boss::Boss(int playerLevel) : Enemy(playerLevel, bosses[rand() % bosses.size()], vulnerabilities) { }
+
+bool Boss::createBoss()
+{
+  health = 100;
+  return true;
+}
 
 void Boss::announceEnemy() const
 {

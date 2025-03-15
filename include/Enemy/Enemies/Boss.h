@@ -30,9 +30,12 @@ private:
 public:
   Boss(int playerLevel);
 
+private:
+  bool createBoss() override;
+  void announceEnemy() const override;
+
 public:
   // Accessors
-  void announceEnemy() const override;
   std::string getNickname() const override;
 
   // Mutators

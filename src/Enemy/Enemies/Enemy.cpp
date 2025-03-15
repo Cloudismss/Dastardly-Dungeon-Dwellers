@@ -4,10 +4,10 @@
 
 #include "Globals.h"
 
-Enemy::Enemy(int playerLevel, const std::string& name, const double vulnerability[], bool boss) :
+Enemy::Enemy(int playerLevel, const std::string& name, const double vulnerability[]) :
   name(name),
   vulnerability(vulnerability[skill::MELEE], vulnerability[skill::MAGIC], vulnerability[skill::RANGED]),
-  boss(boss),
+  boss(createBoss()),
   level(setLevel(playerLevel)),
   rewardTier(setRewardTier(playerLevel))
 {
@@ -20,9 +20,17 @@ Enemy::Enemy(int playerLevel, const std::string& name, const double vulnerabilit
   announceEnemy();
 }
 
-// TODO: add fun logic to allow lower AND higher level enemies
-int setLevel(int playerLevel)
+bool Enemy::createBoss()
 {
+  return false;
+}
+
+// TODO: add fun logic to allow lower AND higher level enemies
+int Enemy::setLevel(int playerLevel)
+{
+  if (boss)
+    return 10;
+
   int level = 1;
   int randomVariation = 1 + rand() % 100;
 
