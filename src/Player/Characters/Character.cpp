@@ -40,19 +40,19 @@ void Character::checkoutCharacter(const string &className)
 // Skills based functions
 void Character::readSkills()
 {
-  // Load 'Dastardly Dungeon Dwellers.cfg' or create and load 'Dastardly Dungeon Dwellers.cfg' with defaults, the player can edit the .cfg file if they want custom stats
+  // Load 'DastardlyDungeonDwellers.cfg' or create and load 'DastardlyDungeonDwellers.cfg' with defaults, the player can edit the .cfg file if they want custom stats
   std::ifstream characterStats;
-  characterStats.open("Dastardly Dungeon Dwellers.cfg");
+  characterStats.open("DastardlyDungeonDwellers.cfg");
   if (!characterStats)
   {
     std::ofstream defaultCharacterStats;
-    defaultCharacterStats.open("Dastardly Dungeon Dwellers.cfg");
+    defaultCharacterStats.open("DastardlyDungeonDwellers.cfg");
     generateSkills(defaultCharacterStats);
     defaultCharacterStats.close();
-    characterStats.open("Dastardly Dungeon Dwellers.cfg");
+    characterStats.open("DastardlyDungeonDwellers.cfg");
     if (!characterStats)
     {
-      std::cerr << "\"Dastardly Dungeon Dwellers.cfg\" failed to open!\n";
+      std::cerr << "\"DastardlyDungeonDwellers.cfg\" failed to open!\n";
     }
   }
 
