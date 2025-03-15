@@ -16,10 +16,12 @@ public:
   static int getProgression() { return enemyProgression; }
   
 private:
+  // Helper functions
   int setLevel(int playerLevel);
   int setRewardTier(int playerLevel);
 
 protected:
+  // Helper functions
   virtual bool createBoss();
   virtual void announceEnemy() const;
 
