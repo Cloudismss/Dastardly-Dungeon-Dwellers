@@ -8,6 +8,22 @@
 
 class Boss : public Enemy
 {
+public:
+  Boss(int playerLevel);
+
+private:
+  // Helper functions
+  bool createBoss() override;
+  void announceEnemy() const override;
+
+public:
+  // Accessors
+  std::string getNickname() const override;
+
+public:
+  // Mutators
+  int attack(int playerArmor, int playerMaxHealth) override;
+
 private:
   const inline static std::vector<std::string> bosses =
   {
@@ -26,21 +42,6 @@ private:
   const static inline double magicVulnerability = 1.0;
   const static inline double rangedVulnerability = 1.0;
   const static inline double vulnerabilities[] = { meleeVulnerability, magicVulnerability, rangedVulnerability };
-
-public:
-  Boss(int playerLevel);
-
-private:
-  // Helper functions
-  bool createBoss() override;
-  void announceEnemy() const override;
-
-public:
-  // Accessors
-  std::string getNickname() const override;
-
-  // Mutators
-  int attack(int playerArmor, int playerMaxHealth) override;
 };
 
 #endif // BOSS_H

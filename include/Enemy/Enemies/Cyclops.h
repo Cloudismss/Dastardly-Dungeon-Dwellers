@@ -5,15 +5,15 @@
 
 class Cyclops : public Enemy
 {
+public:
+  Cyclops(int playerLevel); 
+
 private:
   const static inline std::string enemyName = "Cyclops";
   const static inline double meleeVulnerability = 1.0;
   const static inline double magicVulnerability = 1.0;
   const static inline double rangedVulnerability = 1.0;
   const static inline double vulnerabilities[] = { meleeVulnerability, magicVulnerability, rangedVulnerability };
-
-public:
-  Cyclops(int playerLevel); 
 };
 
 #endif // CYCLOPS_H
