@@ -4,13 +4,6 @@
 #include "Enemy.h"
 #include "Player.h"
 
-enum Result
-{
-  WIN,
-  LOSE,
-  RUN
-};
-
 int battleController(Player *player, Enemy *enemy);
 
 #endif // BATTLECONTROLLER_H

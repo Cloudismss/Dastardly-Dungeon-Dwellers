@@ -5,6 +5,16 @@
 
 #include "BattleArt.h"
 
+namespace
+{
+  enum Result
+  {
+    WIN,
+    LOSE,
+    RUN
+  };
+}
+
 int battleController(Player *player, Enemy *enemy)
 {
   // Battle loop - loops until either the enemy or the player hits 0 health
