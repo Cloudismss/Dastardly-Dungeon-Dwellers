@@ -8,14 +8,14 @@ class Game
 {
 private:
   // Debug toggle - displays useful debug information in the console and gives resources / increased damage
-  inline static bool debug = false; // Enter -37 at the main menu to enter debug mode
+  static inline bool debug = false; // Enter -37 at the main menu to enter debug mode
 
 public:
   static bool getDebug() { return debug; }
 
 public:
-  inline static bool winCondition;
-  inline static bool running = true;
+  static inline bool winCondition;
+  static inline bool running = true;
 
 private:
   Player *player;
