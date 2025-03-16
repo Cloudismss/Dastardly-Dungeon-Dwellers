@@ -1,35 +1,64 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
+#include <array>
 #include <set>
 #include <string>
 #include <unordered_map>
 
-using std::set;
-using std::string;
-using std::unordered_map;
-
 class Character
 {
 public:
-  Character() { }
+  Character(const std::string& className, const std::unordered_map<int, std::array<std::string, 3>> skillNames);
   ~Character() { }
 
 private:
-  inline static set<string> availableCharacters = { "Warrior", "Mage", "Archer", "Bard" };
+  static inline std::set<std::string> availableCharacters = { "Warrior", "Mage", "Archer", "Bard" };
+
 public:
-  static string getRandomAvailableCharacter();
+  static std::string getRandomAvailableCharacter();
   static bool available() { return !availableCharacters.empty(); }
-  static bool getAvailableCharacter(const string &className);
-  static void checkoutCharacter(const string &className);
+  static bool getAvailability(const std::string &className);
+  static void checkoutCharacter(const std::string &className);
+
+private:
+  // Helper Functions
+  void initSkills();
+  void generateSkills(std::ofstream &defaultCharacterStats);
+
+public:
+  // Generic Class Accessors
+  std::string getClassName() const { return className; }
+  int getHealth() const { return health; }
+  int getXp() const { return xp; }
+  int getLevel() const { return level; }
+  int getWeaponLevel(int skillType) const;
+
+  // Class Specific Accessors
+  int getMaxHealth() const { return maxHealth; }
+  int getSkillUpgradeTier(int skillType) const;
+  int getSkillLevel(int skillType) const;
+  double getCritLevel() const { return critLevel; }
+  std::string getSkillName(int skillType);
+
+public:
+  // Generic Class Mutators
+  void adjustHealth(int healthAdjust) { health += healthAdjust; }
+  void addXp(int xpAdjust);
+  void addLevel();
+  void upgradeWeapon(int skillType, const std::string &upgradeName);
+
+  // Class Specific Mutators
+  void useSkill(int skillType);
+  void upgradeSkillName(int skillType);
+  void adjustMaxHealth(int maxHealthAdjust) { maxHealth += maxHealthAdjust; }
 
 protected:
-  void setClassName();
-  void generateSkillNames();
+  // Constants
+  const std::string className;
+  const std::unordered_map<int, std::array<std::string, 3>> skillNames;
 
-protected:
   // Generic Class Variables
-  string className;
   int health;
   int xp = 0;
   int level = 1;
@@ -42,40 +71,6 @@ protected:
   int meleeLevel = 0, rangedLevel = 0, magicLevel = 0;
   int xpRequiredPerLevel = 100;
   double critLevel = 1.0;
-  // Map of skill names with array for indicating skill level - key is ability type [ Melee, Magic, or Ranged ]
-  unordered_map<int, string [3]> skillNames;
-
-protected:
-  // Skill Helper Functions
-  void readSkills();
-  void generateSkills(std::ofstream &defaultCharacterStats);
-
-public:
-  // Generic Class Accessors
-  string getClassName() const { return className; }
-  int getHealth() const { return health; }
-  int getXp() const { return xp; }
-  int getLevel() const { return level; }
-  int getWeaponLevel(int skillType) const;
-
-  // Class Specific Accessors
-  int getMaxHealth() const { return maxHealth; }
-  int getSkillUpgradeTier(int skillType) const;
-  int getSkillLevel(int skillType) const;
-  double getCritLevel() const { return critLevel; }
-  // Retrieves value from skillNames
-  string getSkillName(int skillType);
-
-  // Generic Class Mutators
-  void adjustHealth(int healthAdjust) { health += healthAdjust; }
-  void addXp(int xpAdjust);
-  void addLevel();
-  void upgradeWeapon(int skillType, const string &upgradeName);
-
-  // Class Specific Mutators
-  void useSkill(int skillType);
-  void upgradeSkillName(int skillType);
-  void adjustMaxHealth(int maxHealthAdjust) { maxHealth += maxHealthAdjust; }
 };
 
 #endif // CHARACTER_H
