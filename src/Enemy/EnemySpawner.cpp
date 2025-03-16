@@ -1,5 +1,7 @@
 #include "EnemySpawner.h"
 
+#include <vector>
+
 #include "Globals.h"
 
 #include "Boss.h"
@@ -43,7 +45,7 @@ Enemy *EnemySpawner::generateEnemy(int playerLevel)
 
 int EnemySpawner::calculateName()
 {
-  static vector<int> baddies;
+  static std::vector<int> baddies;
 
   if (Enemy::getProgression() == 0)
     baddies.insert(baddies.end(), stage1Baddies.begin(), stage1Baddies.end());
