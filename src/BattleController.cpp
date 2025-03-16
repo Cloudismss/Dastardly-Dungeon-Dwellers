@@ -36,7 +36,7 @@ int battleController(Player *player, Enemy *enemy)
       if (player->getCharacter()->getClassName() == "Bard" || 1 + (rand() % 100) <= 50)
       {
         std::cout << "\tYou escaped successfully!\n\n";
-        return RUN;
+        return battle::RUN;
       }
       else
         std::cout << "\tYou failed to escape!\n\n";
@@ -54,7 +54,7 @@ int battleController(Player *player, Enemy *enemy)
       {
         // Player is out of characters - game over
         std::cout << "Player Defeated!\n\n";
-        return LOSE;
+        return battle::LOSE;
       }
     }
   }
@@ -64,7 +64,7 @@ int battleController(Player *player, Enemy *enemy)
   {
     std::cout << "Enemy defeated!\n\n";
     // Returning a 1 means the player won the battle
-    return WIN;
+    return battle::WIN;
   }
 
   // TODO: Implement clean fix for return in all control paths
