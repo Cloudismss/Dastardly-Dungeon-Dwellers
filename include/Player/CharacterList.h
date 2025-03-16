@@ -39,8 +39,8 @@ public:
 
 private:
   // Class selector
-  std::string classSelection();
-  bool classSelectionConfirm(const std::string &className);
+  std::string classSelection() const;
+  bool classSelectionConfirm(const std::string &className) const;
 
 public:
   // Generic Class Accessors
