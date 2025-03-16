@@ -7,8 +7,9 @@ namespace art
 {
   namespace game
   {
-    void victoryArt(Player *player);
-    void gameOverArt(Player *player);
+    void menu();
+    void victory(Player *player);
+    void gameOver(Player *player);
   }
 }
 
