@@ -8,7 +8,7 @@ namespace art
   {
     void warrior()
     {
-      std::cout << "                                                                             \n"
+      std::cout << "                                                                        \n"
               "                   ..                                                        \n"
               "                   *                                                         \n"
               "                   #                                                         \n"
@@ -61,7 +61,7 @@ namespace art
 
     void mage()
     {
-      std::cout << "                                                                             \n"
+      std::cout << "                                                                        \n"
               "                                              ::                             \n"
               "                                            ..-+:-                           \n"
               "                                             --=+-.                          \n"
@@ -115,7 +115,7 @@ namespace art
 
     void archer()
     {
-      std::cout << "                                                                             \n"
+      std::cout << "                                                                        \n"
               "                     ::                                                      \n"
               "                    :+:                                                      \n"
               "                    ==                                                       \n"
@@ -170,7 +170,7 @@ namespace art
 
     void bard()
     {
-      std::cout << "                                                                             \n"
+      std::cout << "                                                                        \n"
               "                          @@%@@@%                                            \n"
               "                         @@%#%@@#%+                                          \n"
               "                        :@@@#*+*#*%+                  *                      \n"
