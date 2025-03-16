@@ -8,6 +8,7 @@ namespace art
   namespace game
   {
     void menu();
+    void classSelection();
     void victory(Player *player);
     void gameOver(Player *player);
   }

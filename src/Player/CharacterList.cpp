@@ -5,6 +5,7 @@
 
 #include "BoxArt.h"
 #include "CharacterArt.h"
+#include "GameArt.h"
 
 #include "Archer.h"
 #include "Bard.h"
@@ -209,15 +210,7 @@ std::string CharacterList::classSelection() const
   do
   {
     int classChoice = 0;
-    std::cout << ".-------------------------------------------------------------.\n"
-         << "|                                                             |\n"
-         << "|       Please choose a starting class using numbers 1-3:     |\n"
-         << "|                                                             |\n"
-         << "|            1: Warrior             Skill: Melee              |\n"
-         << "|            2: Mage                Skill: Magic              |\n"
-         << "|            3: Archer              Skill: Ranged             |\n"
-         << "|                                                             |\n"
-         << "'-------------------------------------------------------------'\n";
+    art::game::classSelection();
     std::cin >> classChoice;
     // High range is 999 to force the joke selection of bard if a number > 3 is entered
     if (validate::input(classChoice, 1, 999))
