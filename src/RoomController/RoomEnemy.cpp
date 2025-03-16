@@ -6,10 +6,7 @@
 #include "BattleController.h"
 #include "EnemySpawner.h"
 #include "Loot.h"
-
-using std::cin;
-using std::cout;
-using std::string;
+#include "Player.h"
 
 bool roomEnemy(Player *player)
 {
@@ -19,20 +16,20 @@ bool roomEnemy(Player *player)
   int battleResult = battleController(player, enemy);
 
   // Player lost the battle - end the program
-  if (battleResult == LOSE)
+  if (battleResult == battle::LOSE)
     return false;
 
   // Player won the battle - collect loot
-  if (battleResult == WIN)
+  if (battleResult == battle::WIN)
     loot(player, enemy);
 
   delete enemy;
 
   // Pause the game until the user is ready
-  cout << "Press enter to continue to the next room: ";
-  string enterKey = " ";
-  getline(cin, enterKey);
-  cout << "\n";
+  std::cout << "Press enter to continue to the next room: ";
+  std::string enterKey = " ";
+  getline(std::cin, enterKey);
+  std::cout << "\n";
 
   // Continue the game
   return true;
