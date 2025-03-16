@@ -1,12 +1,15 @@
 #include "RoomController.h"
 
-#include "Game.h"
+#include <string>
 
 #include "Globals.h"
 
 #include "BoxArt.h"
 #include "DialogueArt.h"
 #include "RoomArt.h"
+
+#include "Enemy.h"
+#include "Game.h"
 
 #include "RoomEnemy.h"
 #include "RoomExit.h"
@@ -17,7 +20,7 @@ void roomController(Player *player, Map *map)
 {
   // map->move() allows the player to move between rooms. It returns false if the room has not been explored yet
   const bool ROOM_EXPLORED = map->move();
-  const string ROOM_NAME = map->getRoomContents();
+  const std::string ROOM_NAME = map->getRoomContents();
 
   bool isEnemyRoom = false;
 
