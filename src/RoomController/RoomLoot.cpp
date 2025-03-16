@@ -72,7 +72,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
         cout << "\n";
 
         if (characterSelection == 'Y' || characterSelection == 'y')
-          player->addRandomCharacter();
+          player->appendRandomCharacter();
 
       }
 

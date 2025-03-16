@@ -144,6 +144,6 @@ void loot(Player *player, Enemy *enemy)
     cout << "\n";
 
     if (characterSelection == 'Y' || characterSelection == 'y')
-      player->addRandomCharacter();
+      player->appendRandomCharacter();
   }
 }

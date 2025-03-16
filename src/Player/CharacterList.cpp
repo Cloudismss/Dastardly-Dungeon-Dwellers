@@ -17,7 +17,7 @@ using std::cout;
 CharacterList::CharacterList()
 {
   // Set the class name in the current node and initialize the head
-  addSpecificCharacter(classSelection());
+  appendCharacter(classSelection());
 }
 
 CharacterList::~CharacterList()
@@ -39,7 +39,7 @@ CharacterList::~CharacterList()
   head = nullptr;
 }
 
-void CharacterList::addRandomCharacter()
+void CharacterList::appendRandomCharacter()
 {
   // Check if any characters are available
   string className = Character::getRandomAvailableCharacter();
@@ -87,10 +87,10 @@ void CharacterList::addRandomCharacter()
   art::box::displayMeInABox(message);
 }
 
-void CharacterList::addSpecificCharacter(const string &className)
+void CharacterList::appendCharacter(const string &className)
 {
   // Check if any characters are available
-  if (!Character::getAvailableCharacter(className))
+  if (!Character::getAvailability(className))
     return;
 
   // Connect pointers on doubly linked list
@@ -156,7 +156,7 @@ bool CharacterList::removeCurrentCharacter()
   return true;
 }
 
-bool CharacterList::removeSpecificCharacter(const string &className)
+bool CharacterList::removeCharacter(const string &className)
 {
   if (head->next == head)
     return false; // Out of characters

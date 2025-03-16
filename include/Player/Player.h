@@ -57,10 +57,10 @@ public:
   CharacterList* getCharacter() { return characters; }
 
   // Character List Mutators
-  void addRandomCharacter() { characters->addRandomCharacter(); }
-  void addSpecificCharacter(const string &className) { characters->addSpecificCharacter(className); }
+  void appendRandomCharacter() { characters->appendRandomCharacter(); }
+  void appendCharacter(const string &className) { characters->appendCharacter(className); }
   bool removeCurrentCharacter() { return characters->removeCurrentCharacter(); }
-  bool removeSpecificCharacter(const string &className) { return characters->removeSpecificCharacter(className); }
+  bool removeCharacter(const string &className) { return characters->removeCharacter(className); }
   bool cycle(char direction = 'R') { return characters->cycle(direction); }
 };
 

@@ -1,13 +1,9 @@
 #ifndef CHARACTERLIST_H
 #define CHARACTERLIST_H
 
-#include <set>
 #include <string>
 
 #include "Character.h"
-
-using std::set;
-using std::string;
 
 class CharacterList
 {
@@ -23,32 +19,32 @@ private:
   Node *current = nullptr;
 
 private:
-  int xpRequiredPerLevel = 100;
+  const int xpRequiredPerLevel = 100;
 
 public:
   CharacterList();
   ~CharacterList();
 
   // Append new character
-  void addRandomCharacter();
-  void addSpecificCharacter(const string &className);
+  void appendRandomCharacter();
+  void appendCharacter(const std::string &className);
 
   // Remove character
   bool removeCurrentCharacter();
-  bool removeSpecificCharacter(const string &className);
+  bool removeCharacter(const std::string &className);
 
   // Switch current character
-  bool cycle(char direction = 'R', const string &context = "Switch");
-  void select(const string &characterName);
+  bool cycle(char direction = 'R', const std::string &context = "Switch");
+  void select(const std::string &characterName);
 
 private:
   // Class selector
-  string classSelection();
-  bool classSelectionConfirm(const string &className);
+  std::string classSelection();
+  bool classSelectionConfirm(const std::string &className);
 
 public:
   // Generic Class Accessors
-  string getClassName() const { return current->character->getClassName(); }
+  std::string getClassName() const { return current->character->getClassName(); }
   double getHealth() const { return current->character->getHealth(); }
   double getXp() const { return current->character->getXp(); }
   int getLevel() const { return current->character->getLevel(); }
@@ -59,14 +55,13 @@ public:
   int getSkillLevel(int skillType) const { return current->character->getSkillLevel(skillType); }
   double getCritLevel() const { return current->character->getCritLevel(); }
   double getMaxHealth() const { return current->character->getMaxHealth(); }
-  // Retrieves value from skillNames
-  string getSkillName(int skillType) const { return current->character->getSkillName(skillType); }
+  std::string getSkillName(int skillType) const { return current->character->getSkillName(skillType); }
 
   // Generic Class Mutators
   void adjustHealth(double healthAdjust) { current->character->adjustHealth(healthAdjust); }
   void addXp(int xpAdjust) { current->character->addXp(xpAdjust); }
   void addLevel() { current->character->addLevel(); }
-  void upgradeWeapon(int skillType, const string &upgradeName) { current->character->upgradeWeapon(skillType, upgradeName); }
+  void upgradeWeapon(int skillType, const std::string &upgradeName) { current->character->upgradeWeapon(skillType, upgradeName); }
 
   // Class Specific Mutators
   void useSkill(int skillType) { current->character->useSkill(skillType); }

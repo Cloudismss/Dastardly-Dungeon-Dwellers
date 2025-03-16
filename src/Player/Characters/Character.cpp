@@ -2,15 +2,23 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
+
+#include "Globals.h"
 
 #include "BoxArt.h"
-#include "Globals.h"
 
 #include <fmt/color.h>
 
-using std::cout;
+Character::Character(const std::string& className, const std::unordered_map<int, std::array<std::string, 3>> skillNames) :
+  className(className),
+  skillNames(skillNames)
+{
+  initSkills();
+  health = maxHealth;
+}
 
-string Character::getRandomAvailableCharacter()
+std::string Character::getRandomAvailableCharacter()
 {
   // Check set of available characters
   if (availableCharacters.empty())
@@ -18,27 +26,27 @@ string Character::getRandomAvailableCharacter()
 
   // Select random class name
   int classIndex = rand() % availableCharacters.size();
-  set<string>::iterator iter = availableCharacters.begin();
+  auto iter = availableCharacters.begin();
   for (int i = 0; i != classIndex; ++i)
     ++iter;
 
   return *iter;
 }
 
-bool Character::getAvailableCharacter(const string &className)
+bool Character::getAvailability(const std::string &className)
 {
   // Check if character is available
   return availableCharacters.count(className);
 }
 
-void Character::checkoutCharacter(const string &className)
+void Character::checkoutCharacter(const std::string &className)
 {
   // Remove character from set
   availableCharacters.erase(availableCharacters.find(className));
 }
 
 // Skills based functions
-void Character::readSkills()
+void Character::initSkills()
 {
   // Load 'DastardlyDungeonDwellers.cfg' or create and load 'DastardlyDungeonDwellers.cfg' with defaults, the player can edit the .cfg file if they want custom stats
   std::ifstream characterStats;
@@ -56,7 +64,7 @@ void Character::readSkills()
     }
   }
 
-  string classNameChecker = " ";
+  std::string classNameChecker;
   
   // Ignore the first two lines (info header and blank line)
   getline(characterStats, classNameChecker);
@@ -130,14 +138,14 @@ int Character::getSkillLevel(int skillType) const
   return -1;
 }
 
-string Character::getSkillName(int skillType)
+std::string Character::getSkillName(int skillType)
 {
   if (skillType == skill::MELEE)
-    return skillNames[skillType][meleeUpgradeTier];
+    return skillNames.at(skillType)[meleeUpgradeTier];
   else if (skillType == skill::MAGIC)
-    return skillNames[skillType][magicUpgradeTier];
+    return skillNames.at(skillType)[magicUpgradeTier];
   else if (skillType == skill::RANGED)
-    return skillNames[skillType][rangedUpgradeTier];
+    return skillNames.at(skillType)[rangedUpgradeTier];
 
   // TODO: Implement clean fix for return in all control paths
   return "Error";
@@ -145,7 +153,7 @@ string Character::getSkillName(int skillType)
 
 void Character::addXp(int xpAdjust)
 {
-  cout << className << " gained " << xpAdjust << " xp!\n";
+  std::cout << className << " gained " << xpAdjust << " xp!\n";
 
   // XP amount exceeds a full level
   while(xpAdjust >= xpRequiredPerLevel)
@@ -165,12 +173,12 @@ void Character::addXp(int xpAdjust)
 
   xp += xpAdjust;
 
-  cout << "\n";
+  std::cout << "\n";
 }
 
 void Character::addLevel()
 {
-  cout << className << " is now level " << ++level << "!\n";
+  std::cout << className << " is now level " << ++level << "!\n";
   
   // TODO: Make interesting and print, possibly make virtual
 
@@ -181,7 +189,7 @@ void Character::addLevel()
   maxHealth *= 1.1;
 }
 
-void Character::upgradeWeapon(int skillType, const string &upgradeName)
+void Character::upgradeWeapon(int skillType, const std::string &upgradeName)
 {
   if (skillType == skill::MELEE)
     ++meleeWeapon;
@@ -221,7 +229,7 @@ void Character::upgradeSkillName(int skillType)
   else if (skillType == skill::RANGED)
     skillUpgradeTier = &rangedUpgradeTier;
 
-  const string upgradeMessage = skillNames[skillType][*skillUpgradeTier] + " has been upgraded to " + skillNames[skillType][(*skillUpgradeTier)++];
+  const std::string upgradeMessage = skillNames.at(skillType)[*skillUpgradeTier] + " has been upgraded to " + skillNames.at(skillType)[(*skillUpgradeTier)++];
  
   // Print skill upgrade notification
   art::box::displayMeInABox("Congratulations!", upgradeMessage);
