@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include <iostream>
+#include <string>
 
 #include "Globals.h"
 
@@ -20,7 +21,7 @@ Player::~Player()
   delete inventory;
 }
 
-int Player::attack(int skillType, const string &enemyName, double enemyVulnerability)
+int Player::attack(int skillType, const std::string &enemyName, double enemyVulnerability)
 {
   // DEBUG OPTION - Max damage
   if (Game::getDebug())
@@ -85,7 +86,7 @@ int Player::attack(int skillType, const string &enemyName, double enemyVulnerabi
   }
 
   // Calculate vulnerability
-  const string skillName = characters->getSkillName(skillType);
+  const std::string skillName = characters->getSkillName(skillType);
   if (enemyVulnerability < 1.0)
   {
     std::cout << "\t" << skillName << " is ";
