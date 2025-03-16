@@ -25,7 +25,7 @@ public:
   int attack(int playerArmor, int playerMaxHealth) override;
 
 private:
-  const inline static std::vector<std::string> bosses =
+  const static inline std::vector<std::string> bosses =
   {
     "Voidshaper Nihilus",
     "Snarltooth the Feral",
