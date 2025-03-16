@@ -4,6 +4,8 @@
 
 #include "Globals.h"
 
+#include "Enemy.h"
+
 #include "Boss.h"
 #include "Cyclops.h"
 #include "Goblin.h"
