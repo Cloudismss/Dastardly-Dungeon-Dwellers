@@ -5,100 +5,98 @@
 #include <limits>
 #include <string>
 
-using std::cin;
-using std::cout;
-using std::setw;
-using std::string;
-
-bool validateDecision(int userChoice)
+namespace validate
 {
-  bool validFlag = true;
-  if ((cin.fail()) || (!(userChoice == 'Y' || userChoice == 'y' || userChoice == 'N' || userChoice == 'n')))
+  bool decision(int userChoice)
   {
-    cout << setw(63) << "Invalid Selection! >:(\n"
-         << setw(63) << "Please enter an acceptable value\n"
-         << "\n";
-    validFlag = false;
-  }
-  cin.clear();
-  cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  return validFlag;
-}
-
-bool validateInput(int userChoice, int rangeLow, int rangeHigh)
-{
-  bool validFlag = true;
-  if ((cin.fail()) || ((userChoice < rangeLow) || (userChoice > rangeHigh)))
-  {
-    cout << setw(63) << "Invalid Selection! >:( \n"
-         << setw(63) << "Please enter an acceptable value\n"
-         << "\n";
-    validFlag = false;
-  }
-  cin.clear();
-  cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  return validFlag;
-}
-
-bool validateDirection(int rowPos, int colPos, char &userChoice, const int ROWS, const int COLS)
-{
-  bool validFlag = true;
-  if ((cin.fail()) || (!(userChoice == 'N' || userChoice == 'n' || userChoice == 'E' || userChoice == 'e' || userChoice == 'S' || userChoice == 's' || userChoice == 'W' || userChoice == 'w')))
-  {
-    cout << setw(63) << "Invalid Selection! >:(\n"
-         << setw(63) << "Please enter an acceptable value\n"
-         << "\n";
-    validFlag = false;
-  }
-  else
-  {
-    // Convert the char to uppercase for use in switch statements
-    if (userChoice == 'n' || userChoice == 'e' || userChoice == 's' || userChoice == 'w')
-      userChoice -= 32;
-
-    // Bounds checking
-    string boundsFail = "A mysterious force prevents you from progressing in that direction...\n\n";
-    switch (userChoice)
+    bool validFlag = true;
+    if ((std::cin.fail()) || (!(userChoice == 'Y' || userChoice == 'y' || userChoice == 'N' || userChoice == 'n')))
     {
-      case 'N':
+      std::cout << std::setw(63) << "Invalid Selection! >:(\n"
+           << std::setw(63) << "Please enter an acceptable value\n"
+           << "\n";
+      validFlag = false;
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return validFlag;
+  }
+  
+  bool input(int userChoice, int rangeLow, int rangeHigh)
+  {
+    bool validFlag = true;
+    if ((std::cin.fail()) || ((userChoice < rangeLow) || (userChoice > rangeHigh)))
+    {
+      std::cout << std::setw(63) << "Invalid Selection! >:( \n"
+           << std::setw(63) << "Please enter an acceptable value\n"
+           << "\n";
+      validFlag = false;
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return validFlag;
+  }
+  
+  bool direction(int rowPos, int colPos, char &userChoice, const int ROWS, const int COLS)
+  {
+    bool validFlag = true;
+    if ((std::cin.fail()) || (!(userChoice == 'N' || userChoice == 'n' || userChoice == 'E' || userChoice == 'e' || userChoice == 'S' || userChoice == 's' || userChoice == 'W' || userChoice == 'w')))
+    {
+      std::cout << std::setw(63) << "Invalid Selection! >:(\n"
+           << std::setw(63) << "Please enter an acceptable value\n"
+           << "\n";
+      validFlag = false;
+    }
+    else
+    {
+      // Convert the char to uppercase for use in switch statements
+      if (userChoice == 'n' || userChoice == 'e' || userChoice == 's' || userChoice == 'w')
+        userChoice -= 32;
+  
+      // Bounds checking
+      std::string boundsFail = "A mysterious force prevents you from progressing in that direction...\n\n";
+      switch (userChoice)
       {
-        if (--rowPos < 0)
+        case 'N':
         {
-          cout << boundsFail;
-          validFlag = false;
+          if (--rowPos < 0)
+          {
+            std::cout << boundsFail;
+            validFlag = false;
+          }
+          break;
         }
-        break;
-      }
-      case 'S':
-      {
-        if (++rowPos > ROWS - 1)
+        case 'S':
         {
-          cout << boundsFail;
-          validFlag = false;
+          if (++rowPos > ROWS - 1)
+          {
+            std::cout << boundsFail;
+            validFlag = false;
+          }
+          break;
         }
-        break;
-      }
-      case 'E':
-      {
-        if (++colPos > COLS - 1)
+        case 'E':
         {
-          cout << boundsFail;
-          validFlag = false;
+          if (++colPos > COLS - 1)
+          {
+            std::cout << boundsFail;
+            validFlag = false;
+          }
+          break;
         }
-        break;
-      }
-      case 'W':
-      {
-        if (--colPos < 0)
+        case 'W':
         {
-          cout << boundsFail;
-          validFlag = false;
+          if (--colPos < 0)
+          {
+            std::cout << boundsFail;
+            validFlag = false;
+          }
+          break;
         }
-        break;
       }
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return validFlag;
   }
-  cin.clear();
-  cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  return validFlag;
 }

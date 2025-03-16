@@ -23,7 +23,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
     cout << "Do you look inside?\n"
          << "Y or N:";
     cin >> chestSelection;
-    if (validateDecision(chestSelection))
+    if (validate::decision(chestSelection))
       loopFlag = false;
   } while (loopFlag);
 
@@ -65,7 +65,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
           cout << "Do you invite them to join your party?\n"
               << "Y or N: ";
           cin >> characterSelection;
-          if (validateDecision(characterSelection))
+          if (validate::decision(characterSelection))
             loopFlag = false;
         } while (loopFlag);
 

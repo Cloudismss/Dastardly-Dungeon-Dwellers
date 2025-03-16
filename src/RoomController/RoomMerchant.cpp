@@ -188,7 +188,7 @@ void roomMerchant(Player *player)
       std::cout << "\tWhat would you like to purchase? ";
       std::cin >> userShopSelection;
       std::cout << "\n";
-      if (validateInput(userShopSelection, 1, shop.size()))
+      if (validate::input(userShopSelection, 1, shop.size()))
         loopFlag = false;
     } while (loopFlag);
 
@@ -217,7 +217,7 @@ void roomMerchant(Player *player)
           std::cout << "\tY or N: ";
           std::cin >> selection;
           std::cout << "\n";
-          if (validateDecision(selection))
+          if (validate::decision(selection))
             loopFlag = false;
         } while (loopFlag);
 
@@ -297,7 +297,7 @@ void roomMerchantPurchase(Player *player, std::vector<MerchantItem> &shop, const
       std::cout << "\tHow many " << shop[userShopSelection].name << "(s) would you like to buy?: ";
       std::cin >> purchaseAmount;
       std::cout << "\n";
-      if (validateInput(purchaseAmount, 0, shop[userShopSelection].quantity))
+      if (validate::input(purchaseAmount, 0, shop[userShopSelection].quantity))
       {
         loopFlag = false;
 
@@ -330,7 +330,7 @@ void roomMerchantPurchase(Player *player, std::vector<MerchantItem> &shop, const
 
       std::cout << "\tY or N: ";
       std::cin >> merchantConfirm;
-      if (validateDecision(merchantConfirm))
+      if (validate::decision(merchantConfirm))
       {
         std::cout << "\n";
         loopFlag = false;

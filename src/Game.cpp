@@ -73,7 +73,7 @@ void Game::mainMenu()
             "'-------------------------------------------------------------'\n";
     int selection = 0;
     cin >> selection;
-    if (validateInput(selection, 1, 2))
+    if (validate::input(selection, 1, 2))
     {
       if (selection == 1)
         loopFlag = false;

@@ -137,7 +137,7 @@ void loot(Player *player, Enemy *enemy)
       cout << "Do you invite them to join your party?\n"
           << "Y or N: ";
       cin >> characterSelection;
-      if (validateDecision(characterSelection))
+      if (validate::decision(characterSelection))
         loopFlag = false;
     } while (loopFlag);
 

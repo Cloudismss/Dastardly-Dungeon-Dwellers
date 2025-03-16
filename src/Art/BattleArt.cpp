@@ -39,7 +39,7 @@ namespace art
                   << std::setfill(' ') << "\n"
                   << "\tMake a selection: ";
         std::cin >> battleSelection;
-        if (validateInput(battleSelection, 0, 6))
+        if (validate::input(battleSelection, 0, 6))
         {
           if (battleSelection == HELP)
           {

@@ -220,7 +220,7 @@ std::string CharacterList::classSelection() const
          << "'-------------------------------------------------------------'\n";
     std::cin >> classChoice;
     // High range is 999 to force the joke selection of bard if a number > 3 is entered
-    if (validateInput(classChoice, 1, 999))
+    if (validate::input(classChoice, 1, 999))
     {
       switch (classChoice)
       {
@@ -273,7 +273,7 @@ bool CharacterList::classSelectionConfirm(const std::string &className) const
     std::cout << "You have selected '" << className << "', continue?\n"
           << "Y or N: ";
     std::cin >> confirmSelection;
-    if (validateDecision(confirmSelection))
+    if (validate::decision(confirmSelection))
     {
       if (confirmSelection == 'Y' || confirmSelection == 'y')
       {

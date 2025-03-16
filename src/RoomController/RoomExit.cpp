@@ -20,7 +20,7 @@ void roomExit(Player *player)
       cout << "Would you like use your golden key to exit the dungeon?\n"
            << "Y or N:";
       cin >> selection;
-      if (validateDecision(selection))
+      if (validate::decision(selection))
         loopFlag = false;
     } while (loopFlag);
 

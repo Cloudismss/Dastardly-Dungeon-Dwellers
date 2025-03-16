@@ -107,7 +107,7 @@ void Map::mapMovement()
     cout << "Which direction would you like to go? (N|E|S|W): ";
     cin >> directionChoice;
     cout << "\n";
-    if (validateDirection(rowPos, colPos, directionChoice, ROWS, COLS))
+    if (validate::direction(rowPos, colPos, directionChoice, ROWS, COLS))
       loopFlag = false;
   } while (loopFlag);
 
