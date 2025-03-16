@@ -2,14 +2,10 @@
 
 #include <iomanip>
 #include <iostream>
+#include <string>
 
 #include "Game.h"
 #include "Validation.h"
-
-using std::cin;
-using std::cout;
-using std::setfill;
-using std::setw;
 
 Map::Map()
 {
@@ -24,41 +20,41 @@ Map::Map()
 void Map::mapPrint() const
 {
   // Prints the map
-  cout << setfill('-') << setw(64) << " " << setfill(' ');
-  cout << "\n\n";
-  cout << "MAP SELECTION" << "\n\n";
-  cout << "You are here [*]\n";
+  std::cout << std::setfill('-') << std::setw(64) << " " << std::setfill(' ');
+  std::cout << "\n\n";
+  std::cout << "MAP SELECTION" << "\n\n";
+  std::cout << "You are here [*]\n";
   for (int i = 0; i < ROWS; ++i)
   {
     for (int j = 0; j < COLS; ++j)
-      cout << "[" << position[i][j].symbol << "]" ;
-    cout << "\n";
+      std::cout << "[" << position[i][j].symbol << "]" ;
+    std::cout << "\n";
   }
 
   // DEBUG OPTION - prints additional helpful debug maps
   if (Game::getDebug())
   {
-    cout << "\n";
-    cout << setfill('-') << setw(64) << " " << setfill(' ');
-    cout << "\n\n";
-    cout << setw(65/2) << "DEBUG MAPS" << "\n\n";
+    std::cout << "\n";
+    std::cout << std::setfill('-') << std::setw(64) << " " << std::setfill(' ');
+    std::cout << "\n\n";
+    std::cout << std::setw(65/2) << "DEBUG MAPS" << "\n\n";
     for (int i = 0; i < ROWS; ++i)
     {
       for (int j = 0; j < COLS; ++j)
-        cout << "[" << position[i][j].explored << "]" ;
-      cout << "\n";
+        std::cout << "[" << position[i][j].explored << "]" ;
+      std::cout << "\n";
     }
-    cout << "\n";
+    std::cout << "\n";
     for (int i = 0; i < ROWS; ++i)
     {
       for (int j = 0; j < COLS; ++j)
-        cout << "[" << position[i][j].contents << "]" ;
-      cout << "\n";
+        std::cout << "[" << position[i][j].contents << "]" ;
+      std::cout << "\n";
     }
-    cout << "\n" << setfill('-') << setw(64) << " " << setfill(' ');
-    cout << "\n";
+    std::cout << "\n" << std::setfill('-') << std::setw(64) << " " << std::setfill(' ');
+    std::cout << "\n";
   }
-  cout << "\n";
+  std::cout << "\n";
 }
 
 bool Map::move()
@@ -91,7 +87,7 @@ bool Map::move()
   mapPrint();
 
   // Print map divider
-  cout << setfill('-') << setw(64) << " " << setfill(' ') << "\n\n";
+  std::cout << std::setfill('-') << std::setw(64) << " " << std::setfill(' ') << "\n\n";
 
   // If the room was already visited, return true, if not, return false
   return roomCleared;
@@ -104,9 +100,9 @@ void Map::mapMovement()
   do
   {
     // Accept direction from user, validates that the direction is within map bounds
-    cout << "Which direction would you like to go? (N|E|S|W): ";
-    cin >> directionChoice;
-    cout << "\n";
+    std::cout << "Which direction would you like to go? (N|E|S|W): ";
+    std::cin >> directionChoice;
+    std::cout << "\n";
     if (validate::direction(rowPos, colPos, directionChoice, ROWS, COLS))
       loopFlag = false;
   } while (loopFlag);
@@ -172,7 +168,7 @@ void Map::generateMap()
   const int MERCHANT_ROOMS_DISTANCE = 2; // Merchants must spawn 2 tiles away from the center
   const int MERCHANT_ROOMS_DUPE_DISTANCE = 1; // Merchants rooms must spawn 1 tile away from each other
   const int MERCHANT_ROOMS_ALLOWED = ROWS / 2 + 1; // Number of merchants to spawn is based on map size
-  const string MERCHANT_ROOMS_NAME = "Merchant";
+  const std::string MERCHANT_ROOMS_NAME = "Merchant";
   const char MERCHANT_SYMBOL = '$';
   generateRooms(MERCHANT_ROOMS_NAME, MERCHANT_SYMBOL, MERCHANT_ROOMS_DISTANCE, MERCHANT_ROOMS_DUPE_DISTANCE, MERCHANT_ROOMS_ALLOWED);
 
@@ -183,7 +179,7 @@ void Map::generateMap()
 
   // Spawn Loot Room
   const int LOOT_ROOMS_ALLOWED = REMAINING_ROOMS_ALLOWED * 0.15f; // 15% of remaining rooms can be loot rooms
-  const string LOOT_ROOMS_NAME = "Loot";
+  const std::string LOOT_ROOMS_NAME = "Loot";
   const char LOOT_ROOMS_SYMBOL = 'L';
   generateRooms(LOOT_ROOMS_NAME, LOOT_ROOMS_SYMBOL, REMAINING_ROOMS_DISTANCE, REMAINING_ROOMS_DUPE_DISTANCE, LOOT_ROOMS_ALLOWED);
 
@@ -202,7 +198,7 @@ void Map::generateMap()
   }
 }
 
-void Map::generateRooms(const string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED)
+void Map::generateRooms(const std::string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED)
 {
   bool validSpawns[COLS][COLS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function
   for (int i = 0; i < ROWS; ++i)
