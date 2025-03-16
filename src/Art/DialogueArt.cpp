@@ -4,7 +4,7 @@
 
 namespace art
 {
-  namespace room
+  namespace dialogue
   {
     void roomEnemyMonologue(bool ROOM_EXPLORED)
     {
