@@ -1,6 +1,8 @@
 #ifndef BATTLEART_H
 #define BATTLEART_H
 
+#include <string>
+
 #include "Enemy.h"
 #include "Player.h"
 
@@ -20,7 +22,7 @@ namespace art
     };
     
     int menu(Player *player, Enemy *enemy);
-    void displayHealth(const string &className, int playerHealth, const string &enemyName, int enemyHealth);
+    void displayHealth(const std::string &className, int playerHealth, const std::string &enemyName, int enemyHealth);
   }
 }
 

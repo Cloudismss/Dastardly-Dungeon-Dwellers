@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <string>
 
 #include "Globals.h"
 
@@ -20,8 +21,8 @@ namespace art
       // Menu Variables
       int boxWidth = 63;
       int borderSpacing = ((boxWidth - 23) / 2);
-      string choiceName[] = {player->getCharacter()->getSkillName(skill::MELEE), player->getCharacter()->getSkillName(skill::MAGIC), player->getCharacter()->getSkillName(skill::RANGED)};
-      string potionElement = "Potions: " + std::to_string(player->getPotions());
+      std::string choiceName[] = {player->getCharacter()->getSkillName(skill::MELEE), player->getCharacter()->getSkillName(skill::MAGIC), player->getCharacter()->getSkillName(skill::RANGED)};
+      std::string potionElement = "Potions: " + std::to_string(player->getPotions());
   
       int battleSelection;
       bool loopFlag = true;
@@ -62,7 +63,7 @@ namespace art
       return battleSelection;
     }
   
-    void displayHealth(const string &className, int playerHealth, const string &enemyName, int enemyHealth)
+    void displayHealth(const std::string &className, int playerHealth, const std::string &enemyName, int enemyHealth)
     {
       // Don't print health if either the player or the enemy has 0 health
       if (playerHealth <= 0 || enemyHealth <= 0)
@@ -71,9 +72,9 @@ namespace art
       // Print health
       else
       {
-        string playerHealthDisplay = className + " health: ";
+        std::string playerHealthDisplay = className + " health: ";
         playerHealthDisplay += std::to_string(playerHealth);
-        string enemyHealthDisplay = enemyName + " health: ";
+        std::string enemyHealthDisplay = enemyName + " health: ";
         enemyHealthDisplay += std::to_string(enemyHealth);
   
         int boxWidth = 63;
