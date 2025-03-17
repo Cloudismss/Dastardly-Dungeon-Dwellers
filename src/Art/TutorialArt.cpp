@@ -30,7 +30,7 @@ namespace art
                    "'-------------------------------------------------------------'\n";
 
       std::cout << "\n\tPress enter to return to the main menu: ";
-      std::string enterKey = " ";
+      std::string enterKey;
       getline(std::cin, enterKey);
     }
 
@@ -68,7 +68,7 @@ namespace art
                    "'-------------------------------------------------------------'\n";
 
       std::cout << "\n\tPress enter to return to the game: ";
-      std::string enterKey = " ";
+      std::string enterKey;
       getline(std::cin, enterKey);
       std::cout << "\n";
     }

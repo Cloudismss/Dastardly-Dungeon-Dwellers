@@ -74,7 +74,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
 
       // Pause the game until the user is ready
       std::cout << "Press enter to continue to the next room: ";
-      std::string enterKey = " ";
+      std::string enterKey;
       getline(std::cin, enterKey);
       std::cout << "\n";
     }
@@ -102,7 +102,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
 
     // Pause the game until the user is ready
     std::cout << "Press enter to continue to the next room: ";
-    std::string enterKey = " ";
+    std::string enterKey;
     getline(std::cin, enterKey);
     std::cout << "\n";
   }

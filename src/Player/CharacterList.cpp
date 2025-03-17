@@ -206,7 +206,7 @@ void CharacterList::select(const std::string &characterName)
 std::string CharacterList::classSelection() const
 {
   bool loopFlag = true;
-  std::string className = " ";
+  std::string className;
   do
   {
     int classChoice = 0;

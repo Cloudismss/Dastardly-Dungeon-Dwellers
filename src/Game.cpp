@@ -37,7 +37,7 @@ void Game::end()
 
   // Pause the end screen until the user is ready to close the application
   std::cout << "Press enter to exit the program: ";
-  std::string enterKey = " ";
+  std::string enterKey;
   getline(std::cin, enterKey);
   std::cout << "\n";
 }

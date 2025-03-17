@@ -34,8 +34,8 @@ void roomMerchant(Player *player)
   shop.emplace_back(armor);
 
   // Slot 3 - Melee Upgrade
-  std::string meleeUpgradeName = " ";
-  std::string meleeUpgradeMessage = " ";
+  std::string meleeUpgradeName;
+  std::string meleeUpgradeMessage;
   int meleeSuccess = meleeChance <= UPGRADE_CHANCE;
   if (meleeSuccess)
   {
@@ -65,8 +65,8 @@ void roomMerchant(Player *player)
   }
 
   // Slot 4 - Staff Upgrade
-  std::string magicUpgradeName = " ";
-  std::string magicUpgradeMessage = " ";
+  std::string magicUpgradeName;
+  std::string magicUpgradeMessage;
   int magicSuccess = magicChance <= UPGRADE_CHANCE;
   if (magicSuccess)
   {
@@ -96,8 +96,8 @@ void roomMerchant(Player *player)
   }
 
   // Slot 5 - Ranged Upgrade
-  std::string rangedUpgradeName = " ";
-  std::string rangedUpgradeMessage = " ";
+  std::string rangedUpgradeName;
+  std::string rangedUpgradeMessage;
   int rangedSuccess = rangedChance <= UPGRADE_CHANCE;
   if (rangedSuccess)
   {
@@ -278,7 +278,7 @@ void roomMerchant(Player *player)
 
   // Pause the game until the user is ready
   std::cout << "Press enter to continue to the next room: ";
-  std::string enterKey = " ";
+  std::string enterKey;
   getline(std::cin, enterKey);
   std::cout << "\n";
 }
