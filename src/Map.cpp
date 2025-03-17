@@ -198,7 +198,7 @@ void Map::generateMap()
   }
 }
 
-void Map::generateRooms(const std::string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED)
+void Map::generateRooms(const std::string &ROOM_NAME, char ROOM_SYMBOL, int ROOM_DISTANCE, int DUPE_DISTANCE, int ROOMS_ALLOWED)
 {
   bool validSpawns[ROWS][COLS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function
   for (int i = 0; i < ROWS; ++i)

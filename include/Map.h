@@ -27,7 +27,7 @@ public:
 private:
   // Helper Functions
   void generateMap();
-  void generateRooms(const std::string &ROOM_NAME, const char ROOM_SYMBOL, const int ROOM_DISTANCE, const int DUPE_DISTANCE, const int ROOMS_ALLOWED);
+  void generateRooms(const std::string &ROOM_NAME, char ROOM_SYMBOL, int ROOM_DISTANCE, int DUPE_DISTANCE, int ROOMS_ALLOWED);
   void mapPrint() const;
   void mapMovement();
 
