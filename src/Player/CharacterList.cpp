@@ -209,7 +209,7 @@ std::string CharacterList::classSelection() const
   std::string className;
   do
   {
-    int classChoice = 0;
+    int classChoice;
     art::game::classSelection();
     std::cin >> classChoice;
     // High range is 999 to force the joke selection of bard if a number > 3 is entered

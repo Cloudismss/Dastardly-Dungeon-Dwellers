@@ -181,7 +181,7 @@ void roomMerchant(Player *player)
          << "\n" << std::setfill(' ');
 
     // Validate Selection
-    int userShopSelection = 0;
+    int userShopSelection;
     bool loopFlag = true;
     do
     {

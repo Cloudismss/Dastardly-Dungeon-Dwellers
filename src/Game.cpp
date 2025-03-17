@@ -48,7 +48,7 @@ void Game::mainMenu()
   do
   {
     art::game::menu();
-    int selection = 0;
+    int selection;
     std::cin >> selection;
     if (validate::input(selection, 1, 2))
     {
