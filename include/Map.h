@@ -14,7 +14,7 @@ class Position
 public:
   char symbol;
   bool explored;
-  std::string contents = " ";
+  std::string contents;
   Position() { symbol = ' '; explored = false; }
 };
 

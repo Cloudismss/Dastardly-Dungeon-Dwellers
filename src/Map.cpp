@@ -188,7 +188,7 @@ void Map::generateMap()
   {
     for (int j = 0; j < COLS; ++j)
     {
-      if (position[i][j].contents == " ")
+      if (position[i][j].contents.empty())
       {
         position[i][j].contents = "Enemy";
         if (Game::getDebug())
@@ -205,7 +205,7 @@ void Map::generateRooms(const std::string &ROOM_NAME, char ROOM_SYMBOL, int ROOM
   {
     for (int j = 0; j < COLS; ++j)
       // Mark the room as valid if the room is empty and a valid distance away from spawn
-      if (position[i][j].contents == " " && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COL_MIDPOINT - ROOM_DISTANCE || j >= COL_MIDPOINT + ROOM_DISTANCE))
+      if (position[i][j].contents.empty() && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COL_MIDPOINT - ROOM_DISTANCE || j >= COL_MIDPOINT + ROOM_DISTANCE))
         validSpawns[i][j] = true;
   }
 
@@ -223,7 +223,7 @@ void Map::generateRooms(const std::string &ROOM_NAME, char ROOM_SYMBOL, int ROOM
     int randomColumn = rand() % COLS;
 
     // Check to make sure the room is valid and empty before spawning the room
-    if (validSpawns[randomRow][randomColumn] && position[randomRow][randomColumn].contents == " ")
+    if (validSpawns[randomRow][randomColumn] && position[randomRow][randomColumn].contents.empty())
     {
       // Place room
       position[randomRow][randomColumn].contents = ROOM_NAME;
