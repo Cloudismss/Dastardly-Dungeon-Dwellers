@@ -6,17 +6,14 @@
 
 #include "Player.h"
 
-using std::string;
-using std::vector;
-
 struct MerchantItem
 {
-  string name;
-  int quantity;
+  std::string name;
   int cost;
+  int quantity;
 };
 
 void roomMerchant(Player *player);
-void roomMerchantPurchase(Player *player, vector<MerchantItem> &shop, const int userShopSelection, int &purchaseAmount);
+void roomMerchantPurchase(Player *player, std::vector<MerchantItem> &shop, const int userShopSelection, int &purchaseAmount);
 
 #endif // ROOMMERCHANT_H

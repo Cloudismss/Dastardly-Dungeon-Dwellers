@@ -6,20 +6,8 @@
 #include "CharacterList.h"
 #include "Inventory.h"
 
-using std::string;
-
 class Player
 {
-private:
-  // Progression Variables
-  int rooms = 0;
-
-  // Character Linked List
-  CharacterList *characters;
-
-  // Player Inventory
-  Inventory *inventory;
-
 public:
   Player();
   ~Player();
@@ -27,7 +15,7 @@ public:
 public:
   // Helper Functions
   void heal();
-  int attack(const string &battleMenuSelection, const string &enemyName, double enemyVulnerability);
+  int attack(int skillType, const std::string &enemyName, double enemyVulnerability);
 
 public:
   // Progression Accessors
@@ -39,6 +27,10 @@ public:
   int getArmor() const { return inventory->getArmor(); }
   int getKeys() const { return inventory->getKeys(); }
 
+  // Character List Accessors
+  CharacterList* getCharacter() { return characters; }
+
+public:
   // Progression Mutators
   void roomCleared() { ++rooms; }
 
@@ -53,15 +45,17 @@ public:
   void removeArmor(int armorAdjust = 1) { inventory->removeArmor(armorAdjust); }
   void removeKeys(int keysAdjust = 1) { inventory->removeKeys(keysAdjust); }
 
-  // Character List Accessors
-  CharacterList* getCharacter() { return characters; }
-
   // Character List Mutators
-  void addRandomCharacter() { characters->addRandomCharacter(); }
-  void addSpecificCharacter(const string &className) { characters->addSpecificCharacter(className); }
+  void appendRandomCharacter() { characters->appendRandomCharacter(); }
+  void appendCharacter(const std::string &className) { characters->appendCharacter(className); }
   bool removeCurrentCharacter() { return characters->removeCurrentCharacter(); }
-  bool removeSpecificCharacter(const string &className) { return characters->removeSpecificCharacter(className); }
+  bool removeCharacter(const std::string &className) { return characters->removeCharacter(className); }
   bool cycle(char direction = 'R') { return characters->cycle(direction); }
+
+private:
+  int rooms = 0;
+  CharacterList *characters;
+  Inventory *inventory;
 };
 
 #endif // PLAYER_H

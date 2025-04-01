@@ -4,12 +4,9 @@
 
 #include "Validation.h"
 
-using std::cout;
-using std::cin;
-
 void loot(Player *player, Enemy *enemy)
 {
-  cout << "You check the enemy for valuables:\n";
+  std::cout << "You check the enemy for valuables:\n";
   int rewardTier = enemy->getRewardTier();
   int lootRoll = 1 + (rand() % 100);
 
@@ -27,9 +24,9 @@ void loot(Player *player, Enemy *enemy)
 
       // Nothing found
       if (lootRoll > 85)
-        cout << "You found nothing of value\n";
+        std::cout << "You found nothing of value\n";
 
-      cout << "\n";
+      std::cout << "\n";
 
       player->getCharacter()->addXp(15 + (rand() % 16));
 
@@ -48,9 +45,9 @@ void loot(Player *player, Enemy *enemy)
 
       // Nothing found
       if (lootRoll > 90)
-        cout << "You found nothing of value\n";
+        std::cout << "You found nothing of value\n";
 
-      cout << "\n";
+      std::cout << "\n";
 
       player->getCharacter()->addXp(25 + (rand() % 16));
 
@@ -65,7 +62,7 @@ void loot(Player *player, Enemy *enemy)
       // 100% chance to earn a random amount of gold between 10-20
       player->addGold(10 + (rand() % 11));
 
-      cout << "\n";    
+      std::cout << "\n";    
 
       player->getCharacter()->addXp(35 + (rand() % 16));
 
@@ -80,7 +77,7 @@ void loot(Player *player, Enemy *enemy)
       // 100% chance to earn a random amount of gold between 15-20
       player->addGold(15 + (rand() % 6));
 
-      cout << "\n";
+      std::cout << "\n";
 
       player->getCharacter()->addXp(45 + (rand() % 16));
 
@@ -98,7 +95,7 @@ void loot(Player *player, Enemy *enemy)
       // 100% chance to earn a random amount of gold between 15-20
       player->addGold(15 + (rand() % 6));
 
-      cout << "\n";
+      std::cout << "\n";
 
       player->getCharacter()->addXp(55 + (rand() % 16));
 
@@ -116,7 +113,7 @@ void loot(Player *player, Enemy *enemy)
       // 100% chance to earn a random amount of gold between 25-50
       player->addGold(25 + (rand() % 26));
 
-      cout << "\n";
+      std::cout << "\n";
 
       player->getCharacter()->addXp(200 + (rand() % 101));
 
@@ -129,21 +126,21 @@ void loot(Player *player, Enemy *enemy)
 
   if (lootRoll <= 5 && Character::available())
   {
-    cout << "One of your fellow adventurers enters the room and compliments you on your victory...\n";
+    std::cout << "One of your fellow adventurers enters the room and compliments you on your victory...\n";
     bool loopFlag = true;
     char characterSelection;
     do
     {
-      cout << "Do you invite them to join your party?\n"
+      std::cout << "Do you invite them to join your party?\n"
           << "Y or N: ";
-      cin >> characterSelection;
-      if (validateDecision(characterSelection))
+      std::cin >> characterSelection;
+      if (validate::decision(characterSelection))
         loopFlag = false;
     } while (loopFlag);
 
-    cout << "\n";
+    std::cout << "\n";
 
     if (characterSelection == 'Y' || characterSelection == 'y')
-      player->addRandomCharacter();
+      player->appendRandomCharacter();
   }
 }

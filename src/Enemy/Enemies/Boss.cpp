@@ -4,22 +4,20 @@
 
 #include "Globals.h"
 
-using std::cout;
+Boss::Boss(int playerLevel) : Enemy(playerLevel, bosses[rand() % bosses.size()], vulnerabilities) { }
 
-Boss::Boss(int playerLevel) : Enemy(playerLevel)
+bool Boss::createBoss()
 {
-  rewardTier = 10;
-  name = bosses[rand() % bosses.size()];
-  boss = true;
-  announceEnemy();
+  health = 100;
+  return true;
 }
 
 void Boss::announceEnemy() const
 {
-  cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
+  std::cout << "\nThe Earth trembles beneath you, a powerful foe is near...\n" << name << " has cornered you!\n\n";
 }
 
-string Boss::getNickname() const
+std::string Boss::getNickname() const
 {
   if (name == "Voidshaper Nihilus")
     return "Nihilus";
@@ -49,7 +47,7 @@ int Boss::attack(int playerArmor, int playerMaxHealth)
 {
   if (1 + (rand() % 100) <= BASE_ENEMY_MISS_CHANCE * 100)
   {
-    cout << "\t" << name << " missed!\n\n";
+    std::cout << "\t" << name << " missed!\n\n";
     return 0;
   }
 
@@ -85,6 +83,6 @@ int Boss::attack(int playerArmor, int playerMaxHealth)
   if (damage < 0)
     damage = 0;
 
-  cout << "\t" << name << " dealt " << damage << " damage\n\n";
+  std::cout << "\t" << name << " dealt " << damage << " damage\n\n";
   return damage;
 }

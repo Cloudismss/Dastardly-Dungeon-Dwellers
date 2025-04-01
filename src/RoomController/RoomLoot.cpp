@@ -3,14 +3,10 @@
 #include <iostream>
 #include <string>
 
-#include "Art.h"
-#include "Game.h"
-#include "RoomEnemy.h"
+#include "Player.h"
 #include "Validation.h"
 
-using std::cin;
-using std::cout;
-using std::string;
+#include "RoomEnemy.h"
 
 bool roomLoot(Player *player, bool &isEnemyRoom)
 {
@@ -20,21 +16,21 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
   char chestSelection = ' ';
   do
   {
-    cout << "Do you look inside?\n"
+    std::cout << "Do you look inside?\n"
          << "Y or N:";
-    cin >> chestSelection;
-    if (validateDecision(chestSelection))
+    std::cin >> chestSelection;
+    if (validate::decision(chestSelection))
       loopFlag = false;
   } while (loopFlag);
 
   if (chestSelection == 'Y' || chestSelection == 'y')
   {
-    cout << "\nYou carefully lift the lid open";
+    std::cout << "\nYou carefully lift the lid open";
 
     // There is a 90% chance the room isn't a trap
     if (1 + (rand() % 100) <= 90)
     {
-      cout << " and found the following items:\n";
+      std::cout << " and found the following items:\n";
 
       // Player is guaranteed a random amount of gold between 15-30
       player->addGold(15 + (rand() % 16));
@@ -45,7 +41,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
       if (lootRoll <= 75)
         player->addPotions(2 + (rand() % 2));
 
-      cout << "\n";
+      std::cout << "\n";
 
       // 30% chance the player is given the golden key
       if (lootRoll <= 30)
@@ -57,36 +53,36 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
       // There is a 30% chance to find a new character
       if (1 + (rand() % 100) <= 30 && Character::available())
       {
-        cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
+        std::cout << "One of your fellow adventurers enters the room and compliments you on your prize...\n";
         bool loopFlag = true;
         char characterSelection;
         do
         {
-          cout << "Do you invite them to join your party?\n"
+          std::cout << "Do you invite them to join your party?\n"
               << "Y or N: ";
-          cin >> characterSelection;
-          if (validateDecision(characterSelection))
+          std::cin >> characterSelection;
+          if (validate::decision(characterSelection))
             loopFlag = false;
         } while (loopFlag);
 
-        cout << "\n";
+        std::cout << "\n";
 
         if (characterSelection == 'Y' || characterSelection == 'y')
-          player->addRandomCharacter();
+          player->appendRandomCharacter();
 
       }
 
       // Pause the game until the user is ready
-      cout << "Press enter to continue to the next room: ";
-      string enterKey = " ";
-      getline(cin, enterKey);
-      cout << "\n";
+      std::cout << "Press enter to continue to the next room: ";
+      std::string enterKey;
+      getline(std::cin, enterKey);
+      std::cout << "\n";
     }
 
     // There is a 10% chance the room is a trap
     else
     {
-      cout << " but it's empty!\n"
+      std::cout << " but it's empty!\n"
            << "You quickly slam the lid closed as you hear the door in front of you crack open!\n\n";
 
       // Run roomEnemy, Returns true if the player wins the battle
@@ -101,14 +97,14 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
   // Player chose not to open the chest
   else
   {
-    cout << "\nYou sense this may be a trap, and quickly exit the room\n\n";
+    std::cout << "\nYou sense this may be a trap, and quickly exit the room\n\n";
     lootSuccess = true;
 
     // Pause the game until the user is ready
-    cout << "Press enter to continue to the next room: ";
-    string enterKey = " ";
-    getline(cin, enterKey);
-    cout << "\n";
+    std::cout << "Press enter to continue to the next room: ";
+    std::string enterKey;
+    getline(std::cin, enterKey);
+    std::cout << "\n";
   }
 
   // If a battle is triggered and lost, a false value will end the program

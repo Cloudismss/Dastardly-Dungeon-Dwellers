@@ -3,16 +3,21 @@
 
 #include "Enemy.h"
 
-enum EnemyName
+#include <vector>
+
+namespace
 {
-  CYCLOPS,
-  GOBLIN,
-  MINOTAUR,
-  ORC,
-  SKELETON,
-  TROLL,
-  BOSS
-};
+  enum EnemyName
+  {
+    CYCLOPS,
+    GOBLIN,
+    MINOTAUR,
+    ORC,
+    SKELETON,
+    TROLL,
+    BOSS
+  };
+}
 
 class EnemySpawner
 {
@@ -21,9 +26,9 @@ public:
   static Enemy *generateEnemy(int playerLevel);
 
 private:
-  const static inline vector<int> stage1Baddies = { SKELETON, GOBLIN, ORC };
-  const static inline vector<int> stage2Baddies = { TROLL, CYCLOPS };
-  const static inline vector<int> stage3Baddies = { MINOTAUR };  
+  const static inline std::vector<int> stage1Baddies = { SKELETON, GOBLIN, ORC };
+  const static inline std::vector<int> stage2Baddies = { TROLL, CYCLOPS };
+  const static inline std::vector<int> stage3Baddies = { MINOTAUR };  
 
 private:
   // Helper functions

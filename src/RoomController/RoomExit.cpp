@@ -3,10 +3,8 @@
 #include <iostream>
 
 #include "Game.h"
+#include "Player.h"
 #include "Validation.h"
-
-using std::cin;
-using std::cout;
 
 void roomExit(Player *player)
 {
@@ -17,17 +15,17 @@ void roomExit(Player *player)
     char selection = ' ';
     do
     {
-      cout << "Would you like use your golden key to exit the dungeon?\n"
+      std::cout << "Would you like use your golden key to exit the dungeon?\n"
            << "Y or N:";
-      cin >> selection;
-      if (validateDecision(selection))
+      std::cin >> selection;
+      if (validate::decision(selection))
         loopFlag = false;
     } while (loopFlag);
 
     // Player chose to leave the dungeon, victory!
     if (selection == 'Y' || selection == 'y')
     {
-      cout << "\n";
+      std::cout << "\n";
       Game::winCondition = true;
       return;
     }
@@ -35,5 +33,5 @@ void roomExit(Player *player)
 
   // Player doesn't have a golden key
   else
-    cout << "You don't have a golden key!\n\n";
+    std::cout << "You don't have a golden key!\n\n";
 }

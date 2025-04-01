@@ -1,22 +1,23 @@
 #include "CharacterList.h"
 
 #include <iostream>
+#include <string>
 
-#include "Art.h"
-#include "Validation.h"
+#include "BoxArt.h"
+#include "CharacterArt.h"
+#include "GameArt.h"
 
 #include "Archer.h"
 #include "Bard.h"
 #include "Mage.h"
 #include "Warrior.h"
 
-using std::cin;
-using std::cout;
+#include "Validation.h"
 
 CharacterList::CharacterList()
 {
   // Set the class name in the current node and initialize the head
-  addSpecificCharacter(classSelection());
+  appendCharacter(classSelection());
 }
 
 CharacterList::~CharacterList()
@@ -38,10 +39,10 @@ CharacterList::~CharacterList()
   head = nullptr;
 }
 
-void CharacterList::addRandomCharacter()
+void CharacterList::appendRandomCharacter()
 {
   // Check if any characters are available
-  string className = Character::getRandomAvailableCharacter();
+  std::string className = Character::getRandomAvailableCharacter();
   if (className == "None")
     return;
 
@@ -82,14 +83,14 @@ void CharacterList::addRandomCharacter()
     node->character = new Warrior;
 
   // TODO: Output text indicating new character added
-  string message = className + " has joined your party!";
+  std::string message = className + " has joined your party!";
   art::box::displayMeInABox(message);
 }
 
-void CharacterList::addSpecificCharacter(const string &className)
+void CharacterList::appendCharacter(const std::string &className)
 {
   // Check if any characters are available
-  if (!Character::getAvailableCharacter(className))
+  if (!Character::getAvailability(className))
     return;
 
   // Connect pointers on doubly linked list
@@ -116,7 +117,7 @@ void CharacterList::addSpecificCharacter(const string &className)
     last->next = node;
 
     // TODO: Output text indicating new character added
-    string message = className + " has joined your party!";
+    std::string message = className + " has joined your party!";
     art::box::displayMeInABox(message);
   }
 
@@ -155,7 +156,7 @@ bool CharacterList::removeCurrentCharacter()
   return true;
 }
 
-bool CharacterList::removeSpecificCharacter(const string &className)
+bool CharacterList::removeCharacter(const std::string &className)
 {
   if (head->next == head)
     return false; // Out of characters
@@ -176,7 +177,7 @@ bool CharacterList::removeSpecificCharacter(const string &className)
   return true;
 }
 
-bool CharacterList::cycle(char direction, const string &context)
+bool CharacterList::cycle(char direction, const std::string &context)
 {
   if (current->next == current)
     return false;
@@ -189,65 +190,57 @@ bool CharacterList::cycle(char direction, const string &context)
     current = current->next;
   
   if (context == "Switch") // This is just a check for context based newline output formatting
-    cout << "\n\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n";
+    std::cout << "\n\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n";
   else
-    cout << "\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n\n";
+    std::cout << "\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n\n";
 
   return true;
 }
 
-void CharacterList::select(const string &characterName)
+void CharacterList::select(const std::string &characterName)
 {
   while (current->character->getClassName() != characterName && current->next != current)
     current = current->next;
 }
 
-string CharacterList::classSelection()
+std::string CharacterList::classSelection() const
 {
   bool loopFlag = true;
-  string className = " ";
+  std::string className;
   do
   {
-    int classChoice = 0;
-    cout << ".-------------------------------------------------------------.\n"
-         << "|                                                             |\n"
-         << "|       Please choose a starting class using numbers 1-3:     |\n"
-         << "|                                                             |\n"
-         << "|            1: Warrior             Skill: Melee              |\n"
-         << "|            2: Mage                Skill: Magic              |\n"
-         << "|            3: Archer              Skill: Ranged             |\n"
-         << "|                                                             |\n"
-         << "'-------------------------------------------------------------'\n";
-    cin >> classChoice;
+    int classChoice;
+    art::game::classSelection();
+    std::cin >> classChoice;
     // High range is 999 to force the joke selection of bard if a number > 3 is entered
-    if (validateInput(classChoice, 1, 999))
+    if (validate::input(classChoice, 1, 999))
     {
       switch (classChoice)
       {
         case 1:
         {
           className = "Warrior";
-          art::character::warriorArt();
+          art::character::warrior();
           break;
         }
         case 2:
         {
           className = "Mage";
-          art::character::mageArt();
+          art::character::mage();
           break;
         }
         case 3:
         {
           className = "Archer";
-          art::character::archerArt();
+          art::character::archer();
           break;
         }
         // Player chose an invalid number, and is auto-assigned to bard
         default:
         {
           className = "Bard";
-          art::character::bardArt();
-          cout << "That wasn't an option >:(\n"
+          art::character::bard();
+          std::cout << "That wasn't an option >:(\n"
                << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
           loopFlag = false;
           break;
@@ -264,20 +257,20 @@ string CharacterList::classSelection()
   return className;
 }
 
-bool CharacterList::classSelectionConfirm(const string &className)
+bool CharacterList::classSelectionConfirm(const std::string &className) const
 {
   char confirmSelection = ' ';
   bool confirmLoop = true;
   do
   {
-    cout << "You have selected '" << className << "', continue?\n"
+    std::cout << "You have selected '" << className << "', continue?\n"
           << "Y or N: ";
-    cin >> confirmSelection;
-    if (validateDecision(confirmSelection))
+    std::cin >> confirmSelection;
+    if (validate::decision(confirmSelection))
     {
       if (confirmSelection == 'Y' || confirmSelection == 'y')
       {
-        cout << "\nYou've chosen the path of the " << className << "\n\n";
+        std::cout << "\nYou've chosen the path of the " << className << "\n\n";
         return false; // Exit main character select loop
       }
       return true; // Return to beginning of character select loop

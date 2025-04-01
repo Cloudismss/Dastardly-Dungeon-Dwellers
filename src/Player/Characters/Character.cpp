@@ -2,15 +2,23 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
-#include <Art.h>
 #include "Globals.h"
+
+#include "BoxArt.h"
 
 #include <fmt/color.h>
 
-using std::cout;
+Character::Character(const std::string& className, const std::unordered_map<int, std::array<std::string, 3>> skillNames) :
+  className(className),
+  skillNames(skillNames)
+{
+  initSkills();
+  health = maxHealth;
+}
 
-string Character::getRandomAvailableCharacter()
+std::string Character::getRandomAvailableCharacter()
 {
   // Check set of available characters
   if (availableCharacters.empty())
@@ -18,27 +26,27 @@ string Character::getRandomAvailableCharacter()
 
   // Select random class name
   int classIndex = rand() % availableCharacters.size();
-  set<string>::iterator iter = availableCharacters.begin();
+  auto iter = availableCharacters.begin();
   for (int i = 0; i != classIndex; ++i)
     ++iter;
 
   return *iter;
 }
 
-bool Character::getAvailableCharacter(const string &className)
+bool Character::getAvailability(const std::string &className)
 {
   // Check if character is available
   return availableCharacters.count(className);
 }
 
-void Character::checkoutCharacter(const string &className)
+void Character::checkoutCharacter(const std::string &className)
 {
   // Remove character from set
   availableCharacters.erase(availableCharacters.find(className));
 }
 
 // Skills based functions
-void Character::readSkills()
+void Character::initSkills()
 {
   // Load 'DastardlyDungeonDwellers.cfg' or create and load 'DastardlyDungeonDwellers.cfg' with defaults, the player can edit the .cfg file if they want custom stats
   std::ifstream characterStats;
@@ -56,7 +64,7 @@ void Character::readSkills()
     }
   }
 
-  string classNameChecker = " ";
+  std::string classNameChecker;
   
   // Ignore the first two lines (info header and blank line)
   getline(characterStats, classNameChecker);
@@ -90,54 +98,54 @@ void Character::generateSkills(std::ofstream &defaultCharacterStats)
                         << "Bard, 15 15 15 9.0 0.4";
 }
 
-int Character::getWeaponLevel(const string &weaponType) const
+int Character::getWeaponLevel(int skillType) const
 {
-  if (weaponType == "Melee")
+  if (skillType == skill::MELEE)
     return meleeWeapon;
-  else if (weaponType == "Magic")
+  else if (skillType == skill::MAGIC)
     return magicWeapon;
-  else if (weaponType == "Ranged")
+  else if (skillType == skill::RANGED)
     return rangedWeapon;
 
   // TODO: Implement clean fix for return in all control paths
   return -1;
 }
 
-int Character::getSkillUpgradeTier(const string &skillType) const
+int Character::getSkillUpgradeTier(int skillType) const
 {
   // Add 1 since upgradeTiers start at index 0
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     return meleeUpgradeTier + 1;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     return magicUpgradeTier + 1;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     return magicUpgradeTier + 1;
 
   // TODO: Implement clean fix for return in all control paths
   return -1;
 }
 
-int Character::getSkillLevel(const string &skillType) const
+int Character::getSkillLevel(int skillType) const
 {
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     return meleeLevel;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     return magicLevel;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     return rangedLevel;
 
   // TODO: Implement clean fix for return in all control paths
   return -1;
 }
 
-string Character::getSkillName(const string &skillType)
+std::string Character::getSkillName(int skillType)
 {
-  if (skillType == "Melee")
-    return skillNames[skillType][meleeUpgradeTier];
-  else if (skillType == "Magic")
-    return skillNames[skillType][magicUpgradeTier];
-  else if (skillType == "Ranged")
-    return skillNames[skillType][rangedUpgradeTier];
+  if (skillType == skill::MELEE)
+    return skillNames.at(skillType)[meleeUpgradeTier];
+  else if (skillType == skill::MAGIC)
+    return skillNames.at(skillType)[magicUpgradeTier];
+  else if (skillType == skill::RANGED)
+    return skillNames.at(skillType)[rangedUpgradeTier];
 
   // TODO: Implement clean fix for return in all control paths
   return "Error";
@@ -145,7 +153,7 @@ string Character::getSkillName(const string &skillType)
 
 void Character::addXp(int xpAdjust)
 {
-  cout << className << " gained " << xpAdjust << " xp!\n";
+  std::cout << className << " gained " << xpAdjust << " xp!\n";
 
   // XP amount exceeds a full level
   while(xpAdjust >= xpRequiredPerLevel)
@@ -165,12 +173,12 @@ void Character::addXp(int xpAdjust)
 
   xp += xpAdjust;
 
-  cout << "\n";
+  std::cout << "\n";
 }
 
 void Character::addLevel()
 {
-  cout << className << " is now level " << ++level << "!\n";
+  std::cout << className << " is now level " << ++level << "!\n";
   
   // TODO: Make interesting and print, possibly make virtual
 
@@ -181,27 +189,27 @@ void Character::addLevel()
   maxHealth *= 1.1;
 }
 
-void Character::upgradeWeapon(const string &weaponType, const string &upgradeName)
+void Character::upgradeWeapon(int skillType, const std::string &upgradeName)
 {
-  if (weaponType == "Melee")
+  if (skillType == skill::MELEE)
     ++meleeWeapon;
-  else if (weaponType == "Magic")
+  else if (skillType == skill::MAGIC)
     ++magicWeapon;
-  else if (weaponType == "Ranged")
+  else if (skillType == skill::RANGED)
     ++rangedWeapon;
 
   fmt::print(fmt::emphasis::bold, "{0} added\n", upgradeName);
 }
 
-void Character::useSkill(const string &skillType)
+void Character::useSkill(int skillType)
 {
   int *upgradeCounter = nullptr;
 
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     upgradeCounter = &meleeCounter;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     upgradeCounter = &magicCounter;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     upgradeCounter = &rangedCounter;
 
   if (*upgradeCounter + 1 == SKILL_UPGRADE || *upgradeCounter + 1 == SKILL_UPGRADE * 2)
@@ -210,19 +218,18 @@ void Character::useSkill(const string &skillType)
   ++(*upgradeCounter);
 }
 
-void Character::upgradeSkillName(const string &skillType)
+void Character::upgradeSkillName(int skillType)
 {
   int *skillUpgradeTier = nullptr;
 
-  if (skillType == "Melee")
+  if (skillType == skill::MELEE)
     skillUpgradeTier = &meleeUpgradeTier;
-  else if (skillType == "Magic")
+  else if (skillType == skill::MAGIC)
     skillUpgradeTier = &magicUpgradeTier;
-  else if (skillType == "Ranged")
+  else if (skillType == skill::RANGED)
     skillUpgradeTier = &rangedUpgradeTier;
 
-  const string upgradeMessage = skillNames[skillType][*skillUpgradeTier] + " has been upgraded to " + skillNames[skillType][(*skillUpgradeTier) + 1];
-  ++(*skillUpgradeTier);
+  const std::string upgradeMessage = skillNames.at(skillType)[*skillUpgradeTier] + " has been upgraded to " + skillNames.at(skillType)[(*skillUpgradeTier)++];
  
   // Print skill upgrade notification
   art::box::displayMeInABox("Congratulations!", upgradeMessage);

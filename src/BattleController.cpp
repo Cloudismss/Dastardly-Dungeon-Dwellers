@@ -3,44 +3,43 @@
 #include <iostream>
 #include <string>
 
-#include "Art.h"
-
-using std::cout;
-using std::string;
+#include "BattleArt.h"
 
 int battleController(Player *player, Enemy *enemy)
 {
   // Battle loop - loops until either the enemy or the player hits 0 health
   while (enemy->getHealth() > 0 && player->getCharacter()->getHealth() > 0)
   {
-    // Displays the battleMenu and the player's choice is stored in battleMenuSelection
-    const string battleMenuSelection = art::battle::battleMenu(player, enemy);
+    // Displays the battleMenu and the player's choice is stored in battleSelection
+    int battleSelection = art::battle::menu(player, enemy);
 
     // Player chose a damaging move
-    if (battleMenuSelection == "Melee" || battleMenuSelection == "Magic" || battleMenuSelection == "Ranged")
+    if (battleSelection == art::battle::MELEE || battleSelection == art::battle::MAGIC || battleSelection == art::battle::RANGED)
     {
-      int playerAttack = player->attack(battleMenuSelection, enemy->getName(),enemy->getVulnerability(battleMenuSelection));
+      // Translate battle selection to attack skill indexes
+      int skillType = battleSelection - 1;
+
+      int playerAttack = player->attack(skillType, enemy->getName(),enemy->getVulnerability(skillType));
       if (playerAttack > 0)
       {
-        string skillName = player->getCharacter()->getSkillName(battleMenuSelection);
+        std::string skillName = player->getCharacter()->getSkillName(skillType);
         enemy->receive(playerAttack); // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
       }
     }  
-    // Player chose to heal
-    else if (battleMenuSelection == "Heal")
-      player->heal(); // A random heal amount is added to playerHealth
-    // Player chose to run
-    else if (battleMenuSelection == "Run")
+
+    else if (battleSelection == art::battle::HEAL)
+      player->heal();
+
+    else if (battleSelection == art::battle::RUN)
     {
       // Player has a 50% chance to successfully run, Bards can always run
       if (player->getCharacter()->getClassName() == "Bard" || 1 + (rand() % 100) <= 50)
       {
-        cout << "\tYou escaped successfully!\n\n";
-        return RUN;
+        std::cout << "\tYou escaped successfully!\n\n";
+        return battle::RUN;
       }
-      // Player failed to run
       else
-        cout << "\tYou failed to escape!\n\n";
+        std::cout << "\tYou failed to escape!\n\n";
     }
 
     // The enemy is permitted to attack only if their health is > 0, this prevents the enemy from attacking after their health reaches 0
@@ -54,8 +53,8 @@ int battleController(Player *player, Enemy *enemy)
       if (!player->getCharacter()->removeCurrentCharacter())
       {
         // Player is out of characters - game over
-        cout << "Player Defeated!\n\n";
-        return LOSE;
+        std::cout << "Player Defeated!\n\n";
+        return battle::LOSE;
       }
     }
   }
@@ -63,9 +62,9 @@ int battleController(Player *player, Enemy *enemy)
   // Checks if the player won the battle
   if (enemy->getHealth() <= 0)
   {
-    cout << "Enemy defeated!\n\n";
+    std::cout << "Enemy defeated!\n\n";
     // Returning a 1 means the player won the battle
-    return WIN;
+    return battle::WIN;
   }
 
   // TODO: Implement clean fix for return in all control paths

@@ -6,20 +6,9 @@
 
 class Game
 {
-private:
-  // Debug toggle - displays useful debug information in the console and gives resources / increased damage
-  inline static bool debug = false; // Enter -37 at the main menu to enter debug mode
-
 public:
-  static bool getDebug() { return debug; }
-
-public:
-  inline static bool winCondition;
-  inline static bool running = true;
-
-private:
-  Player *player;
-  Map *map;
+  Game() { start(); }
+  ~Game() { end(); }
 
 private:
   void start();
@@ -27,9 +16,22 @@ private:
   void mainMenu();
 
 public:
-  Game() { start(); }
-  ~Game() { end(); }
+  static bool getDebug() { return debug; }
+
+public:
   void loop();
+
+private:
+  // Debug toggle - displays useful debug information in the console and gives resources / increased damage
+  static inline bool debug = false; // Enter -37 at the main menu to enter debug mode
+
+private:
+  Player *player;
+  Map *map;
+
+public:
+  static inline bool winCondition;
+  static inline bool running = true;
 };
 
 #endif // GAME_H

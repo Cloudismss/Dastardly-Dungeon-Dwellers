@@ -3,6 +3,13 @@ set(Includes
         "Globals.h"
 
         # Headers
+        "Art/BattleArt.h"
+        "Art/BoxArt.h"
+        "Art/CharacterArt.h"
+        "Art/DialogueArt.h"
+        "Art/GameArt.h"
+        "Art/RoomArt.h"
+        "Art/TutorialArt.h"
         "Enemy/Enemies/Boss.h"
         "Enemy/Enemies/Cyclops.h"
         "Enemy/Enemies/Enemy.h"
@@ -26,7 +33,6 @@ set(Includes
         "RoomController/RoomExit.h"
         "RoomController/RoomLoot.h"
         "RoomController/RoomMerchant.h"
-        "Art.h"
         "BattleController.h"
         "Game.h"
         "Map.h"
