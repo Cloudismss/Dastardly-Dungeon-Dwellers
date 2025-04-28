@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Enable static compilation
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 # fmt library
 include(FetchContent)
 
@@ -19,9 +22,6 @@ if (CMAKE_HOST_WIN32)
   # Set clang compiler
   set(CMAKE_C_COMPILER clang)
   set(CMAKE_CXX_COMPILER clang++)
-
-  # Enable static compilation
-  #set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
   # UTF-8 option is required when using fmt
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
