@@ -1,0 +1,7 @@
+{
+  "name": "C++ Environment",
+  "image": "cloudisms/zipcode-cpp:1.0",
+  "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash"
+  }
+}
