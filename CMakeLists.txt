@@ -5,12 +5,11 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Enable static compilation
+# Static MSVC compilation
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-# fmt library
+# Fetch fmt library
 include(FetchContent)
-
 FetchContent_Declare(
   fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
@@ -26,6 +25,13 @@ if (CMAKE_HOST_WIN32)
   # UTF-8 option is required when using fmt
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 endif()
+
+# Make target - 'run' - compiles and runs the produced binary
+add_custom_target(run
+    COMMAND ${CMAKE_BINARY_DIR}/${PROJECT_NAME}
+    DEPENDS ${PROJECT_NAME}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
 
 # Executable
 add_executable(${PROJECT_NAME} "src/DastardlyDungeonDwellers.cpp" "res/DDD.rc")
