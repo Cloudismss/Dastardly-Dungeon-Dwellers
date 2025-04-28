@@ -1,7 +1,10 @@
 {
   "name": "C++ Environment",
   "image": "cloudisms/zipcode-cpp:1.0",
-  "settings": {
-      "terminal.integrated.shell.linux": "/bin/bash"
+  "customizations": {
+    "vscode": {
+      "settings": { "C_Cpp.intelliSenseEngine": "disabled" },
+      "extensions": ["ms-vscode.cpptools-extension-pack", "ms-vscode.cmake-tools", "llvm-vs-code-extensions.vscode-clangd"]
+    }
   }
 }
