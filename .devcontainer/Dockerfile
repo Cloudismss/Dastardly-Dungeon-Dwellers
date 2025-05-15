@@ -17,6 +17,8 @@ RUN pacman -Syu  --noconfirm \
     bat \
     && pacman -Scc --noconfirm
 
+# Copy local directory to docker container
 COPY .. ./DDD
 
+# Set docker container working directory
 WORKDIR /DDD
