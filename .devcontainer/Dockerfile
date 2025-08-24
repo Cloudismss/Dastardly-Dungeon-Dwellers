@@ -15,5 +15,4 @@ RUN pacman -Syu  --noconfirm \
     valgrind \
     doxygen \
     bat \
-    xterm \
     && pacman -Scc --noconfirm
