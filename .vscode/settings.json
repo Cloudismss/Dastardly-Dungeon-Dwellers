@@ -1,0 +1,3 @@
+{
+    "cmake.debugConfig": { "name": "Launch LLDB debugger" }
+}
