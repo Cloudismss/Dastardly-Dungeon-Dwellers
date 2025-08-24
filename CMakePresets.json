@@ -1,18 +1,30 @@
 {
-    "version": 8,
-    "configurePresets": [
-        {
-            "name": "Clang - Linux",
-            "displayName": "Clang - Linux",
-            "description": "Clang with Linux paths",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}",
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        }
-    ]
+  "version": 8,
+  "configurePresets": [
+    {
+      "name": "Clang - Linux",
+      "displayName": "Clang - Linux",
+      "description": "Clang with Linux paths",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}",
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "Clang - Windows",
+      "displayName": "Clang - Windows",
+      "description": "Clang with Visual Studio paths",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}",
+        "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/Llvm/bin/clang.exe",
+        "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/Llvm/bin/clang.exe",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    }
+  ]
 }
