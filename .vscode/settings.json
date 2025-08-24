@@ -1,3 +1,9 @@
 {
-    "cmake.debugConfig": { "name": "Launch LLDB debugger" }
+    "cmake.debugConfig": {
+        "name": "Launch LLDB debugger"
+    },
+    "cmake.configureSettings": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+    }
 }
