@@ -1,9 +1,18 @@
 {
   "name": "C++ Environment",
   "build": { "dockerfile": "Dockerfile" },
+
+  // runArgs to enable debugging in our container 
+  "runArgs": [
+		"--cap-add=SYS_PTRACE",
+		"--security-opt",
+		"seccomp=unconfined"
+  ],
+
+  // VSCode customizations
   "customizations": {
     "vscode": {
-      "settings": { "C_Cpp.intelliSenseEngine": "disabled" },
+      "settings": { "C_Cpp.intelliSenseEngine": "disabled" }, // disabled in favor of clangd
       "extensions": ["ms-vscode.cpptools-extension-pack", "ms-vscode.cmake-tools", "llvm-vs-code-extensions.vscode-clangd"]
     }
   }
