@@ -10,7 +10,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": true,
+            "console": "integratedTerminal",
             "MIMode": "lldb",
             "preLaunchTask": "CMake: Build",
             "miDebuggerPath": "/usr/bin/lldb-mi"
