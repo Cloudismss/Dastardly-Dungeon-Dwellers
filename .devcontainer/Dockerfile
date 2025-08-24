@@ -16,9 +16,3 @@ RUN pacman -Syu  --noconfirm \
     doxygen \
     bat \
     && pacman -Scc --noconfirm
-
-# Copy local directory to docker container
-COPY .. ./DDD
-
-# Set docker container working directory
-WORKDIR /DDD
