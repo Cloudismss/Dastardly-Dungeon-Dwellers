@@ -4,7 +4,7 @@
         {
             "name": "Clang - Linux",
             "displayName": "Clang - Linux",
-            "description": "Clang with Linux pathss",
+            "description": "Clang with Linux paths",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
