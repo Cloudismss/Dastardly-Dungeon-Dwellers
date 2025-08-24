@@ -9,6 +9,9 @@
 		"seccomp=unconfined"
   ],
 
+  // Run a command after the container is created to configure the project
+  "postCreateCommand": "cmake -S . -B build -G Ninja",
+
   // VSCode customizations
   "customizations": {
     "vscode": {
