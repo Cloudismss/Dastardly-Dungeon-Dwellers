@@ -28,7 +28,7 @@
         "isDefault": true
       },
       "problemMatcher": [
-        "$gcc"
+        "$clang"
       ],
       "detail": "Build the default target."
     }
