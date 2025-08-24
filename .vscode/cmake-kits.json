@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Clang",
+    "compilers": {
+      "C": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++"
+    },
+    "preferredGenerator": {
+      "name": "Ninja"
+    }
+  }
+]
