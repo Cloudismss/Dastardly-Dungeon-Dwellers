@@ -32,7 +32,6 @@
 *.app
 
 # Custom
-.vscode
 .build
 .cache
 build
