@@ -9,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  build:
+  Release:
     runs-on: windows-latest
 
     steps:
