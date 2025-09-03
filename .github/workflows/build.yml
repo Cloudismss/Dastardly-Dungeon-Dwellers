@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure CMake
-        run: cmake -S . -B build -G "Ninja" -DCMAKE_CXX_COMPILER=/usr/bin/gcc
+        run: cmake -S . -B build -G "Ninja" -DCMAKE_CXX_COMPILER=/usr/bin/g++
 
       - name: Build
         run: cmake --build build --config Debug
@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure CMake
-        run: cmake -S . -B build -G "Ninja" -DCMAKE_CXX_COMPILER=/usr/bin/clang
+        run: cmake -S . -B build -G "Ninja" -DCMAKE_CXX_COMPILER=/usr/bin/clang++
 
       - name: Build
         run: cmake --build build --config Debug
