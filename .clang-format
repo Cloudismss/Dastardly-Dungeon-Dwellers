@@ -1,0 +1,8 @@
+﻿---
+BasedOnStyle: Microsoft
+IndentWidth: '4'
+Language: Cpp
+SortIncludes: 'true'
+SortUsingDeclarations: 'true'
+UseTab: Never
+...
