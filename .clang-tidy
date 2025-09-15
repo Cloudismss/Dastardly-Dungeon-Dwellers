@@ -1,0 +1,11 @@
+# Enable checks from the modernize and readability modules
+Checks: >
+  modernize-*,
+  readability-*,
+  -modernize-use-trailing-return-type
+
+# Only run on your own headers
+HeaderFilterRegex: '^(include|src)'
+
+# Use Microsoft formatting style
+FormatStyle: Microsoft
