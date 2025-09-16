@@ -15,11 +15,10 @@ public:
 
 private:
   const static inline std::string characterName = "Archer";
-  const static inline std::unordered_map<int, std::array<std::string, 3>> characterSkillNames = 
-  {
-    { skill::MELEE, {"Slice", "Sever", "Blade Dance"} }, 
-    { skill::MAGIC, {"Poison Bomb", "Intoxicate", "Pestilence"} }, 
-    { skill::RANGED, {"Pierce", "Perforate", "Serpent Shot"} }
+  const static inline std::unordered_map<int, std::array<std::string, 3>> characterSkillNames = {
+    { skill::MELEE, { "Slice", "Sever", "Blade Dance" } },
+    { skill::MAGIC, { "Poison Bomb", "Intoxicate", "Pestilence" } },
+    { skill::RANGED, { "Pierce", "Perforate", "Serpent Shot" } }
   };
 };
 

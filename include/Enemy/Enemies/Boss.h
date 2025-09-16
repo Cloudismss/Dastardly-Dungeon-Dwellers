@@ -25,19 +25,11 @@ public:
   int attack(int playerArmor, int playerMaxHealth) override;
 
 private:
-  const static inline std::vector<std::string> bosses =
-  {
-    "Voidshaper Nihilus",
-    "Snarltooth the Feral",
-    "Dreadlord Vorkar",
-    "Soulstealer Malgrimor",
-    "King Rattleclaw",
-    "Ignatius the Infernal",
-    "Dreadmaw the Bonecrusher",
-    "Rotclaw the Pustulant",
-    "Sludgeheart the Grotesque",
-    "Drak'thar the Trollking"
-  };
+  const static inline std::vector<std::string> bosses = { "Voidshaper Nihilus",        "Snarltooth the Feral",
+                                                          "Dreadlord Vorkar",          "Soulstealer Malgrimor",
+                                                          "King Rattleclaw",           "Ignatius the Infernal",
+                                                          "Dreadmaw the Bonecrusher",  "Rotclaw the Pustulant",
+                                                          "Sludgeheart the Grotesque", "Drak'thar the Trollking" };
   const static inline double meleeVulnerability = 1.0;
   const static inline double magicVulnerability = 1.0;
   const static inline double rangedVulnerability = 1.0;

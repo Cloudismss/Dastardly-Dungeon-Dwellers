@@ -19,13 +19,14 @@ int battleController(Player *player, Enemy *enemy)
       // Translate battle selection to attack skill indexes
       int skillType = battleSelection - 1;
 
-      int playerAttack = player->attack(skillType, enemy->getName(),enemy->getVulnerability(skillType));
+      int playerAttack = player->attack(skillType, enemy->getName(), enemy->getVulnerability(skillType));
       if (playerAttack > 0)
       {
         std::string skillName = player->getCharacter()->getSkillName(skillType);
-        enemy->receive(playerAttack); // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to select a skill type (melee, mage, ranged)
+        enemy->receive(playerAttack); // Subtracts playerDamage from enemyHealth, playerDamage passes the value from battleMenu to
+                                      // select a skill type (melee, mage, ranged)
       }
-    }  
+    }
 
     else if (battleSelection == art::battle::HEAL)
       player->heal();
@@ -42,8 +43,8 @@ int battleController(Player *player, Enemy *enemy)
         std::cout << "\tYou failed to escape!\n\n";
     }
 
-    // The enemy is permitted to attack only if their health is > 0, this prevents the enemy from attacking after their health reaches 0
-    // Enemy damage is based on the (enemy level * base enemy damage) + a random number between 1 and 3
+    // The enemy is permitted to attack only if their health is > 0, this prevents the enemy from attacking after their health
+    // reaches 0 Enemy damage is based on the (enemy level * base enemy damage) + a random number between 1 and 3
     if (enemy->getHealth() > 0)
       player->getCharacter()->adjustHealth(-1 * enemy->attack(player->getArmor(), player->getCharacter()->getMaxHealth()));
 

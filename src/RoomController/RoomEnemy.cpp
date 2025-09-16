@@ -12,7 +12,8 @@ bool roomEnemy(Player *player)
 {
   Enemy *enemy = EnemySpawner::generateEnemy(player->getCharacter()->getLevel());
 
-  // Run the battleController function. It returns 1 if the player wins the battle, -1 if the player successfully runs away, and 0 if they lose.
+  // Run the battleController function. It returns 1 if the player wins the battle, -1 if the player successfully runs away, and 0
+  // if they lose.
   int battleResult = battleController(player, enemy);
 
   // Player lost the battle - end the program

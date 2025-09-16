@@ -6,7 +6,7 @@
 class Enemy
 {
 public:
-  Enemy(int playerLevel, const std::string& name, const double vulnerability[]);
+  Enemy(int playerLevel, const std::string &name, const double vulnerability[]);
   ~Enemy() { ++enemyProgression; }
 
 private:
@@ -14,7 +14,7 @@ private:
 
 public:
   static int getProgression() { return enemyProgression; }
-  
+
 private:
   // Helper functions
   int setLevel(int playerLevel);

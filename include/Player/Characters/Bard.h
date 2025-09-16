@@ -12,14 +12,13 @@ class Bard : public Character
 {
 public:
   Bard();
-  
+
 private:
   const static inline std::string characterName = "Bard";
-  const static inline std::unordered_map<int, std::array<std::string, 3>> characterSkillNames = 
-  {
-    { skill::MELEE, {"Slap", "Snuggle", "Strum"} }, 
-    { skill::MAGIC, {"Beg", "Sing", "Serenade"} }, 
-    { skill::RANGED, {"Waft", "Whistle", "Seduce"} }
+  const static inline std::unordered_map<int, std::array<std::string, 3>> characterSkillNames = {
+    { skill::MELEE, { "Slap", "Snuggle", "Strum" } },
+    { skill::MAGIC, { "Beg", "Sing", "Serenade" } },
+    { skill::RANGED, { "Waft", "Whistle", "Seduce" } }
   };
 };
 

@@ -62,7 +62,7 @@ void loot(Player *player, Enemy *enemy)
       // 100% chance to earn a random amount of gold between 10-20
       player->addGold(10 + (rand() % 11));
 
-      std::cout << "\n";    
+      std::cout << "\n";
 
       player->getCharacter()->addXp(35 + (rand() % 16));
 
@@ -132,7 +132,7 @@ void loot(Player *player, Enemy *enemy)
     do
     {
       std::cout << "Do you invite them to join your party?\n"
-          << "Y or N: ";
+                << "Y or N: ";
       std::cin >> characterSelection;
       if (validate::decision(characterSelection))
         loopFlag = false;

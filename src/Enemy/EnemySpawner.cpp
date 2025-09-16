@@ -17,7 +17,7 @@
 Enemy *EnemySpawner::generateEnemy(int playerLevel)
 {
   int name = calculateName();
-  switch(name)
+  switch (name)
   {
     case CYCLOPS:
       return new Cyclops(playerLevel);

@@ -6,24 +6,21 @@
 #include "Enemy.h"
 #include "Player.h"
 
-namespace art
+namespace art::battle
 {
-  namespace battle
-  {
-    enum battleSelections
-    {
-      HELP = 0,
-      MELEE = 1,
-      MAGIC = 2,
-      RANGED = 3,
-      HEAL = 4,
-      RUN = 5,
-      SWITCH = 6
-    };
-    
-    int menu(Player *player, Enemy *enemy);
-    void displayHealth(const std::string &className, int playerHealth, const std::string &enemyName, int enemyHealth);
-  }
-}
+enum battleSelections
+{
+  HELP = 0,
+  MELEE = 1,
+  MAGIC = 2,
+  RANGED = 3,
+  HEAL = 4,
+  RUN = 5,
+  SWITCH = 6
+};
+
+int menu(Player *player, Enemy *enemy);
+void displayHealth(const std::string &className, int playerHealth, const std::string &enemyName, int enemyHealth);
+} // namespace art::battle
 
 #endif // BATTLEART_H

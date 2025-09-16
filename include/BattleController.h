@@ -3,13 +3,13 @@
 
 namespace battle
 {
-  enum Result
-  {
-    WIN,
-    LOSE,
-    RUN
-  };
-}
+enum Result
+{
+  WIN,
+  LOSE,
+  RUN
+};
+} // namespace battle
 
 #include "Enemy.h"
 #include "Player.h"

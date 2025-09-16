@@ -15,7 +15,11 @@ public:
   char symbol;
   bool explored;
   std::string contents;
-  Position() { symbol = ' '; explored = false; }
+  Position()
+  {
+    symbol = ' ';
+    explored = false;
+  }
 };
 
 class Map

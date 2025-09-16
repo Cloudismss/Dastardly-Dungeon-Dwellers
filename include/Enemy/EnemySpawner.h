@@ -7,17 +7,17 @@
 
 namespace
 {
-  enum EnemyName
-  {
-    CYCLOPS,
-    GOBLIN,
-    MINOTAUR,
-    ORC,
-    SKELETON,
-    TROLL,
-    BOSS
-  };
-}
+enum EnemyName
+{
+  CYCLOPS,
+  GOBLIN,
+  MINOTAUR,
+  ORC,
+  SKELETON,
+  TROLL,
+  BOSS
+};
+} // namespace
 
 class EnemySpawner
 {
@@ -28,7 +28,7 @@ public:
 private:
   const static inline std::vector<int> stage1Baddies = { SKELETON, GOBLIN, ORC };
   const static inline std::vector<int> stage2Baddies = { TROLL, CYCLOPS };
-  const static inline std::vector<int> stage3Baddies = { MINOTAUR };  
+  const static inline std::vector<int> stage3Baddies = { MINOTAUR };
 
 private:
   // Helper functions
