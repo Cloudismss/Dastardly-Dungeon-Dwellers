@@ -1,8 +1,38 @@
 ﻿---
 BasedOnStyle: Microsoft
-IndentWidth: '4'
+---
 Language: Cpp
-SortIncludes: 'true'
-SortUsingDeclarations: 'true'
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Inline
+BraceWrapping:
+  AfterCaseLabel:  true
+  AfterClass:      true
+  AfterControlStatement: Always
+  AfterEnum:       true
+  AfterExternBlock: true
+  AfterFunction:   true
+  AfterNamespace:  true
+  AfterObjCDeclaration: true
+  AfterStruct:     true
+  AfterUnion:      false
+  BeforeCatch:     true
+  BeforeElse:      true
+  BeforeLambdaBody: false
+  BeforeWhile:     false
+  IndentBraces:    false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakTemplateDeclarations: Yes
+Cpp11BracedListStyle: false
+EmptyLineBeforeAccessModifier: Always
+IndentCaseLabels: true
+IndentWidth: 2
+InsertNewlineAtEOF: true
+PackConstructorInitializers: CurrentLine
+QualifierAlignment: Left
+SeparateDefinitionBlocks: Always
+SpaceAfterTemplateKeyword: false
+SpaceInEmptyBlock: true
 UseTab: Never
 ...
