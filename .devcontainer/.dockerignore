@@ -1,0 +1,10 @@
+# Build directories
+build/
+out/
+cmake-build-*/
+
+# OS generated files
+.cache
+.DS_Store
+Thumbs.db
+Dockerfile
