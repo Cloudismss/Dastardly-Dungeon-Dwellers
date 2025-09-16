@@ -12,7 +12,11 @@
   // VSCode customizations
   "customizations": {
     "vscode": {
-      "settings": { "C_Cpp.intelliSenseEngine": "disabled" }, // disabled in favor of clangd
+      "settings": { 
+        "C_Cpp.intelliSenseEngine": "disabled", // disabled in favor of clangd
+        "cmake.configureOnOpen": true,
+		    "editor.formatOnSave": true
+      },
       "extensions": [
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
