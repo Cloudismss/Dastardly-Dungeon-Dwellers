@@ -24,6 +24,7 @@ BraceWrapping:
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
 BreakTemplateDeclarations: Yes
+ColumnLimit: 132
 Cpp11BracedListStyle: false
 EmptyLineBeforeAccessModifier: Always
 IndentCaseLabels: true
@@ -31,7 +32,7 @@ IndentWidth: 2
 InsertNewlineAtEOF: true
 PackConstructorInitializers: CurrentLine
 QualifierAlignment: Left
-SeparateDefinitionBlocks: Always
+SeparateDefinitionBlocks: Leave
 SpaceAfterTemplateKeyword: false
 SpaceInEmptyBlock: true
 UseTab: Never
