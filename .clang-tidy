@@ -1,3 +1,4 @@
+---
 # Enable checks from the modernize and readability modules
 Checks: >
   bugprone-*,
@@ -18,3 +19,4 @@ HeaderFilterRegex: '^(include|src|tests)'
 
 # Use Microsoft formatting style
 FormatStyle: Microsoft
+...
