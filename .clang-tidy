@@ -1,11 +1,20 @@
 # Enable checks from the modernize and readability modules
 Checks: >
+  bugprone-*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  misc-*,
   modernize-*,
+  performance-*,
+  portability-*,
   readability-*,
-  -modernize-use-trailing-return-type
+  -cppcoreguidelines-avoid-c-arrays,
+  -modernize-use-trailing-return-type,
+  -readability-braces-around-statements,
+  -readability-magic-numbers
 
 # Only run on your own headers
-HeaderFilterRegex: '^(include|src)'
+HeaderFilterRegex: '^(include|src|tests)'
 
 # Use Microsoft formatting style
 FormatStyle: Microsoft
