@@ -1,7 +1,7 @@
 #include "Character.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 #include "Globals.h"
@@ -10,9 +10,9 @@
 
 #include <fmt/color.h>
 
-Character::Character(const std::string& className, const std::unordered_map<int, std::array<std::string, 3>> skillNames) :
-  className(className),
-  skillNames(skillNames)
+Character::Character(const std::string &className, const std::unordered_map<int, std::array<std::string, 3>> skillNames)
+    : className(className),
+      skillNames(skillNames)
 {
   initSkills();
   health = maxHealth;
@@ -48,7 +48,8 @@ void Character::checkoutCharacter(const std::string &className)
 // Skills based functions
 void Character::initSkills()
 {
-  // Load 'DastardlyDungeonDwellers.cfg' or create and load 'DastardlyDungeonDwellers.cfg' with defaults, the player can edit the .cfg file if they want custom stats
+  // Load 'DastardlyDungeonDwellers.cfg' or create and load 'DastardlyDungeonDwellers.cfg' with defaults, the player can edit the
+  // .cfg file if they want custom stats
   std::ifstream characterStats;
   characterStats.open("DastardlyDungeonDwellers.cfg");
   if (!characterStats)
@@ -65,7 +66,7 @@ void Character::initSkills()
   }
 
   std::string classNameChecker;
-  
+
   // Ignore the first two lines (info header and blank line)
   getline(characterStats, classNameChecker);
   getline(characterStats, classNameChecker);
@@ -156,7 +157,7 @@ void Character::addXp(int xpAdjust)
   std::cout << className << " gained " << xpAdjust << " xp!\n";
 
   // XP amount exceeds a full level
-  while(xpAdjust >= xpRequiredPerLevel)
+  while (xpAdjust >= xpRequiredPerLevel)
   {
     addLevel();
     xpAdjust -= xpRequiredPerLevel;
@@ -179,7 +180,7 @@ void Character::addXp(int xpAdjust)
 void Character::addLevel()
 {
   std::cout << className << " is now level " << ++level << "!\n";
-  
+
   // TODO: Make interesting and print, possibly make virtual
 
   meleeLevel *= 1.1;
@@ -229,8 +230,9 @@ void Character::upgradeSkillName(int skillType)
   else if (skillType == skill::RANGED)
     skillUpgradeTier = &rangedUpgradeTier;
 
-  const std::string upgradeMessage = skillNames.at(skillType)[*skillUpgradeTier] + " has been upgraded to " + skillNames.at(skillType)[(*skillUpgradeTier)++];
- 
+  const std::string upgradeMessage =
+      skillNames.at(skillType)[*skillUpgradeTier] + " has been upgraded to " + skillNames.at(skillType)[(*skillUpgradeTier)++];
+
   // Print skill upgrade notification
   art::box::displayMeInABox("Congratulations!", upgradeMessage);
 }

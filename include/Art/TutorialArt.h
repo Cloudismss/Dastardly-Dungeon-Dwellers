@@ -1,13 +1,10 @@
 #ifndef TUTORIALART_H
 #define TUTORIALART_H
 
-namespace art
+namespace art::tutorial
 {
-  namespace tutorial
-  {
-    void tutorialGame();
-    void tutorialBattle();
-  }
-}
+void tutorialGame();
+void tutorialBattle();
+} // namespace art::tutorial
 
 #endif // TUTORIALART_H

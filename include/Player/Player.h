@@ -28,7 +28,7 @@ public:
   int getKeys() const { return inventory->getKeys(); }
 
   // Character List Accessors
-  CharacterList* getCharacter() { return characters; }
+  CharacterList *getCharacter() { return characters; }
 
 public:
   // Progression Mutators

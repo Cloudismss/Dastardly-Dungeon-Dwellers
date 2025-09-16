@@ -118,7 +118,7 @@ void Player::heal()
 
     int thirty = (0.3 * characters->getMaxHealth());
     int fifty = (0.5 * characters->getMaxHealth());
-    
+
     // Picks a random number between 30% and 50% of maxHealth to return a heal amount
     int healValue = thirty + (rand() % (fifty + 1));
 
@@ -127,10 +127,10 @@ void Player::heal()
       healValue = characters->getMaxHealth() - characters->getHealth();
 
     std::cout << "\tYou used a potion and healed for ";
-         fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::green), "{0}", healValue);
     std::cout << " health\n";
     std::cout << "\tYou now have ";
-         fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", getPotions());
+    fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "{0}", getPotions());
     std::cout << " potions\n\n";
 
     characters->adjustHealth(healValue);

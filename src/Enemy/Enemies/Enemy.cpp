@@ -4,12 +4,12 @@
 
 #include "Globals.h"
 
-Enemy::Enemy(int playerLevel, const std::string& name, const double vulnerability[]) :
-  name(name),
-  vulnerability(vulnerability[skill::MELEE], vulnerability[skill::MAGIC], vulnerability[skill::RANGED]),
-  boss(createBoss()),
-  level(setLevel(playerLevel)),
-  rewardTier(setRewardTier(playerLevel))
+Enemy::Enemy(int playerLevel, const std::string &name, const double vulnerability[])
+    : name(name),
+      vulnerability(vulnerability[skill::MELEE], vulnerability[skill::MAGIC], vulnerability[skill::RANGED]),
+      boss(createBoss()),
+      level(setLevel(playerLevel)),
+      rewardTier(setRewardTier(playerLevel))
 {
   // Calculates health of the enemy based off of base enemy health and enemy level
   int levelBoost = 0;
@@ -41,7 +41,7 @@ int Enemy::setLevel(int playerLevel)
   // The first 5 rooms can only spawn enemies at player level
   else if (Enemy::getProgression() < CHECKPOINT_1)
     return playerLevel;
-  
+
   // The next 5 rooms can spawn enemies up to 1 level higher than the player
   else if (Enemy::getProgression() < CHECKPOINT_2)
   {
@@ -61,7 +61,7 @@ int Enemy::setLevel(int playerLevel)
     else
       return playerLevel + 2;
   }
-  
+
   // The final rooms guarantee enemies spawn at least 1 level higher than the player
   else if (Enemy::getProgression() >= CHECKPOINT_3)
   {
@@ -93,7 +93,7 @@ void Enemy::announceEnemy() const
 }
 
 int Enemy::attack(int playerArmor, int playerMaxHealth)
-{ 
+{
   if (1 + (rand() % 100) <= BASE_ENEMY_MISS_CHANCE * 100)
   {
     std::cout << "\t" << name << " missed!\n\n";
@@ -111,7 +111,7 @@ int Enemy::attack(int playerArmor, int playerMaxHealth)
 
   if (level > 3)
     damage *= 0.85;
-  
+
   attackLow = (-0.1 * playerMaxHealth) + (-0.1 * damage);
   attackHigh = (0.1 * playerMaxHealth) + (0.1 * damage);
 

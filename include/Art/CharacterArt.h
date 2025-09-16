@@ -1,15 +1,12 @@
 #ifndef CHARACTERART_H
 #define CHARACTERART_H
 
-namespace art
+namespace art::character
 {
-  namespace character
-  {
-    void warrior();
-    void mage();
-    void archer();
-    void bard();
-  }
-}
+void warrior();
+void mage();
+void archer();
+void bard();
+} // namespace art::character
 
 #endif // CHARACTERART_H

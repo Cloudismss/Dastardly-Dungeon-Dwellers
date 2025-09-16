@@ -22,13 +22,13 @@ const int CHECKPOINT_3 = 15;
 
 namespace skill
 {
-  enum skills
-  {
-    MELEE,
-    MAGIC,
-    RANGED
-  };
-}
+enum skills
+{
+  MELEE,
+  MAGIC,
+  RANGED
+};
+} // namespace skill
 
 enum exitCodes
 {

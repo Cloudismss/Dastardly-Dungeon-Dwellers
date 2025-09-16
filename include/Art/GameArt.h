@@ -3,15 +3,12 @@
 
 #include "Player.h"
 
-namespace art
+namespace art::game
 {
-  namespace game
-  {
-    void menu();
-    void classSelection();
-    void victory(Player *player);
-    void gameOver(Player *player);
-  }
-}
+void menu();
+void classSelection();
+void victory(Player *player);
+void gameOver(Player *player);
+} // namespace art::game
 
 #endif // GAMEART_H

@@ -16,7 +16,7 @@ void roomExit(Player *player)
     do
     {
       std::cout << "Would you like use your golden key to exit the dungeon?\n"
-           << "Y or N:";
+                << "Y or N:";
       std::cin >> selection;
       if (validate::decision(selection))
         loopFlag = false;

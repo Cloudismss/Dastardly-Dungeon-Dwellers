@@ -17,7 +17,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
   do
   {
     std::cout << "Do you look inside?\n"
-         << "Y or N:";
+              << "Y or N:";
     std::cin >> chestSelection;
     if (validate::decision(chestSelection))
       loopFlag = false;
@@ -59,7 +59,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
         do
         {
           std::cout << "Do you invite them to join your party?\n"
-              << "Y or N: ";
+                    << "Y or N: ";
           std::cin >> characterSelection;
           if (validate::decision(characterSelection))
             loopFlag = false;
@@ -69,7 +69,6 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
 
         if (characterSelection == 'Y' || characterSelection == 'y')
           player->appendRandomCharacter();
-
       }
 
       // Pause the game until the user is ready
@@ -83,7 +82,7 @@ bool roomLoot(Player *player, bool &isEnemyRoom)
     else
     {
       std::cout << " but it's empty!\n"
-           << "You quickly slam the lid closed as you hear the door in front of you crack open!\n\n";
+                << "You quickly slam the lid closed as you hear the door in front of you crack open!\n\n";
 
       // Run roomEnemy, Returns true if the player wins the battle
       if (roomEnemy(player))

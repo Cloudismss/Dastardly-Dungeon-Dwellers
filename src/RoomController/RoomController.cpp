@@ -29,7 +29,7 @@ void roomController(Player *player, Map *map)
     if (ROOM_EXPLORED)
     {
       art::box::monologueInABox("A powerful foe once inhabited this room");
-      
+
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
         return; // Room did not respawn
@@ -53,7 +53,7 @@ void roomController(Player *player, Map *map)
     if (ROOM_EXPLORED)
     {
       art::box::monologueInABox("A chest used to sit before me in this room");
-      
+
       // There is a 50% chance the room will respawn
       if (1 + (rand() % 100) <= 50)
         return; // Room did not respawn
@@ -61,9 +61,9 @@ void roomController(Player *player, Map *map)
 
     art::dialogue::roomLootMonologue(ROOM_EXPLORED);
     art::room::treasureArt();
-    
+
     // Initiate loot room
-    if(!roomLoot(player, isEnemyRoom))
+    if (!roomLoot(player, isEnemyRoom))
     {
       Game::winCondition = false;
       Game::running = false;
@@ -100,7 +100,7 @@ void roomController(Player *player, Map *map)
       return;
     }
   }
-  
+
   else if (ROOM_NAME == "Start")
     art::box::monologueInABox("This room seems familiar... have I gone in a circle???");
 
@@ -112,10 +112,8 @@ void roomController(Player *player, Map *map)
     {
       // Display text indicating the enemy spawner has become more challenging
       int progression = Enemy::getProgression() - 1; // Subtract one since progression was already incremented
-      if (progression + 1 == CHECKPOINT_1 ||
-          progression + 1 == CHECKPOINT_2 ||
-          progression + 1 == CHECKPOINT_3)
-          art::box::monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
+      if (progression + 1 == CHECKPOINT_1 || progression + 1 == CHECKPOINT_2 || progression + 1 == CHECKPOINT_3)
+        art::box::monologueInABox("Stronger foes have emerged from the depths of the dungeon...");
     }
 
     // Increment room counter

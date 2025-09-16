@@ -25,12 +25,12 @@ void roomMerchant(Player *player)
 
   // Slot 1 - The Merchant has a random number of potions between 2-5
   std::string potionName = "Potion";
-  MerchantItem potion = {potionName, 15, 2 + (rand() % 4)};
+  MerchantItem potion = { potionName, 15, 2 + (rand() % 4) };
   shop.emplace_back(potion);
 
   // Slot 2 - The Merchant has a random number of armor platings between 1-3
   std::string armorName = "Armor Plating";
-  MerchantItem armor = {armorName, 30, 1 + (rand() % 3)};
+  MerchantItem armor = { armorName, 30, 1 + (rand() % 3) };
   shop.emplace_back(armor);
 
   // Slot 3 - Melee Upgrade
@@ -60,7 +60,7 @@ void roomMerchant(Player *player)
       meleeUpgradeMessage = "\tYour lute gently tugs on your shoulder, politely yearning for your affection\n";
     }
     meleeUpgradeMessage += "\tYour melee damage has been upgraded!\n\n";
-    MerchantItem melee = {meleeUpgradeName, UPGRADE_COST, meleeSuccess};
+    MerchantItem melee = { meleeUpgradeName, UPGRADE_COST, meleeSuccess };
     shop.emplace_back(melee);
   }
 
@@ -91,7 +91,7 @@ void roomMerchant(Player *player)
       magicUpgradeMessage = "\tYour throat feels nice and refreshed\n";
     }
     magicUpgradeMessage += "\tYour magic damage has been upgraded!\n\n";
-    MerchantItem magic = {magicUpgradeName, UPGRADE_COST, magicSuccess};
+    MerchantItem magic = { magicUpgradeName, UPGRADE_COST, magicSuccess };
     shop.emplace_back(magic);
   }
 
@@ -118,11 +118,11 @@ void roomMerchant(Player *player)
     }
     else if (className == "Bard")
     {
-    rangedUpgradeName = "Chapstick";
-    rangedUpgradeMessage = "\tThe air in this dungeon is very dry, you'll certainly need this\n";
+      rangedUpgradeName = "Chapstick";
+      rangedUpgradeMessage = "\tThe air in this dungeon is very dry, you'll certainly need this\n";
     }
     rangedUpgradeMessage += "\tYour ranged damage has been upgraded!\n\n";
-    MerchantItem ranged = {rangedUpgradeName, UPGRADE_COST, rangedSuccess};
+    MerchantItem ranged = { rangedUpgradeName, UPGRADE_COST, rangedSuccess };
     shop.emplace_back(ranged);
   }
 
@@ -131,13 +131,13 @@ void roomMerchant(Player *player)
   int keySuccess = goldenKeyChance <= KEY_CHANCE;
   if (keySuccess)
   {
-    MerchantItem key = {keyName, 100, keySuccess};
+    MerchantItem key = { keyName, 100, keySuccess };
     shop.emplace_back(key);
   }
 
   // Slot 7 - Exit Index
   std::string exitName = "Exit";
-  MerchantItem exit = {exitName, 1, -1};
+  MerchantItem exit = { exitName, 1, -1 };
   shop.emplace_back(exit);
 
   // Loop the shop until the player is ready to leave
@@ -150,7 +150,8 @@ void roomMerchant(Player *player)
     std::string potionDisplay = "Potions: ";
     potionDisplay += std::to_string(player->getPotions());
     std::cout << "." << std::setfill('-') << std::setw(63) << ".\n";
-    std::cout << "|" << std::setfill(' ') << std::setw(2) << " " << goldDisplay << std::setw(57 - goldDisplay.length()) << potionDisplay << std::setw(2) << " " << "|\n";
+    std::cout << "|" << std::setfill(' ') << std::setw(2) << " " << goldDisplay << std::setw(57 - goldDisplay.length())
+              << potionDisplay << std::setw(2) << " " << "|\n";
     std::cout << "|" << std::setfill(' ') << std::setw(63) << "|\n";
 
     // Print all shop items
@@ -160,13 +161,14 @@ void roomMerchant(Player *player)
       if (shop[i].quantity > 1)
       {
         std::cout << "|" << std::setw(10) << " " << i + 1 << ": " << shop[i].name << "(s) x" << shop[i].quantity
-             << std::setw(24 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << std::setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
+                  << std::setw(24 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost
+                  << std::setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
       }
       // Don't print the quantity if there's only one
       else if (shop[i].quantity == 1)
       {
-        std::cout << "|" << std::setw(10) << " " << i + 1 << ": " << shop[i].name
-             << std::setw(30 - shop[i].name.length()) << " " << "Cost: " << shop[i].cost << std::setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
+        std::cout << "|" << std::setw(10) << " " << i + 1 << ": " << shop[i].name << std::setw(30 - shop[i].name.length()) << " "
+                  << "Cost: " << shop[i].cost << std::setw(14 - std::to_string(shop[i].cost).size()) << "|\n";
       }
       // Prints the exit last
       else if (shop[i].quantity == -1)
@@ -177,8 +179,9 @@ void roomMerchant(Player *player)
 
     // Display Bottom Box of Merchant Shop
     std::cout << "|" << std::setw(63) << "|\n"
-         << "'" << std::setfill('-') << std::setw(63) << "'\n"
-         << "\n" << std::setfill(' ');
+              << "'" << std::setfill('-') << std::setw(63) << "'\n"
+              << "\n"
+              << std::setfill(' ');
 
     // Validate Selection
     int userShopSelection;
@@ -322,11 +325,13 @@ void roomMerchantPurchase(Player *player, std::vector<MerchantItem> &shop, const
     {
       // Purchase confirmation with qty printed
       if (shop[userShopSelection].quantity > 1)
-        std::cout << "\tConfirm purchase of " << purchaseAmount << "x " << shop[userShopSelection].name << " for " << purchaseAmount * shop[userShopSelection].cost << "x Gold?\n";
+        std::cout << "\tConfirm purchase of " << purchaseAmount << "x " << shop[userShopSelection].name << " for "
+                  << purchaseAmount * shop[userShopSelection].cost << "x Gold?\n";
 
       // Purchase confirmation without qty printed
       else if (shop[userShopSelection].quantity == 1)
-        std::cout << "\tConfirm purchase of " << shop[userShopSelection].name << " for " << purchaseAmount * shop[userShopSelection].cost << "x Gold?\n";
+        std::cout << "\tConfirm purchase of " << shop[userShopSelection].name << " for "
+                  << purchaseAmount * shop[userShopSelection].cost << "x Gold?\n";
 
       std::cout << "\tY or N: ";
       std::cin >> merchantConfirm;

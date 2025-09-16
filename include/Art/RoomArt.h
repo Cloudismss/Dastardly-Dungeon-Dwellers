@@ -1,14 +1,11 @@
 #ifndef ROOMART_H
 #define ROOMART_H
 
-namespace art
+namespace art::room
 {
-  namespace room
-  {
-    void treasureArt();
-    void merchantArt();
-    void doorArt();
-  }
-}
+void treasureArt();
+void merchantArt();
+void doorArt();
+} // namespace art::room
 
 #endif // ROOMART_H

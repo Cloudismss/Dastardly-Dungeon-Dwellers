@@ -27,7 +27,7 @@ void Map::mapPrint() const
   for (int i = 0; i < ROWS; ++i)
   {
     for (int j = 0; j < COLS; ++j)
-      std::cout << "[" << position[i][j].symbol << "]" ;
+      std::cout << "[" << position[i][j].symbol << "]";
     std::cout << "\n";
   }
 
@@ -37,18 +37,18 @@ void Map::mapPrint() const
     std::cout << "\n";
     std::cout << std::setfill('-') << std::setw(64) << " " << std::setfill(' ');
     std::cout << "\n\n";
-    std::cout << std::setw(65/2) << "DEBUG MAPS" << "\n\n";
+    std::cout << std::setw(65 / 2) << "DEBUG MAPS" << "\n\n";
     for (int i = 0; i < ROWS; ++i)
     {
       for (int j = 0; j < COLS; ++j)
-        std::cout << "[" << position[i][j].explored << "]" ;
+        std::cout << "[" << position[i][j].explored << "]";
       std::cout << "\n";
     }
     std::cout << "\n";
     for (int i = 0; i < ROWS; ++i)
     {
       for (int j = 0; j < COLS; ++j)
-        std::cout << "[" << position[i][j].contents << "]" ;
+        std::cout << "[" << position[i][j].contents << "]";
       std::cout << "\n";
     }
     std::cout << "\n" << std::setfill('-') << std::setw(64) << " " << std::setfill(' ');
@@ -59,7 +59,7 @@ void Map::mapPrint() const
 
 bool Map::move()
 {
-   // Prints the map
+  // Prints the map
   mapPrint();
 
   // Overwrite current position symbol before moving
@@ -141,13 +141,14 @@ void Map::generateMap()
   position[ROW_MIDPOINT][COL_MIDPOINT].contents = "Start";
 
   // Spawn an exit on the map
-  const int MIN_EXIT_DISTANCE = 3; // The exit must spawn 3 tiles away from the center
-  bool validExitSpawns[ROWS][COLS] = {0}; // This array finds a valid spawn location based on distance from spawn
+  const int MIN_EXIT_DISTANCE = 3;          // The exit must spawn 3 tiles away from the center
+  bool validExitSpawns[ROWS][COLS] = { 0 }; // This array finds a valid spawn location based on distance from spawn
   for (int i = 0; i < ROWS; ++i)
   {
     for (int j = 0; j < COLS; ++j)
     {
-      if ((i <= ROW_MIDPOINT - MIN_EXIT_DISTANCE || i >= ROW_MIDPOINT + MIN_EXIT_DISTANCE) || (j <= COL_MIDPOINT - MIN_EXIT_DISTANCE || j >= COL_MIDPOINT + MIN_EXIT_DISTANCE))
+      if ((i <= ROW_MIDPOINT - MIN_EXIT_DISTANCE || i >= ROW_MIDPOINT + MIN_EXIT_DISTANCE) ||
+          (j <= COL_MIDPOINT - MIN_EXIT_DISTANCE || j >= COL_MIDPOINT + MIN_EXIT_DISTANCE))
         validExitSpawns[i][j] = true;
     }
   }
@@ -165,15 +166,17 @@ void Map::generateMap()
   } while (!exitPlaced);
 
   // Spawn Merchants
-  const int MERCHANT_ROOMS_DISTANCE = 2; // Merchants must spawn 2 tiles away from the center
-  const int MERCHANT_ROOMS_DUPE_DISTANCE = 1; // Merchants rooms must spawn 1 tile away from each other
+  const int MERCHANT_ROOMS_DISTANCE = 2;           // Merchants must spawn 2 tiles away from the center
+  const int MERCHANT_ROOMS_DUPE_DISTANCE = 1;      // Merchants rooms must spawn 1 tile away from each other
   const int MERCHANT_ROOMS_ALLOWED = ROWS / 2 + 1; // Number of merchants to spawn is based on map size
   const std::string MERCHANT_ROOMS_NAME = "Merchant";
   const char MERCHANT_SYMBOL = '$';
-  generateRooms(MERCHANT_ROOMS_NAME, MERCHANT_SYMBOL, MERCHANT_ROOMS_DISTANCE, MERCHANT_ROOMS_DUPE_DISTANCE, MERCHANT_ROOMS_ALLOWED);
+  generateRooms(MERCHANT_ROOMS_NAME, MERCHANT_SYMBOL, MERCHANT_ROOMS_DISTANCE, MERCHANT_ROOMS_DUPE_DISTANCE,
+                MERCHANT_ROOMS_ALLOWED);
 
   // Calculate Remaining Non-Enemy Rooms
-  int REMAINING_ROOMS_DISTANCE = 2; // Non-enemy rooms must spawn 2 tiles away from the center, this is so the first room is guaranteed to contain an enemy
+  int REMAINING_ROOMS_DISTANCE =
+      2; // Non-enemy rooms must spawn 2 tiles away from the center, this is so the first room is guaranteed to contain an enemy
   int REMAINING_ROOMS_DUPE_DISTANCE = 1; // Non-enemy rooms must spawn 1 tiles away from each other
   int REMAINING_ROOMS_ALLOWED = (ROWS * COLS) - 2 - MERCHANT_ROOMS_ALLOWED; // The literal 2 is for 1 exit and 1 spawn location
 
@@ -200,12 +203,14 @@ void Map::generateMap()
 
 void Map::generateRooms(const std::string &ROOM_NAME, char ROOM_SYMBOL, int ROOM_DISTANCE, int DUPE_DISTANCE, int ROOMS_ALLOWED)
 {
-  bool validSpawns[ROWS][COLS] = {0}; // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function
+  // This array finds valid spawn locations based on distance from spawn and other from other spawns in this function
+  bool validSpawns[ROWS][COLS] = { 0 };
   for (int i = 0; i < ROWS; ++i)
   {
     for (int j = 0; j < COLS; ++j)
       // Mark the room as valid if the room is empty and a valid distance away from spawn
-      if (position[i][j].contents.empty() && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) || (j <= COL_MIDPOINT - ROOM_DISTANCE || j >= COL_MIDPOINT + ROOM_DISTANCE))
+      if (position[i][j].contents.empty() && (i <= ROW_MIDPOINT - ROOM_DISTANCE || i >= ROW_MIDPOINT + ROOM_DISTANCE) ||
+          (j <= COL_MIDPOINT - ROOM_DISTANCE || j >= COL_MIDPOINT + ROOM_DISTANCE))
         validSpawns[i][j] = true;
   }
 
@@ -234,7 +239,8 @@ void Map::generateRooms(const std::string &ROOM_NAME, char ROOM_SYMBOL, int ROOM
       if (Game::getDebug())
         position[randomRow][randomColumn].symbol = ROOM_SYMBOL;
 
-      // Mark spaces DUPE_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check bounds so I don't assign an out of bounds value
+      // Mark spaces DUPE_DISTANCE tile(s) away as invalid spawns, so rooms don't spawn too close to each other - if branches check
+      // bounds so I don't assign an out of bounds value
       // TODO: num merchants not always correct
       if (randomRow + DUPE_DISTANCE < ROWS)
       {
@@ -263,5 +269,6 @@ void Map::generateRooms(const std::string &ROOM_NAME, char ROOM_SYMBOL, int ROOM
     // Fallback exit if the spawning luck is poor
     else
       ++spawnAttempts;
+
   } while (roomsPlaced < ROOMS_ALLOWED && spawnAttempts < allowedAttempts);
 }

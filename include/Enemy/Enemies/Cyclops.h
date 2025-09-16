@@ -6,7 +6,7 @@
 class Cyclops : public Enemy
 {
 public:
-  Cyclops(int playerLevel); 
+  Cyclops(int playerLevel);
 
 private:
   const static inline std::string enemyName = "Cyclops";

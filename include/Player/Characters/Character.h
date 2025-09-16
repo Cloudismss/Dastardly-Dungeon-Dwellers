@@ -9,7 +9,7 @@
 class Character
 {
 public:
-  Character(const std::string& className, const std::unordered_map<int, std::array<std::string, 3>> skillNames);
+  Character(const std::string &className, const std::unordered_map<int, std::array<std::string, 3>> skillNames);
   ~Character() { }
 
 private:

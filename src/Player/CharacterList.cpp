@@ -28,7 +28,7 @@ CharacterList::~CharacterList()
   {
     current = head;
     Node *temp = nullptr;
-    while(current->next != head)
+    while (current->next != head)
     {
       temp = current->next;
       delete current;
@@ -55,7 +55,7 @@ void CharacterList::appendRandomCharacter()
     current->next = head;
     current->previous = head;
   }
-  else 
+  else
   {
     Node *last;
     if (head->previous == head)
@@ -72,7 +72,7 @@ void CharacterList::appendRandomCharacter()
 
   // Remove character from list of available characters
   Character::checkoutCharacter(className);
-  
+
   if (className == "Archer")
     node->character = new Archer;
   else if (className == "Bard")
@@ -102,7 +102,7 @@ void CharacterList::appendCharacter(const std::string &className)
     current->next = head;
     current->previous = head;
   }
-  else 
+  else
   {
     Node *last;
     if (head->previous == head)
@@ -123,7 +123,7 @@ void CharacterList::appendCharacter(const std::string &className)
 
   // Remove character from list of available characters
   Character::checkoutCharacter(className);
-  
+
   if (className == "Archer")
     node->character = new Archer;
   else if (className == "Bard")
@@ -188,11 +188,13 @@ bool CharacterList::cycle(char direction, const std::string &context)
     current = current->previous;
   else if (direction == 'R')
     current = current->next;
-  
+
   if (context == "Switch") // This is just a check for context based newline output formatting
-    std::cout << "\n\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n";
+    std::cout << "\n\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName()
+              << "!\n";
   else
-    std::cout << "\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName() << "!\n\n";
+    std::cout << "\t" << previous->character->getClassName() << " is tired, you're up " << current->character->getClassName()
+              << "!\n\n";
 
   return true;
 }
@@ -241,7 +243,7 @@ std::string CharacterList::classSelection() const
           className = "Bard";
           art::character::bard();
           std::cout << "That wasn't an option >:(\n"
-               << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
+                    << "Player has been punished and automatically assigned to class: 'Bard'\n\n";
           loopFlag = false;
           break;
         }
@@ -251,7 +253,7 @@ std::string CharacterList::classSelection() const
     // Confirm class selection
     if (loopFlag) // check is needed to skip bard confirm
       loopFlag = classSelectionConfirm(className);
-    
+
   } while (loopFlag);
 
   return className;
@@ -264,7 +266,7 @@ bool CharacterList::classSelectionConfirm(const std::string &className) const
   do
   {
     std::cout << "You have selected '" << className << "', continue?\n"
-          << "Y or N: ";
+              << "Y or N: ";
     std::cin >> confirmSelection;
     if (validate::decision(confirmSelection))
     {
@@ -276,7 +278,7 @@ bool CharacterList::classSelectionConfirm(const std::string &className) const
       return true; // Return to beginning of character select loop
     }
   } while (confirmLoop);
-  
+
   // TODO: Clean solution for return in all control paths
   return true;
 }
