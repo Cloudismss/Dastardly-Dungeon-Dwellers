@@ -2,8 +2,10 @@
 # Enable checks from the modernize and readability modules
 Checks: >
   bugprone-*,
+  cert-*,
   concurrency-*,
   cppcoreguidelines-*,
+  hicpp-*,
   misc-*,
   modernize-*,
   performance-*,
