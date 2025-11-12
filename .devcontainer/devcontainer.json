@@ -1,6 +1,6 @@
 {
   "name": "C++ Environment",
-  "build": { "dockerfile": "Dockerfile" },
+  "build": { "dockerfile": "Dockerfile.dev" },
 
   // runArgs to enable debugging in our container 
   "runArgs": [
