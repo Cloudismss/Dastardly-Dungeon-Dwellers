@@ -1,16 +1,17 @@
 FROM --platform=linux/amd64 archlinux:base-devel
 
 RUN pacman -Syu  --noconfirm \
+    # Build dependencies
     git \
-    gdb \
     gcc \
     clang \
-    lldb \
-    lldb-mi \
+    make \
     ninja \
     cmake \
+    # Dev tools
+    gdb \
+    lldb \
     cppcheck \
     valgrind \
     doxygen \
-    bat \
     && pacman -Scc --noconfirm
