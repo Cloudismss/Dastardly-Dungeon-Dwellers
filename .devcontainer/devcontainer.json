@@ -14,14 +14,20 @@
     "vscode": {
       "settings": { 
         "C_Cpp.intelliSenseEngine": "disabled", // disabled in favor of clangd
+        "C_Cpp.clang_format_fallbackStyle": "Microsoft",
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
         "cmake.configureOnOpen": true,
-		    "editor.formatOnSave": true
+        "cmake.configureArgs": [ "--fresh" ],
+        "lldb.suppressUpdateNotifications": true
       },
       "extensions": [
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
         "llvm-vs-code-extensions.vscode-clangd",
-        "vadimcn.vscode-lldb"
+        "vadimcn.vscode-lldb",
+        "aaron-bond.better-comments"
       ]
     }
   }
