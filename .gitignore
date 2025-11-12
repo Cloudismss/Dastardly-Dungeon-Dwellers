@@ -41,3 +41,6 @@ out
 cmake-build-*
 .cache
 Thumbs.db
+
+# Project files
+DastardlyDungeonDwellers.cfg
