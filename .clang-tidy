@@ -14,7 +14,8 @@ Checks: >
   -cppcoreguidelines-avoid-c-arrays,
   -modernize-use-trailing-return-type,
   -readability-braces-around-statements,
-  -readability-magic-numbers
+  -readability-magic-numbers,
+  -readability-redundant-access-specifiers
 
 # Only run on your own headers
 HeaderFilterRegex: '^(include|src|tests)'
