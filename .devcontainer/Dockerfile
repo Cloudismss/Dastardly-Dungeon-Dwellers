@@ -1,18 +1,19 @@
-# Arch Linux base development package
-FROM --platform=linux/amd64 archlinux:base-devel
+FROM alpine:latest
 
-# Update distro and install C++ packages
-RUN pacman -Syu  --noconfirm \
-    git \
-    gdb \
-    gcc \
-    clang \
-    lldb \
-    lldb-mi \
-    ninja \
-    cmake \
-    cppcheck \
-    valgrind \
-    doxygen \
-    bat \
-    && pacman -Scc --noconfirm
+RUN apk add --update --no-cache \
+  # Build dependencies
+  git \
+  gcc \
+  clang \
+  make \
+  samurai \
+  cmake \
+  # Dev tools
+  openssh \
+  gdb \
+  clang-extra-tools \
+  lldb \
+  cppcheck \
+  valgrind \
+  doxygen \
+  bat
