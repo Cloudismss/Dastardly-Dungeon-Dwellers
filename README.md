@@ -1,5 +1,6 @@
 # Dastardly-Dungeon-Dwellers
-A text interface rogue-like dungeon crawler game. It is a single-player adventure that moves players through various randomized rooms. Each room presents a different challenge. Some rooms might be treasure-troves filled with chests of valuable resources, others may contain vicious enemies. Win the game by finding the key and reaching an exit.
+
+Dastardly-Dungeon-Dwellers is a text interface rogue-like dungeon crawler game. The player explores various randomized rooms within a treacherous dungeon. Each room presents a different challenge - some rooms may act as treasure-troves filled with chests of valuable resources, others may contain vicious enemies. Win the game by acquiring the Golden Key and reaching an exit.
 
 ![Main Menu](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/main%20menu.png)
 
@@ -42,6 +43,7 @@ Built with CMake:
 ![Merchant](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/merchant.png)
 
 ## Art Credits
+
 Huge thank you to the ASCII art contributors at https://www.asciiart.eu/ and https://ascii.co.uk
 
 The following art was used in this project:
