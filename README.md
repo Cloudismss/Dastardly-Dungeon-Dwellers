@@ -8,6 +8,7 @@ A text interface rogue-like dungeon crawler game. It is a single-player adventur
 Built with CMake:
   
 `cmake -B build`
+
 `cmake --build build`
 
 ## Game Information
