@@ -1,29 +1,28 @@
 {
-  "version": 8,
+  "version": 10,
   "configurePresets": [
     {
-      "name": "Clang - Linux",
-      "displayName": "Clang - Linux",
-      "description": "Clang with Linux paths",
+      "name": "default",
+      "displayName": "Default",
+      "description": "Clang with Ninja build system",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
-        "CMAKE_C_COMPILER": "/usr/bin/clang",
-        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
-      "name": "Clang - Windows",
-      "displayName": "Clang - Windows",
-      "description": "Clang with Visual Studio paths",
-      "binaryDir": "${sourceDir}/build",
-      "cacheVariables": {
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
-        "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/Llvm/bin/clang.exe",
-        "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/Llvm/bin/clang.exe",
-        "CMAKE_BUILD_TYPE": "Debug"
+      "name": "windows",
+      "inherits": "default",
+      "displayName": "Windows",
+      "description": "Clang with Visual Studio 17 2022 build system",
+      "generator": "Visual Studio 17 2022",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     }
   ]
