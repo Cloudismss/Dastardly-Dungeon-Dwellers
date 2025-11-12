@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 archlinux:base-devel
+FROM archlinux:base-devel
 
 RUN pacman -Syu  --noconfirm \
     # Build dependencies
