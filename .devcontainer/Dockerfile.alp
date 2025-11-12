@@ -10,10 +10,11 @@ RUN apk add --update --no-cache \
   cmake \
   # Dev tools
   openssh \
+  openssl \
+  gcompat \
   gdb \
   clang-extra-tools \
   lldb \
   cppcheck \
   valgrind \
-  doxygen \
-  bat
+  doxygen 

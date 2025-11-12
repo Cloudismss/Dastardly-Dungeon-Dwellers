@@ -1,0 +1,23 @@
+FROM debian:stable-slim
+
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  # Build dependencies
+  git \
+  openssh-client \
+  ca-certificates \
+  g++ \
+  clang \
+  make \
+  ninja-build \
+  cmake \
+  # Dev tools
+  gdb \
+  lldb \
+  clangd \
+  clang-format \
+  clang-tidy \
+  cppcheck \
+  valgrind \
+  doxygen \
+  && rm -rf /var/lib/apt/lists/*

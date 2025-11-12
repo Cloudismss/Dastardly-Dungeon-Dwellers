@@ -1,0 +1,10 @@
+FROM alpine:latest
+
+RUN apk add --update --no-cache \
+  # Build dependencies
+  git \
+  g++ \
+  clang \
+  make \
+  samurai \
+  cmake
