@@ -248,12 +248,10 @@ std::string CharacterList::classSelection() const
           break;
         }
       }
+      // Confirm class selection
+      if (loopFlag) // check is needed to skip bard confirm
+        loopFlag = classSelectionConfirm(className);
     }
-
-    // Confirm class selection
-    if (loopFlag) // check is needed to skip bard confirm
-      loopFlag = classSelectionConfirm(className);
-
   } while (loopFlag);
 
   return className;
