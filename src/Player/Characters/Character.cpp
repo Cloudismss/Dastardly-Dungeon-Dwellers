@@ -231,7 +231,7 @@ void Character::upgradeSkillName(int skillType)
     skillUpgradeTier = &rangedUpgradeTier;
 
   const std::string upgradeMessage =
-      skillNames.at(skillType)[*skillUpgradeTier] + " has been upgraded to " + skillNames.at(skillType)[(*skillUpgradeTier)++];
+      skillNames.at(skillType)[*skillUpgradeTier] + " has been upgraded to " + skillNames.at(skillType)[++(*skillUpgradeTier)];
 
   // Print skill upgrade notification
   art::box::displayMeInABox("Congratulations!", upgradeMessage);
