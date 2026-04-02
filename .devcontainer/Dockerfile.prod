@@ -1,0 +1,40 @@
+# ---- Builder Stage ----
+FROM ubuntu:latest AS builder
+
+# Set non-interactive mode to prevent installation prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update distro and install C++ packages
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    gpg \
+    wget \
+    lsb-release \
+&& wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
+    && echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
+    && apt-get update && apt-get install -y \
+    ninja-build \
+    clang \
+    clang-tools \
+    cmake \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Pre-fetch fmt so this layer is cached independently of source changes.
+# FETCHCONTENT_SOURCE_DIR_FMT tells CMake to use this clone instead of downloading.
+RUN git clone --depth 1 https://github.com/fmtlib/fmt.git /opt/fmt
+
+WORKDIR /src
+COPY . .
+
+RUN cmake --preset default -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_SOURCE_DIR_FMT=/opt/fmt \
+    && cmake --build build
+
+# ---- Runtime Stage ----
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+COPY --from=builder ["/src/build/Dastardly Dungeon Dwellers", "/app/Dastardly Dungeon Dwellers"]
+
+ENTRYPOINT ["/app/Dastardly Dungeon Dwellers"]
