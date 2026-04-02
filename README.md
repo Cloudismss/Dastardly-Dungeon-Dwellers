@@ -2,7 +2,7 @@
 
 Dastardly-Dungeon-Dwellers is a text interface rogue-like dungeon crawler game. The player explores various randomized rooms within a treacherous dungeon. Each room presents a different challenge - some rooms may act as treasure-troves filled with chests of valuable resources, others may contain vicious enemies. Win the game by acquiring the Golden Key and reaching an exit.
 
-Now playable in the browser: [Play](https://dastardly.cloudisms.dev)
+Now [runs](https://dastardly.cloudisms.dev) in the browser!
 
 ![Main Menu](https://github.com/Cloudismss/Dastardly-Dungeon-Dwellers/blob/main/images/main%20menu.png)
 
