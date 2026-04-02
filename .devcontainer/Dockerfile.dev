@@ -1,17 +1,27 @@
-FROM archlinux:base-devel
+FROM ubuntu:latest
 
-RUN pacman -Syu  --noconfirm \
-    # Build dependencies
-    git \
-    gcc \
+# Set non-interactive mode to prevent installation prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update distro and install C++ packages
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    gpg \
+    wget \
+    lsb-release \
+    software-properties-common \
+    && wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
+    && echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
+    && apt-get update && apt-get install -y \
+    build-essential \
+    ninja-build \
     clang \
-    make \
-    ninja \
-    cmake \
-    # Dev tools
-    gdb \
+    clang-tools \
     lldb \
+    gdb \
+    cmake \
+    git \
+    doxygen \
     cppcheck \
     valgrind \
-    doxygen \
-    && pacman -Scc --noconfirm
+    && rm -rf /var/lib/apt/lists/*
