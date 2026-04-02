@@ -5,20 +5,23 @@ FROM ubuntu:latest AS builder
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Update distro and install C++ packages
-RUN apt-get update && apt-get install -y \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     gpg \
     wget \
     lsb-release \
-&& wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
+    && wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
     && echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
-    && apt-get update && apt-get install -y \
+    && apt-get update && apt-get install -y --no-install-recommends \
     ninja-build \
     clang \
     clang-tools \
     cmake \
     git \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get purge -y wget gpg lsb-release \
+    && apt-get autoremove -y
 
 # Pre-fetch fmt so this layer is cached independently of source changes.
 # FETCHCONTENT_SOURCE_DIR_FMT tells CMake to use this clone instead of downloading.
