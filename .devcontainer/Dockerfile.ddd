@@ -25,20 +25,15 @@ RUN case "${TARGETARCH}" in \
     && sh /tmp/cmake.sh --skip-license --prefix=/usr/local \
     && rm /tmp/cmake.sh
 
+# Pre-fetch fmt so this layer is cached independently of source changes.
+# FETCHCONTENT_SOURCE_DIR_FMT tells CMake to use this clone instead of downloading.
+RUN git clone --depth 1 https://github.com/fmtlib/fmt.git /opt/fmt
+
 WORKDIR /src
+COPY . .
 
-# Copy only files needed for CMake configuration and FetchContent.
-# This layer is cached as long as these files don't change, even if source files do.
-COPY CMakeLists.txt CMakePresets.json ./
-COPY include/CMakeLists.txt include/CMakeLists.txt
-COPY src/CMakeLists.txt src/CMakeLists.txt
-RUN cmake --preset default -DCMAKE_BUILD_TYPE=Release
-
-# Now copy source and build. Only this layer re-runs on source changes.
-COPY src/ src/
-COPY include/ include/
-COPY res/ res/
-RUN cmake --build build
+RUN cmake --preset default -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_SOURCE_DIR_FMT=/opt/fmt -DCMAKE_CXX_SCAN_FOR_MODULES=OFF -DFMT_MODULE=OFF \
+    && cmake --build build
 
 # ---- Runtime Stage ----
 FROM debian:bookworm-slim
