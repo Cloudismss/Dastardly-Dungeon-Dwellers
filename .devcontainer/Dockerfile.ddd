@@ -45,6 +45,6 @@ FROM debian:bookworm-slim
 
 WORKDIR /app
 
-COPY --from=builder "/src/build/Dastardly Dungeon Dwellers" "/app/Dastardly Dungeon Dwellers"
+COPY --from=builder ["/src/build/Dastardly Dungeon Dwellers", "/app/Dastardly Dungeon Dwellers"]
 
 ENTRYPOINT ["/app/Dastardly Dungeon Dwellers"]
