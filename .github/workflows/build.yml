@@ -18,21 +18,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-        with:
-          msbuild-architecture: x64
+      - name: Set up MSVC developer environment
+        shell: pwsh
+        run: |
+          $vcvars = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"
+          cmd /c "`"$vcvars`" x64 && set" | ForEach-Object {
+            if ($_ -match "^([^=]+)=(.*)$") {
+              echo "$($matches[1])=$($matches[2])" >> $env:GITHUB_ENV
+            }
+          }
 
-      - name: Set up CMake
-        uses: jwlawson/actions-setup-cmake@v1
+      - name: Cache CMake dependencies
+        uses: actions/cache@v4
         with:
-          cmake-version: '3.30.0'
+          path: build/_deps
+          key: ${{ runner.os }}-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: ${{ runner.os }}-cmake-deps-
 
       - name: Configure CMake
-        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+        run: cmake --preset msvc
 
       - name: Build
-        run: cmake --build build --config Debug
+        run: cmake --build build
 
   GCC:
     runs-on: ubuntu-latest
@@ -41,21 +48,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up CMake
+        run: |
+          wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+          echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
+          sudo apt-get update && sudo apt-get install -y cmake
+
+      - name: Cache CMake dependencies
+        uses: actions/cache@v4
+        with:
+          path: build/_deps
+          key: ${{ runner.os }}-gcc-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: ${{ runner.os }}-gcc-cmake-deps-
+
       - name: Configure CMake
-        run: cmake -S . -B build -G "Ninja" -DCMAKE_CXX_COMPILER=/usr/bin/g++
+        run: cmake --preset gcc
 
       - name: Build
-        run: cmake --build build --config Debug
+        run: cmake --build build
 
   Clang:
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-      steps:
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up CMake
+        run: |
+          wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+          echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
+          sudo apt-get update && sudo apt-get install -y cmake
+
+      - name: Cache CMake dependencies
+        uses: actions/cache@v4
+        with:
+          path: build/_deps
+          key: ${{ runner.os }}-clang-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: ${{ runner.os }}-clang-cmake-deps-
+
       - name: Configure CMake
-        run: cmake -S . -B build -G "Ninja" -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+        run: cmake --preset clang
 
       - name: Build
-        run: cmake --build build --config Debug
+        run: cmake --build build
