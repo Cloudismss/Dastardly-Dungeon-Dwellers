@@ -95,5 +95,5 @@ jobs:
           tags: |
             images.cloudisms.dev/dastardly-dungeon-dwellers:${{ github.ref_name }}
             images.cloudisms.dev/dastardly-dungeon-dwellers:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=images.cloudisms.dev/dastardly-dungeon-dwellers:buildcache
+          cache-to: type=registry,ref=images.cloudisms.dev/dastardly-dungeon-dwellers:buildcache,mode=max
