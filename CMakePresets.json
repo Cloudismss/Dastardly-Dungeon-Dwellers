@@ -70,7 +70,8 @@
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
         "CMAKE_CXX_FLAGS": "/utf-8 /EHsc",
-        "CMAKE_CXX_SCAN_FOR_MODULES": "OFF"
+        "CMAKE_CXX_SCAN_FOR_MODULES": "OFF",
+        "FMT_MODULE": "OFF"
       }
     }
   ]
