@@ -8,11 +8,9 @@ Now [runs](https://dastardly.cloudisms.dev) in the browser!
 
 ## Building
 
-Built with CMake:
-  
-`cmake -B build`
+Build and run with CMake:
 
-`cmake --build build`
+`cmake -B build && cmake --build build --target run`
 
 ## Game Information
 
