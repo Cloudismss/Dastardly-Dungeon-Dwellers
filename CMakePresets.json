@@ -42,9 +42,21 @@
       }
     },
     {
-      "name": "release",
-      "displayName": "Release",
-      "description": "Clang-cl with Ninja build system",
+      "name": "linux-release",
+      "displayName": "Linux Release",
+      "description": "Clang with Ninja build system, Release configuration, static binary",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXE_LINKER_FLAGS": "-static"
+      }
+    },
+    {
+      "name": "windows-release",
+      "displayName": "Windows Release",
+      "description": "Clang-cl with Ninja build system, Release configuration, static binary",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "condition": {
