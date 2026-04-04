@@ -20,6 +20,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     clang-tools \
     cmake \
     git \
+    libstdc++-dev \
     && apt-get purge -y wget gpg lsb-release \
     && apt-get autoremove -y
 
@@ -30,14 +31,14 @@ RUN git clone --depth 1 https://github.com/fmtlib/fmt.git /opt/fmt
 WORKDIR /src
 COPY . .
 
-RUN cmake --preset default -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_SOURCE_DIR_FMT=/opt/fmt \
+RUN cmake --preset linux-release \
+    -DFETCHCONTENT_SOURCE_DIR_FMT=/opt/fmt \
     && cmake --build build
 
 # ---- Runtime Stage ----
-FROM debian:bookworm-slim
+FROM tsl0922/ttyd:latest
 
-WORKDIR /app
+COPY --from=builder ["/src/build/Dastardly Dungeon Dwellers", "/usr/local/bin/ddd"]
+COPY res/index.html /index.html
 
-COPY --from=builder ["/src/build/Dastardly Dungeon Dwellers", "/app/Dastardly Dungeon Dwellers"]
-
-ENTRYPOINT ["/app/Dastardly Dungeon Dwellers"]
+EXPOSE 7681
