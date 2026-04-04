@@ -2,27 +2,61 @@
   "version": 10,
   "configurePresets": [
     {
-      "name": "default",
-      "displayName": "Default",
+      "name": "clang",
+      "displayName": "Clang",
       "description": "Clang with Ninja build system",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
-      "name": "windows",
-      "inherits": "default",
-      "displayName": "Windows",
-      "description": "Clang with Visual Studio 17 2022 build system",
-      "generator": "Visual Studio 17 2022",
+      "name": "gcc",
+      "displayName": "GCC",
+      "description": "GCC with Ninja build system",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "msvc",
+      "displayName": "MSVC",
+      "description": "MSVC with Ninja build system",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
+        "CMAKE_CXX_FLAGS": "/utf-8"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "description": "Clang-cl with Ninja build system",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "clang-cl",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+        "CMAKE_CXX_FLAGS": "/utf-8"
       }
     }
   ]

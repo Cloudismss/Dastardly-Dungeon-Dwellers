@@ -1,12 +1,9 @@
-cmake_minimum_required(VERSION 3.30.0)
+cmake_minimum_required(VERSION 3.31.0)
 project(Dastardly-Dungeon-Dwellers LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Static MSVC compilation
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # Fetch fmt library
 include(FetchContent)
@@ -16,15 +13,6 @@ FetchContent_Declare(
   GIT_TAG main
 )
 FetchContent_MakeAvailable(fmt)
-
-if (CMAKE_HOST_WIN32)
-  # Set clang compiler
-  set(CMAKE_C_COMPILER clang)
-  set(CMAKE_CXX_COMPILER clang++)
-
-  # UTF-8 option is required when using fmt
-  add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-endif()
 
 # Make target - 'run' - compiles and runs the produced binary
 add_custom_target(run
@@ -40,8 +28,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Dastardly Dungeon 
 # Dirs
 add_subdirectory(include)
 add_subdirectory(src)
+
+# Libraries
 target_link_libraries(${PROJECT_NAME} include)
 target_link_libraries(${PROJECT_NAME} src)
-
-# fmt library
 target_link_libraries(src fmt::fmt)
