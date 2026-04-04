@@ -7,7 +7,7 @@ class Enemy
 {
 public:
   Enemy(int playerLevel, const std::string &name, const double vulnerability[]);
-  ~Enemy() { ++enemyProgression; }
+  virtual ~Enemy() { ++enemyProgression; }
 
 private:
   static inline int enemyProgression = 0;
