@@ -68,6 +68,7 @@ html, body { background: var(--crt-bg) !important; }
   z-index: 8998;
   mix-blend-mode: screen;
   opacity: 0.5;
+  transition: opacity 0.3s;
 }
 #crt-bloom-canvas {
   position: absolute;
@@ -77,7 +78,7 @@ html, body { background: var(--crt-bg) !important; }
   filter: sepia(1) saturate(5) hue-rotate(5deg);
 }
 
-/* ── Scanline + vignette overlay ────────────────────────────────────── */
+/* ── Scanline overlay ───────────────────────────────────────────────── */
 #crt-overlay {
   position: fixed;
   inset: 0;
@@ -98,28 +99,6 @@ html, body { background: var(--crt-bg) !important; }
   );
 }
 
-
-/* ── Profile switcher button ────────────────────────────────────────── */
-#crt-profile-btn {
-  position: fixed;
-  bottom: 10px;
-  right: 12px;
-  z-index: 9100;
-  font-family: 'VT323', monospace;
-  font-size: 15px;
-  letter-spacing: 1px;
-  padding: 3px 9px;
-  background: rgba(0, 0, 0, 0.55);
-  color: rgba(255, 165, 0, 0.80);
-  border: 1px solid rgba(255, 165, 0, 0.30);
-  border-radius: 3px;
-  cursor: pointer;
-  user-select: none;
-  transition: opacity 0.2s;
-  opacity: 0.6;
-}
-#crt-profile-btn:hover { opacity: 1; }
-
 /* ── Horizontal jitter ───────────────────────────────────────────────── */
 @keyframes crt-jitter {
   0%,100% { transform: translateX(0);    }
@@ -134,8 +113,6 @@ html, body { background: var(--crt-bg) !important; }
 }
 
 /* ── Glow line ──────────────────────────────────────────────────────── */
-/* Simulates the faint bright band left by the CRT electron beam as it   */
-/* sweeps from top to bottom. Loops continuously.                        */
 @keyframes crt-glow-line {
   0%   { transform: translateY(-220px); }
   100% { transform: translateY(100vh); }
@@ -149,19 +126,18 @@ html, body { background: var(--crt-bg) !important; }
   pointer-events: none;
   z-index: 9001;
   mix-blend-mode: screen;
-  /* Gradient runs top→bottom. The element sweeps downward so the        */
-  /* bottom edge is the leading beam; the trail fades upward behind it.  */
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0)      0%,   /* tail end — fully faded     */
-    rgba(255, 255, 255, 0.01)  45%,   /* mid trail                  */
-    rgba(255, 255, 255, 0.03)  72%,   /* approaching the beam       */
-    rgba(255, 255, 255, 0.06)  86%,   /* beam shoulder              */
-    rgba(255, 255, 255, 0.10)  95%,   /* peak brightness            */
-    rgba(255, 255, 255, 0.03)  98%,   /* leading-edge falloff       */
-    rgba(255, 255, 255, 0)    100%    /* hard bottom edge gone      */
+    rgba(255, 255, 255, 0)      0%,
+    rgba(255, 255, 255, 0.01)  45%,
+    rgba(255, 255, 255, 0.03)  72%,
+    rgba(255, 255, 255, 0.06)  86%,
+    rgba(255, 255, 255, 0.10)  95%,
+    rgba(255, 255, 255, 0.03)  98%,
+    rgba(255, 255, 255, 0)    100%
   );
   animation: crt-glow-line 8s linear infinite;
+  transition: opacity 0.3s;
 }
 
 /* ── Screen flicker ─────────────────────────────────────────────────── */
@@ -190,6 +166,87 @@ body.crt-boot {
     crt-flicker 10s 0.7s steps(1) infinite;
 }
 
+/* ── Settings menu ──────────────────────────────────────────────────── */
+#crt-menu {
+  position: fixed;
+  bottom: 10px;
+  right: 12px;
+  z-index: 9200;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  letter-spacing: 1px;
+  user-select: none;
+}
+#crt-menu-btn {
+  display: block;
+  margin-left: auto;
+  padding: 3px 9px;
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 165, 0, 0.80);
+  border: 1px solid rgba(255, 165, 0, 0.30);
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  transition: opacity 0.2s;
+  opacity: 0.6;
+}
+#crt-menu-btn:hover { opacity: 1; }
+#crt-menu-panel {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  min-width: 170px;
+  background: rgba(0, 0, 0, 0.88);
+  border: 1px solid rgba(255, 165, 0, 0.30);
+  border-radius: 3px;
+  padding: 8px 10px;
+}
+#crt-menu-panel.open { display: block; }
+.crt-menu-section {
+  color: rgba(255, 165, 0, 0.45);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin: 8px 0 3px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 165, 0, 0.15);
+}
+.crt-menu-section:first-child { margin-top: 0; }
+.crt-menu-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  color: rgba(255, 165, 0, 0.90);
+  padding: 2px 0;
+}
+.crt-menu-profile button {
+  background: none;
+  border: none;
+  color: rgba(255, 165, 0, 0.60);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 0 2px;
+  line-height: 1;
+}
+.crt-menu-profile button:hover { color: rgba(255, 165, 0, 1); }
+#crt-profile-label { flex: 1; text-align: center; }
+.crt-menu-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 165, 0, 0.80);
+  padding: 2px 0;
+  cursor: pointer;
+}
+.crt-menu-toggle:hover { color: rgba(255, 165, 0, 1); }
+.crt-toggle-state { font-size: 13px; }
+.crt-toggle-state.on  { color: rgba(255, 165, 0, 0.85); }
+.crt-toggle-state.off { color: rgba(255, 165, 0, 0.30); }
+
 </style>
 
 <script id="crt-script">
@@ -210,9 +267,6 @@ body.crt-boot {
   'use strict';
 
   /* ── VT323 font ────────────────────────────────────────────────────── */
-  /* ttyd merges window.tty_options into the xterm.js Terminal constructor  */
-  /* at DOMContentLoaded; setting it here (inline, before that event)       */
-  /* ensures the font is active from the very first render.                 */
   window.tty_options = Object.assign(window.tty_options || {}, {
     fontFamily: "'VT323', 'Courier New', monospace",
     fontSize:   18,
@@ -250,19 +304,159 @@ body.crt-boot {
     s.setProperty('--crt-glow',   p.glow);
     s.setProperty('--crt-filter', p.filter);
     document.body.style.background = p.bg;
-    if (btn) btn.textContent = '[ ' + p.name + ' ]';
     var bc = document.getElementById('crt-bloom-canvas');
     if (bc) bc.style.filter = p.bloom;
+    var lbl = document.getElementById('crt-profile-label');
+    if (lbl) lbl.textContent = p.name;
   }
 
-  var btn = document.createElement('button');
-  btn.id = 'crt-profile-btn';
-  btn.textContent = '[ AMBER ]';
-  btn.addEventListener('click', function () {
+  /* ── Effect toggle registry ────────────────────────────────────────── */
+  var jitterEnabled = true;
+
+  var effectDefs = [
+    {
+      id: 'bloom', label: 'BLOOM',
+      enable:  function () {
+        var el = document.getElementById('crt-bloom');
+        if (el) el.style.opacity = '0.5';
+      },
+      disable: function () {
+        var el = document.getElementById('crt-bloom');
+        if (el) el.style.opacity = '0';
+      },
+    },
+    {
+      id: 'glowline', label: 'GLOW LINE',
+      enable:  function () {
+        var el = document.getElementById('crt-glow-line');
+        if (el) el.style.opacity = '1';
+      },
+      disable: function () {
+        var el = document.getElementById('crt-glow-line');
+        if (el) el.style.opacity = '0';
+      },
+    },
+    {
+      id: 'scanlines', label: 'SCANLINES',
+      enable:  function () { document.documentElement.style.setProperty('--crt-scanlines', '0.13'); },
+      disable: function () { document.documentElement.style.setProperty('--crt-scanlines', '0'); },
+    },
+    {
+      id: 'noise', label: 'FILM GRAIN',
+      enable:  function () {
+        var el = document.getElementById('crt-noise-svg');
+        if (el) el.style.opacity = '0.08';
+      },
+      disable: function () {
+        var el = document.getElementById('crt-noise-svg');
+        if (el) el.style.opacity = '0';
+      },
+    },
+    {
+      id: 'jitter', label: 'JITTER',
+      enable:  function () { jitterEnabled = true; },
+      disable: function () { jitterEnabled = false; },
+    },
+    {
+      id: 'flicker', label: 'FLICKERING',
+      enable:  function () { document.body.style.animationPlayState = 'running'; },
+      disable: function () { document.body.style.animationPlayState = 'paused';  },
+    },
+  ];
+
+  /* Track on/off state */
+  var effectState = {};
+  effectDefs.forEach(function (e) { effectState[e.id] = true; });
+
+  /* ── Settings menu ─────────────────────────────────────────────────── */
+  var menu = document.createElement('div');
+  menu.id = 'crt-menu';
+
+  var panel = document.createElement('div');
+  panel.id = 'crt-menu-panel';
+
+  /* — Profile row — */
+  var profSection = document.createElement('div');
+  profSection.className = 'crt-menu-section';
+  profSection.textContent = 'PROFILE';
+  panel.appendChild(profSection);
+
+  var profRow = document.createElement('div');
+  profRow.className = 'crt-menu-profile';
+
+  var prevBtn = document.createElement('button');
+  prevBtn.textContent = '◄';
+  prevBtn.addEventListener('click', function () {
+    profileIdx = (profileIdx - 1 + profiles.length) % profiles.length;
+    applyProfile(profiles[profileIdx]);
+  });
+
+  var profLabel = document.createElement('span');
+  profLabel.id = 'crt-profile-label';
+  profLabel.textContent = profiles[profileIdx].name;
+
+  var nextBtn = document.createElement('button');
+  nextBtn.textContent = '►';
+  nextBtn.addEventListener('click', function () {
     profileIdx = (profileIdx + 1) % profiles.length;
     applyProfile(profiles[profileIdx]);
   });
-  document.body.appendChild(btn);
+
+  profRow.appendChild(prevBtn);
+  profRow.appendChild(profLabel);
+  profRow.appendChild(nextBtn);
+  panel.appendChild(profRow);
+
+  /* — Effect toggles — */
+  var fxSection = document.createElement('div');
+  fxSection.className = 'crt-menu-section';
+  fxSection.textContent = 'EFFECTS';
+  panel.appendChild(fxSection);
+
+  effectDefs.forEach(function (def) {
+    var row = document.createElement('div');
+    row.className = 'crt-menu-toggle';
+
+    var lbl = document.createElement('span');
+    lbl.textContent = def.label;
+
+    var state = document.createElement('span');
+    state.className = 'crt-toggle-state on';
+    state.textContent = 'ON';
+
+    row.appendChild(lbl);
+    row.appendChild(state);
+    row.addEventListener('click', function () {
+      effectState[def.id] = !effectState[def.id];
+      if (effectState[def.id]) {
+        def.enable();
+        state.textContent = 'ON';
+        state.className = 'crt-toggle-state on';
+      } else {
+        def.disable();
+        state.textContent = 'OFF';
+        state.className = 'crt-toggle-state off';
+      }
+    });
+    panel.appendChild(row);
+  });
+
+  /* — Toggle button — */
+  var menuBtn = document.createElement('button');
+  menuBtn.id = 'crt-menu-btn';
+  menuBtn.textContent = '[ CRT ]';
+  menuBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click', function () {
+    panel.classList.remove('open');
+  });
+  panel.addEventListener('click', function (e) { e.stopPropagation(); });
+
+  menu.appendChild(panel);
+  menu.appendChild(menuBtn);
+  document.body.appendChild(menu);
 
   /* ── Animated film-grain noise ─────────────────────────────────────── */
   var turbulence = document.getElementById('crt-turbulence');
@@ -276,27 +470,24 @@ body.crt-boot {
   /* ── Horizontal jitter ─────────────────────────────────────────────── */
   function scheduleJitter() {
     setTimeout(function () {
-      var tc = document.getElementById('terminal-container');
-      if (tc) {
-        tc.classList.remove('crt-jitter');
-        requestAnimationFrame(function () {
+      if (jitterEnabled) {
+        var tc = document.getElementById('terminal-container');
+        if (tc) {
+          tc.classList.remove('crt-jitter');
           requestAnimationFrame(function () {
-            tc.classList.add('crt-jitter');
-            setTimeout(function () { tc.classList.remove('crt-jitter'); }, 120);
+            requestAnimationFrame(function () {
+              tc.classList.add('crt-jitter');
+              setTimeout(function () { tc.classList.remove('crt-jitter'); }, 120);
+            });
           });
-        });
+        }
       }
       scheduleJitter();
-    }, 4000 + Math.random() * 14000);   /* every 4–18 s at random */
+    }, 4000 + Math.random() * 14000);
   }
   scheduleJitter();
 
   /* ── Bloom ─────────────────────────────────────────────────────────── */
-  /* Canvas lives outside .xterm so the parent sepia/brightness filter    */
-  /* does not re-amplify it.                                               */
-  /* brightness(4) first: lifts dark ANSI colours (min channel ~0.5) to   */
-  /* white before contrast clips them, so every character glows evenly.   */
-  /* Pure black background (0,0,0) × 4 = 0 — no background contribution. */
   function setupBloom() {
     var screen = document.querySelector('.xterm-screen');
     if (!screen) { setTimeout(setupBloom, 200); return; }
@@ -319,7 +510,6 @@ body.crt-boot {
       var h = Math.max(1, Math.round(screen.offsetHeight * SCALE));
       tmp.width  = bloomCanvas.width  = w;
       tmp.height = bloomCanvas.height = h;
-      /* Size the CSS canvas to cover the terminal area */
       var r = screen.getBoundingClientRect();
       bloomCanvas.style.left   = r.left   + 'px';
       bloomCanvas.style.top    = r.top    + 'px';
@@ -333,21 +523,18 @@ body.crt-boot {
     var lastFrame = 0;
     function tick(ts) {
       requestAnimationFrame(tick);
-      if (ts - lastFrame < 50) return;   /* ~20 fps */
+      if (ts - lastFrame < 50) return;
       lastFrame = ts;
 
       var w = tmp.width, h = tmp.height;
       if (!w || !h) return;
 
-      /* Pass 1 — composite all xterm layers unfiltered */
       tmpCtx.clearRect(0, 0, w, h);
       screen.querySelectorAll('canvas').forEach(function (c) {
         if (c === bloomCanvas) return;
         try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
       });
 
-      /* Pass 2 — brightness lifts dark chars, contrast clips bg to black,
-                  blur spreads the bright pixels into a halo             */
       bloomCtx.clearRect(0, 0, w, h);
       bloomCtx.filter = 'blur(2px)';
       bloomCtx.drawImage(tmp, 0, 0);
