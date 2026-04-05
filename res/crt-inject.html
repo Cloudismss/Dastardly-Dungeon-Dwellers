@@ -4,11 +4,39 @@
      Auto-injected before </body> by the release workflow.
      ============================================================ -->
 
-<!-- Noise SVG (placed early so the filter ID is available before the script) -->
-<svg id="crt-noise-svg" aria-hidden="true" focusable="false"
-     style="position:fixed;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:8999;opacity:0.05;
-            mix-blend-mode:screen;">
+<!-- VT323 pixel font -->
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+
+<!-- Filter definitions — zero-size but NOT display:none; browsers will not  -->
+<!-- resolve url(#id) references against a display:none SVG element.         -->
+<svg id="crt-filters-svg" aria-hidden="true" focusable="false"
+     style="position:absolute;width:0;height:0;overflow:hidden">
+
+  <!-- Chromatic aberration: offset the R channel left and B/cyan right so  -->
+  <!-- each bright glyph gets a coloured fringe. Applied to the raw xterm   -->
+  <!-- output before the phosphor tint so the split uses the full palette.  -->
+  <filter id="crt-chroma" color-interpolation-filters="sRGB"
+          x="-2%" y="0%" width="104%" height="100%">
+    <feOffset in="SourceGraphic" dx="-1.5" dy="0" result="r-shift"/>
+    <feColorMatrix in="r-shift" type="matrix"
+      values="1 0 0 0 0
+              0 0 0 0 0
+              0 0 0 0 0
+              0 0 0 0.7 0"
+      result="r-only"/>
+    <feOffset in="SourceGraphic" dx="1.5" dy="0" result="b-shift"/>
+    <feColorMatrix in="b-shift" type="matrix"
+      values="0 0 0 0 0
+              0 0.3 0 0 0
+              0 0 0.9 0 0
+              0 0 0 0.7 0"
+      result="b-only"/>
+    <feBlend in="r-only"      in2="SourceGraphic" mode="screen" result="with-r"/>
+    <feBlend in="with-r"      in2="b-only"        mode="screen"/>
+  </filter>
+
+  <!-- Film-grain noise (animated seed via JS below) -->
   <filter id="crt-noise-filter" color-interpolation-filters="linearRGB"
           x="0%" y="0%" width="100%" height="100%">
     <feTurbulence id="crt-turbulence"
@@ -16,6 +44,14 @@
       numOctaves="4" stitchTiles="stitch"/>
     <feColorMatrix type="saturate" values="0"/>
   </filter>
+
+</svg>
+
+<!-- Noise overlay (visible, low opacity, screen blend) -->
+<svg id="crt-noise-svg" aria-hidden="true" focusable="false"
+     style="position:fixed;inset:0;width:100%;height:100%;
+            pointer-events:none;z-index:8999;opacity:0.05;
+            mix-blend-mode:screen;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
 
@@ -34,9 +70,19 @@
 /* ── Base background ────────────────────────────────────────────────── */
 html, body { background: var(--crt-bg) !important; }
 
-/* ── Phosphor tint + bloom applied to the xterm terminal ────────────── */
-/* xterm.js renders text onto canvas layers inside .xterm; a CSS filter  */
-/* on this element tints all those canvases uniformly.                   */
+/* ── Chromatic aberration on the canvas layer ───────────────────────── */
+/* Applying the SVG filter to .xterm-screen (child) and the CSS phosphor  */
+/* chain to .xterm (parent) keeps them separate and avoids mixing url()   */
+/* with CSS filter functions — which has unreliable cross-browser support. */
+/* CSS renders child filters before parent filters, so the order is:      */
+/*   1. url(#crt-chroma)  — RGB split on the raw terminal canvas          */
+/*   2. sepia/saturate/…  — phosphor tint applied to the split result     */
+/*   3. drop-shadow       — amber bloom around the now-tinted glyphs      */
+.xterm-screen {
+  filter: url(#crt-chroma) !important;
+}
+
+/* ── Phosphor tint + bloom ──────────────────────────────────────────── */
 .xterm {
   filter: var(--crt-filter)
           drop-shadow(0 0  5px var(--crt-glow))
@@ -97,8 +143,6 @@ html, body { background: var(--crt-bg) !important; }
 }
 
 /* ── CRT power-on horizontal sweep ──────────────────────────────────── */
-/* Simulates a CRT screen warming up — the image expands from a thin     */
-/* horizontal stripe in the centre outward, with initial brightness.     */
 @keyframes crt-poweron {
   0%   { clip-path: inset(49.6% 0 49.6% 0); filter: brightness(4);   }
   25%  { clip-path: inset(20%   0 20%   0); filter: brightness(3);   }
@@ -110,8 +154,6 @@ body {
   animation: crt-flicker 10s steps(1) infinite;
 }
 
-/* .crt-boot is added by the script below once the DOM is ready.         */
-/* It plays the power-on animation first, then hands off to flicker.     */
 body.crt-boot {
   animation:
     crt-poweron 0.7s cubic-bezier(.4, 0, .2, 1) forwards,
@@ -124,13 +166,22 @@ body.crt-boot {
 (function () {
   'use strict';
 
+  /* ── VT323 font ────────────────────────────────────────────────────── */
+  /* window.tty_options is merged into xterm.js Terminal options by ttyd  */
+  /* before it creates the Terminal instance (at DOMContentLoaded).       */
+  /* Setting it here — in an inline script parsed before that event —     */
+  /* ensures our values are picked up on first initialisation.            */
+  window.tty_options = Object.assign(window.tty_options || {}, {
+    fontFamily: "'VT323', 'Courier New', monospace",
+    fontSize:   18,
+  });
+
   /* ── Scanline / vignette overlay div ──────────────────────────────── */
   var overlay = document.createElement('div');
   overlay.id = 'crt-overlay';
   document.body.appendChild(overlay);
 
   /* ── Animated film-grain noise via SVG feTurbulence ──────────────── */
-  /* Cycling the seed attribute produces a new noise pattern each tick.  */
   var turbulence = document.getElementById('crt-turbulence');
   var noiseSeed = 0;
   (function animateNoise() {
