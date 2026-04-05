@@ -797,6 +797,19 @@ body.crt-boot {
         try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
       });
 
+      /* Adaptive brightness for Pass 3: scale so the current background  */
+      /* channel max lands below contrast(8)'s crush threshold (≈0.4375). */
+      /* B = 90 / bg_max ensures bg_max × B / 255 ≈ 0.353 < 0.4375.      */
+      /* Text channels (much brighter than bg) clamp at 1.0 and pass.     */
+      /* For pure-black bg (max ≤ 2) or bright bg (E-Ink), use safe caps. */
+      var _p   = profiles[profileIdx];
+      var _bg  = _p.rawFg
+        ? computePhosphorColors(_p.rawFg, _p.rawBg, _p.satColor, contrastLevel).bg
+        : _p.rawBg;
+      var _bgc = h2a(_bg);
+      var _bgMax = Math.max(_bgc[0], _bgc[1], _bgc[2]);
+      var _brt = _bgMax > 2 ? Math.min(90 / _bgMax, 10) : 8;
+
       /* Pass 2 — blur before threshold to normalise per-glyph density.   */
       /* blur(3px) at SCALE=0.5 = 6px effective: enough to average within  */
       /* a character (~11px wide) so dense glyphs (#,@) and sparse ones   */
@@ -806,14 +819,13 @@ body.crt-boot {
       extractCtx.drawImage(tmp, 0, 0);
       extractCtx.filter = 'none';
 
-      /* Pass 3 — threshold: crush background to black so it contributes  */
-      /* nothing via screen blend. The CSS blur(20px) on the canvas element*/
-      /* then spreads the thresholded text mask into soft halos: at σ=12px */
-      /* adjacent characters (10px apart) are within 1σ so their halos    */
-      /* fully overlap, producing uniform coverage without hot spots. At   */
-      /* 3σ=36px from text the bloom fades to zero — no background wash.  */
+      /* Pass 3 — threshold: adaptive brightness crushes background to black */
+      /* while text channels (always much brighter than bg) clamp at 255.  */
+      /* contrast(8) then hard-clips the result: bg → 0, text → 255.       */
+      /* CSS blur(40px) on the canvas element spreads the thresholded mask  */
+      /* into soft halos.                                                   */
       bloomCtx.clearRect(0, 0, w, h);
-      bloomCtx.filter = 'brightness(2) contrast(8)';
+      bloomCtx.filter = 'brightness(' + _brt.toFixed(2) + ') contrast(8)';
       bloomCtx.drawImage(extract, 0, 0);
       bloomCtx.filter = 'none';
     }
