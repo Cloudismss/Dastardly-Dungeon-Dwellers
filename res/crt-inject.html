@@ -57,6 +57,26 @@ html, body { background: var(--crt-bg) !important; }
   box-shadow: 0 0 80px rgba(0, 0, 0, 0.95);
 }
 
+/* ── Bloom ──────────────────────────────────────────────────────────── */
+/* Wrapper holds mix-blend-mode; inner canvas holds the tint filter.     */
+/* They must be on separate elements: filter creates an isolated          */
+/* stacking context that breaks mix-blend-mode if on the same element.   */
+#crt-bloom {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8998;
+  mix-blend-mode: screen;
+  opacity: 0.6;
+}
+#crt-bloom-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: sepia(1) saturate(5) hue-rotate(5deg);
+}
+
 /* ── Scanline + vignette overlay ────────────────────────────────────── */
 #crt-overlay {
   position: fixed;
@@ -170,6 +190,19 @@ body.crt-boot {
 </style>
 
 <script id="crt-script">
+/* Patch WebGL context creation so bloom can read back pixels.            */
+/* Must run before xterm.js creates its renderer — inline scripts execute */
+/* synchronously as the parser reaches them, before DOMContentLoaded.     */
+(function () {
+  var _orig = HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext = function (type, attrs) {
+    if (type === 'webgl' || type === 'webgl2') {
+      attrs = Object.assign({}, attrs || {}, { preserveDrawingBuffer: true });
+    }
+    return _orig.call(this, type, attrs);
+  };
+}());
+
 (function () {
   'use strict';
 
@@ -194,13 +227,17 @@ body.crt-boot {
   /* ── Phosphor profiles ─────────────────────────────────────────────── */
   var profiles = [
     { name: 'AMBER', bg: '#0d0800', glow: 'rgba(255,152,0,0.40)',
-      filter: 'sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08)' },
+      filter: 'sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08)',
+      bloom:  'sepia(1) saturate(5) hue-rotate(5deg)' },
     { name: 'GREEN', bg: '#00100a', glow: 'rgba(0,255,80,0.35)',
-      filter: 'sepia(1) saturate(8) hue-rotate(80deg) brightness(1.10) contrast(1.10)' },
+      filter: 'sepia(1) saturate(8) hue-rotate(80deg) brightness(1.10) contrast(1.10)',
+      bloom:  'sepia(1) saturate(8) hue-rotate(80deg)' },
     { name: 'WHITE', bg: '#0a0a0d', glow: 'rgba(180,200,255,0.30)',
-      filter: 'brightness(1.10) contrast(1.15) saturate(0.20)' },
+      filter: 'brightness(1.10) contrast(1.15) saturate(0.20)',
+      bloom:  'saturate(0.20)' },
     { name: 'APPLE', bg: '#001400', glow: 'rgba(0,255,100,0.40)',
-      filter: 'sepia(1) saturate(10) hue-rotate(95deg) brightness(1.20) contrast(1.05)' },
+      filter: 'sepia(1) saturate(10) hue-rotate(95deg) brightness(1.20) contrast(1.05)',
+      bloom:  'sepia(1) saturate(10) hue-rotate(95deg)' },
   ];
   var profileIdx = 0;
 
@@ -211,6 +248,8 @@ body.crt-boot {
     s.setProperty('--crt-filter', p.filter);
     document.body.style.background = p.bg;
     if (btn) btn.textContent = '[ ' + p.name + ' ]';
+    var bc = document.getElementById('crt-bloom-canvas');
+    if (bc) bc.style.filter = p.bloom;
   }
 
   var btn = document.createElement('button');
@@ -248,6 +287,72 @@ body.crt-boot {
     }, 4000 + Math.random() * 14000);   /* every 4–18 s at random */
   }
   scheduleJitter();
+
+  /* ── Bloom ─────────────────────────────────────────────────────────── */
+  /* Canvas lives outside .xterm so the parent sepia/brightness filter    */
+  /* does not re-amplify it.                                               */
+  /* brightness(4) first: lifts dark ANSI colours (min channel ~0.5) to   */
+  /* white before contrast clips them, so every character glows evenly.   */
+  /* Pure black background (0,0,0) × 4 = 0 — no background contribution. */
+  function setupBloom() {
+    var screen = document.querySelector('.xterm-screen');
+    if (!screen) { setTimeout(setupBloom, 200); return; }
+
+    var bloomWrap    = document.createElement('div');
+    bloomWrap.id     = 'crt-bloom';
+    var bloomCanvas  = document.createElement('canvas');
+    bloomCanvas.id   = 'crt-bloom-canvas';
+    bloomWrap.appendChild(bloomCanvas);
+    document.body.appendChild(bloomWrap);
+    var bloomCtx     = bloomCanvas.getContext('2d');
+
+    var tmp    = document.createElement('canvas');
+    var tmpCtx = tmp.getContext('2d');
+
+    var SCALE = 0.25;
+
+    function resize() {
+      var w = Math.max(1, Math.round(screen.offsetWidth  * SCALE));
+      var h = Math.max(1, Math.round(screen.offsetHeight * SCALE));
+      tmp.width  = bloomCanvas.width  = w;
+      tmp.height = bloomCanvas.height = h;
+      /* Size the CSS canvas to cover the terminal area */
+      var r = screen.getBoundingClientRect();
+      bloomCanvas.style.left   = r.left   + 'px';
+      bloomCanvas.style.top    = r.top    + 'px';
+      bloomCanvas.style.width  = r.width  + 'px';
+      bloomCanvas.style.height = r.height + 'px';
+    }
+    resize();
+    new ResizeObserver(resize).observe(screen);
+    window.addEventListener('resize', resize);
+
+    var lastFrame = 0;
+    function tick(ts) {
+      requestAnimationFrame(tick);
+      if (ts - lastFrame < 50) return;   /* ~20 fps */
+      lastFrame = ts;
+
+      var w = tmp.width, h = tmp.height;
+      if (!w || !h) return;
+
+      /* Pass 1 — composite all xterm layers unfiltered */
+      tmpCtx.clearRect(0, 0, w, h);
+      screen.querySelectorAll('canvas').forEach(function (c) {
+        if (c === bloomCanvas) return;
+        try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
+      });
+
+      /* Pass 2 — brightness lifts dark chars, contrast clips bg to black,
+                  blur spreads the bright pixels into a halo             */
+      bloomCtx.clearRect(0, 0, w, h);
+      bloomCtx.filter = 'blur(2px)';
+      bloomCtx.drawImage(tmp, 0, 0);
+      bloomCtx.filter = 'none';
+    }
+    requestAnimationFrame(tick);
+  }
+  setupBloom();
 
   /* ── Power-on sweep ────────────────────────────────────────────────── */
   document.addEventListener('DOMContentLoaded', function () {
