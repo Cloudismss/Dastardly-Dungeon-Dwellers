@@ -1,0 +1,150 @@
+<!-- ============================================================
+     CRT visual effects — Amber Phosphor profile
+     Inspired by cool-retro-term (github.com/Swordfish90/cool-retro-term)
+     Auto-injected before </body> by the release workflow.
+     ============================================================ -->
+
+<!-- Noise SVG (placed early so the filter ID is available before the script) -->
+<svg id="crt-noise-svg" aria-hidden="true" focusable="false"
+     style="position:fixed;inset:0;width:100%;height:100%;
+            pointer-events:none;z-index:8999;opacity:0.05;
+            mix-blend-mode:screen;">
+  <filter id="crt-noise-filter" color-interpolation-filters="linearRGB"
+          x="0%" y="0%" width="100%" height="100%">
+    <feTurbulence id="crt-turbulence"
+      type="fractalNoise" baseFrequency="0.75"
+      numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
+</svg>
+
+<style id="crt-styles">
+
+/* ── CSS variables ──────────────────────────────────────────────────── */
+:root {
+  --crt-bg:         #0d0800;
+  --crt-glow:       rgba(255, 152, 0, 0.40);
+  --crt-filter:     sepia(1) saturate(5) hue-rotate(5deg)
+                    brightness(1.15) contrast(1.08);
+  --crt-scanlines:  0.13;
+  --crt-vignette:   0.70;
+}
+
+/* ── Base background ────────────────────────────────────────────────── */
+html, body { background: var(--crt-bg) !important; }
+
+/* ── Phosphor tint + bloom applied to the xterm terminal ────────────── */
+/* xterm.js renders text onto canvas layers inside .xterm; a CSS filter  */
+/* on this element tints all those canvases uniformly.                   */
+.xterm {
+  filter: var(--crt-filter)
+          drop-shadow(0 0  5px var(--crt-glow))
+          drop-shadow(0 0 14px var(--crt-glow)) !important;
+}
+
+/* ── Rounded bezel + inner shadow ───────────────────────────────────── */
+#terminal-container {
+  border-radius: 10px;
+  overflow:       hidden;
+  box-shadow:
+    inset 0 0 90px rgba(0, 0, 0, 0.55),
+    0 0 80px rgba(0, 0, 0, 0.95);
+}
+
+/* ── Scanline + vignette overlay ────────────────────────────────────── */
+#crt-overlay {
+  position:       fixed;
+  inset:          0;
+  pointer-events: none;
+  z-index:        9000;
+  border-radius:  10px;
+}
+
+/* scanlines */
+#crt-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent                             0px,
+    transparent                             2px,
+    rgba(0, 0, 0, var(--crt-scanlines))     2px,
+    rgba(0, 0, 0, var(--crt-scanlines))     4px
+  );
+}
+
+/* vignette */
+#crt-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 88% 76% at 50% 50%,
+    transparent 36%,
+    rgba(0, 0, 0, var(--crt-vignette)) 100%
+  );
+}
+
+/* ── Subtle screen flicker ───────────────────────────────────────────── */
+@keyframes crt-flicker {
+  0%,  94%, 100% { opacity: 1;    }
+  95%            { opacity: 0.97; }
+  96%            { opacity: 1;    }
+  97%            { opacity: 0.95; }
+  98%            { opacity: 0.99; }
+}
+
+/* ── CRT power-on horizontal sweep ──────────────────────────────────── */
+/* Simulates a CRT screen warming up — the image expands from a thin     */
+/* horizontal stripe in the centre outward, with initial brightness.     */
+@keyframes crt-poweron {
+  0%   { clip-path: inset(49.6% 0 49.6% 0); filter: brightness(4);   }
+  25%  { clip-path: inset(20%   0 20%   0); filter: brightness(3);   }
+  65%  { clip-path: inset(0%    0 0%    0); filter: brightness(1.4); }
+  100% { clip-path: inset(0%    0 0%    0); filter: brightness(1);   }
+}
+
+body {
+  animation: crt-flicker 10s steps(1) infinite;
+}
+
+/* .crt-boot is added by the script below once the DOM is ready.         */
+/* It plays the power-on animation first, then hands off to flicker.     */
+body.crt-boot {
+  animation:
+    crt-poweron 0.7s cubic-bezier(.4, 0, .2, 1) forwards,
+    crt-flicker 10s 0.7s steps(1) infinite;
+}
+
+</style>
+
+<script id="crt-script">
+(function () {
+  'use strict';
+
+  /* ── Scanline / vignette overlay div ──────────────────────────────── */
+  var overlay = document.createElement('div');
+  overlay.id = 'crt-overlay';
+  document.body.appendChild(overlay);
+
+  /* ── Animated film-grain noise via SVG feTurbulence ──────────────── */
+  /* Cycling the seed attribute produces a new noise pattern each tick.  */
+  var turbulence = document.getElementById('crt-turbulence');
+  var noiseSeed = 0;
+  (function animateNoise() {
+    noiseSeed = (noiseSeed + 1) & 0x3FF;           /* wrap at 1024 */
+    turbulence.setAttribute('seed', noiseSeed);
+    setTimeout(function () {
+      requestAnimationFrame(animateNoise);
+    }, 80);                                         /* ~12 fps */
+  }());
+
+  /* ── Power-on sweep ───────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.add('crt-boot');
+  });
+
+}());
+</script>
