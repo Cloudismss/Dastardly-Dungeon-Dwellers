@@ -623,15 +623,17 @@ body.crt-boot {
     document.body.appendChild(bloomWrap);
     var bloomCtx = bloomCanvas.getContext('2d');
 
-    var tmp    = document.createElement('canvas');
-    var tmpCtx = tmp.getContext('2d');
-    var SCALE  = 0.25;
+    var tmp        = document.createElement('canvas');
+    var tmpCtx     = tmp.getContext('2d');
+    var extract    = document.createElement('canvas');
+    var extractCtx = extract.getContext('2d');
+    var SCALE      = 0.25;
 
     function resize() {
       var w = Math.max(1, Math.round(screen.offsetWidth  * SCALE));
       var h = Math.max(1, Math.round(screen.offsetHeight * SCALE));
-      tmp.width  = bloomCanvas.width  = w;
-      tmp.height = bloomCanvas.height = h;
+      tmp.width  = extract.width  = bloomCanvas.width  = w;
+      tmp.height = extract.height = bloomCanvas.height = h;
       var r = screen.getBoundingClientRect();
       bloomCanvas.style.left   = r.left   + 'px';
       bloomCanvas.style.top    = r.top    + 'px';
@@ -650,15 +652,25 @@ body.crt-boot {
       var w = tmp.width, h = tmp.height;
       if (!w || !h) return;
 
+      /* Pass 1 — composite all xterm canvas layers */
       tmpCtx.clearRect(0, 0, w, h);
       screen.querySelectorAll('canvas').forEach(function (c) {
         if (c === bloomCanvas) return;
         try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
       });
 
+      /* Pass 2 — threshold: crush dark pixels to black, keep only bright   */
+      /* ones. Black pixels in screen blend-mode contribute nothing, so the  */
+      /* dark terminal background won't add any luminosity when composited.  */
+      extractCtx.clearRect(0, 0, w, h);
+      extractCtx.filter = 'brightness(2) contrast(8)';
+      extractCtx.drawImage(tmp, 0, 0);
+      extractCtx.filter = 'none';
+
+      /* Pass 3 — blur the extracted bright areas to spread the glow halo */
       bloomCtx.clearRect(0, 0, w, h);
       bloomCtx.filter = 'blur(2px)';
-      bloomCtx.drawImage(tmp, 0, 0);
+      bloomCtx.drawImage(extract, 0, 0);
       bloomCtx.filter = 'none';
     }
     requestAnimationFrame(tick);
