@@ -63,7 +63,7 @@ html, body { background: var(--crt-bg) !important; }
   pointer-events: none;
   z-index: 8998;
   mix-blend-mode: screen;
-  opacity: 0.5;
+  opacity: 0.20;
   transition: opacity 0.2s;
 }
 #crt-bloom-canvas {
@@ -71,7 +71,12 @@ html, body { background: var(--crt-bg) !important; }
   inset: 0;
   width: 100%;
   height: 100%;
-  filter: sepia(1) saturate(5) hue-rotate(5deg);
+  /* Tint matches the phosphor profile. blur(20px) spreads the thresholded */
+  /* text mask into soft halos: at σ=12px adjacent characters (10px apart) */
+  /* sit within 1σ so their halos fully overlap → uniform coverage across  */
+  /* words. Background pixels >3σ (36px) from any text stay black, so the  */
+  /* bloom stays localised and does not wash the background.               */
+  filter: sepia(1) saturate(5) hue-rotate(5deg) blur(20px);
 }
 
 /* ── Scanlines ──────────────────────────────────────────────────────── */
@@ -333,19 +338,19 @@ body.crt-boot {
   var profiles = [
     { name: 'AMBER', bg: '#0d0800', glow: 'rgba(255,152,0,0.40)',
       filter: 'sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08)',
-      bloom:  'sepia(1) saturate(5) hue-rotate(5deg)',
+      bloom:  'sepia(1) saturate(5) hue-rotate(5deg) blur(20px)',
       menuRgb: '255, 165, 0' },
     { name: 'GREEN', bg: '#00100a', glow: 'rgba(0,255,80,0.35)',
       filter: 'sepia(1) saturate(8) hue-rotate(80deg) brightness(1.10) contrast(1.10)',
-      bloom:  'sepia(1) saturate(8) hue-rotate(80deg)',
+      bloom:  'sepia(1) saturate(8) hue-rotate(80deg) blur(20px)',
       menuRgb: '0, 255, 80' },
     { name: 'WHITE', bg: '#0a0a0d', glow: 'rgba(180,200,255,0.30)',
       filter: 'brightness(1.10) contrast(1.15) saturate(0.20)',
-      bloom:  'saturate(0.20)',
+      bloom:  'saturate(0.20) blur(20px)',
       menuRgb: '180, 200, 255' },
     { name: 'APPLE', bg: '#001400', glow: 'rgba(0,255,100,0.40)',
       filter: 'sepia(1) saturate(10) hue-rotate(95deg) brightness(1.20) contrast(1.05)',
-      bloom:  'sepia(1) saturate(10) hue-rotate(95deg)',
+      bloom:  'sepia(1) saturate(10) hue-rotate(95deg) blur(20px)',
       menuRgb: '0, 255, 100' },
   ];
   var profileIdx = 0;
@@ -397,9 +402,13 @@ body.crt-boot {
   var effectDefs = [
     {
       id: 'bloom', label: 'BLOOM', default: 50,
+      /* Map 0–100% to 0–0.40 opacity. The bloom canvas is a full-res     */
+      /* blurred copy of the terminal; at full opacity (1.0) via screen   */
+      /* blend it would be far too strong. 0.40 maximum keeps it in the   */
+      /* same perceptual range as cool-retro-term's bloom setting.        */
       apply: function (v) {
         var el = document.getElementById('crt-bloom');
-        if (el) el.style.opacity = (v / 100).toFixed(2);
+        if (el) el.style.opacity = (v / 100 * 0.40).toFixed(3);
       },
     },
     {
@@ -627,7 +636,7 @@ body.crt-boot {
     var tmpCtx     = tmp.getContext('2d');
     var extract    = document.createElement('canvas');
     var extractCtx = extract.getContext('2d');
-    var SCALE      = 0.25;
+    var SCALE      = 0.50;
 
     function resize() {
       var w = Math.max(1, Math.round(screen.offsetWidth  * SCALE));
@@ -652,24 +661,30 @@ body.crt-boot {
       var w = tmp.width, h = tmp.height;
       if (!w || !h) return;
 
-      /* Pass 1 — composite all xterm canvas layers */
+      /* Pass 1 — composite all xterm canvas layers at half resolution.    */
       tmpCtx.clearRect(0, 0, w, h);
       screen.querySelectorAll('canvas').forEach(function (c) {
         if (c === bloomCanvas) return;
         try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
       });
 
-      /* Pass 2 — threshold: crush dark pixels to black, keep only bright   */
-      /* ones. Black pixels in screen blend-mode contribute nothing, so the  */
-      /* dark terminal background won't add any luminosity when composited.  */
+      /* Pass 2 — blur before threshold to normalise per-glyph density.   */
+      /* blur(3px) at SCALE=0.5 = 6px effective: enough to average within  */
+      /* a character (~11px wide) so dense glyphs (#,@) and sparse ones   */
+      /* (-,.) produce similar values before the cutoff is applied.        */
       extractCtx.clearRect(0, 0, w, h);
-      extractCtx.filter = 'brightness(2) contrast(8)';
+      extractCtx.filter = 'blur(3px)';
       extractCtx.drawImage(tmp, 0, 0);
       extractCtx.filter = 'none';
 
-      /* Pass 3 — blur the extracted bright areas to spread the glow halo */
+      /* Pass 3 — threshold: crush background to black so it contributes  */
+      /* nothing via screen blend. The CSS blur(20px) on the canvas element*/
+      /* then spreads the thresholded text mask into soft halos: at σ=12px */
+      /* adjacent characters (10px apart) are within 1σ so their halos    */
+      /* fully overlap, producing uniform coverage without hot spots. At   */
+      /* 3σ=36px from text the bloom fades to zero — no background wash.  */
       bloomCtx.clearRect(0, 0, w, h);
-      bloomCtx.filter = 'blur(2px)';
+      bloomCtx.filter = 'brightness(2) contrast(8)';
       bloomCtx.drawImage(extract, 0, 0);
       bloomCtx.filter = 'none';
     }
