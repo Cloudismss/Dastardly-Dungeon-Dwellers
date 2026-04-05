@@ -177,8 +177,8 @@ body.crt-boot {
   margin-left: auto;
   padding: 3px 9px;
   background: rgba(0,0,0,0.55);
-  color: rgba(255,165,0,0.80);
-  border: 1px solid rgba(255,165,0,0.30);
+  color: rgba(var(--crt-menu-rgb),0.80);
+  border: 1px solid rgba(var(--crt-menu-rgb),0.30);
   border-radius: 3px;
   cursor: pointer;
   font-family: inherit;
@@ -195,19 +195,19 @@ body.crt-boot {
   right: 0;
   min-width: 210px;
   background: rgba(0,0,0,0.90);
-  border: 1px solid rgba(255,165,0,0.30);
+  border: 1px solid rgba(var(--crt-menu-rgb),0.30);
   border-radius: 3px;
   padding: 8px 10px 10px;
 }
 #crt-menu-panel.open { display: block; }
 
 .crt-menu-section {
-  color: rgba(255,165,0,0.45);
+  color: rgba(var(--crt-menu-rgb),0.45);
   font-size: 12px;
   letter-spacing: 2px;
   margin: 8px 0 4px;
   padding-bottom: 2px;
-  border-bottom: 1px solid rgba(255,165,0,0.15);
+  border-bottom: 1px solid rgba(var(--crt-menu-rgb),0.15);
 }
 .crt-menu-section:first-child { margin-top: 0; }
 
@@ -217,20 +217,22 @@ body.crt-boot {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  color: rgba(255,165,0,0.90);
+  color: rgba(var(--crt-menu-rgb),0.90);
   padding: 2px 0;
 }
 .crt-menu-profile button {
   background: none;
   border: none;
-  color: rgba(255,165,0,0.60);
+  color: rgba(var(--crt-menu-rgb),1);
+  opacity: 0.6;
   cursor: pointer;
   font-family: inherit;
   font-size: 13px;
   padding: 0 2px;
   line-height: 1;
+  transition: opacity 0.1s;
 }
-.crt-menu-profile button:hover { color: rgba(255,165,0,1); }
+.crt-menu-profile button:hover { opacity: 1; }
 #crt-profile-label { flex: 1; text-align: center; }
 
 /* Effect rows */
@@ -239,15 +241,15 @@ body.crt-boot {
   display: flex;
   align-items: baseline;
   gap: 5px;
-  color: rgba(255,165,0,0.80);
+  color: rgba(var(--crt-menu-rgb),0.80);
 }
-.crt-effect-header.dim { color: rgba(255,165,0,0.30); }
+.crt-effect-header.dim { color: rgba(var(--crt-menu-rgb),0.30); }
 .crt-effect-label { flex: 1; }
 .crt-effect-value { font-size: 13px; min-width: 26px; text-align: right; }
 .crt-effect-toggle {
   background: none;
-  border: 1px solid rgba(255,165,0,0.30);
-  color: rgba(255,165,0,0.70);
+  border: 1px solid rgba(var(--crt-menu-rgb),0.30);
+  color: rgba(var(--crt-menu-rgb),0.70);
   cursor: pointer;
   font-family: inherit;
   font-size: 12px;
@@ -256,8 +258,8 @@ body.crt-boot {
   border-radius: 2px;
   line-height: 1.4;
 }
-.crt-effect-toggle:hover { color: rgba(255,165,0,1); border-color: rgba(255,165,0,0.60); }
-.crt-effect-toggle.off   { color: rgba(255,165,0,0.30); border-color: rgba(255,165,0,0.15); }
+.crt-effect-toggle:hover { color: rgba(var(--crt-menu-rgb),1); border-color: rgba(var(--crt-menu-rgb),0.60); }
+.crt-effect-toggle.off   { color: rgba(var(--crt-menu-rgb),0.30); border-color: rgba(var(--crt-menu-rgb),0.15); }
 
 /* Range slider */
 .crt-slider {
@@ -266,7 +268,7 @@ body.crt-boot {
   display: block;
   width: 100%;
   height: 2px;
-  background: rgba(255,165,0,0.20);
+  background: rgba(var(--crt-menu-rgb),0.20);
   outline: none;
   border: none;
   cursor: pointer;
@@ -278,14 +280,14 @@ body.crt-boot {
   appearance: none;
   width: 8px;
   height: 14px;
-  background: rgba(255,165,0,0.85);
+  background: rgba(var(--crt-menu-rgb),0.85);
   border-radius: 1px;
   cursor: pointer;
 }
 .crt-slider::-moz-range-thumb {
   width: 8px;
   height: 14px;
-  background: rgba(255,165,0,0.85);
+  background: rgba(var(--crt-menu-rgb),0.85);
   border-radius: 1px;
   border: none;
   cursor: pointer;
@@ -331,18 +333,45 @@ body.crt-boot {
   var profiles = [
     { name: 'AMBER', bg: '#0d0800', glow: 'rgba(255,152,0,0.40)',
       filter: 'sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08)',
-      bloom:  'sepia(1) saturate(5) hue-rotate(5deg)' },
+      bloom:  'sepia(1) saturate(5) hue-rotate(5deg)',
+      menuRgb: '255, 165, 0' },
     { name: 'GREEN', bg: '#00100a', glow: 'rgba(0,255,80,0.35)',
       filter: 'sepia(1) saturate(8) hue-rotate(80deg) brightness(1.10) contrast(1.10)',
-      bloom:  'sepia(1) saturate(8) hue-rotate(80deg)' },
+      bloom:  'sepia(1) saturate(8) hue-rotate(80deg)',
+      menuRgb: '0, 255, 80' },
     { name: 'WHITE', bg: '#0a0a0d', glow: 'rgba(180,200,255,0.30)',
       filter: 'brightness(1.10) contrast(1.15) saturate(0.20)',
-      bloom:  'saturate(0.20)' },
+      bloom:  'saturate(0.20)',
+      menuRgb: '180, 200, 255' },
     { name: 'APPLE', bg: '#001400', glow: 'rgba(0,255,100,0.40)',
       filter: 'sepia(1) saturate(10) hue-rotate(95deg) brightness(1.20) contrast(1.05)',
-      bloom:  'sepia(1) saturate(10) hue-rotate(95deg)' },
+      bloom:  'sepia(1) saturate(10) hue-rotate(95deg)',
+      menuRgb: '0, 255, 100' },
   ];
   var profileIdx = 0;
+
+  /* Inject a <style> block with hardcoded RGB values so there are no CSS   */
+  /* variable references that browsers can stale-cache on profile changes.  */
+  var menuThemeStyle = document.createElement('style');
+  document.body.appendChild(menuThemeStyle);
+
+  function updateMenuTheme(rgb) {
+    menuThemeStyle.textContent =
+      '#crt-menu-btn{color:rgba('+rgb+',0.80);border-color:rgba('+rgb+',0.30);}' +
+      '#crt-menu-panel{border-color:rgba('+rgb+',0.30);}' +
+      '.crt-menu-section{color:rgba('+rgb+',0.45);border-bottom-color:rgba('+rgb+',0.15);}' +
+      '.crt-menu-profile{color:rgba('+rgb+',0.90);}' +
+      '.crt-menu-profile button{color:rgba('+rgb+',1);}' +
+      '.crt-effect-header{color:rgba('+rgb+',0.80);}' +
+      '.crt-effect-header.dim{color:rgba('+rgb+',0.30);}' +
+      '.crt-effect-toggle{border-color:rgba('+rgb+',0.30);color:rgba('+rgb+',0.70);}' +
+      '.crt-effect-toggle:hover{color:rgba('+rgb+',1);border-color:rgba('+rgb+',0.60);}' +
+      '.crt-effect-toggle.off{color:rgba('+rgb+',0.30);border-color:rgba('+rgb+',0.15);}' +
+      '.crt-slider{background:rgba('+rgb+',0.20);}' +
+      '.crt-slider::-webkit-slider-thumb{background:rgba('+rgb+',0.85);}' +
+      '.crt-slider::-moz-range-thumb{background:rgba('+rgb+',0.85);}';
+  }
+  updateMenuTheme(profiles[0].menuRgb);
 
   function applyProfile(p) {
     var s = document.documentElement.style;
@@ -354,6 +383,7 @@ body.crt-boot {
     if (bc) bc.style.filter = p.bloom;
     var lbl = document.getElementById('crt-profile-label');
     if (lbl) lbl.textContent = p.name;
+    updateMenuTheme(p.menuRgb);
   }
 
   /* ── Effect definitions ────────────────────────────────────────────── */
@@ -440,9 +470,11 @@ body.crt-boot {
     profileIdx = (profileIdx - 1 + profiles.length) % profiles.length;
     applyProfile(profiles[profileIdx]);
   });
+
   var profLabel = document.createElement('span');
   profLabel.id = 'crt-profile-label';
   profLabel.textContent = profiles[0].name;
+
   var nextBtn = document.createElement('button');
   nextBtn.textContent = '►';
   nextBtn.addEventListener('click', function () {
