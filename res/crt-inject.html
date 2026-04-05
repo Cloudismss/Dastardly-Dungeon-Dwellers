@@ -8,35 +8,13 @@
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
 
-<!-- Filter definitions — zero-size but NOT display:none; browsers will not  -->
-<!-- resolve url(#id) references against a display:none SVG element.         -->
+<!-- SVG filter definitions.                                              -->
+<!-- Must NOT be display:none — browsers refuse to resolve url(#id)       -->
+<!-- references into a display:none element. Zero-size keeps it invisible. -->
 <svg id="crt-filters-svg" aria-hidden="true" focusable="false"
      style="position:absolute;width:0;height:0;overflow:hidden">
 
-  <!-- Chromatic aberration: offset the R channel left and B/cyan right so  -->
-  <!-- each bright glyph gets a coloured fringe. Applied to the raw xterm   -->
-  <!-- output before the phosphor tint so the split uses the full palette.  -->
-  <filter id="crt-chroma" color-interpolation-filters="sRGB"
-          x="-2%" y="0%" width="104%" height="100%">
-    <feOffset in="SourceGraphic" dx="-1.5" dy="0" result="r-shift"/>
-    <feColorMatrix in="r-shift" type="matrix"
-      values="1 0 0 0 0
-              0 0 0 0 0
-              0 0 0 0 0
-              0 0 0 0.7 0"
-      result="r-only"/>
-    <feOffset in="SourceGraphic" dx="1.5" dy="0" result="b-shift"/>
-    <feColorMatrix in="b-shift" type="matrix"
-      values="0 0 0 0 0
-              0 0.3 0 0 0
-              0 0 0.9 0 0
-              0 0 0 0.7 0"
-      result="b-only"/>
-    <feBlend in="r-only"      in2="SourceGraphic" mode="screen" result="with-r"/>
-    <feBlend in="with-r"      in2="b-only"        mode="screen"/>
-  </filter>
-
-  <!-- Film-grain noise (animated seed via JS below) -->
+  <!-- Film-grain noise (seed animated by JS) -->
   <filter id="crt-noise-filter" color-interpolation-filters="linearRGB"
           x="0%" y="0%" width="100%" height="100%">
     <feTurbulence id="crt-turbulence"
@@ -47,116 +25,145 @@
 
 </svg>
 
-<!-- Noise overlay (visible, low opacity, screen blend) -->
+<!-- Noise overlay -->
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
      style="position:fixed;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:8999;opacity:0.05;
-            mix-blend-mode:screen;">
+            pointer-events:none;z-index:8999;opacity:0.05;mix-blend-mode:screen;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
 
 <style id="crt-styles">
 
-/* ── CSS variables ──────────────────────────────────────────────────── */
+/* ── CSS variables (mutated by the profile switcher) ────────────────── */
 :root {
-  --crt-bg:         #0d0800;
-  --crt-glow:       rgba(255, 152, 0, 0.40);
-  --crt-filter:     sepia(1) saturate(5) hue-rotate(5deg)
-                    brightness(1.15) contrast(1.08);
-  --crt-scanlines:  0.13;
-  --crt-vignette:   0.70;
+  --crt-bg:        #0d0800;
+  --crt-glow:      rgba(255, 152, 0, 0.40);
+  --crt-filter:    sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08);
+  --crt-scanlines: 0.13;
 }
 
 /* ── Base background ────────────────────────────────────────────────── */
 html, body { background: var(--crt-bg) !important; }
 
-/* ── Chromatic aberration on the canvas layer ───────────────────────── */
-/* Applying the SVG filter to .xterm-screen (child) and the CSS phosphor  */
-/* chain to .xterm (parent) keeps them separate and avoids mixing url()   */
-/* with CSS filter functions — which has unreliable cross-browser support. */
-/* CSS renders child filters before parent filters, so the order is:      */
-/*   1. url(#crt-chroma)  — RGB split on the raw terminal canvas          */
-/*   2. sepia/saturate/…  — phosphor tint applied to the split result     */
-/*   3. drop-shadow       — amber bloom around the now-tinted glyphs      */
-.xterm-screen {
-  filter: url(#crt-chroma) !important;
-}
-
-/* ── Phosphor tint + bloom ──────────────────────────────────────────── */
+/* ── Phosphor tint ──────────────────────────────────────────────────── */
 .xterm {
-  filter: var(--crt-filter)
-          drop-shadow(0 0  5px var(--crt-glow))
-          drop-shadow(0 0 14px var(--crt-glow)) !important;
+  filter: var(--crt-filter) !important;
 }
 
-/* ── Rounded bezel + inner shadow ───────────────────────────────────── */
+/* ── Rounded bezel ──────────────────────────────────────────────────── */
 #terminal-container {
   border-radius: 10px;
-  overflow:       hidden;
-  box-shadow:
-    inset 0 0 90px rgba(0, 0, 0, 0.55),
-    0 0 80px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.95);
 }
 
 /* ── Scanline + vignette overlay ────────────────────────────────────── */
 #crt-overlay {
-  position:       fixed;
-  inset:          0;
+  position: fixed;
+  inset: 0;
   pointer-events: none;
-  z-index:        9000;
-  border-radius:  10px;
+  z-index: 9000;
+  border-radius: 10px;
 }
-
-/* scanlines */
-#crt-overlay::before {
+#crt-overlay::before {   /* scanlines */
   content: '';
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     180deg,
-    transparent                             0px,
-    transparent                             2px,
-    rgba(0, 0, 0, var(--crt-scanlines))     2px,
-    rgba(0, 0, 0, var(--crt-scanlines))     4px
+    transparent                          0px,
+    transparent                          2px,
+    rgba(0,0,0,var(--crt-scanlines))     2px,
+    rgba(0,0,0,var(--crt-scanlines))     4px
   );
 }
 
-/* vignette */
-#crt-overlay::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse 88% 76% at 50% 50%,
-    transparent 36%,
-    rgba(0, 0, 0, var(--crt-vignette)) 100%
-  );
+
+/* ── Profile switcher button ────────────────────────────────────────── */
+#crt-profile-btn {
+  position: fixed;
+  bottom: 10px;
+  right: 12px;
+  z-index: 9100;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  letter-spacing: 1px;
+  padding: 3px 9px;
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 165, 0, 0.80);
+  border: 1px solid rgba(255, 165, 0, 0.30);
+  border-radius: 3px;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s;
+  opacity: 0.6;
+}
+#crt-profile-btn:hover { opacity: 1; }
+
+/* ── Horizontal jitter ───────────────────────────────────────────────── */
+@keyframes crt-jitter {
+  0%,100% { transform: translateX(0);    }
+  15%     { transform: translateX(-2px); }
+  30%     { transform: translateX( 2px); }
+  45%     { transform: translateX(-1px); }
+  60%     { transform: translateX( 1px); }
+  75%     { transform: translateX(0);    }
+}
+#terminal-container.crt-jitter {
+  animation: crt-jitter 0.12s linear;
 }
 
-/* ── Subtle screen flicker ───────────────────────────────────────────── */
+/* ── Glow line ──────────────────────────────────────────────────────── */
+/* Simulates the faint bright band left by the CRT electron beam as it   */
+/* sweeps from top to bottom. Loops continuously.                        */
+@keyframes crt-glow-line {
+  0%   { transform: translateY(-220px); }
+  100% { transform: translateY(100vh); }
+}
+#crt-glow-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 220px;
+  pointer-events: none;
+  z-index: 9001;
+  mix-blend-mode: screen;
+  /* Gradient runs top→bottom. The element sweeps downward so the        */
+  /* bottom edge is the leading beam; the trail fades upward behind it.  */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0)      0%,   /* tail end — fully faded     */
+    rgba(255, 255, 255, 0.03)  45%,   /* mid trail                  */
+    rgba(255, 255, 255, 0.08)  72%,   /* approaching the beam       */
+    rgba(255, 255, 255, 0.15)  86%,   /* beam shoulder              */
+    rgba(255, 255, 255, 0.25)  95%,   /* peak brightness            */
+    rgba(255, 255, 255, 0.08)  98%,   /* leading-edge falloff       */
+    rgba(255, 255, 255, 0)    100%    /* hard bottom edge gone      */
+  );
+  animation: crt-glow-line 8s linear infinite;
+}
+
+/* ── Screen flicker ─────────────────────────────────────────────────── */
 @keyframes crt-flicker {
-  0%,  94%, 100% { opacity: 1;    }
-  95%            { opacity: 0.97; }
-  96%            { opacity: 1;    }
-  97%            { opacity: 0.95; }
-  98%            { opacity: 0.99; }
+  0%,94%,100% { opacity: 1;    }
+  95%         { opacity: 0.97; }
+  96%         { opacity: 1;    }
+  97%         { opacity: 0.95; }
+  98%         { opacity: 0.99; }
 }
 
-/* ── CRT power-on horizontal sweep ──────────────────────────────────── */
+/* ── Power-on horizontal sweep ──────────────────────────────────────── */
 @keyframes crt-poweron {
   0%   { clip-path: inset(49.6% 0 49.6% 0); filter: brightness(4);   }
   25%  { clip-path: inset(20%   0 20%   0); filter: brightness(3);   }
   65%  { clip-path: inset(0%    0 0%    0); filter: brightness(1.4); }
-  100% { clip-path: inset(0%    0 0%    0); filter: brightness(1);   }
+  100% { clip-path: inset(0%    0 0%    0); }
 }
-
-body {
-  animation: crt-flicker 10s steps(1) infinite;
-}
-
+body { animation: crt-flicker 10s steps(1) infinite; }
 body.crt-boot {
   animation:
-    crt-poweron 0.7s cubic-bezier(.4, 0, .2, 1) forwards,
+    crt-poweron 0.7s cubic-bezier(.4,0,.2,1) forwards,
     crt-flicker 10s 0.7s steps(1) infinite;
 }
 
@@ -167,32 +174,82 @@ body.crt-boot {
   'use strict';
 
   /* ── VT323 font ────────────────────────────────────────────────────── */
-  /* window.tty_options is merged into xterm.js Terminal options by ttyd  */
-  /* before it creates the Terminal instance (at DOMContentLoaded).       */
-  /* Setting it here — in an inline script parsed before that event —     */
-  /* ensures our values are picked up on first initialisation.            */
+  /* ttyd merges window.tty_options into the xterm.js Terminal constructor  */
+  /* at DOMContentLoaded; setting it here (inline, before that event)       */
+  /* ensures the font is active from the very first render.                 */
   window.tty_options = Object.assign(window.tty_options || {}, {
     fontFamily: "'VT323', 'Courier New', monospace",
     fontSize:   18,
   });
 
-  /* ── Scanline / vignette overlay div ──────────────────────────────── */
+  /* ── Static overlays ───────────────────────────────────────────────── */
   var overlay = document.createElement('div');
   overlay.id = 'crt-overlay';
   document.body.appendChild(overlay);
 
-  /* ── Animated film-grain noise via SVG feTurbulence ──────────────── */
+  var glowLine = document.createElement('div');
+  glowLine.id = 'crt-glow-line';
+  document.body.appendChild(glowLine);
+
+  /* ── Phosphor profiles ─────────────────────────────────────────────── */
+  var profiles = [
+    { name: 'AMBER', bg: '#0d0800', glow: 'rgba(255,152,0,0.40)',
+      filter: 'sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08)' },
+    { name: 'GREEN', bg: '#00100a', glow: 'rgba(0,255,80,0.35)',
+      filter: 'sepia(1) saturate(8) hue-rotate(80deg) brightness(1.10) contrast(1.10)' },
+    { name: 'WHITE', bg: '#0a0a0d', glow: 'rgba(180,200,255,0.30)',
+      filter: 'brightness(1.10) contrast(1.15) saturate(0.20)' },
+    { name: 'APPLE', bg: '#001400', glow: 'rgba(0,255,100,0.40)',
+      filter: 'sepia(1) saturate(10) hue-rotate(95deg) brightness(1.20) contrast(1.05)' },
+  ];
+  var profileIdx = 0;
+
+  function applyProfile(p) {
+    var s = document.documentElement.style;
+    s.setProperty('--crt-bg',     p.bg);
+    s.setProperty('--crt-glow',   p.glow);
+    s.setProperty('--crt-filter', p.filter);
+    document.body.style.background = p.bg;
+    if (btn) btn.textContent = '[ ' + p.name + ' ]';
+  }
+
+  var btn = document.createElement('button');
+  btn.id = 'crt-profile-btn';
+  btn.textContent = '[ AMBER ]';
+  btn.addEventListener('click', function () {
+    profileIdx = (profileIdx + 1) % profiles.length;
+    applyProfile(profiles[profileIdx]);
+  });
+  document.body.appendChild(btn);
+
+  /* ── Animated film-grain noise ─────────────────────────────────────── */
   var turbulence = document.getElementById('crt-turbulence');
-  var noiseSeed = 0;
-  (function animateNoise() {
-    noiseSeed = (noiseSeed + 1) & 0x3FF;           /* wrap at 1024 */
+  var noiseSeed  = 0;
+  (function tickNoise() {
+    noiseSeed = (noiseSeed + 1) & 0x3FF;
     turbulence.setAttribute('seed', noiseSeed);
-    setTimeout(function () {
-      requestAnimationFrame(animateNoise);
-    }, 80);                                         /* ~12 fps */
+    setTimeout(function () { requestAnimationFrame(tickNoise); }, 80);
   }());
 
-  /* ── Power-on sweep ───────────────────────────────────────────────── */
+  /* ── Horizontal jitter ─────────────────────────────────────────────── */
+  function scheduleJitter() {
+    setTimeout(function () {
+      var tc = document.getElementById('terminal-container');
+      if (tc) {
+        tc.classList.remove('crt-jitter');
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            tc.classList.add('crt-jitter');
+            setTimeout(function () { tc.classList.remove('crt-jitter'); }, 120);
+          });
+        });
+      }
+      scheduleJitter();
+    }, 4000 + Math.random() * 14000);   /* every 4–18 s at random */
+  }
+  scheduleJitter();
+
+  /* ── Power-on sweep ────────────────────────────────────────────────── */
   document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.add('crt-boot');
   });
