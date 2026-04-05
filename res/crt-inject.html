@@ -35,16 +35,21 @@
 
 /* ── CSS variables ──────────────────────────────────────────────────── */
 :root {
-  --crt-bg:           #0d0800;
-  --crt-glow:         rgba(255, 152, 0, 0.40);
-  --crt-filter:       sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08);
+  --crt-bg:           #0f0802;
+  --crt-glow:         rgba(255, 129, 0, 0.40);
+  --crt-filter:       brightness(1.10) contrast(1.08);
   --crt-scanlines:    0.13;   /* driven by scanlines slider   */
   --crt-flicker-amt:  0.08;   /* driven by flickering slider  */
   --crt-jitter-px:    1px;    /* driven by jitter slider      */
 }
 
 /* ── Base background ────────────────────────────────────────────────── */
+/* xterm-viewport is the scrollable container behind the WebGL canvas.  */
+/* Forcing its background here makes the phosphor ambient colour appear  */
+/* immediately on paint, before window.term is available to set the      */
+/* xterm theme — so the boot animation already shows the right colour.  */
 html, body { background: var(--crt-bg) !important; }
+.xterm-viewport { background-color: var(--crt-bg) !important; }
 
 /* ── Phosphor tint ──────────────────────────────────────────────────── */
 .xterm { filter: var(--crt-filter) !important; }
@@ -71,12 +76,10 @@ html, body { background: var(--crt-bg) !important; }
   inset: 0;
   width: 100%;
   height: 100%;
-  /* Tint matches the phosphor profile. blur(20px) spreads the thresholded */
-  /* text mask into soft halos: at σ=12px adjacent characters (10px apart) */
-  /* sit within 1σ so their halos fully overlap → uniform coverage across  */
-  /* words. Background pixels >3σ (36px) from any text stay black, so the  */
-  /* bloom stays localised and does not wash the background.               */
-  filter: sepia(1) saturate(5) hue-rotate(5deg) blur(20px);
+  /* blur(40px) spreads the thresholded text mask into wide, soft halos.   */
+  /* No post-blur brightness step — that causes a ring artifact by         */
+  /* amplifying the steep part of the Gaussian falloff more than the tail. */
+  filter: blur(40px);
 }
 
 /* ── Scanlines ──────────────────────────────────────────────────────── */
@@ -319,11 +322,72 @@ body.crt-boot {
 (function () {
   'use strict';
 
+  /* ── Colour helpers ────────────────────────────────────────────────── */
+  function h2a(h) {
+    var v = parseInt(h.replace('#', ''), 16);
+    return [v >> 16 & 255, v >> 8 & 255, v & 255];
+  }
+  function a2h(r, g, b) {
+    return '#' + [r, g, b].map(function (c) {
+      return ('0' + Math.max(0, Math.min(255, Math.round(c))).toString(16)).slice(-2);
+    }).join('');
+  }
+
+  /* ── Phosphor colour formula ───────────────────────────────────────── */
+  /* Exact replication of cool-retro-term ApplicationSettings.qml:        */
+  /*   saturatedColor = mix(rawFg, white, satColor × 0.5)                 */
+  /*   fgRendered     = mix(rawBg, saturatedColor, 0.7 + contrast × 0.3)  */
+  /*   bgRendered     = mix(saturatedColor, rawBg, 0.7 + contrast × 0.3)  */
+  /* Both fg and bg vary with contrast — contrast shifts fg brightness     */
+  /* AND adds a white-mix component (e.g. blue channel) from satColor.    */
+  var contrastLevel = 0.80;   /* driven by contrast slider */
+
+  function computePhosphorColors(rawFgHex, rawBgHex, satColor, contrast) {
+    var f = h2a(rawFgHex), b = h2a(rawBgHex);
+    var s = satColor * 0.5;
+    var sc = [f[0]*(1-s) + 255*s, f[1]*(1-s) + 255*s, f[2]*(1-s) + 255*s];
+    var mix = 0.7 + contrast * 0.3;
+    return {
+      fg: a2h(b[0]*(1-mix) + sc[0]*mix, b[1]*(1-mix) + sc[1]*mix, b[2]*(1-mix) + sc[2]*mix),
+      bg: a2h(sc[0]*(1-mix) + b[0]*mix, sc[1]*(1-mix) + b[1]*mix, sc[2]*(1-mix) + b[2]*mix),
+    };
+  }
+
+  /* ── Phosphor palette helper ───────────────────────────────────────── */
+  /* Generates a monochrome 16-colour xterm theme tinted to a phosphor    */
+  /* colour. Each ANSI slot maps to a lerp between bg (off) and fg (full) */
+  /* at a brightness level chosen to preserve visual differentiation.     */
+  function makePhosphorTheme(fgHex, bgHex) {
+    var f = h2a(fgHex), bk = h2a(bgHex);
+    function lerp(t) {
+      return a2h(bk[0] + (f[0] - bk[0]) * t,
+                 bk[1] + (f[1] - bk[1]) * t,
+                 bk[2] + (f[2] - bk[2]) * t);
+    }
+    function boost(t) { return a2h(f[0] * t, f[1] * t, f[2] * t); }
+    return {
+      foreground: fgHex,  background: bgHex,
+      cursor:     fgHex,  cursorAccent: bgHex,
+      black:         bgHex,      red:           lerp(0.55),
+      green:         lerp(0.65), yellow:        lerp(0.80),
+      blue:          lerp(0.35), magenta:       lerp(0.60),
+      cyan:          lerp(0.70), white:         lerp(0.85),
+      brightBlack:   lerp(0.25), brightRed:     lerp(0.70),
+      brightGreen:   lerp(0.80), brightYellow:  fgHex,
+      brightBlue:    lerp(0.50), brightMagenta: lerp(0.80),
+      brightCyan:    lerp(0.90), brightWhite:   boost(1.15),
+    };
+  }
+
   /* ── VT323 font ────────────────────────────────────────────────────── */
-  window.tty_options = Object.assign(window.tty_options || {}, {
-    fontFamily: "'VT323', 'Courier New', monospace",
-    fontSize:   18,
-  });
+  (function () {
+    var c = computePhosphorColors('#ff8100', '#000000', 0.2, contrastLevel);
+    window.tty_options = Object.assign(window.tty_options || {}, {
+      fontFamily: "'VT323', 'Courier New', monospace",
+      fontSize:   18,
+      theme:      makePhosphorTheme(c.fg, c.bg),
+    });
+  }());
 
   /* ── Static overlays ───────────────────────────────────────────────── */
   var overlay = document.createElement('div');
@@ -335,25 +399,36 @@ body.crt-boot {
   document.body.appendChild(glowLine);
 
   /* ── Phosphor profiles ─────────────────────────────────────────────── */
+  /* rawFg/rawBg/satColor sourced from cool-retro-term ApplicationSettings.qml. */
+  /* fg/bg are computed at runtime by computePhosphorColors so they track   */
+  /* the contrast slider. E-Ink keeps a fixed CSS invert approach.          */
   var profiles = [
-    { name: 'AMBER', bg: '#0d0800', glow: 'rgba(255,152,0,0.40)',
-      filter: 'sepia(1) saturate(5) hue-rotate(5deg) brightness(1.15) contrast(1.08)',
-      bloom:  'sepia(1) saturate(5) hue-rotate(5deg) blur(20px)',
-      menuRgb: '255, 165, 0' },
-    { name: 'GREEN', bg: '#00100a', glow: 'rgba(0,255,80,0.35)',
-      filter: 'sepia(1) saturate(8) hue-rotate(80deg) brightness(1.10) contrast(1.10)',
-      bloom:  'sepia(1) saturate(8) hue-rotate(80deg) blur(20px)',
-      menuRgb: '0, 255, 80' },
-    { name: 'WHITE', bg: '#0a0a0d', glow: 'rgba(180,200,255,0.30)',
-      filter: 'brightness(1.10) contrast(1.15) saturate(0.20)',
-      bloom:  'saturate(0.20) blur(20px)',
-      menuRgb: '180, 200, 255' },
-    { name: 'APPLE', bg: '#001400', glow: 'rgba(0,255,100,0.40)',
-      filter: 'sepia(1) saturate(10) hue-rotate(95deg) brightness(1.20) contrast(1.05)',
-      bloom:  'sepia(1) saturate(10) hue-rotate(95deg) blur(20px)',
-      menuRgb: '0, 255, 100' },
+    { name: 'MONO GREEN', rawFg: '#0ccc68', rawBg: '#000000', satColor: 0.0,
+      glow: 'rgba(12,204,104,0.35)',   filter: 'brightness(1.05)',
+      bloom: 'blur(40px)', menuRgb: '12, 204, 104' },
+    { name: 'GHOST',      rawFg: '#a6b3c0', rawBg: '#0b1014', satColor: 0.0,
+      glow: 'rgba(166,179,192,0.20)', filter: 'brightness(0.95)',
+      bloom: 'blur(40px)', menuRgb: '166, 179, 192' },
+    { name: 'NEON CYAN',  rawFg: '#52f7ff', rawBg: '#001018', satColor: 0.6,
+      glow: 'rgba(82,247,255,0.40)',  filter: 'brightness(1.05)',
+      bloom: 'blur(40px)', menuRgb: '82, 247, 255' },
+    /* Boring: white phosphor on black, no saturation mixing.               */
+    { name: 'BORING', rawFg: '#ffffff', rawBg: '#000000', satColor: 0.0,
+      glow: 'rgba(220,220,220,0.25)', filter: 'brightness(1.00)',
+      bloom: 'blur(40px)', menuRgb: '220, 220, 220' },
+    /* E-Ink: fixed light bg; CSS invert+grayscale handles display reversal. */
+    { name: 'E-INK', rawFg: null, rawBg: '#f2f2ec',
+      glow: 'rgba(16,16,16,0.10)',
+      filter: 'invert(1) grayscale(1) brightness(0.95) contrast(0.85)',
+      bloom: 'grayscale(1) blur(40px)', menuRgb: '100, 100, 90', xtermTheme: null },
+    { name: 'AMBER',     rawFg: '#ff8100', rawBg: '#000000', satColor: 0.2,
+      glow: 'rgba(255,129,0,0.40)',  filter: 'brightness(1.05)',
+      bloom: 'blur(40px)', menuRgb: '255, 129, 0' },
+    { name: 'DEEP BLUE', rawFg: '#7fb4ff', rawBg: '#000000', satColor: 0.2,
+      glow: 'rgba(127,180,255,0.35)', filter: 'brightness(1.05)',
+      bloom: 'blur(40px)', menuRgb: '127, 180, 255' },
   ];
-  var profileIdx = 0;
+  var profileIdx = 5; /* Default: AMBER */
 
   /* Inject a <style> block with hardcoded RGB values so there are no CSS   */
   /* variable references that browsers can stale-cache on profile changes.  */
@@ -376,19 +451,57 @@ body.crt-boot {
       '.crt-slider::-webkit-slider-thumb{background:rgba('+rgb+',0.85);}' +
       '.crt-slider::-moz-range-thumb{background:rgba('+rgb+',0.85);}';
   }
-  updateMenuTheme(profiles[0].menuRgb);
+  /* Update xterm.js terminal colour theme at runtime via window.term.     */
+  /* window.term is set asynchronously by ttyd after our script runs, so  */
+  /* applyXtermTheme polls until it is available.                         */
+  /* Optional cb is called once the theme is applied (used for boot anim) */
+  function applyXtermTheme(theme, cb) {
+    if (!theme) { if (cb) cb(); return; }
+    if (window.term && window.term.options) {
+      try { window.term.options.theme = theme; } catch (e) {}
+      /* Double rAF: first rAF lets xterm schedule its redraw, second waits */
+      /* for that redraw to actually land on the canvas before boot reveals  */
+      /* the terminal content via the clip-path sweep.                       */
+      if (cb) requestAnimationFrame(function () { requestAnimationFrame(cb); });
+    } else {
+      setTimeout(function () { applyXtermTheme(theme, cb); }, 50);
+    }
+  }
+
+  /* Returns {fg, bg, theme} for a profile at the current contrastLevel.   */
+  function computeColors(p) {
+    if (!p.rawFg) return { fg: null, bg: p.rawBg, theme: p.xtermTheme || null };
+    var c = computePhosphorColors(p.rawFg, p.rawBg, p.satColor, contrastLevel);
+    return { fg: c.fg, bg: c.bg, theme: makePhosphorTheme(c.fg, c.bg) };
+  }
+
+  /* Apply initial profile immediately so JS state matches CSS defaults.   */
+  (function () {
+    var p = profiles[profileIdx];
+    var c = computeColors(p);
+    document.documentElement.style.setProperty('--crt-bg',     c.bg);
+    document.documentElement.style.setProperty('--crt-glow',   p.glow);
+    document.documentElement.style.setProperty('--crt-filter', p.filter);
+    document.body.style.background = c.bg;
+    updateMenuTheme(p.menuRgb);
+    applyXtermTheme(c.theme, function () {
+      document.body.classList.add('crt-boot');
+    });
+  }());
 
   function applyProfile(p) {
+    var c = computeColors(p);
     var s = document.documentElement.style;
-    s.setProperty('--crt-bg',     p.bg);
+    s.setProperty('--crt-bg',     c.bg);
     s.setProperty('--crt-glow',   p.glow);
     s.setProperty('--crt-filter', p.filter);
-    document.body.style.background = p.bg;
+    document.body.style.background = c.bg;
     var bc = document.getElementById('crt-bloom-canvas');
     if (bc) bc.style.filter = p.bloom;
     var lbl = document.getElementById('crt-profile-label');
     if (lbl) lbl.textContent = p.name;
     updateMenuTheme(p.menuRgb);
+    applyXtermTheme(c.theme);
   }
 
   /* ── Effect definitions ────────────────────────────────────────────── */
@@ -402,13 +515,12 @@ body.crt-boot {
   var effectDefs = [
     {
       id: 'bloom', label: 'BLOOM', default: 50,
-      /* Map 0–100% to 0–0.40 opacity. The bloom canvas is a full-res     */
-      /* blurred copy of the terminal; at full opacity (1.0) via screen   */
-      /* blend it would be far too strong. 0.40 maximum keeps it in the   */
-      /* same perceptual range as cool-retro-term's bloom setting.        */
+      /* Map 0–100% directly to 0–1.0 opacity. blur(20px)+brightness(2)   */
+      /* on the canvas already limits overshoot; screen blend on a dark    */
+      /* background saturates gracefully so opacity 1.0 is safe.          */
       apply: function (v) {
         var el = document.getElementById('crt-bloom');
-        if (el) el.style.opacity = (v / 100 * 0.40).toFixed(3);
+        if (el) el.style.opacity = (v / 100).toFixed(3);
       },
     },
     {
@@ -457,6 +569,23 @@ body.crt-boot {
         }
       },
     },
+    {
+      id: 'contrast', label: 'CONTRAST', default: 80,
+      /* Replicates cool-retro-term's contrast knob: shifts both fg and bg. */
+      /* 100% = saturatedColor fg / black bg. 0% = ~30% of phosphor on bg.  */
+      /* Only affects phosphor profiles that have a rawFg colour.           */
+      apply: function (v) {
+        contrastLevel = v / 100;
+        var p = profiles[profileIdx];
+        if (!p.rawFg) return;
+        var c = computePhosphorColors(p.rawFg, p.rawBg, p.satColor, contrastLevel);
+        document.documentElement.style.setProperty('--crt-bg', c.bg);
+        document.body.style.background = c.bg;
+        if (window.term && window.term.options) {
+          try { window.term.options.theme = makePhosphorTheme(c.fg, c.bg); } catch (e) {}
+        }
+      },
+    },
   ];
 
   /* ── Settings menu ─────────────────────────────────────────────────── */
@@ -482,7 +611,7 @@ body.crt-boot {
 
   var profLabel = document.createElement('span');
   profLabel.id = 'crt-profile-label';
-  profLabel.textContent = profiles[0].name;
+  profLabel.textContent = profiles[profileIdx].name;
 
   var nextBtn = document.createElement('button');
   nextBtn.textContent = '►';
@@ -692,10 +821,8 @@ body.crt-boot {
   }
   setupBloom();
 
-  /* ── Power-on sweep ────────────────────────────────────────────────── */
-  document.addEventListener('DOMContentLoaded', function () {
-    document.body.classList.add('crt-boot');
-  });
+  /* Power-on sweep is triggered by applyXtermTheme's callback above,     */
+  /* so the animation plays only after the phosphor theme is applied.     */
 
 }());
 </script>
