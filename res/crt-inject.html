@@ -28,7 +28,7 @@
 <!-- Noise overlay -->
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
      style="position:fixed;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:8999;opacity:0.05;mix-blend-mode:screen;">
+            pointer-events:none;z-index:8999;opacity:0.08;mix-blend-mode:screen;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
 
@@ -67,7 +67,7 @@ html, body { background: var(--crt-bg) !important; }
   pointer-events: none;
   z-index: 8998;
   mix-blend-mode: screen;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 #crt-bloom-canvas {
   position: absolute;
@@ -123,8 +123,8 @@ html, body { background: var(--crt-bg) !important; }
 /* ── Horizontal jitter ───────────────────────────────────────────────── */
 @keyframes crt-jitter {
   0%,100% { transform: translateX(0);    }
-  15%     { transform: translateX(-2px); }
-  30%     { transform: translateX( 2px); }
+  15%     { transform: translateX(-1px); }
+  30%     { transform: translateX( 1px); }
   45%     { transform: translateX(-1px); }
   60%     { transform: translateX( 1px); }
   75%     { transform: translateX(0);    }
@@ -154,11 +154,11 @@ html, body { background: var(--crt-bg) !important; }
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0)      0%,   /* tail end — fully faded     */
-    rgba(255, 255, 255, 0.03)  45%,   /* mid trail                  */
-    rgba(255, 255, 255, 0.08)  72%,   /* approaching the beam       */
-    rgba(255, 255, 255, 0.15)  86%,   /* beam shoulder              */
-    rgba(255, 255, 255, 0.25)  95%,   /* peak brightness            */
-    rgba(255, 255, 255, 0.08)  98%,   /* leading-edge falloff       */
+    rgba(255, 255, 255, 0.01)  45%,   /* mid trail                  */
+    rgba(255, 255, 255, 0.03)  72%,   /* approaching the beam       */
+    rgba(255, 255, 255, 0.06)  86%,   /* beam shoulder              */
+    rgba(255, 255, 255, 0.10)  95%,   /* peak brightness            */
+    rgba(255, 255, 255, 0.03)  98%,   /* leading-edge falloff       */
     rgba(255, 255, 255, 0)    100%    /* hard bottom edge gone      */
   );
   animation: crt-glow-line 8s linear infinite;
@@ -166,11 +166,14 @@ html, body { background: var(--crt-bg) !important; }
 
 /* ── Screen flicker ─────────────────────────────────────────────────── */
 @keyframes crt-flicker {
-  0%,94%,100% { opacity: 1;    }
-  95%         { opacity: 0.97; }
-  96%         { opacity: 1;    }
-  97%         { opacity: 0.95; }
-  98%         { opacity: 0.99; }
+  0%,92%,100% { opacity: 1;    }
+  93%         { opacity: 0.96; }
+  94%         { opacity: 1;    }
+  95%         { opacity: 0.92; }
+  96%         { opacity: 0.98; }
+  97%         { opacity: 1;    }
+  98%         { opacity: 0.94; }
+  99%         { opacity: 1;    }
 }
 
 /* ── Power-on horizontal sweep ──────────────────────────────────────── */
