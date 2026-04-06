@@ -16,10 +16,10 @@ FetchContent_MakeAvailable(fmt)
 
 # Make target - 'run' - compiles and runs the produced binary
 add_custom_target(run
-    COMMAND ${CMAKE_COMMAND} -E env clear
-    COMMAND $<TARGET_FILE:${PROJECT_NAME}>
-    DEPENDS ${PROJECT_NAME}
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  COMMAND ${CMAKE_COMMAND} -E env clear
+  COMMAND $<TARGET_FILE:${PROJECT_NAME}>
+  DEPENDS ${PROJECT_NAME}
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
 # Executable
