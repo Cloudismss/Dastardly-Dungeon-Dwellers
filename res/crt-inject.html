@@ -34,14 +34,15 @@
 <style id="crt-styles">
 
 /* ── CSS variables ──────────────────────────────────────────────────── */
+/* Initial "safe" defaults; script overrides these immediately based on CONFIG. */
 :root {
-  --crt-bg:           #010c06;
-  --crt-glow:         rgba(12, 204, 104, 0.35);
-  --crt-glow-rgb:     12, 204, 104;
-  --crt-filter:       brightness(1.05);
-  --crt-scanlines:    0.125;  /* driven by scanlines slider   */
-  --crt-flicker-amt:  0.080;  /* driven by flickering slider  */
-  --crt-jitter-px:    0.60px; /* driven by jitter slider      */
+  --crt-bg:           #000;
+  --crt-glow:         transparent;
+  --crt-glow-rgb:     0,0,0;
+  --crt-filter:       none;
+  --crt-scanlines:    0;
+  --crt-flicker-amt:  0;
+  --crt-jitter-px:    0;
 }
 
 /* ── Base background ────────────────────────────────────────────────── */
@@ -70,7 +71,7 @@ html, body { background: var(--crt-bg) !important; }
   pointer-events: none;
   z-index: 8998;
   mix-blend-mode: screen;
-  opacity: 0.50;
+  opacity: 0;
   transition: opacity 0.2s;
 }
 #crt-bloom-canvas {
@@ -141,7 +142,7 @@ html, body { background: var(--crt-bg) !important; }
   );
   animation: crt-glow-line 8s linear infinite;
   transition: opacity 0.2s;
-  opacity: 0.40;
+  opacity: 0;
 }
 
 /* ── Flicker ────────────────────────────────────────────────────────── */
@@ -325,6 +326,18 @@ body.crt-boot {
 (function () {
   'use strict';
 
+  /* ── Configuration — CENTRAL DEFAULTS ──────────────────────────────── */
+  var CONFIG = {
+    profileIdx: 0,   /* 0: GREEN, 1: GHOST, 2: NEON, 3: BORING, 4: E-INK, 5: AMBER, 6: BLUE */
+    bloom:      50,  /* % */
+    glowline:   40,  /* % */
+    scanlines:  25,  /* % */
+    noise:      15,  /* % */
+    jitter:     15,  /* % */
+    flicker:    10,  /* % */
+    contrast:   80,  /* % */
+  };
+
   /* ── Colour helpers ────────────────────────────────────────────────── */
   function h2a(h) {
     var v = parseInt(h.replace('#', ''), 16);
@@ -343,7 +356,7 @@ body.crt-boot {
   /*   bgRendered     = mix(saturatedColor, rawBg, 0.7 + contrast × 0.3)  */
   /* Both fg and bg vary with contrast — contrast shifts fg brightness     */
   /* AND adds a white-mix component (e.g. blue channel) from satColor.    */
-  var contrastLevel = 0.80;   /* driven by contrast slider */
+  var contrastLevel = CONFIG.contrast / 100;
 
   function computePhosphorColors(rawFgHex, rawBgHex, satColor, contrast) {
     var f = h2a(rawFgHex), b = h2a(rawBgHex);
@@ -382,35 +395,11 @@ body.crt-boot {
     };
   }
 
-  /* ── VT323 font ────────────────────────────────────────────────────── */
-  (function () {
-    var c = computePhosphorColors('#0ccc68', '#000000', 0.0, contrastLevel);
-    window.tty_options = Object.assign(window.tty_options || {}, {
-      fontFamily: "'VT323', 'Courier New', monospace",
-      fontSize:   18,
-      theme:      makePhosphorTheme(c.fg, c.bg),
-    });
-  }());
-
-  /* ── Static overlays ───────────────────────────────────────────────── */
-  var overlay = document.createElement('div');
-  overlay.id  = 'crt-overlay';
-
-  var glowLine = document.createElement('div');
-  glowLine.id  = 'crt-glow-line';
-
-  function setupOverlays() {
-    var tc = document.getElementById('terminal-container');
-    if (!tc) { setTimeout(setupOverlays, 100); return; }
-    tc.appendChild(overlay);
-    tc.appendChild(glowLine);
-  }
-  setupOverlays();
-
   /* ── Phosphor profiles ─────────────────────────────────────────────── */
   /* rawFg/rawBg/satColor sourced from cool-retro-term ApplicationSettings.qml. */
   /* fg/bg are computed at runtime by computePhosphorColors so they track   */
   /* the contrast slider. E-Ink keeps a fixed CSS invert approach.          */
+  var profileIdx = CONFIG.profileIdx;
   var profiles = [
     { name: 'GREEN',      rawFg: '#0ccc68', rawBg: '#000000', satColor: 0.0,
       glow: 'rgba(12,204,104,0.35)',   filter: 'brightness(1.05)',
@@ -437,7 +426,17 @@ body.crt-boot {
       glow: 'rgba(127,180,255,0.35)', filter: 'brightness(1.05)',
       bloom: 'blur(40px)', menuRgb: '127, 180, 255' },
   ];
-  var profileIdx = 0; /* Default: GREEN */
+
+  /* ── VT323 font ────────────────────────────────────────────────────── */
+  (function () {
+    var p = profiles[profileIdx];
+    var c = computePhosphorColors(p.rawFg || '#ffffff', p.rawBg, p.satColor || 0, contrastLevel);
+    window.tty_options = Object.assign(window.tty_options || {}, {
+      fontFamily: "'VT323', 'Courier New', monospace",
+      fontSize:   18,
+      theme:      makePhosphorTheme(c.fg, c.bg),
+    });
+  }());
 
   /* Inject a <style> block with hardcoded RGB values so there are no CSS   */
   /* variable references that browsers can stale-cache on profile changes.  */
@@ -500,6 +499,21 @@ body.crt-boot {
     });
   }());
 
+  /* ── Static overlays ───────────────────────────────────────────────── */
+  var overlay = document.createElement('div');
+  overlay.id  = 'crt-overlay';
+
+  var glowLine = document.createElement('div');
+  glowLine.id  = 'crt-glow-line';
+
+  function setupOverlays() {
+    var tc = document.getElementById('terminal-container');
+    if (!tc) { setTimeout(setupOverlays, 100); return; }
+    tc.appendChild(overlay);
+    tc.appendChild(glowLine);
+  }
+  setupOverlays();
+
   function applyProfile(p) {
     var c = computeColors(p);
     var s = document.documentElement.style;
@@ -522,11 +536,11 @@ body.crt-boot {
   /*   default  — initial slider value (0–100)                            */
   /*   apply(v) — called on every slider change with value 0–100          */
   /* ─────────────────────────────────────────────────────────────────── */
-  var jitterStrength = 15;   /* read by scheduleJitter */
+  var jitterStrength = CONFIG.jitter;
 
   var effectDefs = [
     {
-      id: 'bloom', label: 'BLOOM', default: 50,
+      id: 'bloom', label: 'BLOOM', default: CONFIG.bloom,
       /* Map 0–100% directly to 0–1.0 opacity. blur(20px)+brightness(2)   */
       /* on the canvas already limits overshoot; screen blend on a dark    */
       /* background saturates gracefully so opacity 1.0 is safe.          */
@@ -536,14 +550,14 @@ body.crt-boot {
       },
     },
     {
-      id: 'glowline', label: 'GLOW LINE', default: 40,
+      id: 'glowline', label: 'GLOW LINE', default: CONFIG.glowline,
       apply: function (v) {
         var el = document.getElementById('crt-glow-line');
         if (el) el.style.opacity = (v / 100).toFixed(2);
       },
     },
     {
-      id: 'scanlines', label: 'SCANLINES', default: 25,
+      id: 'scanlines', label: 'SCANLINES', default: CONFIG.scanlines,
       /* 26% → 0.13 (current default). Max 100% → 0.50.                 */
       apply: function (v) {
         document.documentElement.style.setProperty(
@@ -551,7 +565,7 @@ body.crt-boot {
       },
     },
     {
-      id: 'noise', label: 'FILM GRAIN', default: 15,
+      id: 'noise', label: 'FILM GRAIN', default: CONFIG.noise,
       /* 15% → opacity 0.08 (≈ noise at reference strength).             */
       apply: function (v) {
         var el = document.getElementById('crt-noise-svg');
@@ -559,7 +573,7 @@ body.crt-boot {
       },
     },
     {
-      id: 'jitter', label: 'JITTER', default: 15,
+      id: 'jitter', label: 'JITTER', default: CONFIG.jitter,
       /* Controls both interval frequency and pixel displacement.         */
       apply: function (v) {
         jitterStrength = v;
@@ -568,7 +582,7 @@ body.crt-boot {
       },
     },
     {
-      id: 'flicker', label: 'FLICKERING', default: 10,
+      id: 'flicker', label: 'FLICKERING', default: CONFIG.flicker,
       /* --crt-flicker-amt is used directly in the keyframe calc().       */
       /* 10% → 0.08 amt. Max 100% → 0.80 amt (very deep dips).           */
       apply: function (v) {
@@ -582,7 +596,7 @@ body.crt-boot {
       },
     },
     {
-      id: 'contrast', label: 'CONTRAST', default: 80,
+      id: 'contrast', label: 'CONTRAST', default: CONFIG.contrast,
       /* Replicates cool-retro-term's contrast knob: shifts both fg and bg. */
       /* 100% = saturatedColor fg / black bg. 0% = ~30% of phosphor on bg.  */
       /* Only affects phosphor profiles that have a rawFg colour.           */
@@ -767,6 +781,7 @@ body.crt-boot {
 
     var bloomWrap   = document.createElement('div');
     bloomWrap.id    = 'crt-bloom';
+    bloomWrap.style.opacity = (CONFIG.bloom / 100).toFixed(3);
     var bloomCanvas = document.createElement('canvas');
     bloomCanvas.id  = 'crt-bloom-canvas';
     bloomWrap.appendChild(bloomCanvas);
