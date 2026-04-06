@@ -22,6 +22,12 @@
     <feColorMatrix type="saturate" values="0"/>
   </filter>
 
+  <!-- Bezel clip: full-viewport rect minus a rounded-rect hole (evenodd).  -->
+  <!-- JS updates the path whenever frame size or radius changes.           -->
+  <clipPath id="bezel-clip" clipPathUnits="userSpaceOnUse">
+    <path id="bezel-clip-path" clip-rule="evenodd"/>
+  </clipPath>
+
 </svg>
 
 <!-- Noise overlay -->
@@ -43,6 +49,9 @@
   --crt-scanlines:    0;
   --crt-flicker-amt:  0;
   --crt-jitter-px:    0;
+  --crt-frame-px:     0;
+  --crt-margin-px:    0;
+  --crt-radius-px:    10px;
 }
 
 /* ── Base background ────────────────────────────────────────────────── */
@@ -50,7 +59,14 @@
 /* Forcing its background here makes the phosphor ambient colour appear  */
 /* immediately on paint, before window.term is available to set the      */
 /* xterm theme — so the boot animation already shows the right colour.  */
-html, body { background: var(--crt-bg) !important; }
+html, body { 
+  background: var(--crt-bg) !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
 .xterm-viewport { background-color: var(--crt-bg) !important; }
 
 /* ── Phosphor tint ──────────────────────────────────────────────────── */
@@ -58,10 +74,22 @@ html, body { background: var(--crt-bg) !important; }
 
 /* ── Rounded bezel ──────────────────────────────────────────────────── */
 #terminal-container {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 80px rgba(0, 0, 0, 0.95);
+  /* inset drives the margin: shrinks the container from all four viewport
+     edges so the terminal content sits inside the bezel frame. */
+  position: fixed !important;
+  inset: var(--crt-margin-px) !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  border-radius: var(--crt-radius-px);
+  overflow: hidden !important;
+  box-shadow:
+    inset 0 0 15px rgba(0,0,0,0.85),
+    0 0 80px rgba(0,0,0,0.95);
+  z-index: 1;
 }
 
 /* ── Bloom ──────────────────────────────────────────────────────────── */
@@ -116,6 +144,19 @@ html, body { background: var(--crt-bg) !important; }
   75%     { transform: translateX(0); }
 }
 #terminal-container.crt-jitter { animation: crt-jitter 0.12s linear; }
+
+/* ── Bezel ──────────────────────────────────────────────────────────── */
+/* Full-viewport solid fill, clipped by an evenodd SVG path that cuts a  */
+/* rounded-rect hole for the terminal area. Outer corners are square      */
+/* (viewport boundary); inner corners are rounded (the SVG path).        */
+#crt-bezel {
+  position: fixed !important;
+  inset: 0 !important;
+  background: #1a1a1a;
+  pointer-events: none;
+  z-index: 9100;
+  clip-path: url(#bezel-clip);
+}
 
 /* ── Glow line ──────────────────────────────────────────────────────── */
 @keyframes crt-glow-line {
@@ -335,6 +376,8 @@ body.crt-boot {
     noise:      15,  /* % */
     jitter:     15,  /* % */
     flicker:    10,  /* % */
+    radius:     20,  /* % */
+    framesize:  10,  /* % */
     contrast:   80,  /* % */
   };
 
@@ -492,10 +535,20 @@ body.crt-boot {
     s.setProperty('--crt-glow',     p.glow);
     s.setProperty('--crt-glow-rgb', p.menuRgb);
     s.setProperty('--crt-filter',   p.filter);
+    
+    /* Ensure layout variables are available immediately for CSS calc(). */
+    /* margin is derived from framesize — terminal insets to sit inside the bezel. */
+    var framePx = (CONFIG.framesize / 100 * 120);
+    s.setProperty('--crt-frame-px',  framePx.toFixed(0) + 'px');
+    s.setProperty('--crt-margin-px', framePx.toFixed(0) + 'px');
+    s.setProperty('--crt-radius-px', (CONFIG.radius / 100 * 80).toFixed(0) + 'px');
+
     document.body.style.background = c.bg;
     updateMenuTheme(p.menuRgb);
     applyXtermTheme(c.theme, function () {
       document.body.classList.add('crt-boot');
+      /* Trigger initial resize to fit new padded bounds. */
+      window.dispatchEvent(new Event('resize'));
     });
   }());
 
@@ -506,12 +559,71 @@ body.crt-boot {
   var glowLine = document.createElement('div');
   glowLine.id  = 'crt-glow-line';
 
+  /* Bezel lives on body (not inside terminal-container) because its      */
+  /* clip-path covers the full viewport independent of terminal layout.   */
+  var bezel = document.createElement('div');
+  bezel.id  = 'crt-bezel';
+  document.body.appendChild(bezel);
+
+  /* ── Bezel clip-path ───────────────────────────────────────────────── */
+  /* Recomputes the evenodd SVG path: outer viewport rect minus a rounded */
+  /* inner rect that matches the terminal area. Called on resize and      */
+  /* whenever frame size or radius changes.                               */
+  var bezelClipPath = document.getElementById('bezel-clip-path');
+  function updateBezelClip() {
+    var s   = getComputedStyle(document.documentElement);
+    var fpx = parseFloat(s.getPropertyValue('--crt-frame-px'))  || 0;
+    var rpx = parseFloat(s.getPropertyValue('--crt-radius-px')) || 0;
+    var W = window.innerWidth, H = window.innerHeight;
+    var x = fpx, y = fpx, w = W - 2 * fpx, h = H - 2 * fpx;
+    rpx = Math.min(rpx, w / 2, h / 2);
+    /* Outer rect (CW) then inner rounded rect (CW) — evenodd makes hole. */
+    var d =
+      'M0,0 H' + W + ' V' + H + ' H0 Z' +
+      ' M' + (x + rpx) + ',' + y +
+      ' H' + (x + w - rpx) +
+      ' Q' + (x + w) + ',' + y + ' ' + (x + w) + ',' + (y + rpx) +
+      ' V' + (y + h - rpx) +
+      ' Q' + (x + w) + ',' + (y + h) + ' ' + (x + w - rpx) + ',' + (y + h) +
+      ' H' + (x + rpx) +
+      ' Q' + x + ',' + (y + h) + ' ' + x + ',' + (y + h - rpx) +
+      ' V' + (y + rpx) +
+      ' Q' + x + ',' + y + ' ' + (x + rpx) + ',' + y + ' Z';
+    bezelClipPath.setAttribute('d', d);
+  }
+  updateBezelClip();
+  window.addEventListener('resize', updateBezelClip);
+
+  /* Persistent observers to handle Preact's dynamic DOM swapping. */
+  var ro = new ResizeObserver(function (entries) {
+    for (var entry of entries) {
+      /* Immediate resize. */
+      window.dispatchEvent(new Event('resize'));
+      /* Delayed resize to catch any ttyd settles. */
+      setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 50);
+      if (typeof resizeBloom === 'function') resizeBloom();
+    }
+  });
+
   function setupOverlays() {
     var tc = document.getElementById('terminal-container');
-    if (!tc) { setTimeout(setupOverlays, 100); return; }
+    if (!tc) return;
+
+    /* Avoid duplicate appends if setupOverlays is called again. */
+    if (tc.contains(overlay)) return;
+
     tc.appendChild(overlay);
     tc.appendChild(glowLine);
+
+    var termEl = tc.querySelector('.terminal');
+    if (termEl) ro.observe(termEl);
   }
+
+  /* Listen for any changes to <body> to re-attach overlays if Preact swaps them. */
+  var bodyObserver = new MutationObserver(setupOverlays);
+  bodyObserver.observe(document.body, { childList: true, subtree: true });
+  
+  /* Initial run. */
   setupOverlays();
 
   function applyProfile(p) {
@@ -596,6 +708,28 @@ body.crt-boot {
       },
     },
     {
+      id: 'radius', label: 'ROUNDED FRAME', default: CONFIG.radius,
+      toggleOnly: true,
+      /* Toggle: ON = 20% (16px), OFF = 0% (square).                     */
+      apply: function (v) {
+        document.documentElement.style.setProperty(
+          '--crt-radius-px', (v / 100 * 80).toFixed(0) + 'px');
+        updateBezelClip();
+      },
+    },
+    {
+      id: 'framesize', label: 'FRAME SIZE', default: CONFIG.framesize,
+      /* 10% → 12px border. 100% → 120px. 0% → 0px.                      */
+      /* margin tracks framesize so the terminal always sits inside the bezel. */
+      apply: function (v) {
+        var px = (v / 100 * 120).toFixed(0) + 'px';
+        document.documentElement.style.setProperty('--crt-frame-px',  px);
+        document.documentElement.style.setProperty('--crt-margin-px', px);
+        updateBezelClip();
+        window.dispatchEvent(new Event('resize'));
+      },
+    },
+    {
       id: 'contrast', label: 'CONTRAST', default: CONFIG.contrast,
       /* Replicates cool-retro-term's contrast knob: shifts both fg and bg. */
       /* 100% = saturatedColor fg / black bg. 0% = ~30% of phosphor on bg.  */
@@ -674,43 +808,46 @@ body.crt-boot {
     toggleBtn.className   = 'crt-effect-toggle';
     toggleBtn.textContent = 'ON';
 
-    var valDisplay = document.createElement('span');
-    valDisplay.className   = 'crt-effect-value';
-    valDisplay.textContent = def.default + '%';
-
     header.appendChild(lbl);
     header.appendChild(toggleBtn);
-    header.appendChild(valDisplay);
 
-    var slider = document.createElement('input');
-    slider.type      = 'range';
-    slider.className = 'crt-slider';
-    slider.min       = '0';
-    slider.max       = '100';
-    slider.value     = String(def.default);
+    if (!def.toggleOnly) {
+      var valDisplay = document.createElement('span');
+      valDisplay.className   = 'crt-effect-value';
+      valDisplay.textContent = def.default + '%';
+      header.appendChild(valDisplay);
+    }
 
-    slider.addEventListener('input', function () {
-      var v = parseInt(this.value, 10);
-      valDisplay.textContent = v + '%';
-      def.apply(v);
-    });
+    var slider = !def.toggleOnly && (function () {
+      var s = document.createElement('input');
+      s.type      = 'range';
+      s.className = 'crt-slider';
+      s.min       = '0';
+      s.max       = '100';
+      s.value     = String(def.default);
+      s.addEventListener('input', function () {
+        var v = parseInt(this.value, 10);
+        valDisplay.textContent = v + '%';
+        def.apply(v);
+      });
+      return s;
+    }());
 
     toggleBtn.addEventListener('click', function () {
       enabled = !enabled;
       if (enabled) {
-        slider.disabled         = false;
-        slider.value            = String(savedValue);
-        valDisplay.textContent  = savedValue + '%';
-        header.className        = 'crt-effect-header';
-        toggleBtn.textContent   = 'ON';
-        toggleBtn.className     = 'crt-effect-toggle';
+        if (slider) { slider.disabled = false; slider.value = String(savedValue); }
+        if (valDisplay) valDisplay.textContent = savedValue + '%';
+        header.className      = 'crt-effect-header';
+        toggleBtn.textContent = 'ON';
+        toggleBtn.className   = 'crt-effect-toggle';
         def.apply(savedValue);
       } else {
-        savedValue              = parseInt(slider.value, 10);
-        slider.disabled         = true;
-        header.className        = 'crt-effect-header dim';
-        toggleBtn.textContent   = 'OFF';
-        toggleBtn.className     = 'crt-effect-toggle off';
+        savedValue = slider ? parseInt(slider.value, 10) : savedValue;
+        if (slider) slider.disabled = true;
+        header.className      = 'crt-effect-header dim';
+        toggleBtn.textContent = 'OFF';
+        toggleBtn.className   = 'crt-effect-toggle off';
         def.apply(0);
       }
     });
@@ -719,7 +856,7 @@ body.crt-boot {
     def.apply(def.default);
 
     row.appendChild(header);
-    row.appendChild(slider);
+    if (slider) row.appendChild(slider);
     panel.appendChild(row);
   });
 
@@ -775,99 +912,110 @@ body.crt-boot {
   scheduleJitter();
 
   /* ── Bloom ─────────────────────────────────────────────────────────── */
-  function setupBloom() {
-    var screen = document.querySelector('.xterm-screen');
-    if (!screen) { setTimeout(setupBloom, 200); return; }
+  var bloomCanvas, bloomCtx, tmp, tmpCtx, extract, extractCtx;
+  var SCALE = 0.50;
 
-    var bloomWrap   = document.createElement('div');
-    bloomWrap.id    = 'crt-bloom';
+  function resizeBloom() {
+    var screen = document.querySelector('.xterm-screen');
+    if (!screen || !bloomCanvas) return;
+    var w = Math.max(1, Math.round(screen.offsetWidth  * SCALE));
+    var h = Math.max(1, Math.round(screen.offsetHeight * SCALE));
+    tmp.width  = extract.width  = bloomCanvas.width  = w;
+    tmp.height = extract.height = bloomCanvas.height = h;
+    var r = screen.getBoundingClientRect();
+    bloomCanvas.style.left   = r.left   + 'px';
+    bloomCanvas.style.top    = r.top    + 'px';
+    bloomCanvas.style.width  = r.width  + 'px';
+    bloomCanvas.style.height = r.height + 'px';
+  }
+
+  function setupBloom() {
+    if (document.getElementById('crt-bloom')) return;
+
+    var bloomWrap = document.createElement('div');
+    bloomWrap.id = 'crt-bloom';
     bloomWrap.style.opacity = (CONFIG.bloom / 100).toFixed(3);
-    var bloomCanvas = document.createElement('canvas');
-    bloomCanvas.id  = 'crt-bloom-canvas';
+    bloomCanvas = document.createElement('canvas');
+    bloomCanvas.id = 'crt-bloom-canvas';
     bloomWrap.appendChild(bloomCanvas);
     document.body.appendChild(bloomWrap);
-    var bloomCtx = bloomCanvas.getContext('2d');
+    bloomCtx = bloomCanvas.getContext('2d');
 
-    var tmp        = document.createElement('canvas');
-    var tmpCtx     = tmp.getContext('2d');
-    var extract    = document.createElement('canvas');
-    var extractCtx = extract.getContext('2d');
-    var SCALE      = 0.50;
+    tmp = document.createElement('canvas');
+    tmpCtx = tmp.getContext('2d');
+    extract = document.createElement('canvas');
+    extractCtx = extract.getContext('2d');
 
-    function resize() {
-      var w = Math.max(1, Math.round(screen.offsetWidth  * SCALE));
-      var h = Math.max(1, Math.round(screen.offsetHeight * SCALE));
-      tmp.width  = extract.width  = bloomCanvas.width  = w;
-      tmp.height = extract.height = bloomCanvas.height = h;
-      var r = screen.getBoundingClientRect();
+    window.addEventListener('resize', resizeBloom);
+    /* ResizeBloom will be called by the global ResizeObserver in setupOverlays. */
+  }
+
+  function tickBloom(ts) {
+    requestAnimationFrame(tickBloom);
+    var screen = document.querySelector('.xterm-screen');
+    if (!screen || !bloomCtx) return;
+    
+    /* Recalculate position every frame to prevent detachment during moves. */
+    var r = screen.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) {
       bloomCanvas.style.left   = r.left   + 'px';
       bloomCanvas.style.top    = r.top    + 'px';
       bloomCanvas.style.width  = r.width  + 'px';
       bloomCanvas.style.height = r.height + 'px';
+      
+      var w = Math.max(1, Math.round(r.width  * SCALE));
+      var h = Math.max(1, Math.round(r.height * SCALE));
+      if (bloomCanvas.width !== w || bloomCanvas.height !== h) {
+        tmp.width  = extract.width  = bloomCanvas.width  = w;
+        tmp.height = extract.height = bloomCanvas.height = h;
+      }
     }
-    resize();
-    new ResizeObserver(resize).observe(screen);
-    window.addEventListener('resize', resize);
 
-    var lastFrame = 0;
-    function tick(ts) {
-      requestAnimationFrame(tick);
-      if (ts - lastFrame < 50) return;
-      lastFrame = ts;
-      var w = tmp.width, h = tmp.height;
-      if (!w || !h) return;
+    var w = tmp.width, h = tmp.height;
+    if (!w || !h) return;
 
-      /* Pass 1 — composite all xterm canvas layers at half resolution.    */
-      tmpCtx.clearRect(0, 0, w, h);
-      screen.querySelectorAll('canvas').forEach(function (c) {
-        if (c === bloomCanvas) return;
-        try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
-      });
+    /* Pass 1 — composite all xterm canvas layers at half resolution.    */
+    tmpCtx.clearRect(0, 0, w, h);
+    screen.querySelectorAll('canvas').forEach(function (c) {
+      if (c === bloomCanvas) return;
+      try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
+    });
 
-      /* Adaptive brightness: target the background intensity to land     */
-      /* safely below the contrast threshold (0.5). This ensures the      */
-      /* background is crushed to absolute black regardless of the        */
-      /* contrast slider setting, keeping the bloom mask stable.          */
-      var _p = profiles[profileIdx];
-      var _bg = _p.rawFg
-        ? computePhosphorColors(_p.rawFg, _p.rawBg, _p.satColor, contrastLevel).bg
-        : _p.rawBg;
-      var _bgc = h2a(_bg);
-      var _bgMax = Math.max(_bgc[0], _bgc[1], _bgc[2]);
-      /* 120 / bgMax targets ~0.47, safely below the 0.5 threshold.       */
-      /* Max gain 15x ensures text survives even at 0.0 contrast.         */
-      var _brt = _bgMax > 8 ? (120 / _bgMax) : 15;
+    /* Adaptive brightness: target the background intensity to land     */
+    /* safely below the contrast threshold (0.5). This ensures the      */
+    /* background is crushed to absolute black regardless of the        */
+    /* contrast slider setting, keeping the bloom mask stable.          */
+    var _p = profiles[profileIdx];
+    var _bg = _p.rawFg
+      ? computePhosphorColors(_p.rawFg, _p.rawBg, _p.satColor, contrastLevel).bg
+      : _p.rawBg;
+    var _bgc = h2a(_bg);
+    var _bgMax = Math.max(_bgc[0], _bgc[1], _bgc[2]);
+    var _brt = _bgMax > 8 ? (120 / _bgMax) : 15;
 
-      /* Pass 2 — minimal blur to smooth glyphs without killing intensity. */
-      /* 1px blur at SCALE=0.5 preserves peak brightness for the threshold. */
-      extractCtx.clearRect(0, 0, w, h);
-      extractCtx.filter = 'blur(1px)';
-      extractCtx.drawImage(tmp, 0, 0);
-      extractCtx.filter = 'none';
+    /* Pass 2 — minimal blur to smooth glyphs without killing intensity. */
+    extractCtx.clearRect(0, 0, w, h);
+    extractCtx.filter = 'blur(1px)';
+    extractCtx.drawImage(tmp, 0, 0);
+    extractCtx.filter = 'none';
 
-      /* Pass 3 — threshold and colorize: extract a binary mask and fill   */
-      /* it with the phosphor color. grayscale(1) MUST be first to prevent */
-      /* red-channel clipping artifacts during high-gain thresholding.     */
-      bloomCtx.globalCompositeOperation = 'source-over';
-      bloomCtx.clearRect(0, 0, w, h);
-      bloomCtx.fillStyle = '#000';
-      bloomCtx.fillRect(0, 0, w, h);
+    /* Pass 3 — threshold and colorize. */
+    bloomCtx.globalCompositeOperation = 'source-over';
+    bloomCtx.clearRect(0, 0, w, h);
+    bloomCtx.fillStyle = '#000';
+    bloomCtx.fillRect(0, 0, w, h);
+    bloomCtx.filter = 'grayscale(1) brightness(' + _brt.toFixed(2) + ') contrast(12)';
+    bloomCtx.drawImage(extract, 0, 0);
+    bloomCtx.filter = 'none';
 
-      bloomCtx.filter = 'grayscale(1) brightness(' + _brt.toFixed(2) + ') contrast(12)';
-      bloomCtx.drawImage(extract, 0, 0);
-      bloomCtx.filter = 'none';
-
-      /* Multiply the binary mask with the profile's phosphor color.      */
-      /* Black stays black (transparent in 'screen' blend mode); white    */
-      /* becomes the target phosphor hue.                                 */
-      bloomCtx.globalCompositeOperation = 'multiply';
-      bloomCtx.fillStyle = 'rgb(' + _p.menuRgb + ')';
-      bloomCtx.fillRect(0, 0, w, h);
-      bloomCtx.globalCompositeOperation = 'source-over';
-    }
-    requestAnimationFrame(tick);
+    bloomCtx.globalCompositeOperation = 'multiply';
+    bloomCtx.fillStyle = 'rgb(' + _p.menuRgb + ')';
+    bloomCtx.fillRect(0, 0, w, h);
+    bloomCtx.globalCompositeOperation = 'source-over';
   }
+  
   setupBloom();
+  requestAnimationFrame(tickBloom);
 
   /* Power-on sweep is triggered by applyXtermTheme's callback above,     */
   /* so the animation plays only after the phosphor theme is applied.     */
