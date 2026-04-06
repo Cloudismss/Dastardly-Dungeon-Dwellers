@@ -35,13 +35,13 @@
 
 /* ── CSS variables ──────────────────────────────────────────────────── */
 :root {
-  --crt-bg:           #0f0802;
-  --crt-glow:         rgba(255, 129, 0, 0.40);
-  --crt-glow-rgb:     255, 129, 0;
-  --crt-filter:       brightness(1.10) contrast(1.08);
-  --crt-scanlines:    0.13;   /* driven by scanlines slider   */
-  --crt-flicker-amt:  0.08;   /* driven by flickering slider  */
-  --crt-jitter-px:    1px;    /* driven by jitter slider      */
+  --crt-bg:           #010c06;
+  --crt-glow:         rgba(12, 204, 104, 0.35);
+  --crt-glow-rgb:     12, 204, 104;
+  --crt-filter:       brightness(1.05);
+  --crt-scanlines:    0.125;  /* driven by scanlines slider   */
+  --crt-flicker-amt:  0.080;  /* driven by flickering slider  */
+  --crt-jitter-px:    0.60px; /* driven by jitter slider      */
 }
 
 /* ── Base background ────────────────────────────────────────────────── */
@@ -70,7 +70,7 @@ html, body { background: var(--crt-bg) !important; }
   pointer-events: none;
   z-index: 8998;
   mix-blend-mode: screen;
-  opacity: 0.20;
+  opacity: 0.50;
   transition: opacity 0.2s;
 }
 #crt-bloom-canvas {
@@ -141,6 +141,7 @@ html, body { background: var(--crt-bg) !important; }
   );
   animation: crt-glow-line 8s linear infinite;
   transition: opacity 0.2s;
+  opacity: 0.40;
 }
 
 /* ── Flicker ────────────────────────────────────────────────────────── */
@@ -383,7 +384,7 @@ body.crt-boot {
 
   /* ── VT323 font ────────────────────────────────────────────────────── */
   (function () {
-    var c = computePhosphorColors('#ff8100', '#000000', 0.2, contrastLevel);
+    var c = computePhosphorColors('#0ccc68', '#000000', 0.0, contrastLevel);
     window.tty_options = Object.assign(window.tty_options || {}, {
       fontFamily: "'VT323', 'Courier New', monospace",
       fontSize:   18,
@@ -411,7 +412,7 @@ body.crt-boot {
   /* fg/bg are computed at runtime by computePhosphorColors so they track   */
   /* the contrast slider. E-Ink keeps a fixed CSS invert approach.          */
   var profiles = [
-    { name: 'MONO GREEN', rawFg: '#0ccc68', rawBg: '#000000', satColor: 0.0,
+    { name: 'GREEN',      rawFg: '#0ccc68', rawBg: '#000000', satColor: 0.0,
       glow: 'rgba(12,204,104,0.35)',   filter: 'brightness(1.05)',
       bloom: 'blur(40px)', menuRgb: '12, 204, 104' },
     { name: 'GHOST',      rawFg: '#a6b3c0', rawBg: '#0b1014', satColor: 0.0,
@@ -436,7 +437,7 @@ body.crt-boot {
       glow: 'rgba(127,180,255,0.35)', filter: 'brightness(1.05)',
       bloom: 'blur(40px)', menuRgb: '127, 180, 255' },
   ];
-  var profileIdx = 5; /* Default: AMBER */
+  var profileIdx = 0; /* Default: GREEN */
 
   /* Inject a <style> block with hardcoded RGB values so there are no CSS   */
   /* variable references that browsers can stale-cache on profile changes.  */
@@ -535,7 +536,7 @@ body.crt-boot {
       },
     },
     {
-      id: 'glowline', label: 'GLOW LINE', default: 15,
+      id: 'glowline', label: 'GLOW LINE', default: 40,
       apply: function (v) {
         var el = document.getElementById('crt-glow-line');
         if (el) el.style.opacity = (v / 100).toFixed(2);
