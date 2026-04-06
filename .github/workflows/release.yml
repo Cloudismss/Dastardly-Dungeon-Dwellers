@@ -52,34 +52,6 @@ jobs:
         with:
           ref: main
 
-      - name: Pull latest ttyd image
-        run: docker pull tsl0922/ttyd:latest
-
-      - name: Extract ttyd HTML
-        run: |
-          docker run --rm -d --name ttyd-patch -p 17681:17681 tsl0922/ttyd:latest ttyd --port 17681 /bin/sh
-          sleep 2
-          for i in $(seq 1 10); do
-            curl -sf http://localhost:17681/ -o /tmp/ttyd_index.html && [ -s /tmp/ttyd_index.html ] && break
-            rm -f /tmp/ttyd_index.html
-            sleep 1
-          done
-          docker stop ttyd-patch
-          [ -s /tmp/ttyd_index.html ] || { echo "ERROR: failed to extract ttyd index.html"; exit 1; }
-
-      - name: Patch favicon
-        run: |
-          ICO_B64=$(base64 -w 0 res/DDD.ico)
-          sed "s|<link rel=\"icon\" type=\"image/png\" href=\"data:image/png;base64,[^\"]*\"|<link rel=\"icon\" type=\"image/x-icon\" href=\"data:image/x-icon;base64,${ICO_B64}\"|" /tmp/ttyd_index.html > res/index.html
-
-      - name: Inject CRT effects
-        run: |
-          python3 -c "
-          content = open('res/index.html').read()
-          inject  = open('res/crt-inject.html').read()
-          open('res/index.html', 'w').write(content.replace('</body>', inject + '</body>', 1))
-          "
-
       - name: Log in to container registry
         uses: docker/login-action@v3
         with:
