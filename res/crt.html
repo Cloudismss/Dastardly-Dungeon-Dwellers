@@ -350,6 +350,29 @@ body.crt-boot {
   cursor: default;
 }
 
+/* ── Custom profile checkbox ─────────────────────────────────────────── */
+#crt-prof-section { display: flex; align-items: center; justify-content: space-between; }
+#crt-custom-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+#crt-custom-cb { cursor: pointer; margin: 0; width: 11px; height: 11px; }
+
+/* ── Custom color picker ─────────────────────────────────────────────── */
+#crt-color-picker {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 0 3px;
+}
+#crt-color-picker.visible { display: flex; }
+#crt-hue-wheel { cursor: crosshair; display: block; }
+
 </style>
 
 <script id="crt-script">
@@ -459,6 +482,25 @@ body.crt-boot {
       bloom: 'blur(40px)', menuRgb: '197, 255, 255' },
   ];
 
+  /* ── Custom hue state ──────────────────────────────────────────────── */
+  var customHue = 0;
+  var customActive = false;
+  var customProfile = {
+    rawFg: '#ffffff', rawBg: '#000000', satColor: 0.0,
+    glow: 'rgba(255,255,255,0.25)', filter: 'brightness(1.00)',
+    bloom: 'blur(40px)', menuRgb: '255, 255, 255'
+  };
+
+  function hslToRgb(h, s, l) {
+    s /= 100; l /= 100;
+    var a = s * Math.min(l, 1 - l);
+    function f(n) {
+      var k = (n + h / 30) % 12;
+      return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    }
+    return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+  }
+
   /* ── VT323 font ────────────────────────────────────────────────────── */
   (function () {
     var p = profiles[profileIdx];
@@ -489,7 +531,8 @@ body.crt-boot {
       '.crt-effect-toggle.off{color:rgba('+rgb+',0.30);border-color:rgba('+rgb+',0.15);}' +
       '.crt-slider{background:rgba('+rgb+',0.20);}' +
       '.crt-slider::-webkit-slider-thumb{background:rgba('+rgb+',0.85);}' +
-      '.crt-slider::-moz-range-thumb{background:rgba('+rgb+',0.85);}';
+      '.crt-slider::-moz-range-thumb{background:rgba('+rgb+',0.85);}' +
+      '#crt-custom-toggle{color:rgba('+rgb+',0.70);}';
   }
   /* Update xterm.js terminal colour theme at runtime via window.term.     */
   /* window.term is set asynchronously by ttyd after our script runs, so  */
@@ -745,8 +788,24 @@ body.crt-boot {
 
   /* Profile section */
   var profSection = document.createElement('div');
+  profSection.id = 'crt-prof-section';
   profSection.className = 'crt-menu-section';
-  profSection.textContent = 'PROFILE';
+
+  var profTitle = document.createElement('span');
+  profTitle.textContent = 'PROFILE';
+  profSection.appendChild(profTitle);
+
+  var customToggle = document.createElement('label');
+  customToggle.id = 'crt-custom-toggle';
+  var customCb = document.createElement('input');
+  customCb.type = 'checkbox';
+  customCb.id = 'crt-custom-cb';
+  var customLbl = document.createElement('span');
+  customLbl.textContent = 'CUSTOM';
+  customToggle.appendChild(customCb);
+  customToggle.appendChild(customLbl);
+  profSection.appendChild(customToggle);
+
   panel.appendChild(profSection);
 
   var profRow = document.createElement('div');
@@ -771,7 +830,111 @@ body.crt-boot {
   profRow.appendChild(prevBtn);
   profRow.appendChild(profLabel);
   profRow.appendChild(nextBtn);
+
+  /* Custom hue wheel — shown when the CUSTOM checkbox is checked */
+  var pickerDiv = document.createElement('div');
+  pickerDiv.id = 'crt-color-picker';
+
+  var WHEEL_SIZE = 110, OUTER_R = 50, INNER_R = 32;
+  var wheelCanvas = document.createElement('canvas');
+  wheelCanvas.id     = 'crt-hue-wheel';
+  wheelCanvas.width  = WHEEL_SIZE;
+  wheelCanvas.height = WHEEL_SIZE;
+  var wctx = wheelCanvas.getContext('2d');
+
+  function drawHueWheel(hue) {
+    wctx.clearRect(0, 0, WHEEL_SIZE, WHEEL_SIZE);
+    var cx = WHEEL_SIZE / 2, cy = WHEEL_SIZE / 2;
+    for (var i = 0; i < 360; i++) {
+      var a0 = (i / 360) * Math.PI * 2 - Math.PI / 2;
+      var a1 = ((i + 1) / 360) * Math.PI * 2 - Math.PI / 2;
+      wctx.beginPath();
+      wctx.moveTo(cx + Math.cos(a0) * INNER_R, cy + Math.sin(a0) * INNER_R);
+      wctx.arc(cx, cy, OUTER_R, a0, a1);
+      wctx.arc(cx, cy, INNER_R, a1, a0, true);
+      wctx.closePath();
+      wctx.fillStyle = 'hsl(' + i + ',100%,55%)';
+      wctx.fill();
+    }
+    /* Selection dot */
+    var selAngle = (hue / 360) * Math.PI * 2 - Math.PI / 2;
+    var midR = (OUTER_R + INNER_R) / 2;
+    var dx = Math.cos(selAngle) * midR, dy = Math.sin(selAngle) * midR;
+    wctx.beginPath();
+    wctx.arc(cx + dx, cy + dy, 5, 0, Math.PI * 2);
+    wctx.fillStyle = '#fff';
+    wctx.fill();
+    wctx.strokeStyle = 'rgba(0,0,0,0.6)';
+    wctx.lineWidth = 1.5;
+    wctx.stroke();
+  }
+
+  function getHueFromEvent(e) {
+    var rect = wheelCanvas.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    var angle = Math.atan2(clientY - cy, clientX - cx) + Math.PI / 2;
+    return ((angle / (Math.PI * 2)) * 360 + 360) % 360;
+  }
+
+  function applyCustomHue(hue) {
+    customHue = hue;
+    var rgb = hslToRgb(hue, 100, 60);
+    var hex = a2h(rgb[0], rgb[1], rgb[2]);
+    var menuRgb = rgb[0] + ', ' + rgb[1] + ', ' + rgb[2];
+    customProfile.rawFg   = hex;
+    customProfile.glow    = 'rgba(' + rgb.join(',') + ',0.35)';
+    customProfile.menuRgb = menuRgb;
+    applyProfile(customProfile);
+    drawHueWheel(hue);
+  }
+
+  drawHueWheel(customHue);
+
+  var wheelDragging = false;
+  wheelCanvas.addEventListener('mousedown', function (e) {
+    wheelDragging = true;
+    applyCustomHue(getHueFromEvent(e));
+  });
+  document.addEventListener('mousemove', function (e) {
+    if (wheelDragging) applyCustomHue(getHueFromEvent(e));
+  });
+  document.addEventListener('mouseup', function () { wheelDragging = false; });
+  wheelCanvas.addEventListener('touchstart', function (e) {
+    e.preventDefault();
+    applyCustomHue(getHueFromEvent(e));
+  }, { passive: false });
+  wheelCanvas.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+    applyCustomHue(getHueFromEvent(e));
+  }, { passive: false });
+
+  pickerDiv.appendChild(wheelCanvas);
+
+  /* Insert picker between section header and arrows, then append arrows */
+  panel.appendChild(pickerDiv);
   panel.appendChild(profRow);
+
+  customCb.addEventListener('change', function () {
+    customActive = customCb.checked;
+    var picker = document.getElementById('crt-color-picker');
+    if (customActive) {
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      prevBtn.style.opacity = '0.20';
+      nextBtn.style.opacity = '0.20';
+      applyProfile(customProfile);
+      if (picker) picker.classList.add('visible');
+    } else {
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+      prevBtn.style.opacity = '';
+      nextBtn.style.opacity = '';
+      applyProfile(profiles[profileIdx]);
+      if (picker) picker.classList.remove('visible');
+    }
+  });
 
   /* Effects section */
   var fxSection = document.createElement('div');
@@ -974,7 +1137,7 @@ body.crt-boot {
     /* safely below the contrast threshold (0.5). This ensures the      */
     /* background is crushed to absolute black regardless of the        */
     /* contrast slider setting, keeping the bloom mask stable.          */
-    var _p = profiles[profileIdx];
+    var _p = customActive ? customProfile : profiles[profileIdx];
     var _bg = _p.rawFg
       ? computePhosphorColors(_p.rawFg, _p.rawBg, _p.satColor, contrastLevel).bg
       : _p.rawBg;
