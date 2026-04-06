@@ -37,6 +37,7 @@
 :root {
   --crt-bg:           #0f0802;
   --crt-glow:         rgba(255, 129, 0, 0.40);
+  --crt-glow-rgb:     255, 129, 0;
   --crt-filter:       brightness(1.10) contrast(1.08);
   --crt-scanlines:    0.13;   /* driven by scanlines slider   */
   --crt-flicker-amt:  0.08;   /* driven by flickering slider  */
@@ -56,6 +57,7 @@ html, body { background: var(--crt-bg) !important; }
 
 /* ── Rounded bezel ──────────────────────────────────────────────────── */
 #terminal-container {
+  position: relative;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 80px rgba(0, 0, 0, 0.95);
@@ -120,7 +122,7 @@ html, body { background: var(--crt-bg) !important; }
   100% { transform: translateY(100vh);  }
 }
 #crt-glow-line {
-  position: fixed;
+  position: absolute;
   top: 0; left: 0;
   width: 100%;
   height: 220px;
@@ -129,13 +131,13 @@ html, body { background: var(--crt-bg) !important; }
   mix-blend-mode: screen;
   background: linear-gradient(
     to bottom,
-    rgba(255,255,255,0)     0%,
-    rgba(255,255,255,0.01) 45%,
-    rgba(255,255,255,0.03) 72%,
-    rgba(255,255,255,0.06) 86%,
-    rgba(255,255,255,0.10) 95%,
-    rgba(255,255,255,0.03) 98%,
-    rgba(255,255,255,0)   100%
+    rgba(var(--crt-glow-rgb), 0)     0%,
+    rgba(var(--crt-glow-rgb), 0.02) 45%,
+    rgba(var(--crt-glow-rgb), 0.06) 72%,
+    rgba(var(--crt-glow-rgb), 0.12) 86%,
+    rgba(var(--crt-glow-rgb), 0.25) 95%,
+    rgba(var(--crt-glow-rgb), 0.06) 98%,
+    rgba(var(--crt-glow-rgb), 0)   100%
   );
   animation: crt-glow-line 8s linear infinite;
   transition: opacity 0.2s;
@@ -392,11 +394,17 @@ body.crt-boot {
   /* ── Static overlays ───────────────────────────────────────────────── */
   var overlay = document.createElement('div');
   overlay.id  = 'crt-overlay';
-  document.body.appendChild(overlay);
 
   var glowLine = document.createElement('div');
   glowLine.id  = 'crt-glow-line';
-  document.body.appendChild(glowLine);
+
+  function setupOverlays() {
+    var tc = document.getElementById('terminal-container');
+    if (!tc) { setTimeout(setupOverlays, 100); return; }
+    tc.appendChild(overlay);
+    tc.appendChild(glowLine);
+  }
+  setupOverlays();
 
   /* ── Phosphor profiles ─────────────────────────────────────────────── */
   /* rawFg/rawBg/satColor sourced from cool-retro-term ApplicationSettings.qml. */
@@ -479,9 +487,11 @@ body.crt-boot {
   (function () {
     var p = profiles[profileIdx];
     var c = computeColors(p);
-    document.documentElement.style.setProperty('--crt-bg',     c.bg);
-    document.documentElement.style.setProperty('--crt-glow',   p.glow);
-    document.documentElement.style.setProperty('--crt-filter', p.filter);
+    var s = document.documentElement.style;
+    s.setProperty('--crt-bg',       c.bg);
+    s.setProperty('--crt-glow',     p.glow);
+    s.setProperty('--crt-glow-rgb', p.menuRgb);
+    s.setProperty('--crt-filter',   p.filter);
     document.body.style.background = c.bg;
     updateMenuTheme(p.menuRgb);
     applyXtermTheme(c.theme, function () {
@@ -492,9 +502,10 @@ body.crt-boot {
   function applyProfile(p) {
     var c = computeColors(p);
     var s = document.documentElement.style;
-    s.setProperty('--crt-bg',     c.bg);
-    s.setProperty('--crt-glow',   p.glow);
-    s.setProperty('--crt-filter', p.filter);
+    s.setProperty('--crt-bg',       c.bg);
+    s.setProperty('--crt-glow',     p.glow);
+    s.setProperty('--crt-glow-rgb', p.menuRgb);
+    s.setProperty('--crt-filter',   p.filter);
     document.body.style.background = c.bg;
     var bc = document.getElementById('crt-bloom-canvas');
     if (bc) bc.style.filter = p.bloom;
