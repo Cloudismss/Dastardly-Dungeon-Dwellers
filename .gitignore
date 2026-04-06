@@ -35,6 +35,7 @@
 .build
 .cache
 build
+build-linux
 .DS_Store
 .idea
 out
