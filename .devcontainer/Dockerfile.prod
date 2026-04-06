@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copies the ttyd binary into an Ubuntu environment with full tooling,
 # runs it locally to capture the HTML it serves, then patches it.
 COPY --from=ttyd-src /usr/bin/ttyd /usr/bin/ttyd
-COPY res/DDD.ico res/crt-inject.html /res/
+COPY res/DDD.ico res/crt.html /res/
 
 RUN ttyd --port 17681 /bin/sh & \
     sleep 2 && \
@@ -22,7 +22,7 @@ RUN ttyd --port 17681 /bin/sh & \
     [ -s /index.html ] || { echo "ERROR: failed to extract ttyd index.html"; exit 1; } && \
     ICO_B64=$(base64 -w 0 /res/DDD.ico) && \
     sed -i "s|<link rel=\"icon\" type=\"image/png\" href=\"data:image/png;base64,[^\"]*\"|<link rel=\"icon\" type=\"image/x-icon\" href=\"data:image/x-icon;base64,${ICO_B64}\"|" /index.html && \
-    python3 -c "c=open('/index.html').read();i=open('/res/crt-inject.html').read();open('/index.html','w').write(c.replace('</body>',i+'</body>',1))"
+    python3 -c "c=open('/index.html').read();i=open('/res/crt.html').read();open('/index.html','w').write(c.replace('</body>',i+'</body>',1))"
 
 # ---- Builder Stage ----
 FROM ubuntu:latest AS builder
