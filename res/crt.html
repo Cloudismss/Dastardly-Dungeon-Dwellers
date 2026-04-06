@@ -684,6 +684,23 @@ body.crt-boot {
 
   var effectDefs = [
     {
+      id: 'contrast', label: 'CONTRAST', default: CONFIG.contrast,
+      /* Replicates cool-retro-term's contrast knob: shifts both fg and bg. */
+      /* 100% = saturatedColor fg / black bg. 0% = ~30% of phosphor on bg.  */
+      /* Only affects phosphor profiles that have a rawFg colour.           */
+      apply: function (v) {
+        contrastLevel = v / 100;
+        var p = customActive ? customProfile : profiles[profileIdx];
+        if (!p.rawFg) return;
+        var c = computePhosphorColors(p.rawFg, p.rawBg, p.satColor, contrastLevel);
+        document.documentElement.style.setProperty('--crt-bg', c.bg);
+        document.body.style.background = c.bg;
+        if (window.term && window.term.options) {
+          try { window.term.options.theme = makePhosphorTheme(c.fg, c.bg); } catch (e) {}
+        }
+      },
+    },
+    {
       id: 'bloom', label: 'BLOOM', default: CONFIG.bloom,
       /* Map 0–100% directly to 0–1.0 opacity. blur(20px)+brightness(2)   */
       /* on the canvas already limits overshoot; screen blend on a dark    */
@@ -740,16 +757,6 @@ body.crt-boot {
       },
     },
     {
-      id: 'radius', label: 'ROUNDED FRAME', default: CONFIG.radius,
-      toggleOnly: true,
-      /* Toggle: ON = 20% (16px), OFF = 0% (square).                     */
-      apply: function (v) {
-        document.documentElement.style.setProperty(
-          '--crt-radius-px', (v / 100 * 80).toFixed(0) + 'px');
-        updateBezelClip();
-      },
-    },
-    {
       id: 'framesize', label: 'FRAME SIZE', default: CONFIG.framesize,
       /* 10% → 12px border. 100% → 120px. 0% → 0px.                      */
       /* margin tracks framesize so the terminal always sits inside the bezel. */
@@ -762,20 +769,12 @@ body.crt-boot {
       },
     },
     {
-      id: 'contrast', label: 'CONTRAST', default: CONFIG.contrast,
-      /* Replicates cool-retro-term's contrast knob: shifts both fg and bg. */
-      /* 100% = saturatedColor fg / black bg. 0% = ~30% of phosphor on bg.  */
-      /* Only affects phosphor profiles that have a rawFg colour.           */
+      id: 'radius', label: 'ROUNDED FRAME', default: CONFIG.radius,
+      toggleOnly: true,
       apply: function (v) {
-        contrastLevel = v / 100;
-        var p = profiles[profileIdx];
-        if (!p.rawFg) return;
-        var c = computePhosphorColors(p.rawFg, p.rawBg, p.satColor, contrastLevel);
-        document.documentElement.style.setProperty('--crt-bg', c.bg);
-        document.body.style.background = c.bg;
-        if (window.term && window.term.options) {
-          try { window.term.options.theme = makePhosphorTheme(c.fg, c.bg); } catch (e) {}
-        }
+        document.documentElement.style.setProperty(
+          '--crt-radius-px', (v / 100 * 80).toFixed(0) + 'px');
+        updateBezelClip();
       },
     },
   ];
@@ -942,6 +941,9 @@ body.crt-boot {
   fxSection.textContent = 'EFFECTS';
   panel.appendChild(fxSection);
 
+  var effectControls = {};
+  var frameSizeRadiusWasOn = true;
+
   effectDefs.forEach(function (def) {
     var enabled    = true;
     var savedValue = def.default;
@@ -961,14 +963,13 @@ body.crt-boot {
     toggleBtn.textContent = 'ON';
 
     header.appendChild(lbl);
-    header.appendChild(toggleBtn);
 
-    if (!def.toggleOnly) {
-      var valDisplay = document.createElement('span');
-      valDisplay.className   = 'crt-effect-value';
-      valDisplay.textContent = def.default + '%';
-      header.appendChild(valDisplay);
-    }
+    var valDisplay = document.createElement('span');
+    valDisplay.className   = 'crt-effect-value';
+    valDisplay.textContent = def.toggleOnly ? '' : def.default + '%';
+    header.appendChild(valDisplay);
+
+    header.appendChild(toggleBtn);
 
     var slider = !def.toggleOnly && (function () {
       var s = document.createElement('input');
@@ -988,8 +989,7 @@ body.crt-boot {
     toggleBtn.addEventListener('click', function () {
       enabled = !enabled;
       if (enabled) {
-        if (slider) { slider.disabled = false; slider.value = String(savedValue); }
-        if (valDisplay) valDisplay.textContent = savedValue + '%';
+        if (slider) { slider.disabled = false; slider.value = String(savedValue); valDisplay.textContent = savedValue + '%'; }
         header.className      = 'crt-effect-header';
         toggleBtn.textContent = 'ON';
         toggleBtn.className   = 'crt-effect-toggle';
@@ -1002,7 +1002,21 @@ body.crt-boot {
         toggleBtn.className   = 'crt-effect-toggle off';
         def.apply(0);
       }
+      if (def.id === 'framesize' && effectControls.radius) {
+        if (!enabled) {
+          frameSizeRadiusWasOn = effectControls.radius.isOn();
+          effectControls.radius.turnOff();
+        } else if (frameSizeRadiusWasOn) {
+          effectControls.radius.turnOn();
+        }
+      }
     });
+
+    effectControls[def.id] = {
+      isOn:    function () { return enabled; },
+      turnOn:  function () { if (!enabled) toggleBtn.click(); },
+      turnOff: function () { if (enabled)  toggleBtn.click(); },
+    };
 
     /* Apply initial value */
     def.apply(def.default);
