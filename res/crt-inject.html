@@ -797,9 +797,10 @@ body.crt-boot {
         try { tmpCtx.drawImage(c, 0, 0, w, h); } catch (e) {}
       });
 
-      /* Adaptive brightness: target the background to land just below    */
-      /* the contrast threshold (~0.5). This ensures the background is    */
-      /* crushed to black regardless of the contrast slider setting.      */
+      /* Adaptive brightness: target the background intensity to land     */
+      /* safely below the contrast threshold (0.5). This ensures the      */
+      /* background is crushed to absolute black regardless of the        */
+      /* contrast slider setting, keeping the bloom mask stable.          */
       var _p = profiles[profileIdx];
       var _bg = _p.rawFg
         ? computePhosphorColors(_p.rawFg, _p.rawBg, _p.satColor, contrastLevel).bg
@@ -807,18 +808,19 @@ body.crt-boot {
       var _bgc = h2a(_bg);
       var _bgMax = Math.max(_bgc[0], _bgc[1], _bgc[2]);
       /* 120 / bgMax targets ~0.47, safely below the 0.5 threshold.       */
-      /* We use a high max gain to ensure thin text survives the blur.    */
+      /* Max gain 15x ensures text survives even at 0.0 contrast.         */
       var _brt = _bgMax > 8 ? (120 / _bgMax) : 15;
 
       /* Pass 2 — minimal blur to smooth glyphs without killing intensity. */
+      /* 1px blur at SCALE=0.5 preserves peak brightness for the threshold. */
       extractCtx.clearRect(0, 0, w, h);
       extractCtx.filter = 'blur(1px)';
       extractCtx.drawImage(tmp, 0, 0);
       extractCtx.filter = 'none';
 
       /* Pass 3 — threshold and colorize: extract a binary mask and fill   */
-      /* it with the phosphor color. 'grayscale(1)' MUST be first to      */
-      /* prevent red channel clipping artifacts during high-gain.          */
+      /* it with the phosphor color. grayscale(1) MUST be first to prevent */
+      /* red-channel clipping artifacts during high-gain thresholding.     */
       bloomCtx.globalCompositeOperation = 'source-over';
       bloomCtx.clearRect(0, 0, w, h);
       bloomCtx.fillStyle = '#000';
@@ -828,6 +830,9 @@ body.crt-boot {
       bloomCtx.drawImage(extract, 0, 0);
       bloomCtx.filter = 'none';
 
+      /* Multiply the binary mask with the profile's phosphor color.      */
+      /* Black stays black (transparent in 'screen' blend mode); white    */
+      /* becomes the target phosphor hue.                                 */
       bloomCtx.globalCompositeOperation = 'multiply';
       bloomCtx.fillStyle = 'rgb(' + _p.menuRgb + ')';
       bloomCtx.fillRect(0, 0, w, h);
