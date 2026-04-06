@@ -1,10 +1,34 @@
+# ---- HTML Extraction Stage ----
+FROM tsl0922/ttyd:latest AS ttyd-src
+FROM ubuntu:latest AS ttyd-html
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copies the ttyd binary into an Ubuntu environment with full tooling,
+# runs it locally to capture the HTML it serves, then patches it.
+COPY --from=ttyd-src /usr/bin/ttyd /usr/bin/ttyd
+COPY res/DDD.ico res/crt-inject.html /res/
+
+RUN ttyd --port 17681 /bin/sh & \
+    sleep 2 && \
+    for i in $(seq 1 10); do \
+      curl -sf http://localhost:17681/ -o /index.html && [ -s /index.html ] && break; \
+      rm -f /index.html; \
+      sleep 1; \
+    done && \
+    [ -s /index.html ] || { echo "ERROR: failed to extract ttyd index.html"; exit 1; } && \
+    ICO_B64=$(base64 -w 0 /res/DDD.ico) && \
+    sed -i "s|<link rel=\"icon\" type=\"image/png\" href=\"data:image/png;base64,[^\"]*\"|<link rel=\"icon\" type=\"image/x-icon\" href=\"data:image/x-icon;base64,${ICO_B64}\"|" /index.html && \
+    python3 -c "c=open('/index.html').read();i=open('/res/crt-inject.html').read();open('/index.html','w').write(c.replace('</body>',i+'</body>',1))"
+
 # ---- Builder Stage ----
 FROM ubuntu:latest AS builder
 
-# Set non-interactive mode to prevent installation prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update distro and install C++ packages
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -39,6 +63,6 @@ RUN cmake --preset linux-release \
 FROM tsl0922/ttyd:latest
 
 COPY --from=builder ["/src/build/Dastardly Dungeon Dwellers", "/usr/local/bin/ddd"]
-COPY res/index.html /index.html
+COPY --from=ttyd-html /index.html /index.html
 
 EXPOSE 7681
