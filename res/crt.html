@@ -369,7 +369,7 @@ body.crt-boot {
 
   /* ── Configuration — CENTRAL DEFAULTS ──────────────────────────────── */
   var CONFIG = {
-    profileIdx: 0,   /* 0: GREEN, 1: GHOST, 2: NEON, 3: BORING, 4: E-INK, 5: AMBER, 6: BLUE */
+    profileIdx: 0,   /* 0: GREEN, 1: AMBER, 2: BLUE, 3: WHITE */
     bloom:      50,  /* % */
     glowline:   40,  /* % */
     scanlines:  25,  /* % */
@@ -441,33 +441,22 @@ body.crt-boot {
   /* ── Phosphor profiles ─────────────────────────────────────────────── */
   /* rawFg/rawBg/satColor sourced from cool-retro-term ApplicationSettings.qml. */
   /* fg/bg are computed at runtime by computePhosphorColors so they track   */
-  /* the contrast slider. E-Ink keeps a fixed CSS invert approach.          */
+  /* the contrast slider.                                                    */
   var profileIdx = CONFIG.profileIdx;
   var profiles = [
-    { name: 'GREEN',      rawFg: '#0ccc68', rawBg: '#000000', satColor: 0.0,
-      glow: 'rgba(12,204,104,0.35)',   filter: 'brightness(1.05)',
-      bloom: 'blur(40px)', menuRgb: '12, 204, 104' },
-    { name: 'GHOST',      rawFg: '#a6b3c0', rawBg: '#0b1014', satColor: 0.0,
-      glow: 'rgba(166,179,192,0.20)', filter: 'brightness(0.95)',
-      bloom: 'blur(40px)', menuRgb: '166, 179, 192' },
-    { name: 'NEON CYAN',  rawFg: '#52f7ff', rawBg: '#001018', satColor: 0.6,
-      glow: 'rgba(82,247,255,0.40)',  filter: 'brightness(1.05)',
-      bloom: 'blur(40px)', menuRgb: '82, 247, 255' },
-    /* Boring: white phosphor on black, no saturation mixing.               */
-    { name: 'BORING', rawFg: '#ffffff', rawBg: '#000000', satColor: 0.0,
-      glow: 'rgba(220,220,220,0.25)', filter: 'brightness(1.00)',
-      bloom: 'blur(40px)', menuRgb: '220, 220, 220' },
-    /* E-Ink: fixed light bg; CSS invert+grayscale handles display reversal. */
-    { name: 'E-INK', rawFg: null, rawBg: '#f2f2ec',
-      glow: 'rgba(16,16,16,0.10)',
-      filter: 'invert(1) grayscale(1) brightness(0.95) contrast(0.85)',
-      bloom: 'grayscale(1) blur(40px)', menuRgb: '100, 100, 90', xtermTheme: null },
-    { name: 'AMBER',     rawFg: '#ff8100', rawBg: '#000000', satColor: 0.2,
-      glow: 'rgba(255,129,0,0.40)',  filter: 'brightness(1.05)',
-      bloom: 'blur(40px)', menuRgb: '255, 129, 0' },
-    { name: 'DEEP BLUE', rawFg: '#7fb4ff', rawBg: '#000000', satColor: 0.2,
+    { name: 'GREEN',      rawFg: '#1aff80', rawBg: '#000000', satColor: 0.0,
+      glow: 'rgba(26,255,128,0.35)',   filter: 'brightness(1.05)',
+      bloom: 'blur(40px)', menuRgb: '26, 255, 128' },
+    { name: 'AMBER',     rawFg: '#ffb642', rawBg: '#000000', satColor: 0.2,
+      glow: 'rgba(255,182,66,0.40)',  filter: 'brightness(1.05)',
+      bloom: 'blur(40px)', menuRgb: '255, 182, 66' },
+    { name: 'BLUE',      rawFg: '#7fb4ff', rawBg: '#000000', satColor: 0.2,
       glow: 'rgba(127,180,255,0.35)', filter: 'brightness(1.05)',
       bloom: 'blur(40px)', menuRgb: '127, 180, 255' },
+    /* White: cool off-white phosphor with a faint cyan tint.               */
+    { name: 'WHITE',     rawFg: '#c5ffff', rawBg: '#0f1414', satColor: 0.0,
+      glow: 'rgba(197,255,255,0.25)', filter: 'brightness(1.00)',
+      bloom: 'blur(40px)', menuRgb: '197, 255, 255' },
   ];
 
   /* ── VT323 font ────────────────────────────────────────────────────── */
