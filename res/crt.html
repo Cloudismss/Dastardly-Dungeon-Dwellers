@@ -574,6 +574,9 @@ html, body {
     s.setProperty('--crt-radius-px', (CONFIG.radius / 100 * 80).toFixed(0) + 'px');
 
     document.body.style.background = c.bg;
+    var tc = document.getElementById('terminal-container');
+    if (tc) tc.style.background = c.bg;
+
     updateMenuTheme(p.menuRgb);
     applyXtermTheme(c.theme, function () {
       (document.getElementById('terminal-container') || document.body).classList.add('crt-boot');
@@ -670,6 +673,8 @@ html, body {
     s.setProperty('--crt-glow-rgb', p.menuRgb);
     s.setProperty('--crt-filter',   p.filter);
     document.body.style.background = c.bg;
+    var tc = document.getElementById('terminal-container');
+    if (tc) tc.style.background = c.bg;
     var bc = document.getElementById('crt-bloom-canvas');
     if (bc) bc.style.filter = p.bloom;
     var lbl = document.getElementById('crt-profile-label');
@@ -699,6 +704,8 @@ html, body {
         var c = computePhosphorColors(p.rawFg, p.rawBg, p.satColor, contrastLevel);
         document.documentElement.style.setProperty('--crt-bg', c.bg);
         document.body.style.background = c.bg;
+        var tc = document.getElementById('terminal-container');
+        if (tc) tc.style.background = c.bg;
         if (window.term && window.term.options) {
           try { window.term.options.theme = makePhosphorTheme(c.fg, c.bg); } catch (e) {}
         }
@@ -1159,7 +1166,8 @@ html, body {
       
       var w = Math.max(1, Math.round(r.width  * SCALE));
       var h = Math.max(1, Math.round(r.height * SCALE));
-      if (bloomCanvas.width !== w || bloomCanvas.height !== h) {
+      /* Use 1px threshold to avoid constant resets from subpixel rounding. */
+      if (Math.abs(bloomCanvas.width - w) > 1 || Math.abs(bloomCanvas.height - h) > 1) {
         tmp.width  = extract.width  = bloomCanvas.width  = w;
         tmp.height = extract.height = bloomCanvas.height = h;
       }
