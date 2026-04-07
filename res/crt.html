@@ -32,8 +32,9 @@
 
 <!-- Noise overlay -->
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
-     style="position:fixed;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:8999;mix-blend-mode:screen;">
+     style="position:absolute;inset:0;width:100%;height:100%;
+            pointer-events:none;z-index:8999;mix-blend-mode:screen;
+            will-change:opacity;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
 
@@ -90,36 +91,40 @@ html, body {
     inset 0 0 15px rgba(0,0,0,0.85),
     0 0 80px rgba(0,0,0,0.95);
   z-index: 1;
+  isolation: isolate;
+  will-change: transform;
+  transform: translate(var(--crt-jitter-x, 0), var(--crt-jitter-y, 0));
 }
 
 /* ── Bloom ──────────────────────────────────────────────────────────── */
 #crt-bloom {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 8998;
   mix-blend-mode: screen;
   opacity: 0;
   transition: opacity 0.2s;
+  will-change: opacity;
 }
 #crt-bloom-canvas {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
   /* blur(40px) spreads the thresholded text mask into wide, soft halos.   */
   /* No post-blur brightness step — that causes a ring artifact by         */
   /* amplifying the steep part of the Gaussian falloff more than the tail. */
   filter: blur(40px);
+  will-change: transform, opacity;
 }
 
 /* ── Scanlines ──────────────────────────────────────────────────────── */
 #crt-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 9000;
   border-radius: 10px;
+  will-change: opacity;
 }
 #crt-overlay::before {
   content: '';
@@ -135,15 +140,7 @@ html, body {
 }
 
 /* ── Jitter ─────────────────────────────────────────────────────────── */
-@keyframes crt-jitter {
-  0%,100% { transform: translateX(0); }
-  15%     { transform: translateX(calc(var(--crt-jitter-px) * -1)); }
-  30%     { transform: translateX(var(--crt-jitter-px)); }
-  45%     { transform: translateX(calc(var(--crt-jitter-px) * -1)); }
-  60%     { transform: translateX(var(--crt-jitter-px)); }
-  75%     { transform: translateX(0); }
-}
-#terminal-container.crt-jitter { animation: crt-jitter 0.12s linear; }
+/* Jitter is driven by JS variables --crt-jitter-x/y to avoid interrupting the main animation stack. */
 
 /* ── Bezel ──────────────────────────────────────────────────────────── */
 /* Full-viewport solid fill, clipped by an evenodd SVG path that cuts a  */
@@ -184,6 +181,7 @@ html, body {
   animation: crt-glow-line 8s linear infinite;
   transition: opacity 0.2s;
   opacity: 0;
+  will-change: transform, opacity;
 }
 
 /* ── Flicker ────────────────────────────────────────────────────────── */
@@ -647,6 +645,12 @@ html, body {
     tc.appendChild(overlay);
     tc.appendChild(glowLine);
 
+    var noise = document.getElementById('crt-noise-svg');
+    if (noise) tc.appendChild(noise);
+
+    var bloom = document.getElementById('crt-bloom');
+    if (bloom) tc.appendChild(bloom);
+
     var termEl = tc.querySelector('.terminal');
     if (termEl) ro.observe(termEl);
   }
@@ -730,7 +734,10 @@ html, body {
       /* 15% → opacity 0.08 (≈ noise at reference strength).             */
       apply: function (v) {
         var el = document.getElementById('crt-noise-svg');
-        if (el) el.style.opacity = (v / 100 * 0.53).toFixed(3);
+        if (el) {
+          el.style.opacity = (v / 100 * 0.53).toFixed(3);
+          el.style.display = v === 0 ? 'none' : 'block';
+        }
       },
     },
     {
@@ -738,8 +745,11 @@ html, body {
       /* Controls both interval frequency and pixel displacement.         */
       apply: function (v) {
         jitterStrength = v;
-        var px = (v / 100 * 4).toFixed(2) + 'px';
-        document.documentElement.style.setProperty('--crt-jitter-px', px);
+        if (v === 0) {
+          var s = document.documentElement.style;
+          s.setProperty('--crt-jitter-x', '0px');
+          s.setProperty('--crt-jitter-y', '0px');
+        }
       },
     },
     {
@@ -747,10 +757,12 @@ html, body {
       /* --crt-flicker-amt is used directly in the keyframe calc().       */
       /* 10% → 0.08 amt. Max 100% → 0.80 amt (very deep dips).           */
       apply: function (v) {
+        var tc = document.getElementById('terminal-container');
         if (v === 0) {
-          document.body.style.animationPlayState = 'paused';
+          if (tc) tc.style.animationPlayState = 'paused';
+          document.documentElement.style.setProperty('--crt-flicker-amt', '0');
         } else {
-          document.body.style.animationPlayState = 'running';
+          if (tc) tc.style.animationPlayState = 'running';
           document.documentElement.style.setProperty(
             '--crt-flicker-amt', (v / 100 * 0.8).toFixed(3));
         }
@@ -1063,13 +1075,20 @@ html, body {
       if (jitterStrength > 0) {
         var tc = document.getElementById('terminal-container');
         if (tc) {
-          tc.classList.remove('crt-jitter');
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              tc.classList.add('crt-jitter');
-              setTimeout(function () { tc.classList.remove('crt-jitter'); }, 120);
-            });
-          });
+          var frames = 5;
+          var count  = 0;
+          var amp    = jitterStrength / 100 * 5;
+          var iv = setInterval(function () {
+            var dx = (Math.random() - 0.5) * amp;
+            var dy = (Math.random() - 0.5) * amp;
+            tc.style.setProperty('--crt-jitter-x', dx.toFixed(2) + 'px');
+            tc.style.setProperty('--crt-jitter-y', dy.toFixed(2) + 'px');
+            if (++count >= frames) {
+              clearInterval(iv);
+              tc.style.setProperty('--crt-jitter-x', '0px');
+              tc.style.setProperty('--crt-jitter-y', '0px');
+            }
+          }, 30);
         }
       }
       scheduleJitter();
@@ -1089,8 +1108,10 @@ html, body {
     tmp.width  = extract.width  = bloomCanvas.width  = w;
     tmp.height = extract.height = bloomCanvas.height = h;
     var r = screen.getBoundingClientRect();
-    bloomCanvas.style.left   = r.left   + 'px';
-    bloomCanvas.style.top    = r.top    + 'px';
+    var tc = document.getElementById('terminal-container');
+    var tr = tc ? tc.getBoundingClientRect() : { left: 0, top: 0 };
+    bloomCanvas.style.left   = (r.left - tr.left) + 'px';
+    bloomCanvas.style.top    = (r.top  - tr.top)  + 'px';
     bloomCanvas.style.width  = r.width  + 'px';
     bloomCanvas.style.height = r.height + 'px';
   }
@@ -1104,7 +1125,11 @@ html, body {
     bloomCanvas = document.createElement('canvas');
     bloomCanvas.id = 'crt-bloom-canvas';
     bloomWrap.appendChild(bloomCanvas);
-    document.body.appendChild(bloomWrap);
+    
+    var tc = document.getElementById('terminal-container');
+    if (tc) tc.appendChild(bloomWrap);
+    else document.body.appendChild(bloomWrap);
+
     bloomCtx = bloomCanvas.getContext('2d');
 
     tmp = document.createElement('canvas');
@@ -1123,9 +1148,12 @@ html, body {
     
     /* Recalculate position every frame to prevent detachment during moves. */
     var r = screen.getBoundingClientRect();
+    var tc = document.getElementById('terminal-container');
+    var tr = tc ? tc.getBoundingClientRect() : { left: 0, top: 0 };
+
     if (r.width > 0 && r.height > 0) {
-      bloomCanvas.style.left   = r.left   + 'px';
-      bloomCanvas.style.top    = r.top    + 'px';
+      bloomCanvas.style.left   = (r.left - tr.left) + 'px';
+      bloomCanvas.style.top    = (r.top  - tr.top)  + 'px';
       bloomCanvas.style.width  = r.width  + 'px';
       bloomCanvas.style.height = r.height + 'px';
       
