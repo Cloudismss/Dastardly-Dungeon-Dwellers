@@ -32,8 +32,8 @@
 
 <!-- Noise overlay -->
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
-     style="position:absolute;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:8999;mix-blend-mode:screen;
+     style="position:fixed;inset:0;width:100%;height:100%;
+            pointer-events:none;z-index:9081;mix-blend-mode:screen;
             will-change:opacity;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
@@ -91,17 +91,16 @@ html, body {
     inset 0 0 15px rgba(0,0,0,0.85),
     0 0 80px rgba(0,0,0,0.95);
   z-index: 1;
-  isolation: isolate;
   will-change: transform;
   transform: translate(var(--crt-jitter-x, 0), var(--crt-jitter-y, 0));
 }
 
 /* ── Bloom ──────────────────────────────────────────────────────────── */
 #crt-bloom {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 8998;
+  z-index: 9080;
   mix-blend-mode: screen;
   opacity: 0;
   transition: opacity 0.2s;
@@ -119,10 +118,10 @@ html, body {
 
 /* ── Scanlines ──────────────────────────────────────────────────────── */
 #crt-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 9000;
+  z-index: 9082;
   border-radius: 10px;
   will-change: opacity;
 }
@@ -161,12 +160,12 @@ html, body {
   100% { transform: translateY(100vh);  }
 }
 #crt-glow-line {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0;
   width: 100%;
   height: 220px;
   pointer-events: none;
-  z-index: 9001;
+  z-index: 9083;
   mix-blend-mode: screen;
   background: linear-gradient(
     to bottom,
@@ -643,16 +642,13 @@ html, body {
     if (!tc) return;
 
     /* Avoid duplicate appends if setupOverlays is called again. */
-    if (tc.contains(overlay)) return;
+    if (document.body.contains(overlay)) return;
 
-    tc.appendChild(overlay);
-    tc.appendChild(glowLine);
-
-    var noise = document.getElementById('crt-noise-svg');
-    if (noise) tc.appendChild(noise);
-
-    var bloom = document.getElementById('crt-bloom');
-    if (bloom) tc.appendChild(bloom);
+    /* Append to body (not terminal-container) so these elements sit above  */
+    /* the WebGL canvas GPU compositor layer, which promotes above TC's     */
+    /* stacking context on HTTPS/public-domain pages.                       */
+    document.body.appendChild(overlay);
+    document.body.appendChild(glowLine);
 
     var termEl = tc.querySelector('.terminal');
     if (termEl) ro.observe(termEl);
@@ -1115,10 +1111,8 @@ html, body {
     tmp.width  = extract.width  = bloomCanvas.width  = w;
     tmp.height = extract.height = bloomCanvas.height = h;
     var r = screen.getBoundingClientRect();
-    var tc = document.getElementById('terminal-container');
-    var tr = tc ? tc.getBoundingClientRect() : { left: 0, top: 0 };
-    bloomCanvas.style.left   = (r.left - tr.left) + 'px';
-    bloomCanvas.style.top    = (r.top  - tr.top)  + 'px';
+    bloomCanvas.style.left   = r.left   + 'px';
+    bloomCanvas.style.top    = r.top    + 'px';
     bloomCanvas.style.width  = r.width  + 'px';
     bloomCanvas.style.height = r.height + 'px';
   }
@@ -1133,9 +1127,7 @@ html, body {
     bloomCanvas.id = 'crt-bloom-canvas';
     bloomWrap.appendChild(bloomCanvas);
     
-    var tc = document.getElementById('terminal-container');
-    if (tc) tc.appendChild(bloomWrap);
-    else document.body.appendChild(bloomWrap);
+    document.body.appendChild(bloomWrap);
 
     bloomCtx = bloomCanvas.getContext('2d');
 
@@ -1155,12 +1147,10 @@ html, body {
     
     /* Recalculate position every frame to prevent detachment during moves. */
     var r = screen.getBoundingClientRect();
-    var tc = document.getElementById('terminal-container');
-    var tr = tc ? tc.getBoundingClientRect() : { left: 0, top: 0 };
 
     if (r.width > 0 && r.height > 0) {
-      bloomCanvas.style.left   = (r.left - tr.left) + 'px';
-      bloomCanvas.style.top    = (r.top  - tr.top)  + 'px';
+      bloomCanvas.style.left   = r.left   + 'px';
+      bloomCanvas.style.top    = r.top    + 'px';
       bloomCanvas.style.width  = r.width  + 'px';
       bloomCanvas.style.height = r.height + 'px';
       
