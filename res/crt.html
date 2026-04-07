@@ -33,8 +33,7 @@
 <!-- Noise overlay -->
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
      style="position:fixed;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:9101;mix-blend-mode:screen;
-            will-change:opacity;">
+            pointer-events:none;z-index:9101;mix-blend-mode:screen;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
 
@@ -91,7 +90,6 @@ html, body {
     inset 0 0 15px rgba(0,0,0,0.85),
     0 0 80px rgba(0,0,0,0.95);
   z-index: 1;
-  will-change: transform;
   transform: translate(var(--crt-jitter-x, 0), var(--crt-jitter-y, 0));
 }
 
@@ -104,7 +102,6 @@ html, body {
   mix-blend-mode: screen;
   opacity: 0;
   transition: opacity 0.2s;
-  will-change: opacity;
 }
 #crt-bloom-canvas {
   position: absolute;
@@ -113,7 +110,6 @@ html, body {
   /* No post-blur brightness step — that causes a ring artifact by         */
   /* amplifying the steep part of the Gaussian falloff more than the tail. */
   filter: blur(40px);
-  will-change: transform, opacity;
 }
 
 /* ── Scanlines ──────────────────────────────────────────────────────── */
@@ -123,7 +119,6 @@ html, body {
   pointer-events: none;
   z-index: 9102;
   border-radius: 10px;
-  will-change: opacity;
 }
 #crt-overlay::before {
   content: '';
@@ -180,7 +175,6 @@ html, body {
   animation: crt-glow-line 8s linear infinite;
   transition: opacity 0.2s;
   opacity: 0;
-  will-change: transform, opacity;
 }
 
 /* ── Flicker ────────────────────────────────────────────────────────── */
