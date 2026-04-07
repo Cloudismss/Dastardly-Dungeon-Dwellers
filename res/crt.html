@@ -207,8 +207,8 @@ html, body {
   65%  { clip-path: inset(0%    0 0%    0); filter: brightness(1.4); }
   100% { clip-path: inset(0%    0 0%    0); }
 }
-body { animation: crt-flicker 10s steps(1) infinite; }
-body.crt-boot {
+#terminal-container { animation: crt-flicker 10s steps(1) infinite; }
+#terminal-container.crt-boot {
   animation:
     crt-poweron 0.7s cubic-bezier(.4,0,.2,1) forwards,
     crt-flicker 10s 0.7s steps(1) infinite;
@@ -578,7 +578,7 @@ body.crt-boot {
     document.body.style.background = c.bg;
     updateMenuTheme(p.menuRgb);
     applyXtermTheme(c.theme, function () {
-      document.body.classList.add('crt-boot');
+      (document.getElementById('terminal-container') || document.body).classList.add('crt-boot');
       /* Trigger initial resize to fit new padded bounds. */
       window.dispatchEvent(new Event('resize'));
     });
