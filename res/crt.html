@@ -33,7 +33,7 @@
 <!-- Noise overlay -->
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
      style="position:fixed;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:9101;mix-blend-mode:screen;">
+            pointer-events:none;z-index:9101;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
 
@@ -99,7 +99,6 @@ html, body {
   inset: 0;
   pointer-events: none;
   z-index: 9100;
-  mix-blend-mode: screen;
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -110,6 +109,9 @@ html, body {
   /* No post-blur brightness step — that causes a ring artifact by         */
   /* amplifying the steep part of the Gaussian falloff more than the tail. */
   filter: blur(40px);
+  /* mix-blend-mode on the canvas element rather than the div wrapper —    */
+  /* adblockers target div+screen but not canvas elements.                 */
+  mix-blend-mode: screen;
 }
 
 /* ── Scanlines ──────────────────────────────────────────────────────── */
@@ -161,7 +163,8 @@ html, body {
   height: 220px;
   pointer-events: none;
   z-index: 9103;
-  mix-blend-mode: screen;
+  /* mix-blend-mode: screen omitted — adblockers target div+screen; on a   */
+  /* dark phosphor background, normal alpha compositing is near-identical.  */
   background: linear-gradient(
     to bottom,
     rgba(var(--crt-glow-rgb), 0)     0%,
