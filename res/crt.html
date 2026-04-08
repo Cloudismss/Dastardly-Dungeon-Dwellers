@@ -33,7 +33,7 @@
 <!-- Noise overlay -->
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
      style="position:fixed;inset:0;width:100%;height:100%;
-            pointer-events:none;z-index:9101;">
+            pointer-events:none;z-index:9101;mix-blend-mode:screen;">
   <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
 </svg>
 
@@ -99,7 +99,11 @@ html, body {
   inset: 0;
   pointer-events: none;
   z-index: 9100;
-  opacity: 0;
+  mix-blend-mode: screen;
+  /* Opacity driven by CSS var so no inline style is set on this element.  */
+  /* Adblockers match div[id^="crt-"][style]; keeping style attr absent    */
+  /* prevents false-positive hiding.                                        */
+  opacity: var(--crt-bloom-opacity, 0);
   transition: opacity 0.2s;
 }
 #crt-bloom-canvas {
@@ -109,9 +113,6 @@ html, body {
   /* No post-blur brightness step — that causes a ring artifact by         */
   /* amplifying the steep part of the Gaussian falloff more than the tail. */
   filter: blur(40px);
-  /* mix-blend-mode on the canvas element rather than the div wrapper —    */
-  /* adblockers target div+screen but not canvas elements.                 */
-  mix-blend-mode: screen;
 }
 
 /* ── Scanlines ──────────────────────────────────────────────────────── */
@@ -163,8 +164,7 @@ html, body {
   height: 220px;
   pointer-events: none;
   z-index: 9103;
-  /* mix-blend-mode: screen omitted — adblockers target div+screen; on a   */
-  /* dark phosphor background, normal alpha compositing is near-identical.  */
+  mix-blend-mode: screen;
   background: linear-gradient(
     to bottom,
     rgba(var(--crt-glow-rgb), 0)     0%,
@@ -177,7 +177,7 @@ html, body {
   );
   animation: crt-glow-line 8s linear infinite;
   transition: opacity 0.2s;
-  opacity: 0;
+  opacity: var(--crt-glow-opacity, 0);
 }
 
 /* ── Flicker ────────────────────────────────────────────────────────── */
@@ -710,15 +710,13 @@ html, body {
       /* on the canvas already limits overshoot; screen blend on a dark    */
       /* background saturates gracefully so opacity 1.0 is safe.          */
       apply: function (v) {
-        var el = document.getElementById('crt-bloom');
-        if (el) el.style.opacity = (v / 100).toFixed(3);
+        document.documentElement.style.setProperty('--crt-bloom-opacity', (v / 100).toFixed(3));
       },
     },
     {
       id: 'glowline', label: 'GLOW LINE', default: CONFIG.glowline,
       apply: function (v) {
-        var el = document.getElementById('crt-glow-line');
-        if (el) el.style.opacity = (v / 100).toFixed(2);
+        document.documentElement.style.setProperty('--crt-glow-opacity', (v / 100).toFixed(2));
       },
     },
     {
@@ -1119,7 +1117,6 @@ html, body {
 
     var bloomWrap = document.createElement('div');
     bloomWrap.id = 'crt-bloom';
-    bloomWrap.style.opacity = (CONFIG.bloom / 100).toFixed(3);
     bloomCanvas = document.createElement('canvas');
     bloomCanvas.id = 'crt-bloom-canvas';
     bloomWrap.appendChild(bloomCanvas);
