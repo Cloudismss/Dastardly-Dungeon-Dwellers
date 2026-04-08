@@ -1,7 +1,6 @@
 <!-- ============================================================
-     CRT visual effects — Amber Phosphor profile
-     Inspired by cool-retro-term (github.com/Swordfish90/cool-retro-term)
-     Auto-injected before </body> by the release workflow.
+     CRT visual effects inspired by github.com/Swordfish90/cool-retro-term
+     This file is auto-injected before ttyd's </body> by the .prod Dockerfile.
      ============================================================ -->
 
 <!-- VT323 pixel font -->
@@ -39,7 +38,7 @@
 
 <style id="crt-styles">
 
-/* ── CSS variables ──────────────────────────────────────────────────── */
+/* ── CSS variables ─────────────────────────────────────────────────────────── */
 /* Initial "safe" defaults; script overrides these immediately based on CONFIG. */
 :root {
   --crt-bg:           #000;
@@ -55,10 +54,10 @@
 }
 
 /* ── Base background ────────────────────────────────────────────────── */
-/* xterm-viewport is the scrollable container behind the WebGL canvas.  */
+/* xterm-viewport is the scrollable container behind the WebGL canvas.   */
 /* Forcing its background here makes the phosphor ambient colour appear  */
 /* immediately on paint, before window.term is available to set the      */
-/* xterm theme — so the boot animation already shows the right colour.  */
+/* xterm theme — so the boot animation already shows the right colour.   */
 html, body { 
   background: var(--crt-bg) !important;
   width: 100vw !important;
@@ -102,7 +101,7 @@ html, body {
   mix-blend-mode: screen;
   /* Opacity driven by CSS var so no inline style is set on this element.  */
   /* Adblockers match div[id^="crt-"][style]; keeping style attr absent    */
-  /* prevents false-positive hiding.                                        */
+  /* prevents false-positive hiding.                                       */
   opacity: var(--crt-bloom-opacity, 0);
   transition: opacity 0.2s;
 }
@@ -136,12 +135,9 @@ html, body {
   );
 }
 
-/* ── Jitter ─────────────────────────────────────────────────────────── */
-/* Jitter is driven by JS variables --crt-jitter-x/y to avoid interrupting the main animation stack. */
-
 /* ── Bezel ──────────────────────────────────────────────────────────── */
 /* Full-viewport solid fill, clipped by an evenodd SVG path that cuts a  */
-/* rounded-rect hole for the terminal area. Outer corners are square      */
+/* rounded-rect hole for the terminal area. Outer corners are square     */
 /* (viewport boundary); inner corners are rounded (the SVG path).        */
 #crt-bezel {
   position: fixed !important;
@@ -414,7 +410,7 @@ html, body {
   /*   saturatedColor = mix(rawFg, white, satColor × 0.5)                 */
   /*   fgRendered     = mix(rawBg, saturatedColor, 0.7 + contrast × 0.3)  */
   /*   bgRendered     = mix(saturatedColor, rawBg, 0.7 + contrast × 0.3)  */
-  /* Both fg and bg vary with contrast — contrast shifts fg brightness     */
+  /* Both fg and bg vary with contrast — contrast shifts fg brightness    */
   /* AND adds a white-mix component (e.g. blue channel) from satColor.    */
   var contrastLevel = CONFIG.contrast / 100;
 
@@ -455,10 +451,10 @@ html, body {
     };
   }
 
-  /* ── Phosphor profiles ─────────────────────────────────────────────── */
+  /* ── Phosphor profiles ───────────────────────────────────────────────────── */
   /* rawFg/rawBg/satColor sourced from cool-retro-term ApplicationSettings.qml. */
-  /* fg/bg are computed at runtime by computePhosphorColors so they track   */
-  /* the contrast slider.                                                    */
+  /* fg/bg are computed at runtime by computePhosphorColors so they track       */
+  /* the contrast slider.                                                       */
   var profileIdx = CONFIG.profileIdx;
   var profiles = [
     { name: 'GREEN',      rawFg: '#1aff80', rawBg: '#000000', satColor: 0.0,
@@ -470,7 +466,6 @@ html, body {
     { name: 'BLUE',      rawFg: '#7fb4ff', rawBg: '#000000', satColor: 0.2,
       glow: 'rgba(127,180,255,0.35)', filter: 'brightness(1.05)',
       bloom: 'blur(40px)', menuRgb: '127, 180, 255' },
-    /* White: cool off-white phosphor with a faint cyan tint.               */
     { name: 'WHITE',     rawFg: '#c5ffff', rawBg: '#0f1414', satColor: 0.0,
       glow: 'rgba(197,255,255,0.25)', filter: 'brightness(1.00)',
       bloom: 'blur(40px)', menuRgb: '197, 255, 255' },
@@ -528,7 +523,7 @@ html, body {
       '.crt-slider::-moz-range-thumb{background:rgba('+rgb+',0.85);}' +
       '#crt-custom-toggle{color:rgba('+rgb+',0.70);}';
   }
-  /* Update xterm.js terminal colour theme at runtime via window.term.     */
+  /* Update xterm.js terminal colour theme at runtime via window.term.    */
   /* window.term is set asynchronously by ttyd after our script runs, so  */
   /* applyXtermTheme polls until it is available.                         */
   /* Optional cb is called once the theme is applied (used for boot anim) */
@@ -677,11 +672,11 @@ html, body {
   }
 
   /* ── Effect definitions ────────────────────────────────────────────── */
-  /* Each effect has:                                                      */
-  /*   label    — display name                                             */
+  /* Each effect has:                                                     */
+  /*   label    — display name                                            */
   /*   default  — initial slider value (0–100)                            */
   /*   apply(v) — called on every slider change with value 0–100          */
-  /* ─────────────────────────────────────────────────────────────────── */
+  /* ──────────────────────────────────────────────────────────────────── */
   var jitterStrength = CONFIG.jitter;
 
   var effectDefs = [
@@ -707,7 +702,7 @@ html, body {
     {
       id: 'bloom', label: 'BLOOM', default: CONFIG.bloom,
       /* Map 0–100% directly to 0–1.0 opacity. blur(20px)+brightness(2)   */
-      /* on the canvas already limits overshoot; screen blend on a dark    */
+      /* on the canvas already limits overshoot; screen blend on a dark   */
       /* background saturates gracefully so opacity 1.0 is safe.          */
       apply: function (v) {
         document.documentElement.style.setProperty('--crt-bloom-opacity', (v / 100).toFixed(3));
@@ -753,7 +748,7 @@ html, body {
     {
       id: 'flicker', label: 'FLICKERING', default: CONFIG.flicker,
       /* --crt-flicker-amt is used directly in the keyframe calc().       */
-      /* 10% → 0.08 amt. Max 100% → 0.80 amt (very deep dips).           */
+      /* 10% → 0.08 amt. Max 100% → 0.80 amt (very deep dips).            */
       apply: function (v) {
         var tc = document.getElementById('terminal-container');
         if (v === 0) {
@@ -768,7 +763,7 @@ html, body {
     },
     {
       id: 'framesize', label: 'FRAME SIZE', default: CONFIG.framesize,
-      /* 10% → 12px border. 100% → 120px. 0% → 0px.                      */
+      /* 10% → 12px border. 100% → 120px. 0% → 0px.                            */
       /* margin tracks framesize so the terminal always sits inside the bezel. */
       apply: function (v) {
         var px = (v / 100 * 120).toFixed(0) + 'px';
@@ -1063,7 +1058,7 @@ html, body {
   }());
 
   /* ── Horizontal jitter ─────────────────────────────────────────────── */
-  /* Interval scales with strength: 0% = never, 100% = very frequent.    */
+  /* Interval scales with strength: 0% = never, 100% = very frequent.     */
   function scheduleJitter() {
     var gap = jitterStrength === 0
       ? 60000
