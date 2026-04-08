@@ -1,15 +1,15 @@
-<!-- ============================================================
-     CRT visual effects inspired by github.com/Swordfish90/cool-retro-term
-     This file is auto-injected before ttyd's </body> by the .prod Dockerfile.
-     ============================================================ -->
+/* ============================================================
+   CRT visual effects inspired by github.com/Swordfish90/cool-retro-term
+   This file is auto-injected before ttyd's </body> by the .prod Dockerfile.
+   ============================================================ */
 
-<!-- VT323 pixel font -->
+/* VT323 pixel font */
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
 
-<!-- SVG filter definitions.                                              -->
-<!-- Must NOT be display:none — browsers refuse to resolve url(#id)       -->
-<!-- references into a display:none element. Zero-size keeps it invisible. -->
+/* SVG filter definitions.                                               */
+/* Must NOT be display:none — browsers refuse to resolve url(#id)        */
+/* references into a display:none element. Zero-size keeps it invisible. */
 <svg id="crt-filters-svg" aria-hidden="true" focusable="false"
      style="position:absolute;width:0;height:0;overflow:hidden">
 
@@ -21,15 +21,15 @@
     <feColorMatrix type="saturate" values="0"/>
   </filter>
 
-  <!-- Bezel clip: full-viewport rect minus a rounded-rect hole (evenodd).  -->
-  <!-- JS updates the path whenever frame size or radius changes.           -->
+  /* Bezel clip: full-viewport rect minus a rounded-rect hole (evenodd).  */
+  /* JS updates the path whenever frame size or radius changes.           */
   <clipPath id="bezel-clip" clipPathUnits="userSpaceOnUse">
     <path id="bezel-clip-path" clip-rule="evenodd"/>
   </clipPath>
 
 </svg>
 
-<!-- Noise overlay -->
+/* Noise overlay */
 <svg id="crt-noise-svg" aria-hidden="true" focusable="false"
      style="position:fixed;inset:0;width:100%;height:100%;
             pointer-events:none;z-index:9101;mix-blend-mode:screen;">
