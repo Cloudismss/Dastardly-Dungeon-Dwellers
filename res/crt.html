@@ -161,6 +161,9 @@ html, body {
   pointer-events: none;
   z-index: 9103;
   mix-blend-mode: screen;
+  /* Opacity driven by CSS var so no inline style is set on this element.  */
+  /* Adblockers match div[id^="crt-"][style]; keeping style attr absent    */
+  /* prevents false-positive hiding.                                       */
   background: linear-gradient(
     to bottom,
     rgba(var(--crt-glow-rgb), 0)     0%,
@@ -701,22 +704,24 @@ html, body {
     },
     {
       id: 'bloom', label: 'BLOOM', default: CONFIG.bloom,
-      /* Map 0–100% directly to 0–1.0 opacity. blur(20px)+brightness(2)   */
-      /* on the canvas already limits overshoot; screen blend on a dark   */
-      /* background saturates gracefully so opacity 1.0 is safe.          */
+      /* Maps 0–100% to 0–1.0 opacity via CSS var (no inline style set).   */
+      /* blur(40px) on the canvas spreads glyphs into soft halos; adaptive */
+      /* brightness crushes the background to black. Screen blend on a     */
+      /* dark bg saturates gracefully so opacity 1.0 is safe.              */
       apply: function (v) {
         document.documentElement.style.setProperty('--crt-bloom-opacity', (v / 100).toFixed(3));
       },
     },
     {
       id: 'glowline', label: 'GLOW LINE', default: CONFIG.glowline,
+      /* Maps 0–100% to 0–1.0 opacity via CSS var (no inline style set).  */
       apply: function (v) {
         document.documentElement.style.setProperty('--crt-glow-opacity', (v / 100).toFixed(2));
       },
     },
     {
       id: 'scanlines', label: 'SCANLINES', default: CONFIG.scanlines,
-      /* 26% → 0.13 (current default). Max 100% → 0.50.                 */
+      /* 25% → 0.125 (current default). Max 100% → 0.50.                */
       apply: function (v) {
         document.documentElement.style.setProperty(
           '--crt-scanlines', (v / 100 * 0.5).toFixed(3));
@@ -725,6 +730,8 @@ html, body {
     {
       id: 'noise', label: 'FILM GRAIN', default: CONFIG.noise,
       /* 15% → opacity 0.08 (≈ noise at reference strength).             */
+      /* Inline style is safe here — adblocker filter targets div elements */
+      /* only (div[id^="crt-"][style]); the noise element is an SVG.      */
       apply: function (v) {
         var el = document.getElementById('crt-noise-svg');
         if (el) {
