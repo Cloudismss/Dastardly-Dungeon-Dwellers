@@ -12,10 +12,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=ttyd-src /usr/bin/ttyd /usr/bin/ttyd
 COPY res/DDD.ico res/crt.html /res/
 
-RUN ttyd --port 17681 /bin/sh & \
+RUN PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1]); s.close()") && \
+    ttyd --port $PORT /bin/sh & \
     sleep 2 && \
     for i in $(seq 1 10); do \
-      curl -sf http://localhost:17681/ -o /index.html && [ -s /index.html ] && break; \
+      curl -sf http://localhost:$PORT/ -o /index.html && [ -s /index.html ] && break; \
       rm -f /index.html; \
       sleep 1; \
     done && \
