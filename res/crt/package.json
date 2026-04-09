@@ -1,0 +1,15 @@
+{
+  "name": "crt-overlay",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/main.tsx --bundle --minify --outfile=dist/crt.js --jsx=automatic --jsx-import-source=preact --format=iife --target=es2020"
+  },
+  "dependencies": {
+    "@preact/signals": "^2.0.4",
+    "preact": "^10.25.4"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.2",
+    "typescript": "^5.8.3"
+  }
+}

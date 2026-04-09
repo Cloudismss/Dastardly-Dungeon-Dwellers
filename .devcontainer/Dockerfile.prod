@@ -1,3 +1,11 @@
+# ---- CRT Overlay Build Stage ----
+FROM node:lts-alpine AS crt-build
+WORKDIR /build
+COPY res/crt/package.json res/crt/package-lock.json* ./
+RUN npm ci
+COPY res/crt/ .
+RUN npm run build
+
 # ---- HTML Extraction Stage ----
 FROM tsl0922/ttyd:latest AS ttyd-src
 FROM ubuntu:latest AS ttyd-html
@@ -10,6 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copies the ttyd binary into an Ubuntu environment with full tooling,
 # runs it locally to capture the HTML it serves, then patches it.
 COPY --from=ttyd-src /usr/bin/ttyd /usr/bin/ttyd
+COPY --from=crt-build /build/dist/crt.js /res/crt.js
 COPY res/DDD.ico res/crt.html /res/
 
 RUN PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1]); s.close()"); \
@@ -23,7 +32,7 @@ RUN PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s
     [ -s /index.html ] || { echo "ERROR: failed to extract ttyd index.html"; exit 1; } && \
     ICO_B64=$(base64 -w 0 /res/DDD.ico) && \
     sed -i "s|<link rel=\"icon\" type=\"image/png\" href=\"data:image/png;base64,[^\"]*\"|<link rel=\"icon\" type=\"image/x-icon\" href=\"data:image/x-icon;base64,${ICO_B64}\"|" /index.html && \
-    python3 -c "c=open('/index.html').read();i=open('/res/crt.html').read();open('/index.html','w').write(c.replace('</body>',i+'</body>',1))"
+    python3 -c "html=open('/index.html').read();crt=open('/res/crt.html').read();bundle=open('/res/crt.js').read();inject=crt+'<script>'+bundle+'</script>';open('/index.html','w').write(html.replace('</body>',inject+'</body>',1))"
 
 # ---- Builder Stage ----
 FROM ubuntu:latest AS builder
