@@ -100,6 +100,30 @@ html, body {
 }
 .xterm-viewport { background-color: var(--crt-bg) !important; }
 
+/* ── Custom scrollbar styling ────────────────────────────────────────── */
+/* Standard properties for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--crt-glow-rgb), 0.4) rgba(0, 0, 0, 0.3);
+}
+
+/* WebKit/Blink properties (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--crt-glow-rgb), 0.3) !important;
+  border-radius: 4px !important;
+  border: 2px solid var(--crt-bg) !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--crt-glow-rgb), 0.6) !important;
+}
+
 /* ── Phosphor tint ──────────────────────────────────────────────────── */
 .xterm { filter: var(--crt-filter) !important; }
 
