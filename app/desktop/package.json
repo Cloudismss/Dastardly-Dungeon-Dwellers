@@ -1,0 +1,21 @@
+{
+  "name": "ddd-desktop-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "NODE_PATH=node_modules:../web/node_modules esbuild src/main.tsx --bundle --minify --outfile=dist/bundle.js --jsx=automatic --jsx-import-source=preact --format=iife --target=es2020 && cp index.html dist/",
+    "dev": "NODE_PATH=node_modules:../web/node_modules esbuild src/main.tsx --bundle --outfile=dist/bundle.js --jsx=automatic --jsx-import-source=preact --format=iife --target=es2020 --watch"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "preact": "^10.25.4",
+    "@preact/signals": "^2.0.4",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0",
+    "xterm-addon-webgl": "^0.16.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.2",
+    "typescript": "^5.8.3"
+  }
+}

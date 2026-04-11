@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dastardly Dungeon Dwellers</title>
+  <!-- VT323 pixel font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+  <!-- xterm.css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
+  <style>
+    /* Base CRT styles from res/crt.html */
+    :root {
+      --crt-bg:           #000;
+      --crt-glow:         transparent;
+      --crt-glow-rgb:     0,0,0;
+      --crt-filter:       none;
+      --crt-scanlines:    0;
+      --crt-flicker-amt:  0;
+      --crt-jitter-px:    0;
+      --crt-frame-px:     0;
+      --crt-margin-px:    0;
+      --crt-radius-px:    10px;
+      --crt-curve-filter: none;
+    }
+    html, body { 
+      background: var(--crt-bg) !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+    .xterm-viewport { background-color: var(--crt-bg) !important; }
+    .xterm { filter: var(--crt-filter) !important; }
+
+    #terminal-container {
+      position: fixed !important;
+      inset: var(--crt-margin-px) !important;
+      width: auto !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+      display: block !important;
+      border-radius: var(--crt-radius-px);
+      overflow: hidden !important;
+      box-shadow:
+        inset 0 0 15px rgba(0,0,0,0.85),
+        0 0 80px rgba(0,0,0,0.95);
+      z-index: 1;
+      transform: translate(var(--crt-jitter-x, 0), var(--crt-jitter-y, 0));
+      filter: var(--crt-curve-filter);
+    }
+
+    #crt-bloom {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9100;
+      mix-blend-mode: screen; opacity: var(--crt-bloom-opacity, 0);
+      transition: opacity 0.2s;
+    }
+    #crt-bloom-canvas { position: absolute; inset: 0; filter: blur(40px); }
+
+    #crt-noise-svg {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 9101; mix-blend-mode: screen;
+      display: block !important; visibility: visible !important;
+    }
+    #crt-noise-svg rect { width: 100%; height: 100%; }
+
+    #crt-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9102;
+    }
+    #crt-overlay::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent                          0px,
+        transparent                          2px,
+        rgba(0,0,0,var(--crt-scanlines))     2px,
+        rgba(0,0,0,var(--crt-scanlines))     4px
+      );
+    }
+
+    #crt-bezel {
+      position: fixed !important; inset: 0 !important; background: #1a1a1a;
+      pointer-events: none; z-index: 9110; clip-path: url(#bezel-clip);
+    }
+
+    @keyframes crt-glow-line {
+      0%   { transform: translateY(-220px); }
+      100% { transform: translateY(100vh);  }
+    }
+    #crt-glow-line {
+      position: fixed; top: 0; left: 0; width: 100%; height: 220px;
+      pointer-events: none; z-index: 9103; mix-blend-mode: screen;
+      background: linear-gradient(
+        to bottom,
+        rgba(var(--crt-glow-rgb), 0)     0%,
+        rgba(var(--crt-glow-rgb), 0.02) 45%,
+        rgba(var(--crt-glow-rgb), 0.06) 72%,
+        rgba(var(--crt-glow-rgb), 0.12) 86%,
+        rgba(var(--crt-glow-rgb), 0.25) 95%,
+        rgba(var(--crt-glow-rgb), 0.06) 98%,
+        rgba(var(--crt-glow-rgb), 0)   100%
+      );
+      animation: crt-glow-line 8s linear infinite;
+      transition: opacity 0.2s;
+      opacity: var(--crt-glow-opacity, 0);
+    }
+
+    @keyframes crt-flicker {
+      0%,92%,100% { opacity: 1; }
+      93%  { opacity: calc(1 - var(--crt-flicker-amt) * 0.50); }
+      94%  { opacity: 1; }
+      95%  { opacity: calc(1 - var(--crt-flicker-amt)); }
+      96%  { opacity: calc(1 - var(--crt-flicker-amt) * 0.25); }
+      97%  { opacity: 1; }
+      98%  { opacity: calc(1 - var(--crt-flicker-amt) * 0.75); }
+      99%  { opacity: 1; }
+    }
+
+    @keyframes crt-poweron {
+      0%   { clip-path: inset(49.6% 0 49.6% 0); filter: brightness(4);   }
+      25%  { clip-path: inset(20%   0 20%   0); filter: brightness(3);   }
+      65%  { clip-path: inset(0%    0 0%    0); filter: brightness(1.4); }
+      100% { clip-path: inset(0%    0 0%    0); }
+    }
+    #terminal-container { animation: crt-flicker 10s steps(1) infinite; }
+    #terminal-container.crt-boot {
+      animation:
+        crt-poweron 0.7s cubic-bezier(.4,0,.2,1) forwards,
+        crt-flicker 10s 0.7s steps(1) infinite;
+    }
+
+    /* Settings menu styles */
+    #crt-menu {
+      position: fixed; bottom: 10px; right: 12px; z-index: 9200;
+      font-family: 'VT323', monospace; font-size: 15px; letter-spacing: 1px; user-select: none;
+    }
+    #crt-menu-btn {
+      display: block; margin-left: auto; padding: 3px 9px; background: rgba(0,0,0,0.55);
+      color: rgba(var(--crt-glow-rgb),0.80); border: 1px solid rgba(var(--crt-glow-rgb),0.30);
+      border-radius: 3px; cursor: pointer; font-family: inherit; font-size: inherit;
+      letter-spacing: inherit; transition: opacity 0.2s; opacity: 0.6;
+    }
+    #crt-menu-btn:hover { opacity: 1; }
+    #crt-menu-panel {
+      display: none; position: absolute; bottom: calc(100% + 6px); right: 0; min-width: 210px;
+      background: rgba(0,0,0,0.90); border: 1px solid rgba(var(--crt-glow-rgb),0.30);
+      border-radius: 3px; padding: 8px 10px 10px;
+    }
+    #crt-menu-panel.open { display: block; }
+    .crt-menu-section {
+      display: flex; align-items: center; justify-content: space-between;
+      color: rgba(var(--crt-glow-rgb),0.45); font-size: 12px; letter-spacing: 2px;
+      margin: 8px 0 4px; padding-bottom: 2px; border-bottom: 1px solid rgba(var(--crt-glow-rgb),0.15);
+    }
+    .crt-menu-section:first-child { margin-top: 0; }
+    #crt-custom-toggle {
+      display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12px; letter-spacing: 1px;
+    }
+    #crt-custom-cb { cursor: pointer; margin: 0; width: 11px; height: 11px; vertical-align: middle; }
+    
+    #crt-color-picker {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 5px 0 3px; width: 100%;
+    }
+    #crt-hue-wheel { cursor: crosshair; display: block; margin: 0 auto; }
+
+    /* Custom scrollbar styling */
+    .xterm-viewport::-webkit-scrollbar {
+      width: 8px;
+    }
+    .xterm-viewport::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .xterm-viewport::-webkit-scrollbar-thumb {
+      background: rgba(var(--crt-glow-rgb), 0.2);
+      border-radius: 4px;
+      border: 2px solid var(--crt-bg);
+    }
+    .xterm-viewport::-webkit-scrollbar-thumb:hover {
+      background: rgba(var(--crt-glow-rgb), 0.4);
+    }
+
+    .crt-menu-profile {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      color: rgba(var(--crt-glow-rgb),0.90); padding: 2px 0;
+    }
+    .crt-menu-profile button {
+      background: none; border: none; color: rgba(var(--crt-glow-rgb),1); opacity: 0.6;
+      cursor: pointer; font-family: inherit; font-size: 13px; padding: 0 2px; line-height: 1; transition: opacity 0.1s;
+    }
+    .crt-menu-profile button:hover { opacity: 1; }
+    #crt-profile-label { flex: 1; text-align: center; }
+    .crt-effect-row { margin: 5px 0 2px; }
+    .crt-effect-header { display: flex; align-items: baseline; gap: 5px; color: rgba(var(--crt-glow-rgb),0.80); }
+    .crt-effect-header.dim { color: rgba(var(--crt-glow-rgb),0.30); }
+    .crt-effect-label { flex: 1; }
+    .crt-effect-value { font-size: 13px; min-width: 26px; text-align: right; }
+    .crt-effect-toggle {
+      background: none; border: 1px solid rgba(var(--crt-glow-rgb),0.30); color: rgba(var(--crt-glow-rgb),0.70);
+      cursor: pointer; font-family: inherit; font-size: 12px; letter-spacing: 0; padding: 0 4px; border-radius: 2px; line-height: 1.4;
+    }
+    .crt-effect-toggle:hover { color: rgba(var(--crt-glow-rgb),1); border-color: rgba(var(--crt-glow-rgb),0.60); }
+    .crt-effect-toggle.off   { color: rgba(var(--crt-glow-rgb),0.30); border-color: rgba(var(--crt-glow-rgb),0.15); }
+    .crt-slider {
+      -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 2px;
+      background: rgba(var(--crt-glow-rgb),0.20); outline: none; border: none; cursor: pointer; margin: 3px 0 0; padding: 0;
+    }
+    .crt-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 8px; height: 14px;
+      background: rgba(var(--crt-glow-rgb),0.85); border-radius: 1px; cursor: pointer;
+    }
+    .crt-slider::-moz-range-thumb {
+      width: 8px; height: 14px; background: rgba(var(--crt-glow-rgb),0.85); border-radius: 1px; border: none; cursor: pointer;
+    }
+    .crt-slider:disabled { opacity: 0.25; cursor: default; }
+  </style>
+</head>
+<body>
+  <div id="terminal-container"></div>
+
+  <svg id="crt-filters-svg" aria-hidden="true" focusable="false"
+       style="position:absolute;width:0;height:0;overflow:hidden">
+    <filter id="crt-noise-filter" color-interpolation-filters="linearRGB">
+      <feTurbulence id="crt-turbulence" type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <clipPath id="bezel-clip" clipPathUnits="userSpaceOnUse">
+      <path id="bezel-clip-path" clip-rule="evenodd"/>
+    </clipPath>
+    <filter id="crt-curve-filter" color-interpolation-filters="sRGB" x="0%" y="0%" width="100%" height="100%" primitiveUnits="objectBoundingBox">
+      <feImage id="crt-curve-img" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="curvemap"/>
+      <feDisplacementMap in="SourceGraphic" in2="curvemap" scale="0.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <svg id="crt-noise-svg" aria-hidden="true" focusable="false">
+    <rect width="100%" height="100%" filter="url(#crt-noise-filter)"/>
+  </svg>
+
+  <div id="crt-bloom"><canvas id="crt-bloom-canvas"></canvas></div>
+  <div id="crt-overlay"></div>
+  <div id="crt-bezel"></div>
+
+  <script src="bundle.js"></script>
+</body>
+</html>

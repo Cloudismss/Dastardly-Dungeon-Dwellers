@@ -1,0 +1,22 @@
+[package]
+name = "ddd"
+version = "0.1.0"
+description = "Dastardly Dungeon Dwellers Desktop"
+authors = ["Cloudy"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2.0" }
+
+[dependencies]
+tauri = { version = "2.0" }
+tauri-plugin-shell = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+portable-pty = "0.8"
+shell-words = "1.1"
+
+[features]
+# default enables protocol asset which is needed for tauri to serve local files
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
