@@ -1,9 +1,8 @@
 FROM ubuntu:latest
 
-# Set non-interactive mode to prevent installation prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update distro and install C++ packages
+# Install ddd dependencies
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -11,19 +10,21 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     gpg \
     wget \
     lsb-release \
-    software-properties-common \
     && wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
     && echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
     && apt-get update && apt-get install -y --no-install-recommends \
+    # Core Build Stack
+    cmake \
+    git \
     build-essential \
     ninja-build \
     clang \
     clang-tools \
+    # Development & Debugging Tooling
     clangd \
     lldb \
     gdb \
-    cmake \
-    git \
+    software-properties-common \
     doxygen \
     cppcheck \
     valgrind \
