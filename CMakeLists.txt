@@ -23,7 +23,7 @@ add_custom_target(run
 )
 
 # Executable
-add_executable(${PROJECT_NAME} "src/ddd.cpp" "res/ddd.rc")
+add_executable(${PROJECT_NAME} "src/ddd.cpp" "app/res/ddd.rc")
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "ddd")
 
 # Dirs
