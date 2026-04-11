@@ -23,8 +23,8 @@ add_custom_target(run
 )
 
 # Executable
-add_executable(${PROJECT_NAME} "src/DastardlyDungeonDwellers.cpp" "res/DDD.rc")
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Dastardly Dungeon Dwellers")
+add_executable(${PROJECT_NAME} "src/ddd.cpp" "res/ddd.rc")
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "ddd")
 
 # Dirs
 add_subdirectory(include)
