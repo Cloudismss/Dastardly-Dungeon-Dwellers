@@ -26,14 +26,19 @@ export function resizeBloom(): void {
 }
 
 export function setupBloom(): void {
-  if (document.getElementById('crt-bloom')) return;
+  let bloomWrap = document.getElementById('crt-bloom');
+  if (!bloomWrap) {
+    bloomWrap = document.createElement('div');
+    bloomWrap.id = 'crt-bloom';
+    document.body.appendChild(bloomWrap);
+  }
 
-  const bloomWrap = document.createElement('div');
-  bloomWrap.id = 'crt-bloom';
-  bloomCanvas = document.createElement('canvas');
-  bloomCanvas.id = 'crt-bloom-canvas';
-  bloomWrap.appendChild(bloomCanvas);
-  document.body.appendChild(bloomWrap);
+  bloomCanvas = document.getElementById('crt-bloom-canvas') as HTMLCanvasElement;
+  if (!bloomCanvas) {
+    bloomCanvas = document.createElement('canvas');
+    bloomCanvas.id = 'crt-bloom-canvas';
+    bloomWrap.appendChild(bloomCanvas);
+  }
 
   bloomCtx   = bloomCanvas.getContext('2d');
   tmp        = document.createElement('canvas');

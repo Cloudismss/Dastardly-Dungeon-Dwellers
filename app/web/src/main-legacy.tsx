@@ -1,9 +1,7 @@
-/* webgl-patch must be the first import so it runs before any other module
-   code — esbuild evaluates modules in dependency order, and this module has
-   no imports of its own, so it is guaranteed to land first in the bundle. */
+/* webgl-patch must be the first import */
 import './webgl-patch';
 
-import { h, render } from 'preact';
+import { render } from 'preact';
 import { CONFIG } from './config';
 import { profiles } from './profiles';
 import { computePhosphorColors, makePhosphorTheme } from './colors';
@@ -46,22 +44,19 @@ import { Menu } from './components/Menu';
 /* ── Apply initial effect values synchronously ───────────────────────────── */
 effectDefs.forEach(def => def.apply(def.default));
 
-/* ── Boot animation: reveal terminal after xterm applies the phosphor theme ─ */
+/* ── Boot animation ─ */
 applyProfile(profiles[CONFIG.profileIdx], () => {
   const tc = document.getElementById('terminal-container') ?? document.body;
   tc.classList.add('crt-boot');
   window.dispatchEvent(new Event('resize'));
 });
 
-/* ── DOM overlays, observers, bezel ─────────────────────────────────────────── */
 initDOM();
 
-/* ── Render settings menu ────────────────────────────────────────────────── */
 const menuRoot = document.createElement('div');
 document.body.appendChild(menuRoot);
 render(<Menu />, menuRoot);
 
-/* ── Start animation loops ───────────────────────────────────────────────── */
 startNoise();
 startJitter();
 requestAnimationFrame(tickBloom);
