@@ -1,4 +1,8 @@
 build/
+out/
+app/**/node_modules/
+app/**/dist/
+app/**/target/
 images/
 .devcontainer/
 .github/
