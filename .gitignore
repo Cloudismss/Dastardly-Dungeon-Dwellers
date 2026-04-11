@@ -43,5 +43,15 @@ cmake-build-*
 .cache
 Thumbs.db
 
+# App dependencies
+app/**/node_modules/
+app/**/dist/
+app/**/target/
+app/desktop/src-tauri/bin/
+app/desktop/src-tauri/ddd-x86_64-*
+app/desktop/src-tauri/error_log.txt
+
 # Project files
 DastardlyDungeonDwellers.cfg
+docs/
+out/
